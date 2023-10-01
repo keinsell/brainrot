@@ -4,7 +4,7 @@
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "bundler",
-    "moduleDetection": "force",
+    "moduleDetection": "auto",
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "composite": true,
@@ -14,10 +14,11 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": false,
     "types": [
-      "bun-types" // add Bun global
+      "bun-types"
     ]
   }
 }

@@ -3,7 +3,7 @@
   "module": "src/index.ts",
   "scripts": {
     "start": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outfile ./dist/out --minify --target node --compile ",
+    "build": "bun build src/index.ts --outfile ./dist/out --minify --target node --compile",
     "dev": "bun run --watch src/index.ts "
   },
   "dependencies": {
