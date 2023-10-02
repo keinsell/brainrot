@@ -8,11 +8,11 @@ import ms                                                  from "ms"
 export class PrismaService
 	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
 	implements OnModuleInit, OnModuleDestroy {
-	private readonly logger = new Logger(PrismaService.name);
+	private logger: Logger = new Logger(this.constructor.name)
 
 	constructor() {
 		super({
-			errorFormat: "minimal",
+			errorFormat: "pretty",
 			log        : [
 				{
 					emit : 'event',

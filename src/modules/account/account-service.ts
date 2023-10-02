@@ -1,11 +1,13 @@
-import {Injectable}    from "@nestjs/common"
-import {Account}       from "@prisma/client"
-import {Ok, Result}    from "oxide.ts"
-import {PrismaService} from "../../infrastructure/database/prisma/prisma-service.ts"
+import {Injectable, Logger} from "@nestjs/common"
+import {Account}            from "@prisma/client"
+import {Ok, Result}         from "oxide.ts"
+import {PrismaService}      from "../../infrastructure/database/prisma/prisma-service.ts"
 
 
 @Injectable()
 export class AccountService {
+	private logger: Logger = new Logger(this.constructor.name)
+
 	constructor(
 		private readonly prisma: PrismaService,
 	) {}
@@ -17,6 +19,8 @@ export class AccountService {
 				password,
 			},
 		})
+
+		this.logger.log(`Account ${account.id} successfully created.`)
 
 		return Ok(account as any)
 	}

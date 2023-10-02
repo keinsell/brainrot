@@ -1,3 +1,4 @@
+import {fakerEN}        from "@faker-js/faker"
 import {NestFactory}    from "@nestjs/core";
 import {MainModule}     from "./main-module.ts";
 import {AccountService} from "./modules/account/account-service.ts"
@@ -9,7 +10,6 @@ export async function bootstrap() {
 
 	const register = app.get<AccountService>(AccountService);
 
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
 
 	// Add Middleware
 	//app.use(json({limit: '16mb'}));
@@ -26,4 +26,13 @@ export async function bootstrap() {
 
 
 	await app.listen(3000);
+
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
 }
