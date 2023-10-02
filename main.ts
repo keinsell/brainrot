@@ -1,6 +1,3 @@
-import process     from "process"
-import {bootstrap} from "./src";
-
-console.log(process.env["DATABASE_URI"])
+import {bootstrap} from "./src/index.ts";
 
 await bootstrap();

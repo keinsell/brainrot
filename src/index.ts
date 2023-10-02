@@ -3,7 +3,15 @@ import {NestFactory}    from "@nestjs/core";
 import {MainModule}     from "./main-module.ts";
 import {AccountService} from "./modules/account/account-service.ts"
 
+const USE_TELEMETRY = true;
+
+if (USE_TELEMETRY) {
+	await import("./infrastructure/telemetry/open-telemetry.ts")
+}
+
 export async function bootstrap() {
+
+
 	const app = await NestFactory.create(MainModule, {
 		bufferLogs: true,
 	});
