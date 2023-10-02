@@ -1,8 +1,19 @@
-import {NestFactory} from '@nestjs/core';
-import {MainModule}  from "./main-module.ts"
+import {NestFactory}    from "@nestjs/core";
+import {MainModule}     from "./main-module.ts";
+import {AccountService} from "./modules/account/account-service.ts"
 
-async function bootstrap() {
-	const app = await NestFactory.create(MainModule);
+export async function bootstrap() {
+	const app = await NestFactory.create(MainModule, {
+		bufferLogs: true,
+	});
+
+	const register = app.get<AccountService>(AccountService);
+
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+
+	// Add Middleware
+	//app.use(json({limit: '16mb'}));
+	//app.useGlobalPipes(new ValidationPipe());
 
 	//const options = new DocumentBuilder().build();
 	//
@@ -13,7 +24,6 @@ async function bootstrap() {
 
 	app.enableShutdownHooks();
 
+
 	await app.listen(3000);
 }
-
-await bootstrap();

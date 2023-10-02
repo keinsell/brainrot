@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  postgres:
+    container_name: shabu-postgres
+    restart: unless-stopped
+    image: postgres:latest
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - "${PWD}/.cache/postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DATABASE=${DATABASE_NAME}
+      - POSTGRES_HOST=${DATABASE_HOST}
+      - POSTGRES_PORT=${DATABASE_PORT}
+      - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    mem_reservation: 256M
+    mem_swappiness: 50
+    cpu_count: 1
+    cpu_percent: 1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024m
+        reservations:
+          cpus: "0.25"
+          memory: 512M
+
+  redis:
+    container_name: shabu-redis
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - "${PWD}/.cache/redis:/var/lib/redis"
+    mem_reservation: 256M
+    mem_swappiness: 50
+    cpu_count: 1
+    cpu_percent: 1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024m
+        reservations:
+          cpus: "0.25"
+          memory: 512M

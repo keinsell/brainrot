@@ -1,0 +1,10 @@
+# Compose specific for project for sharing service not really for production
+
+version: '3.7'
+
+services:
+#  web:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    command: python manage.py runserve

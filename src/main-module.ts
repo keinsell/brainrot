@@ -1,11 +1,13 @@
-import {Module}       from "@nestjs/common"
-import {HealthModule} from "./modules/healthcheck/health-module.ts"
+import {Module}         from "@nestjs/common"
+import {DatabaseModule} from "./infrastructure/database/database.module.ts"
+import {HealthModule}   from "./infrastructure/healthcheck/health-module.ts"
+import {AccountModule}  from "./modules/account/account-module.ts"
 
 
 @Module({
-	imports: [HealthModule],
+	imports    : [HealthModule, DatabaseModule, AccountModule],
 	controllers: [],
-	providers: [],
-	exports: []
+	providers  : [],
+	exports    : [],
 })
 export class MainModule {}
