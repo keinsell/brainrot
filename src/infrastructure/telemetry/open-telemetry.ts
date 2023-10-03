@@ -1,17 +1,18 @@
-import {Logger}                                  from "@nestjs/common"
-import {getNodeAutoInstrumentations}             from "@opentelemetry/auto-instrumentations-node"
-import {JaegerExporter}                          from "@opentelemetry/exporter-jaeger"
-import {registerInstrumentations}                from "@opentelemetry/instrumentation"
-import {NestInstrumentation}                     from "@opentelemetry/instrumentation-nestjs-core"
-import {Resource}                                from "@opentelemetry/resources"
-import {NodeSDK}                                 from '@opentelemetry/sdk-node';
-import {BatchSpanProcessor, SimpleSpanProcessor} from '@opentelemetry/sdk-trace-base';
-import {ConsoleSpanExporter}                     from "@opentelemetry/sdk-trace-base/build/esnext"
-import {NodeTracerProvider}                      from "@opentelemetry/sdk-trace-node"
-import {SemanticResourceAttributes}              from "@opentelemetry/semantic-conventions"
-import {PrismaInstrumentation}                   from "@prisma/instrumentation"
-import * as dotenv                               from 'dotenv';
-import * as process                              from 'process';
+import {Logger}                                                from "@nestjs/common"
+import {JaegerExporter}                                        from "@opentelemetry/exporter-jaeger"
+import {registerInstrumentations}                              from "@opentelemetry/instrumentation"
+import {HttpInstrumentation}                                   from "@opentelemetry/instrumentation-http"
+import {NestInstrumentation}                                   from "@opentelemetry/instrumentation-nestjs-core"
+import {InstrumentationOption}                                 from "@opentelemetry/instrumentation/build/esnext"
+import {Resource}                                              from "@opentelemetry/resources"
+import {NodeSDK}                                               from '@opentelemetry/sdk-node';
+import {BatchSpanProcessor, SimpleSpanProcessor, SpanExporter} from '@opentelemetry/sdk-trace-base';
+import {ConsoleSpanExporter, SpanProcessor}                    from "@opentelemetry/sdk-trace-base/build/esnext"
+import {NodeTracerProvider}                                    from "@opentelemetry/sdk-trace-node"
+import {SemanticResourceAttributes}                            from "@opentelemetry/semantic-conventions"
+import {PrismaInstrumentation}                                 from "@prisma/instrumentation"
+import * as dotenv                                             from 'dotenv';
+import * as process                                            from 'process';
 
 const logger = new Logger("OpenTelemetry");
 
@@ -19,45 +20,61 @@ dotenv.config();
 
 const isDevelopment = dotenv.config().parsed.NODE_ENV === "development";
 
-const provider = new NodeTracerProvider();
+function getResource(): Resource {
+	return new Resource({
+		[SemanticResourceAttributes.SERVICE_NAME]: `shabu`,
+	});
+}
 
-console.log("isDevelopment: ", isDevelopment);
+export function getSpanExporter(): SpanExporter {
+	return isDevelopment ? new ConsoleSpanExporter() : new JaegerExporter({
+		endpoint: 'http://localhost:14268/api/traces',
+	});
+}
 
-const jaegerExporter = new JaegerExporter({
-	endpoint: 'http://localhost:14268/api/traces',
-});
+export function getSpanProcessor(): SpanProcessor {
+	return isDevelopment ? new SimpleSpanProcessor(getSpanExporter()) : new BatchSpanProcessor(getSpanExporter(), {
+		maxQueueSize: 1000,
+	});
+}
 
-const traceExporter = isDevelopment ? new ConsoleSpanExporter() : jaegerExporter;
-
-// Registering provider early
-provider.register();
-
-registerInstrumentations({
-	instrumentations: [
+export function getInstrumentationOptions(): InstrumentationOption[] {
+	return [
+		new HttpInstrumentation(),
 		new NestInstrumentation(),
 		new PrismaInstrumentation(),
-	],
-})
+	] as any;
+}
+
+const provider = new NodeTracerProvider();
+
 
 const OpenTelemetry = new NodeSDK({
 	resource        : new Resource({
 		[SemanticResourceAttributes.SERVICE_NAME]: `shabu`,
 	}),
-	spanProcessor   : isDevelopment ?
-		new SimpleSpanProcessor(traceExporter) :
-		new BatchSpanProcessor(traceExporter, {
-			maxQueueSize: 1000,
-		}),
+	spanProcessor   : getSpanProcessor(),
 	instrumentations: [
-		getNodeAutoInstrumentations(),
-		new NestInstrumentation(),
+		...getInstrumentationOptions(),
 	],
-	traceExporter   : traceExporter,
+	traceExporter   : getSpanExporter(),
 });
 
 try {
 	await OpenTelemetry.start();
+
 	logger.log("Telemetry agent was successfully started.");
+
+	provider.addSpanProcessor(new SimpleSpanProcessor(getSpanExporter()));
+	provider.register();
+
+	registerInstrumentations({
+		instrumentations: [
+			...getInstrumentationOptions(),
+		],
+	})
+
+	logger.log("Telemetry instrumentations registered.");
 }
 catch (error) {
 	logger.error("Telemetry agent encountered error: ", error);
