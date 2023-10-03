@@ -1,13 +1,6 @@
-import {fakerEN}        from "@faker-js/faker"
 import {NestFactory}    from "@nestjs/core";
 import {MainModule}     from "./main-module.ts";
 import {AccountService} from "./modules/account/account-service.ts"
-
-const USE_TELEMETRY = true;
-
-if (USE_TELEMETRY) {
-	await import("./infrastructure/telemetry/open-telemetry.ts")
-}
 
 export async function bootstrap() {
 
@@ -32,15 +25,16 @@ export async function bootstrap() {
 
 	app.enableShutdownHooks();
 
+	// TODO: Wait for port to be free do not crash application
 
 	await app.listen(3000);
 
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
+	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
 }
