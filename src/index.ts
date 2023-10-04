@@ -1,17 +1,17 @@
-import {Logger}         from "@nestjs/common"
-import {NestFactory}    from "@nestjs/core";
-import delay            from "delay"
-import ms               from "ms"
-import {MainModule}     from "./main-module.ts";
-import {AccountService} from "./modules/account/account-service.ts"
+import {Logger}      from "@nestjs/common"
+import {NestFactory} from "@nestjs/core";
+import delay         from "delay"
+import ms            from "ms"
+import {MainModule}  from "./main-module.ts";
+import {portFinder}  from "./utilities/port-finder.ts"
 
 export async function bootstrap() {
+	// Contract application from Nest.js dependency injection container
 	const app = await NestFactory.create(MainModule, {
 		bufferLogs: true,
 	});
 
-	const register = app.get<AccountService>(AccountService);
-
+	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("BootstrapProcess")
 
 	// Add Middleware
@@ -25,9 +25,17 @@ export async function bootstrap() {
 	//
 	//app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
+	// Add lifecycle hooks
+
 	app.enableShutdownHooks();
 
-	// TODO: Wait for port to be free do not crash application
+	// Listen on selected application port (with grace)
+
+	const FOUND_PORT = await portFinder(process.env.PORT ? parseInt(process.env.PORT) : undefined);
+
+	if (FOUND_PORT.isPortChanged) {
+		logger.warn(`Port ${process.env.PORT} is not available, using ${FOUND_PORT.port} instead.`)
+	}
 
 	let isApplicationListening = false;
 	let retryDelay = ms("5s")
@@ -35,7 +43,10 @@ export async function bootstrap() {
 	while (!isApplicationListening) {
 		try {
 			await app.listen(3000, () => {
-				logger.log(`Application listening on port 3000`);
+				logger.log(`Application started on ${process.env["PROTOCOL"] ??
+				                                     'http'}://${process.env["HOST"] ??
+				                                                 'localhost'}:${FOUND_PORT.port} in ${process.env["NODE_ENV"] ??
+				                                                                                      "development"} mode`);
 			});
 			isApplicationListening = true;
 		}
@@ -45,14 +56,4 @@ export async function bootstrap() {
 			retryDelay = retryDelay * 2
 		}
 	}
-
-
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
-	//await register.register(fakerEN.internet.email(), fakerEN.internet.password());
 }
