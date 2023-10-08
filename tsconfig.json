@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "bundler",
@@ -20,8 +18,6 @@
     "experimentalDecorators": true,
     "allowJs": false,
     "diagnostics": true,
-    "types": [
-      "bun-types"
-    ]
+    "types": ["bun-types", "@types/node"]
   }
 }

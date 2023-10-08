@@ -1,24 +1,30 @@
-import detectPort from 'detect-port';
-import getPort    from 'get-port';
+import detectPort from "detect-port";
+import getPort from "get-port";
 
-export async function portFinder(target?: number): Promise<{ port: number, isPortChanged: boolean }> {
-	let isPortChanged = false;
+export async function portFinder(
+  target?: number
+): Promise<{ port: number; isPortChanged: boolean }> {
+  let isPortChanged = false;
+  let availablePort = target;
 
-	if (!target) {
-		target = await getPort()
-		isPortChanged = true;
-	}
+  console.log(`Getting available ::${target}`);
 
-	let isPortAvailable = await detectPort(target);
+  availablePort = await getPort({ port: availablePort });
 
-	while (!isPortAvailable) {
-		target = await getPort()
-		isPortAvailable = await detectPort(target);
-		isPortChanged = true;
-	}
+  console.log(`Found ::${target}`);
 
-	return {
-		port         : target!,
-		isPortChanged: isPortChanged,
-	}
+  let isPortAvailable = await detectPort(availablePort);
+
+  while (!isPortAvailable) {
+    availablePort = await getPort();
+    isPortAvailable = await detectPort(availablePort);
+    isPortChanged = true;
+  }
+
+  isPortChanged = target === availablePort;
+
+  return {
+    port: availablePort!,
+    isPortChanged: isPortChanged,
+  };
 }
