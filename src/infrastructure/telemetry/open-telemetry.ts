@@ -1,8 +1,14 @@
 import {Logger}                                                from "@nestjs/common"
 import {JaegerExporter}                                        from "@opentelemetry/exporter-jaeger"
 import {registerInstrumentations}                              from "@opentelemetry/instrumentation"
+import {ExpressInstrumentation}                                from "@opentelemetry/instrumentation-express"
+import {GraphQLInstrumentation}                                from "@opentelemetry/instrumentation-graphql"
+import {GrpcInstrumentation}                                   from "@opentelemetry/instrumentation-grpc"
 import {HttpInstrumentation}                                   from "@opentelemetry/instrumentation-http"
+import {IORedisInstrumentation}                                from "@opentelemetry/instrumentation-ioredis"
 import {NestInstrumentation}                                   from "@opentelemetry/instrumentation-nestjs-core"
+import {NetInstrumentation}                                    from "@opentelemetry/instrumentation-net"
+import {RedisInstrumentation}                                  from "@opentelemetry/instrumentation-redis"
 import {InstrumentationOption}                                 from "@opentelemetry/instrumentation/build/esnext"
 import {Resource}                                              from "@opentelemetry/resources"
 import {NodeSDK}                                               from '@opentelemetry/sdk-node';
@@ -40,9 +46,15 @@ export function getSpanProcessor(): SpanProcessor {
 
 export function getInstrumentationOptions(): InstrumentationOption[] {
 	return [
+		new ExpressInstrumentation(),
 		new HttpInstrumentation(),
 		new NestInstrumentation(),
 		new PrismaInstrumentation(),
+		new RedisInstrumentation(),
+		new NetInstrumentation(),
+		new IORedisInstrumentation(),
+		new GrpcInstrumentation(),
+		new GraphQLInstrumentation(),
 	] as any;
 }
 
