@@ -1,5 +1,5 @@
+import "reflect-metadata";
 import "./infrastructure/telemetry/tracers/node-tracer.ts";
-
 import { bootstrap } from "./index.ts";
 import { otelSDK } from "./infrastructure/telemetry/telemetry.ts";
 

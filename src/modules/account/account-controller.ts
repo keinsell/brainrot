@@ -1,25 +1,25 @@
-import {faker}           from "@faker-js/faker"
-import {Controller, Get} from "@nestjs/common"
-import {AccountService}  from "./account-service.ts"
+import { faker } from "@faker-js/faker";
+import { Controller, Get, Inject } from "@nestjs/common";
+import { AccountService } from "./account-service.ts";
 
-@Controller('account')
+@Controller("account")
 export class AccountController {
+  constructor(
+    @Inject(AccountService)
+    private accountService: AccountService
+  ) {}
 
-	constructor(
-		private accountService: AccountService,
-	) {}
+  @Get("/")
+  async generateRandomAccount() {
+    const username = faker.internet.email();
+    const password = faker.internet.password();
 
-	@Get('/')
-	async generateRandomAccount() {
-		const username = faker.internet.email()
-		const password = faker.internet.password()
+    const maybeAccount = await this.accountService.register(username, password);
 
-		const maybeAccount = await this.accountService.register(username, password)
+    if (maybeAccount.isOk()) {
+      return maybeAccount.unwrap();
+    }
 
-		if (maybeAccount.isOk()) {
-			return maybeAccount.unwrap()
-		}
-
-		throw maybeAccount.unwrapErr()
-	}
+    throw maybeAccount.unwrapErr();
+  }
 }

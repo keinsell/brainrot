@@ -11,13 +11,13 @@ import { PrismaInstrumentation } from "@prisma/instrumentation";
 import { JaegerSpanExporter } from "../exporters/jaeger-span-exporter";
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
-import { AsyncHooksContextManager } from "@opentelemetry/context-async-hooks";
-import * as api from "@opentelemetry/api";
+// import { AsyncHooksContextManager } from "@opentelemetry/context-async-hooks";
+// import * as api from "@opentelemetry/api";
 
 export function setupTracer() {
-  const contextManager = new AsyncHooksContextManager().enable();
+  // const contextManager = new AsyncHooksContextManager().enable();
 
-  api.context.setGlobalContextManager(contextManager);
+  // api.context.setGlobalContextManager(contextManager);
 
   const nodeTracer = new BasicTracerProvider({
     resource: new Resource({
