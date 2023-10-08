@@ -1,21 +1,21 @@
-import {Module} from "@nestjs/common"
+import {Module}              from "@nestjs/common"
+import {OpenTelemetryModule} from "nestjs-otel"
 
 @Module({
 	imports: [
-		//OpenTelemetryModule.forRoot({
-		//	instrumentations: [
-		//		new ExpressInstrumentation(),
-		//		//new HttpInstrumentation(),
-		//		new NestInstrumentation(),
-		//		new PrismaInstrumentation(),
-		//		new RedisInstrumentation(),
-		//		new NetInstrumentation(),
-		//		new IORedisInstrumentation(),
-		//		new GrpcInstrumentation(),
-		//		new GraphQLInstrumentation(),
-		//	],
-		//	traceExporter   : getSpanExporter(),
-		//}),
+		OpenTelemetryModule.forRoot({
+			metrics: {
+				hostMetrics: true,
+				apiMetrics : {
+					enable               : true,
+					defaultAttributes    : {
+						custom: 'label',
+					},
+					ignoreRoutes         : ['/favicon.ico'],
+					ignoreUndefinedRoutes: false,
+				},
+			},
+		}),
 	],
 	exports: [],
 })

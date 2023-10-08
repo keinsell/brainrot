@@ -42,7 +42,7 @@ export async function bootstrap() {
 
 	while (!isApplicationListening) {
 		try {
-			await app.listen(3000, () => {
+			await app.listen(FOUND_PORT.port, () => {
 				logger.log(`Application started on ${process.env["PROTOCOL"] ??
 				                                     'http'}://${process.env["HOST"] ??
 				                                                 'localhost'}:${FOUND_PORT.port} in ${process.env["NODE_ENV"] ??
