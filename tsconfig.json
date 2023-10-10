@@ -5,7 +5,7 @@
     ],
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "nodenext",
     "moduleDetection": "auto",
     "allowImportingTsExtensions": true,
     "noEmit": true,
@@ -18,14 +18,19 @@
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "extendedDiagnostics": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "incremental": true,
+    "sourceMap": true,
+    "inlineSources": true,
     "allowJs": false,
     "diagnostics": true,
+    "declarationMap": true,
+    "outDir": "dist",
     "types": [
       "bun-types",
       "@types/node"
     ]
   },
-  "exclude": [
-    "src/infrastructure/database/prisma/prisma-client"
-  ]
+  "exclude": []
 }
