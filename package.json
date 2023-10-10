@@ -6,7 +6,7 @@
     "bun:start": "bun run src/index.ts",
     "bun:build": "bun build src/index.ts --outfile ./dist/out --minify --target node --compile",
     "deno:build": "deno compile --allow-all src/main.ts",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --schema=src/infrastructure/database/prisma/schema.prisma",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",

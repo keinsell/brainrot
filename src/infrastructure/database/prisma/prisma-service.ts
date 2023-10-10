@@ -1,8 +1,8 @@
 import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
-import {Prisma, PrismaClient}                              from '@prisma/client';
-import {PrismaClientInitializationError}                   from "@prisma/client/runtime/library"
 import delay                                               from "delay"
 import ms                                                  from "ms"
+import {Prisma, PrismaClient}                              from '.prisma';
+import {PrismaClientInitializationError}                   from ".prisma/runtime/library"
 
 @Injectable()
 export class PrismaService

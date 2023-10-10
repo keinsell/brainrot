@@ -38,7 +38,7 @@ services:
     ports:
       - "${DATABASE_PORT}:5432"
     volumes:
-      - "${PWD}/.cache/postgres:/var/lib/postgresql/data"
+      - "${PWD}/cache/postgres:/var/lib/postgresql/data"
     environment:
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -66,7 +66,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - "${PWD}/.cache/redis:/var/lib/redis"
+      - "${PWD}/cache/redis:/var/lib/redis"
     mem_reservation: 256M
     mem_swappiness: 50
     cpu_count: 1
