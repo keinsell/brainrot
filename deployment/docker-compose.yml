@@ -1,6 +1,7 @@
 # Compose specific for project for sharing service not really for production
 
 version: '3.7'
+name: ${SERVICE_NAME}
 
 services:
 #  web:
