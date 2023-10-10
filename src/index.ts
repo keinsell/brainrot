@@ -1,9 +1,9 @@
-import {Logger}      from "@nestjs/common";
-import {NestFactory} from "@nestjs/core";
-import delay         from "delay";
-import ms            from "ms";
-import {Container}   from "./container.ts";
-import {portFinder}  from "./utilities/port-finder.ts";
+import {Logger, ValidationPipe} from "@nestjs/common";
+import {NestFactory}            from "@nestjs/core";
+import delay                    from "delay";
+import ms                       from "ms";
+import {Container}              from "./container.ts";
+import {portFinder}             from "./utilities/port-finder.ts";
 
 export async function bootstrap() {
 	// Contract application from Nest.js dependency injection container
@@ -14,23 +14,13 @@ export async function bootstrap() {
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("BootstrapProcess");
 
-	// Add Middleware
-	//app.use(json({limit: '16mb'}));
-	//app.useGlobalPipes(new ValidationPipe());
-
-	//const options = new DocumentBuilder().build();
-	//
-	//const document = SwaggerModule.createDocument(app, options);
-	//SwaggerModule.setup('docs', app, document);
-	//
-	//app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+	// Add application-wide validation pipe
+	app.useGlobalPipes(new ValidationPipe({transform: true}));
 
 	// Add lifecycle hooks
-
 	app.enableShutdownHooks();
 
 	// Listen on selected application port (with grace)
-
 	const FOUND_PORT = await portFinder(
 		process.env.PORT ? parseInt(process.env.PORT) : undefined,
 	);
@@ -50,7 +40,7 @@ export async function bootstrap() {
 				logger.log(
 					`Application started on ${process.env["PROTOCOL"] ?? "http"}://${
 						process.env["HOST"] ?? "localhost"
-					}:${FOUND_PORT.port} in ${
+					}:${FOUND_PORT.port}/account in ${
 						process.env["NODE_ENV"] ?? "development"
 					} mode`,
 				);
