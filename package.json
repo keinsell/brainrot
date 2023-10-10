@@ -13,7 +13,7 @@
     "db:push:force": "prisma db push --accept-data-loss",
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate",
-    "dev": "pnpm run dev:tsx",
+    "dev": "pnpm run tsx:dev",
     "tsx:dev": "tsx src/main.ts --watch",
     "bun:dev": "bun run --watch src/main.ts",
     "deno:dev": "deno run -A src/index.ts --watch"

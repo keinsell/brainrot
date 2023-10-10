@@ -1,8 +1,14 @@
-import {Controller, Get}                                                               from "@nestjs/common";
-import {HealthCheck, HealthCheckService, MemoryHealthIndicator, PrismaHealthIndicator} from "@nestjs/terminus";
+import {Controller, Get} from "@nestjs/common";
+import {
+	HealthCheck,
+	HealthCheckService,
+	HealthIndicatorFunction,
+	MemoryHealthIndicator,
+	PrismaHealthIndicator,
+}                        from "@nestjs/terminus";
 import {
 	PrismaService,
-}                                                                                      from "../database/prisma/prisma-service.ts"
+}                        from "../database/prisma/prisma-service.ts"
 
 @Controller("health")
 export class HealthController {
@@ -16,9 +22,13 @@ export class HealthController {
 	@Get()
 	@HealthCheck()
 	check() {
+		const healthIndicators: HealthIndicatorFunction[] = []
+
+		healthIndicators.push(this.checkMemory.bind(this))
+		healthIndicators.push(this.checkPrisma.bind(this))
+
 		return this.health.check([
-			() => this.checkMemory(),
-			() => this.checkPrisma(),
+			...healthIndicators,
 		]);
 	}
 

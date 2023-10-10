@@ -1,69 +1,72 @@
-import { Logger } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
-import delay from "delay";
-import ms from "ms";
-import { MainModule } from "./main-module.ts";
-import { portFinder } from "./utilities/port-finder.ts";
+import {Logger}      from "@nestjs/common";
+import {NestFactory} from "@nestjs/core";
+import delay         from "delay";
+import ms            from "ms";
+import {Container}   from "./container.ts";
+import {portFinder}  from "./utilities/port-finder.ts";
 
 export async function bootstrap() {
-  // Contract application from Nest.js dependency injection container
-  const app = await NestFactory.create(MainModule, {
-    bufferLogs: true,
-  });
+	// Contract application from Nest.js dependency injection container
+	const app = await NestFactory.create(Container, {
+		bufferLogs: true,
+	});
 
-  // Implement logger used for bootstrapping and notifying about application state
-  const logger = new Logger("BootstrapProcess");
+	// Implement logger used for bootstrapping and notifying about application state
+	const logger = new Logger("BootstrapProcess");
 
-  // Add Middleware
-  //app.use(json({limit: '16mb'}));
-  //app.useGlobalPipes(new ValidationPipe());
+	// Add Middleware
+	//app.use(json({limit: '16mb'}));
+	//app.useGlobalPipes(new ValidationPipe());
 
-  //const options = new DocumentBuilder().build();
-  //
-  //const document = SwaggerModule.createDocument(app, options);
-  //SwaggerModule.setup('docs', app, document);
-  //
-  //app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+	//const options = new DocumentBuilder().build();
+	//
+	//const document = SwaggerModule.createDocument(app, options);
+	//SwaggerModule.setup('docs', app, document);
+	//
+	//app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
-  // Add lifecycle hooks
+	// Add lifecycle hooks
 
-  app.enableShutdownHooks();
+	app.enableShutdownHooks();
 
-  // Listen on selected application port (with grace)
+	// Listen on selected application port (with grace)
 
-  const FOUND_PORT = await portFinder(
-    process.env.PORT ? parseInt(process.env.PORT) : undefined
-  );
+	const FOUND_PORT = await portFinder(
+		process.env.PORT ? parseInt(process.env.PORT) : undefined,
+	);
 
-  if (FOUND_PORT.isPortChanged) {
-    logger.warn(
-      `Port ${process.env.PORT} is not available, using ${FOUND_PORT.port} instead.`
-    );
-  }
+	if (FOUND_PORT.isPortChanged) {
+		logger.warn(
+			`Port ${process.env.PORT} is not available, using ${FOUND_PORT.port} instead.`,
+		);
+	}
 
-  let isApplicationListening = false;
-  let retryDelay = ms("5s");
+	let isApplicationListening = false;
+	let retryDelay = ms("5s");
 
-  while (!isApplicationListening) {
-    try {
-      await app.listen(FOUND_PORT.port, () => {
-        logger.log(
-          `Application started on ${process.env["PROTOCOL"] ?? "http"}://${
-            process.env["HOST"] ?? "localhost"
-          }:${FOUND_PORT.port} in ${
-            process.env["NODE_ENV"] ?? "development"
-          } mode`
-        );
-      });
-      isApplicationListening = true;
-    } catch (e) {
-      logger.error(
-        `Error while trying to start application: ${
-          (e as unknown as any).message
-        }`
-      );
-      await delay(retryDelay);
-      retryDelay = retryDelay * 2;
-    }
-  }
+	while (!isApplicationListening) {
+		try {
+			await app.listen(FOUND_PORT.port, () => {
+				logger.log(
+					`Application started on ${process.env["PROTOCOL"] ?? "http"}://${
+						process.env["HOST"] ?? "localhost"
+					}:${FOUND_PORT.port} in ${
+						process.env["NODE_ENV"] ?? "development"
+					} mode`,
+				);
+			});
+			isApplicationListening = true;
+		}
+		catch (e) {
+			logger.error(
+				`Error while trying to start application: ${
+					(
+						e as unknown as any
+					).message
+				}`,
+			);
+			await delay(retryDelay);
+			retryDelay = retryDelay * 2;
+		}
+	}
 }
