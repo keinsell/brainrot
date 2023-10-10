@@ -129,4 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# lockfiles of secondary runimes
+# Docker-based development environment (https://www.docker.com/)
+.docker/
