@@ -8,7 +8,7 @@ import {Resource}                                 from "@opentelemetry/resources
 import {BasicTracerProvider, SimpleSpanProcessor} from "@opentelemetry/sdk-trace-base";
 import {SemanticResourceAttributes}               from "@opentelemetry/semantic-conventions";
 import {PrismaInstrumentation}                    from "@prisma/instrumentation";
-import {JaegerSpanExporter}                       from "../exporters/jaeger-span-exporter";
+import {JaegerSpanExporter}                       from "../exporters/jaeger-span-exporter.ts";
 
 export function basicTracerProvider() {
 	const contextManager = new AsyncHooksContextManager().enable();

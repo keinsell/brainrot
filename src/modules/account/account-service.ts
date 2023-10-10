@@ -1,7 +1,7 @@
 import {Injectable, Logger} from "@nestjs/common";
 import {Span}               from "nestjs-otel"
 import {Err, Ok, Result}    from "oxide.ts";
-import {Account}            from "../../infrastructure/database/prisma/prisma-client"
+import {Account}            from "prisma-client"
 import {PrismaService}      from "../../infrastructure/database/prisma/prisma-service.ts";
 import {AccountError}       from "./account-error.ts";
 

@@ -179,9 +179,6 @@ dependencies:
   slonik:
     specifier: ^37.0.1
     version: 37.0.1(zod@3.22.4)
-  typescript:
-    specifier: ^5.2.2
-    version: 5.2.2
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -205,6 +202,9 @@ devDependencies:
   prisma:
     specifier: ^5.4.1
     version: 5.4.1
+  typescript:
+    specifier: ^5.2.2
+    version: 5.2.2
 
 packages:
 
@@ -7814,7 +7814,7 @@ packages:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: false
+    dev: true
 
   /uid@2.0.2:
     resolution: {integrity: sha512-u3xV3X7uzvi5b1MncmZo3i2Aw222Zk1keqLA1YkHldREkAhAqi65wuPfe7lHx8H/Wzy+8CE7S7uS3jekIM5s8g==}

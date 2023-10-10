@@ -19,6 +19,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "extendedDiagnostics": true,
+    "noImplicitAny": false,
     "tsBuildInfoFile": ".tsbuildinfo",
     "incremental": true,
     "sourceMap": true,
@@ -30,7 +31,12 @@
     "types": [
       "bun-types",
       "@types/node"
-    ]
+    ],
+    "paths": {
+      "prisma-client": [
+        "./src/infrastructure/database/prisma/prisma-client/index.d.ts"
+      ]
+    }
   },
   "exclude": []
 }
