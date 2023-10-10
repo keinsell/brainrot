@@ -64,7 +64,6 @@ export class PrismaService
 				catch (
 					error
 					) {
-
 					if (error instanceof PrismaClientInitializationError) {
 						this.logger.error(`Encountered error while establishing connection with database: ${error.message.split('\n')[2]}`)
 					}
