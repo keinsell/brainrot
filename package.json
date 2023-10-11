@@ -1,10 +1,10 @@
 {
   "name": "shabu",
-  "module": "src/index.ts",
+  "module": "src/boostrap.ts",
   "scripts": {
     "deno:start": "deno run -A src/main.ts",
-    "bun:start": "bun run src/index.ts",
-    "bun:build": "bun build src/index.ts --outfile ./dist/out --minify --target node --compile",
+    "bun:start": "bun run src/boostrap.ts",
+    "bun:build": "bun build src/boostrap.ts --outfile ./dist/out --minify --target node --compile",
     "deno:build": "deno compile --allow-all src/main.ts",
     "db:generate": "prisma generate --schema=src/infrastructure/database/prisma/schema.prisma",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -16,7 +16,7 @@
     "dev": "pnpm run tsx:dev",
     "tsx:dev": "tsx --watch src/main.ts",
     "bun:dev": "bun run --watch src/main.ts",
-    "deno:dev": "deno run -A src/index.ts --watch"
+    "deno:dev": "deno run -A src/boostrap.ts --watch"
   },
   "dependencies": {
     "@faker-js/faker": "^8.1.0",

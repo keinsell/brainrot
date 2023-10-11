@@ -2,43 +2,52 @@ import {Injectable, Logger} from "@nestjs/common";
 import {Span}               from "nestjs-otel"
 import {Err, Ok, Result}    from "oxide.ts";
 import {Account}            from "prisma-client"
-import {PrismaService}      from "../../infrastructure/database/prisma/prisma-service.ts";
 import {AccountError}       from "./account-error.ts";
+import {AccountPolicy}      from "./account-policy.js"
+import {AccountRepository}  from "./account-repository.js"
 
 @Injectable()
 export class AccountService {
-	private logger: Logger = new Logger(this.constructor.name);
+	protected logger = new Logger('account:service')
 
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(private readonly repository: AccountRepository, private accountPolicy: AccountPolicy) {}
 
 	@Span("create-account")
 	async register(
 		email: string,
 		password: string,
-	): Promise<Result<Account, typeof AccountError.CouldNotSaveAccount>> {
+	): Promise<Result<Account, typeof AccountError.AccountAlreadyExists | typeof AccountError.UnknownDatabaseError>> {
+		this.logger.log(this.repository)
+		this.logger.log(this.accountPolicy)
+
+
 		let account: Account;
 
-		try {
-			//@ts-ignore
-			account = await this.prisma.account.create({
-				data: {
-					username: email,
-					password,
-				},
-			})
+		// Validate if email is unique
 
-			this.logger.log("Account successfully saved in database.");
+		const maybeIsEmailUniqueOrError = await this.accountPolicy.mustHaveUniqueEmail(email);
+
+		if (maybeIsEmailUniqueOrError.isErr()) {
+			return Err(maybeIsEmailUniqueOrError.unwrapErr());
 		}
-		catch (e) {
-			this.logger.error(
-				`Error while trying to save account in database: ${
-					(
-						e as unknown as any
-					).message
-				}`,
-			);
-			return Err(AccountError.CouldNotSaveAccount);
+
+		const maybeIsEmailUnique = maybeIsEmailUniqueOrError.unwrap();
+
+		if (maybeIsEmailUnique.isViolated()) {
+			return Err(AccountError.AccountAlreadyExists);
 		}
+
+		// Save account
+
+		const maybeAccountSaved = await this.repository.save(email, password);
+
+		if (maybeAccountSaved.isErr()) {
+			return Err(maybeAccountSaved.unwrapErr());
+		}
+
+		account = maybeAccountSaved.unwrap();
+
+		this.logger.log(`Account successfully created: ${account}`);
 
 		return Ok(account);
 	}
