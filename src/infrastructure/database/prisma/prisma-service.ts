@@ -3,6 +3,8 @@ import delay                                               from "delay"
 import ms                                                  from "ms"
 import {Prisma, PrismaClient}                              from './prisma-client';
 
+
+
 @Injectable()
 export class PrismaService
 	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
@@ -11,26 +13,26 @@ export class PrismaService
 
 	constructor() {
 		super({
-			errorFormat: "pretty",
-			log        : [
-				{
-					emit : 'event',
-					level: 'query',
-				},
-				{
-					emit : 'event',
-					level: 'error',
-				},
-				{
-					emit : 'event',
-					level: 'info',
-				},
-				{
-					emit : 'event',
-					level: 'warn',
-				},
-			],
-		});
+			      errorFormat: "pretty",
+			      log        : [
+				      {
+					      emit : 'event',
+					      level: 'query',
+				      },
+				      {
+					      emit : 'event',
+					      level: 'error',
+				      },
+				      {
+					      emit : 'event',
+					      level: 'info',
+				      },
+				      {
+					      emit : 'event',
+					      level: 'warn',
+				      },
+			      ],
+		      });
 	}
 
 	async onModuleInit() {
@@ -50,17 +52,16 @@ export class PrismaService
 		let connectionState = false;
 		let connectionRetryDelay = ms('2s');
 
-		// Handle retries to database and do not crash server
+		// Handle retries to database and don't throw an error if connection failed.
 
 		new Promise(async () => {
 			while (!connectionState) {
 				try {
 					await this.$connect();
-					this.logger.log("Connection with a database was established.")
+					this.logger.log("Connection with a database established.")
 
 					connectionState = true
-				}
-				catch (
+				} catch (
 					error
 					) {
 					//if (error instanceof PrismaClientInitializationError) {
