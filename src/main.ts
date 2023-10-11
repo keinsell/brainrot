@@ -6,35 +6,38 @@ import {bootstrap}           from "./boostrap.ts";
 import {otelSDK}             from "./infrastructure/telemetry/telemetry.ts";
 import "./infrastructure/telemetry/tracers/basic-tracer-provider.ts";
 import {basicTracerProvider} from "./infrastructure/telemetry/tracers/basic-tracer-provider.ts"
-import {SystemInformation}   from "./utilities/system-information.js"
+import {SystemInformation}   from "./utilities/system-information.ts"
 
 dotenv.config();
 
+const SERVICE_NAME = process.env.SERVICE_NAME ?? "shabu-server";
+
 new SystemInformation().printSystemInfo();
 
-console.log(figlet.textSync("Shabu-server", "Doom"))
+console.log(figlet.textSync(SERVICE_NAME, "Doom"))
 console.log("Shabu is a boilerplate for Nest.js applications with batteries included.\n")
 
 
-const USE_TELEMETRY = true;
+const USE_TELEMETRY = false;
 
 if (USE_TELEMETRY) {
-	otelSDK.start();
-	basicTracerProvider();
-	signale.success("Telemetry started \n");
+	try {
+		otelSDK.start();
+		basicTracerProvider();
+	}
+	catch (e) {
+		signale.error("Error while starting telemetry: " + e)
+	}
+
+
+	signale.warn("Telemetry started. To disable telemetry and prevent data collection, you can set" +
+	             " COLLECT_TELEMETRY=false in your configuration.\n");
 }
 else {
-	signale.info("Telemetry is disabled. No data is being collected.\n");
-	signale.info("To enable telemetry, set USE_TELEMETRY to true in your configuration.\n");
+	signale.warn("Telemetry has stopped. To enable it, set the `COLLECT_TELEMETRY` variable to true in." +
+	             " environment configuration. This can help in identifying and resolving possible issues with your" +
+	             " software." +
+	             " \n")
 }
-
-if (USE_TELEMETRY) {
-	// Log a message about how to disable telemetry
-	signale.info(
-		"To disable telemetry and prevent data collection, you can set COLLECT_TELEMETRY=false in your configuration.\n",
-	);
-	signale.info("Example: COLLECT_TELEMETRY=false node your-server.js\n");
-}
-
 
 await bootstrap();

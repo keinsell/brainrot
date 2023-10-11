@@ -1,13 +1,13 @@
 import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
 import delay                                               from "delay"
 import ms                                                  from "ms"
-import {Prisma, PrismaClient}                              from './prisma-client/index.js';
+import {Prisma, PrismaClient}                              from './prisma-client';
 
 @Injectable()
 export class PrismaService
 	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
 	implements OnModuleInit, OnModuleDestroy {
-	private logger: Logger = new Logger(this.constructor.name)
+	private logger: Logger = new Logger("database:prisma")
 
 	constructor() {
 		super({
@@ -56,7 +56,7 @@ export class PrismaService
 			while (!connectionState) {
 				try {
 					await this.$connect();
-					this.logger.log("Connection with database was established.")
+					this.logger.log("Connection with a database was established.")
 
 					connectionState = true
 				}
@@ -66,7 +66,7 @@ export class PrismaService
 					//if (error instanceof PrismaClientInitializationError) {
 					//	this.logger.error(`Encountered error while establishing connection with database:
 					// ${error.message.split('\n')[2]}`) } else {
-					this.logger.error(`Error while connecting to database: ${JSON.stringify(error)}`)
+					this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`)
 					//}
 
 					await delay(connectionRetryDelay)
