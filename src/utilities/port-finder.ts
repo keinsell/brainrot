@@ -7,11 +7,7 @@ export async function portFinder(
 	let isPortChanged = false;
 	let availablePort = target;
 
-	console.log(`Getting available ::${target}`);
-
 	availablePort = await getPort({port: availablePort});
-
-	console.log(`Found ::${target}`);
 
 	let isPortAvailable = await detectPort(availablePort);
 
@@ -21,7 +17,7 @@ export async function portFinder(
 		isPortChanged = true;
 	}
 
-	isPortChanged = target === availablePort;
+	isPortChanged = target !== availablePort;
 
 	return {
 		port         : availablePort!,

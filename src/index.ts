@@ -27,7 +27,7 @@ export async function bootstrap() {
 
 	if (FOUND_PORT.isPortChanged) {
 		logger.warn(
-			`Port ${process.env.PORT} is not available, using ${FOUND_PORT.port} instead.`,
+			`Application performed port availability check and ::${process.env.PORT} is not available, found a new shiny ::${FOUND_PORT.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`,
 		);
 	}
 
