@@ -2,7 +2,6 @@ import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
 import delay                                               from "delay"
 import ms                                                  from "ms"
 import {Prisma, PrismaClient}                              from './prisma-client/index.js';
-import {PrismaClientInitializationError}                   from "./prisma-client/runtime/library.js"
 
 @Injectable()
 export class PrismaService
@@ -64,12 +63,11 @@ export class PrismaService
 				catch (
 					error
 					) {
-					if (error instanceof PrismaClientInitializationError) {
-						this.logger.error(`Encountered error while establishing connection with database: ${error.message.split('\n')[2]}`)
-					}
-					else {
-						this.logger.error(`Error while connecting to database: ${JSON.stringify(error)}`)
-					}
+					//if (error instanceof PrismaClientInitializationError) {
+					//	this.logger.error(`Encountered error while establishing connection with database:
+					// ${error.message.split('\n')[2]}`) } else {
+					this.logger.error(`Error while connecting to database: ${JSON.stringify(error)}`)
+					//}
 
 					await delay(connectionRetryDelay)
 					connectionRetryDelay = connectionRetryDelay * 2
