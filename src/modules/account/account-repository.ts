@@ -6,6 +6,8 @@ import {Err, None, Ok, Option, Result, Some} from "oxide.ts"
 import {PrismaService}                       from "../../infrastructure/database/prisma/prisma-service.js"
 import {AccountError}                        from "./account-error.js"
 
+
+
 export abstract class AccountRepository {
 	protected logger = new Logger('account:repository')
 
@@ -14,8 +16,10 @@ export abstract class AccountRepository {
 	abstract async save(email: string, password: string): Promise<Result<Account, typeof AccountError.UnknownDatabaseError>>
 }
 
+
 @Injectable()
-export class PrismaAccountRepository extends AccountRepository {
+export class PrismaAccountRepository
+	extends AccountRepository {
 	constructor(
 		private readonly prisma: PrismaService,
 	) {super()}
@@ -24,14 +28,9 @@ export class PrismaAccountRepository extends AccountRepository {
 		let account: Account | null = null
 
 		try {
-			account = await this.prisma.account.findUnique({
-				where: {
-					email: email,
-				},
-			})
-		}
-		catch (error) {
-			this.logger.error(`Error while trying to find account by email: ${email}`, error)
+			account = await this.prisma.account.findUnique({where: {username: email}}) as unknown as Account | null
+		} catch (error) {
+			this.logger.error(`Error while trying to find an account by email: ${email}`, error)
 			return Err(AccountError.UnknownDatabaseError)
 		}
 
@@ -43,15 +42,14 @@ export class PrismaAccountRepository extends AccountRepository {
 
 		try {
 			account = await this.prisma.account.create({
-				data: {
-					email,
-					password,
-				},
-			})
+				                                           data: {
+					                                           email,
+					                                           password,
+				                                           },
+			                                           })
 
 			this.logger.log("Account successfully saved in database.")
-		}
-		catch (error) {
+		} catch (error) {
 			this.logger.error(`Error while trying to save account in database: ${email}`, error)
 			return Err(AccountError.UnknownDatabaseError)
 		}
