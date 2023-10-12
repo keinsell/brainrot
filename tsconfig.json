@@ -3,8 +3,8 @@
     "lib": [
       "ESNext"
     ],
-    "module": "esnext",
-    "target": "esnext",
+    "module": "NodeNext",
+    "target": "ESNext",
     "moduleResolution": "nodenext",
     "moduleDetection": "auto",
     "allowImportingTsExtensions": true,
@@ -13,7 +13,7 @@
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsxdev",
     "allowSyntheticDefaultImports": true,
     "traceResolution": true,
     "generateCpuProfile": "profile.cpuprofile",
@@ -26,7 +26,7 @@
     "extendedDiagnostics": true,
     "noImplicitAny": false,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "incremental": true,
+    "incremental": false,
     "strictFunctionTypes": true,
     "pretty": true,
     "sourceMap": true,

@@ -1,13 +1,15 @@
-import {Injectable}        from "@nestjs/common"
-import {Err, Ok, Result}   from "oxide.ts"
-import {PolicyResult}      from "../../libs/policy/policy-result.js"
-import {AccountError}      from "./account-error.js"
-import {AccountRepository} from "./account-repository.js"
+import {Injectable}              from "@nestjs/common"
+import {Err, Ok, Result}         from "oxide.ts"
+import {PolicyResult}            from "../../libs/policy/policy-result.js"
+import {AccountError}            from "./account-error.js"
+import {PrismaAccountRepository} from "./account-repository.js"
+
+
 
 @Injectable()
 export class AccountPolicy {
 	constructor(
-		private accountRepository: AccountRepository,
+		private accountRepository: PrismaAccountRepository,
 	) {}
 
 	async mustHaveUniqueEmail(email: string): Promise<Result<PolicyResult, typeof AccountError.AccountNotFound>> {

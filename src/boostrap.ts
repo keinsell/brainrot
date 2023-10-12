@@ -1,9 +1,13 @@
+import {faker}                  from "@faker-js/faker"
 import {Logger, ValidationPipe} from "@nestjs/common";
 import {NestFactory}            from "@nestjs/core";
 import delay                    from "delay";
 import ms                       from "ms";
 import {Container}              from "./container.ts";
+import {AccountService}         from "./modules/account/account-service.js"
 import {portFinder}             from "./utilities/port-finder.ts";
+
+
 
 export async function bootstrap() {
 	// Contract application from Nest.js dependency injection container
@@ -16,6 +20,21 @@ export async function bootstrap() {
 
 	// Add application-wide validation pipe
 	app.useGlobalPipes(new ValidationPipe({transform: true}));
+
+	// Try to create a new acocunt
+	const accountService = app.get(AccountService);
+
+	try {
+		await accountService.register(faker.internet.email(), faker.internet.password());
+	} catch (e) {
+		logger.error(
+			`Error while trying to create a new account: ${
+				(
+					e as unknown as any
+				).message
+			}`,
+		);
+	}
 
 	// Add lifecycle hooks
 	app.enableShutdownHooks();
@@ -46,8 +65,7 @@ export async function bootstrap() {
 				);
 			});
 			isApplicationListening = true;
-		}
-		catch (e) {
+		} catch (e) {
 			logger.error(
 				`Error while trying to start application: ${
 					(

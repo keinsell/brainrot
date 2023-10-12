@@ -5,7 +5,7 @@ import {Prisma, PrismaClient}                              from './prisma-client
 
 
 
-@Injectable()
+@Injectable({durable: true, scope: Scope.REQUEST})
 export class PrismaService
 	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
 	implements OnModuleInit, OnModuleDestroy {

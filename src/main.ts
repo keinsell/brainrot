@@ -1,12 +1,12 @@
-import dotenv                from "dotenv";
-import figlet                from "figlet"
+import dotenv              from "dotenv";
+import figlet              from "figlet"
 import "reflect-metadata";
-import signale               from "signale"
-import {bootstrap}           from "./boostrap.ts";
-import {otelSDK}             from "./infrastructure/telemetry/telemetry.ts";
+import signale             from "signale"
+import {bootstrap}         from "./boostrap.ts";
 import "./infrastructure/telemetry/tracers/basic-tracer-provider.ts";
-import {basicTracerProvider} from "./infrastructure/telemetry/tracers/basic-tracer-provider.ts"
-import {SystemInformation}   from "./utilities/system-information.ts"
+import {otelSDK}           from "./infrastructure/telemetry/telemetry.js"
+import {basicTracerProvider} from "./infrastructure/telemetry/tracers/basic-tracer-provider.js"
+import {SystemInformation} from "./utilities/system-information.ts"
 
 
 

@@ -9,7 +9,6 @@ import {AccountError}                        from "./account-error.js"
 
 
 export abstract class AccountRepository {
-	protected logger = new Logger('account:repository')
 
 	abstract findByEmail(email: string): Promise<Result<Option<Account>, typeof AccountError.UnknownDatabaseError>>
 
@@ -19,10 +18,14 @@ export abstract class AccountRepository {
 
 @Injectable()
 export class PrismaAccountRepository
-	extends AccountRepository {
+
+	implements AccountRepository {
+
+	private readonly logger = new Logger("account:repository")
+
 	constructor(
 		private readonly prisma: PrismaService,
-	) {super()}
+	) {}
 
 	async findByEmail(email: string): Promise<Result<Option<Account>, typeof AccountError.UnknownDatabaseError>> {
 		let account: Account | null = null

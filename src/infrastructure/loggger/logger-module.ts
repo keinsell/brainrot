@@ -1,6 +1,6 @@
 import {Module} from "@nestjs/common"
 
-@Module({})
-export class LoggerModule {
 
-}
+
+@Module({})
+export class LoggerModule {}
