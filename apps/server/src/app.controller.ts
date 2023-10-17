@@ -1,4 +1,5 @@
 import {Controller, Get} from '@nestjs/common';
+import {ApiOperation}    from "@nestjs/swagger"
 import {AppService}      from './app.service.js';
 
 
@@ -7,7 +8,10 @@ import {AppService}      from './app.service.js';
 export class AppController {
 	constructor(private readonly appService: AppService) {}
 
-	@Get()
+	@ApiOperation({
+		operationId: "hello-get",
+		tags:        ['hello'],
+	}) @Get()
 	async getHello(): Promise<string> {
 		return await this.appService.getHello();
 	}
