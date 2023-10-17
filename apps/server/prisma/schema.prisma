@@ -1,0 +1,16 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["tracing", "metrics", "fieldReference", "clientExtensions"]
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URI")
+  relationMode = "foreignKeys"
+}
+
+model Account {
+  id       String @id @default(cuid())
+  username String @unique
+  password String
+}
