@@ -2,14 +2,14 @@ import {Logger}                from "@nestjs/common"
 import {NestFactory}           from "@nestjs/core"
 import delay                   from "delay"
 import ms                      from "ms"
-import {AppModule}             from "./app.module.js"
 import {env, HEALTHCHECK_PATH} from "./configs/env.js"
+import {Container}             from "./container.js"
 import {portAllocator}         from "./utilities/port-allocator.js"
 
 
 
 export async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(Container);
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("Bootstrap");
