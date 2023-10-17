@@ -54,25 +54,27 @@ export class PrismaService
 
 		// Handle retries to database and don't throw an error if connection failed.
 
-		while (!connectionState) {
-			try {
-				await this.$connect();
-				this.logger.log("Connection with a database established.")
+		new Promise(async (resolve) => {
+			while (!connectionState) {
+				try {
+					await this.$connect();
+					this.logger.log("Connection with a database established.")
 
-				connectionState = true
-			} catch (
-				error
-				) {
-				//if (error instanceof PrismaClientInitializationError) {
-				//	this.logger.error(`Encountered error while establishing connection with database:
-				// ${error.message.split('\n')[2]}`) } else {
-				this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`)
-				//}
+					connectionState = true
+				} catch (
+					error
+					) {
+					//if (error instanceof PrismaClientInitializationError) {
+					//	this.logger.error(`Encountered error while establishing connection with database:
+					// ${error.message.split('\n')[2]}`) } else {
+					this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`)
+					//}
 
-				await delay(connectionRetryDelay)
-				connectionRetryDelay = connectionRetryDelay * 2
+					await delay(connectionRetryDelay)
+					connectionRetryDelay = connectionRetryDelay * 2
+				}
 			}
-		}
+		})
 	}
 
 	async onModuleDestroy() {
