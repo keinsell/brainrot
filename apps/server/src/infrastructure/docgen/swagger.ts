@@ -1,5 +1,6 @@
 import {INestApplication, Logger}       from "@nestjs/common"
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger"
+import {SwaggerTheme}                   from "swagger-themes"
 import {env}                            from "../../configs/env.js"
 
 
@@ -20,7 +21,10 @@ export async function buildSwaggerDocumentation(app: INestApplication): Promise<
 
 	logger.verbose(`Swagger documentation document built for ${env.SERVICE_NAME} service. ${JSON.stringify(document)}`);
 
-	SwaggerModule.setup('api', app, document);
+	SwaggerModule.setup('api', app, document, {
+		explorer:  true,
+		customCss: new SwaggerTheme('v3').getBuffer("flattop"), // OR newspaper
+	});
 
 	logger.log(`Swagger documentation was attached to ${env.SERVICE_NAME} service at /api`);
 
