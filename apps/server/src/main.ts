@@ -1,12 +1,11 @@
-import {NestFactory} from "@nestjs/core"
-import {AppModule}   from "./app.module.js"
+import {bootstrap}                     from "./bootstrap.js"
+import {prettyPrintServiceInformation} from "./utilities/candies/service-information.js"
+import {printSystemInfo}               from "./utilities/candies/system-information.js"
 
 
 
-async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
-	await app.listen(3000);
-}
+printSystemInfo()
+prettyPrintServiceInformation()
 
-bootstrap();
+await bootstrap();
 

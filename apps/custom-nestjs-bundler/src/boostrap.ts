@@ -4,7 +4,7 @@ import {NestFactory}            from "@nestjs/core";
 import delay                    from "delay";
 import ms                       from "ms";
 import "reflect-metadata";
-import {env}                    from "./configs/env.js";
+import {env}                    from "../../server/src/configs/env.js";
 import {Container}              from "./container.ts";
 import {AccountService}         from "./modules/account/account-service.js";
 import {portFinder}             from "./utilities/port-finder.ts";

@@ -1,8 +1,8 @@
 import figlet                from "figlet"
 import "reflect-metadata";
 import signale               from "signale"
+import {env}                 from "../../server/src/configs/env.js"
 import {bootstrap}           from "./boostrap.ts";
-import {env}                 from "./configs/env.js"
 import {OpenTelemetrySDK}    from "./infrastructure/telemetry/telemetry.js"
 import {basicTracerProvider} from "./infrastructure/telemetry/tracers/basic-tracer-provider.js"
 import "./infrastructure/telemetry/tracers/basic-tracer-provider.ts";

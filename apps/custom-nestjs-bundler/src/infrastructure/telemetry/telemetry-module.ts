@@ -1,6 +1,6 @@
 import {Module}              from "@nestjs/common"
 import {OpenTelemetryModule} from "nestjs-otel"
-import {env}                 from "../../configs/env.js"
+import {env}                 from "../../../../server/src/configs/env.js"
 
 
 

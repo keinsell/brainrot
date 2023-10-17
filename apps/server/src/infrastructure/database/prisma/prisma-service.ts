@@ -1,6 +1,9 @@
-import {Injectable, Logger, OnModuleDestroy, OnModuleInit, Scope} from "@nestjs/common"
-import {Prisma, PrismaClient}                                     from "@prisma/client"
-import delay                                                      from 'delay'
+import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
+import {Prisma, PrismaClient}                              from "@prisma/client"
+import delay                                               from 'delay'
+import ms                                                  from 'ms'
+
+
 
 @Injectable()
 export class PrismaService
@@ -47,7 +50,7 @@ export class PrismaService
 		});
 
 		let connectionState = false;
-		let connectionRetryDelay = 100
+		let connectionRetryDelay = ms('5s')
 
 		// Handle retries to database and don't throw an error if connection failed.
 
