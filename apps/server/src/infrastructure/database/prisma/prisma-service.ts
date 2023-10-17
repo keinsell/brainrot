@@ -47,7 +47,7 @@ export class PrismaService
 		});
 
 		let connectionState = false;
-		let connectionRetryDelay = 2222
+		let connectionRetryDelay = 100
 
 		// Handle retries to database and don't throw an error if connection failed.
 
