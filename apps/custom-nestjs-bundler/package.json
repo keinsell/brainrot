@@ -1,7 +1,7 @@
 {
   "name": "methylphenidate",
   "description": "⚡ The caffeinated Node.js boilerplate powered by Nest.js. It handles all the tedious stuff you'd rather not do in every new project – so you can code like it's xmas (minus the snow)",
-  "module": "apps/custom-nestjs-bundler/src/main.ts",
+  "module": "src/main.ts",
   "readme": "README.md",
   "author": {
     "email": "keinsell@protonmail.com",
@@ -9,10 +9,10 @@
     "url": "https://keinsell.com"
   },
   "scripts": {
-    "deno:start": "deno run -A apps/custom-nestjs-bundler/src/main.ts",
-    "bun:start": "bun run apps/custom-nestjs-bundler/src/main.ts",
-    "bun:build": "bun build apps/custom-nestjs-bundler/src/boostrap.ts --outfile ./dist/out --minify --target node --compile",
-    "deno:build": "deno compile --allow-all apps/custom-nestjs-bundler/src/main.ts",
+    "deno:start": "deno run -A src/main.ts",
+    "bun:start": "bun run src/main.ts",
+    "bun:build": "bun build src/boostrap.ts --outfile ./dist/out --minify --target node --compile",
+    "deno:build": "deno compile --allow-all src/main.ts",
     "db:generate": "prisma generate --schema=src/infrastructure/database/prisma/schema.prisma",
     "db:migrate:deploy": "prisma migrate deploy --schema=src/infrastructure/database/prisma/schema.prisma",
     "db:migrate:dev": "prisma migrate dev --schema=src/infrastructure/database/prisma/schema.prisma",
@@ -20,14 +20,14 @@
     "db:push:force": "prisma db push --accept-data-loss --schema=src/infrastructure/database/prisma/schema.prisma",
     "db:studio": "prisma studio --schema=src/infrastructure/database/prisma/schema.prisma",
     "lint": "oxlint . --fix",
-    "lint:typecheck": "ezno check apps/custom-nestjs-bundler/src/main.ts",
-    "lint:typecheck2": "oxidation-compiler check apps/custom-nestjs-bundler/src/main.ts",
+    "lint:typecheck": "ezno check src/main.ts",
+    "lint:typecheck2": "oxidation-compiler check src/main.ts",
     "postinstall": "pnpm run db:generate",
-    "dev": "tsx --watch apps/custom-nestjs-bundler/src/main.ts",
-    "tsx:dev": "tsx --watch apps/custom-nestjs-bundler/src/main.ts",
-    "bun:dev": "bun run --watch apps/custom-nestjs-bundler/src/main.ts",
-    "deno:dev": "deno run -A apps/custom-nestjs-bundler/src/main.ts --watch",
-    "buildrun": "tsup-node apps/custom-nestjs-bundler/src/main.ts --silent && node ./dist/main.js"
+    "dev": "tsx --watch src/main.ts",
+    "tsx:dev": "tsx --watch src/main.ts",
+    "bun:dev": "bun run --watch src/main.ts",
+    "deno:dev": "deno run -A src/main.ts --watch",
+    "buildrun": "tsup-node src/main.ts --silent && node ./dist/main.js"
   },
   "dependencies": {
     "@apollo/server": "4.9.4",
@@ -88,6 +88,12 @@
     "slonik": "^37.0.1",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
+  },
+  "resolutions": {
+    "@swc/core": "1.2.82"
+  },
+  "overrides": {
+    "@swc/core": "1.2.82"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.1.18",

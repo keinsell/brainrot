@@ -1,0 +1,17 @@
+{
+  "files": {
+    "renameExtensions": {
+      ".js": ".ts"
+    }
+  },
+  "fixes": {
+    "importExtensions": true,
+    "incompleteTypes": true,
+    "missingProperties": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noInferableTypes": true,
+    "strictNonNullAssertions": false
+  },
+  "projectPath": "./tsconfig.json"
+}

@@ -1,0 +1,72 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "WebWorker",
+      "ScriptHost"
+    ],
+    "module": "NodeNext",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "moduleDetection": "auto",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "composite": true,
+    "importHelpers": true,
+    "strict": false,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsxdev",
+    "traceResolution": true,
+    "generateCpuProfile": "profile.cpuprofile",
+    "skipDefaultLibCheck": true,
+    "stripInternal": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowArbitraryExtensions": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "extendedDiagnostics": true,
+    "noImplicitAny": false,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "incremental": true,
+    "strictFunctionTypes": false,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "allowJs": true,
+    "diagnostics": true,
+    "declarationMap": true,
+    "importsNotUsedAsValues": "remove",
+    "disableSolutionSearching": false,
+    "useDefineForClassFields": false,
+    "isolatedModules": false,
+    "listFiles": true,
+    "outDir": "dist",
+    "types": [
+      "bun-types",
+      "@types/node"
+    ],
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "apps/custom-nestjs-bundler/src/**/*"
+  ],
+  "exclude": [],
+  "ts-node": {
+    "preferTsExts": true,
+    "files": true,
+    "pretty": true,
+    "swc": false,
+    "transpileOnly": true,
+    "esm": false,
+    "experimentalReplAwait": true,
+    "experimentalResolver": true,
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
+}
