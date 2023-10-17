@@ -1,10 +1,10 @@
-import {Logger}                                   from "@nestjs/common"
-import {NestFactory}                              from "@nestjs/core"
-import delay                                      from "delay"
-import ms                                         from "ms"
-import {AppModule}                                from "./app.module.js"
-import {env, getApplicationUrl, HEALTHCHECK_PATH} from "./configs/env.js"
-import {portAllocator}                            from "./utilities/port-allocator.js"
+import {Logger}                from "@nestjs/common"
+import {NestFactory}           from "@nestjs/core"
+import delay                   from "delay"
+import ms                      from "ms"
+import {AppModule}             from "./app.module.js"
+import {env, HEALTHCHECK_PATH} from "./configs/env.js"
+import {portAllocator}         from "./utilities/port-allocator.js"
 
 
 
@@ -33,14 +33,16 @@ export async function bootstrap() {
 	let retryDelay = ms("5s");
 	let retryCount = 3
 
+	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPortForAllocation.port}`
+
 	while (!isApplicationListening) {
 		try {
 			await app.listen(openPortForAllocation.port, () => {
 				logger.log(
-					`Application started on ${getApplicationUrl()} in ${env.NODE_ENV} mode`,
+					`Application started on ${applicationUrl} in ${env.NODE_ENV} mode`,
 				);
 				logger.log(
-					`Healthcheck endpoint: ${getApplicationUrl() + HEALTHCHECK_PATH}`,
+					`Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`,
 				)
 			});
 			isApplicationListening = true;
