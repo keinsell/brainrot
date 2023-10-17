@@ -8,7 +8,7 @@ import {SemanticResourceAttributes}               from "@opentelemetry/semantic-
 // Don't forget to import the dotenv package!
 import process                                    from "node:process";
 import signale                                    from "signale"
-import {env}                                      from "../../configs/env.js"
+import {env}                                      from "../../../../server/src/configs/env.js"
 
 
 

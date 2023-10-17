@@ -6,7 +6,7 @@ import {ConsoleSpanExporter, SimpleSpanProcessor} from "@opentelemetry/sdk-trace
 import {NodeTracerProvider}                       from "@opentelemetry/sdk-trace-node"
 import {SemanticResourceAttributes}               from "@opentelemetry/semantic-conventions"
 import {PrismaInstrumentation}                    from "@prisma/instrumentation"
-import {env}                                      from "../../../configs/env.js"
+import {env}                                      from "../../../../../server/src/configs/env.js"
 
 
 
