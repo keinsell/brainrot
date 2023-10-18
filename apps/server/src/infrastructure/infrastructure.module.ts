@@ -1,7 +1,7 @@
 import {Module}                         from "@nestjs/common"
-import {ContinuationLocalStorageModule} from "./cls/continuation-local-storage-module.js"
-import {DatabaseModule}                 from "./database/database.module.js"
-import {TelemetryModule}                from "./telemetry/otel.module.js"
+import {ContinuationLocalStorageModule} from "./cls/continuation-local-storage-module.ts"
+import {DatabaseModule}                 from "./database/database.module.ts"
+import {TelemetryModule}                from "./telemetry/otel.module.ts"
 
 
 

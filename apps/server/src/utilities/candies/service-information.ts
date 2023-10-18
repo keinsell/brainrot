@@ -1,5 +1,5 @@
 import figlet from "figlet"
-import {env}  from "../../configs/env.js"
+import {env}  from "../../configs/env.ts"
 
 
 

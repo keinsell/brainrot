@@ -24,7 +24,8 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:push:force": "prisma db push --accept-data-loss",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "build:rspack": "rspack build"
   },
   "type": "module",
   "dependencies": {
@@ -38,8 +39,11 @@
     "@opentelemetry/sdk-metrics": "^1.17.1",
     "@opentelemetry/sdk-node": "^0.44.0",
     "@prisma/client": "5.4.2",
+    "@rspack/plugin-node-polyfill": "^0.3.7",
     "delay": "^4.4.1",
+    "detect-port": "^1.5.1",
     "figlet": "^1.6.0",
+    "get-port": "^7.0.0",
     "ms": "^2.1.3",
     "nestjs-cls": "^3.5.1",
     "reflect-metadata": "^0.1.13",
@@ -50,6 +54,11 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@rspack/cli": "^0.3.7",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.93",
+    "@swc/jest": "^0.2.29",
+    "@swc/wasm": "1.3.94-nightly-20231018.1",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/ms": "^0.7.32",
