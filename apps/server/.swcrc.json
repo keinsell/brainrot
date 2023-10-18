@@ -28,5 +28,10 @@
     "noInterop": false,
     "lazy": false
   },
-  "isModule": true
+  "isModule": true,
+  "env": {
+    "targets": {
+      "node": "current"
+    }
+  }
 }

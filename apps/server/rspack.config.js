@@ -2,6 +2,44 @@ import {resolve} from "node:path";
 import NodePolyfill from '@rspack/plugin-node-polyfill'
 import {defineConfig} from "@rspack/cli";
 
+const configObject = {
+    jsc: {
+        parser: {
+            syntax: "typescript",
+            jsx: false,
+            dynamicImport: true,
+            privateMethod: false,
+            functionBind: false,
+            exportDefaultFrom: false,
+            exportNamespaceFrom: false,
+            decorators: true,
+            decoratorsBeforeExport: true,
+            topLevelAwait: true,
+            importMeta: true,
+            preserveAllComments: false
+        },
+        transform: {
+            legacyDecorator: true,
+            decoratorMetadata: true
+        },
+        loose: false,
+        externalHelpers: true,
+        keepClassNames: true
+    },
+    module: {
+        type: "es6",
+        importInterop: "node",
+        noInterop: false,
+        lazy: false
+    },
+    isModule: true,
+    env: {
+        targets: {
+            node: "current"
+        }
+    }
+};
+
 
 // @ts-check
 const config = defineConfig({
@@ -17,7 +55,59 @@ const config = defineConfig({
                 test: /\.ts$/,
                 use: {
                     loader: "builtin:swc-loader",
-                    options: await import('./.swcrc.json', {assert: {type: "json"}})
+                    // options: {
+                    //     jsc: {
+                    //         parser: {
+                    //             syntax: "typescript",
+                    //             decorators: true
+                    //         },
+                    //         transform: {
+                    //             legacyDecorator: true,
+                    //             decoratorMetadata: true
+                    //         }
+                    //     },
+                    //     module: {
+                    //         type: "es6"
+                    //     }
+                    // }
+                    options: {
+                        jsc: {
+                            parser: {
+                                syntax: "typescript",
+                                jsx: false,
+                                target: "es2022",
+                                dynamicImport: false,
+                                privateMethod: false,
+                                functionBind: false,
+                                exportDefaultFrom: false,
+                                exportNamespaceFrom: false,
+                                decorators: true,
+                                decoratorsBeforeExport: true,
+                                topLevelAwait: true,
+                                importMeta: true,
+                                preserveAllComments: false
+                            },
+                            transform: {
+                                legacyDecorator: true,
+                                decoratorMetadata: true
+                            },
+                            loose: false,
+                            externalHelpers: true,
+                            keepClassNames: true
+                        },
+                        module: {
+                            type: "es6",
+                            importInterop: "node",
+                            noInterop: false,
+                            lazy: false
+                        },
+                        isModule: true,
+                        env: {
+                            targets: {
+                                node: "18"
+                            }
+                        }
+                    },
                 },
             },
             {
@@ -74,7 +164,7 @@ const config = defineConfig({
     ],
     output: {
         path: './dist',
-        filename: "[name].bundle.js",
+        filename: "[name].bundle.cjs",
     }
 });
 
