@@ -1,7 +1,7 @@
 import {INestApplication, Logger}       from "@nestjs/common"
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger"
 import {SwaggerTheme}                   from "swagger-themes"
-import {env}                            from "../../configs/env.js"
+import {env}                            from "../../../configs/env.js"
 
 
 
