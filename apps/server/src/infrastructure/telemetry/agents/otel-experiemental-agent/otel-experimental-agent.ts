@@ -1,17 +1,17 @@
-import {diag, DiagLogLevel}                                    from "@opentelemetry/api";
+import {diag, DiagLogLevel}                                   from "@opentelemetry/api";
 import {getNodeAutoInstrumentations}                          from "@opentelemetry/auto-instrumentations-node"
 import {AsyncLocalStorageContextManager}                      from "@opentelemetry/context-async-hooks"
-import {JaegerExporter}                                        from "@opentelemetry/exporter-jaeger"
+import {JaegerExporter}                                       from "@opentelemetry/exporter-jaeger"
 import {envDetector, osDetector, processDetector, Resource}   from "@opentelemetry/resources"
 import {ConsoleMetricExporter, PeriodicExportingMetricReader} from "@opentelemetry/sdk-metrics";
-import {NodeSDK}                                               from "@opentelemetry/sdk-node"
-import {SimpleSpanProcessor}                                   from "@opentelemetry/sdk-trace-node";
-import {SemanticResourceAttributes}                            from "@opentelemetry/semantic-conventions"
-import {PrismaInstrumentation}                                 from "@prisma/instrumentation"
-import process                                                 from "node:process"
-import signale                                                 from "signale"
-import {env}                                                   from "../../../../configs/env.ts"
-import {NestjsDiagLogger}                                     from "../../opentelemtry/diag-logger/nestjs-diag-logger.ts";
+import {NodeSDK}                                              from "@opentelemetry/sdk-node"
+import {SimpleSpanProcessor}                                  from "@opentelemetry/sdk-trace-node";
+import {SemanticResourceAttributes}                           from "@opentelemetry/semantic-conventions"
+import {PrismaInstrumentation}                                from "@prisma/instrumentation"
+import process                                                from "node:process"
+import signale                                                from "signale"
+import {env}                                                  from "../../../../configs/env.js"
+import {NestjsDiagLogger}                                     from "../../opentelemtry/diag-logger/nestjs-diag-logger.js";
 
 
 

@@ -1,5 +1,5 @@
 import {Module}       from "@nestjs/common"
-import {PrismaModule} from "./prisma/prisma-module.ts"
+import {PrismaModule} from "./prisma/prisma-module.js"
 
 
 

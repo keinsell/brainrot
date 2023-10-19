@@ -1,6 +1,6 @@
 import {Logger}       from "@nestjs/common"
 import {ExportResult} from "@opentelemetry/core"
-import {ReadableSpan} from "@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.ts"
+import {ReadableSpan} from "@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.js"
 
 
 

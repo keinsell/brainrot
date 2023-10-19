@@ -2,10 +2,10 @@ import {Logger}                    from "@nestjs/common"
 import {NestFactory}               from "@nestjs/core"
 import delay                       from "delay"
 import ms                          from "ms"
-import {env, HEALTHCHECK_PATH}     from "./configs/env.ts"
-import {Container}                 from "./container.ts"
-import {buildSwaggerDocumentation} from "./infrastructure/docgen/swagger.ts"
-import {portAllocator}             from "./utilities/port-allocator.ts"
+import {env, HEALTHCHECK_PATH}     from "./configs/env.js"
+import {Container}                 from "./container.js"
+import {buildSwaggerDocumentation} from "./infrastructure/docgen/swagger.js"
+import {portAllocator}             from "./utilities/port-allocator.js"
 
 
 

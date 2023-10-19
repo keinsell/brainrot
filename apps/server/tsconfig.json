@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "ESNext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "moduleDetection": "auto",
+    "moduleResolution": "bundler",
     "target": "ESNext",
     "sourceMap": true,
+    "strict": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,

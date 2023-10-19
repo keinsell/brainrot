@@ -17,7 +17,7 @@ export const env = cleanEnv(process.env, {
 		desc:       "PORT stands for port on which application will be listening.",
 	}),
 	SERVICE_NAME:        str({default: "methylophenidate"}),
-	SERVICE_DESCRIPTION: str({default: "Methylophenidate is a boilerplate for Nest.ts applications with batteries included."}),
+	SERVICE_DESCRIPTION: str({default: "Methylophenidate is a boilerplate for Nest.js applications with batteries included."}),
 	NODE_ENV:            str({
 		choices:    ['development', 'test', 'production', 'staging'],
 		default:    'development',

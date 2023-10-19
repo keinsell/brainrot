@@ -1,4 +1,4 @@
-import {add} from "./main3.ts"
+import {add} from "./main3.js"
 
 
 

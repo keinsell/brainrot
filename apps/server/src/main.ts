@@ -1,8 +1,8 @@
-import {bootstrap}                        from "./bootstrap.ts"
-import {env}                              from "./configs/env.ts";
-import {experimentalOpenTelemetryTracker} from "./infrastructure/telemetry/agents/otel-experiemental-agent/otel-experimental-agent.ts"
-import {prettyPrintServiceInformation}    from "./utilities/candies/service-information.ts"
-import {printSystemInfo}                  from "./utilities/candies/system-information.ts"
+import {bootstrap}                        from "./bootstrap.js"
+import {env}                              from "./configs/env.js";
+import {experimentalOpenTelemetryTracker} from "./infrastructure/telemetry/agents/otel-experiemental-agent/otel-experimental-agent.js"
+import {prettyPrintServiceInformation}    from "./utilities/candies/service-information.js"
+import {printSystemInfo}                  from "./utilities/candies/system-information.js"
 
 
 
