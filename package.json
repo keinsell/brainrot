@@ -90,6 +90,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.22",
     "@nestjs/cli": "^10.1.18",
     "@oxidation-compiler/napi": "^0.1.0",
     "@swc-node/register": "^1.6.8",

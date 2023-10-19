@@ -1,11 +1,12 @@
-import {Logger}                    from "@nestjs/common"
-import {NestFactory}               from "@nestjs/core"
-import delay                       from "delay"
-import ms                          from "ms"
-import {env, HEALTHCHECK_PATH}     from "./configs/env.js"
-import {Container}                 from "./container.js"
-import {buildSwaggerDocumentation} from "./infrastructure/docgen/swagger.js"
-import {portAllocator}             from "./utilities/port-allocator.js"
+import {Logger}                     from "@nestjs/common"
+import {NestFactory}                from "@nestjs/core"
+import delay                        from "delay"
+import ms                           from "ms"
+import {env, HEALTHCHECK_PATH}      from "./configs/env.js"
+import {Container}                  from "./container.js"
+import {buildCompodocDocumentation} from "./infrastructure/docs/compodoc/compodoc.js"
+import {buildSwaggerDocumentation}  from "./infrastructure/docs/swagger/swagger.js"
+import {portAllocator}              from "./utilities/port-allocator.js"
 
 
 
@@ -19,6 +20,7 @@ export async function bootstrap() {
 
 	// Build swagger documentation
 	await buildSwaggerDocumentation(app);
+	buildCompodocDocumentation()
 
 	// Listen on selected application port (with grace)
 	const openPortForAllocation = await portAllocator(env.PORT as number);
@@ -39,7 +41,11 @@ export async function bootstrap() {
 		try {
 			await app.listen(openPortForAllocation.port, () => {
 				logger.log(`Application started on ${applicationUrl} in ${env.NODE_ENV} mode`);
-				logger.log(`Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`)
+				logger.debug(`${"-".repeat(54)}`)
+				logger.debug(`Compodoc endpoint: ${applicationUrl + '/docs'}`)
+				logger.debug(`Swagger endpoint: ${applicationUrl + '/api'}`)
+				logger.debug(`Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`)
+				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
 		} catch (e) {

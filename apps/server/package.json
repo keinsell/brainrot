@@ -26,7 +26,8 @@
     "db:push": "prisma db push",
     "db:push:force": "prisma db push --accept-data-loss",
     "db:studio": "prisma studio",
-    "postinstall": "pnpm run db:generate"
+    "postinstall": "pnpm run db:generate & pnpm docs:compodoc",
+    "docs:compodoc": "compodoc -p build_utilss/tsconfig.doc.json --output docs/generated/compodoc --theme laravel"
   },
   "type": "module",
   "dependencies": {
@@ -34,6 +35,7 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.13",
     "@opentelemetry/api": "^1.6.0",
     "@opentelemetry/auto-instrumentations-node": "^0.39.4",
@@ -49,6 +51,7 @@
     "swagger-themes": "^1.2.30"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.22",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
