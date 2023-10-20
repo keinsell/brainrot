@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "build:tsc": "tspc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "pnpm run dev:nest",
@@ -27,6 +28,7 @@
     "db:push:force": "prisma db push --accept-data-loss",
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate & pnpm docs:compodoc",
+    "prepare": "ts-patch install -s",
     "docs:compodoc": "compodoc -p build_utilss/tsconfig.doc.json --output docs/generated/compodoc --theme laravel"
   },
   "type": "module",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.22",
+    "@formatjs/ts-transformer": "^3.13.6",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -74,6 +77,8 @@
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
+    "ts-patch": "^3.0.2",
+    "tsc-progress": "^1.0.4",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^3.13.0",
     "typescript": "^5.1.3"
