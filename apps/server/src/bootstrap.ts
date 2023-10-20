@@ -1,9 +1,8 @@
-import {Logger}      from "@nestjs/common"
-import {NestFactory} from "@nestjs/core"
-
-import x                            from 'craftpack'
+import {Logger}                     from "@nestjs/common"
+import {NestFactory}                from "@nestjs/core"
 import delay                        from "delay"
 import ms                           from "ms"
+import process                      from "node:process"
 import {env, HEALTHCHECK_PATH}      from "./configs/env.js"
 import {Container}                  from "./container.js"
 import {buildCompodocDocumentation} from "./infrastructure/docs/compodoc/compodoc.js"
@@ -12,14 +11,13 @@ import {portAllocator}              from "./utilities/network-utils/port-allocat
 
 
 
-x
-
 export async function bootstrap() {
 	const app = await NestFactory.create(Container);
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("Bootstrap");
 
+	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
 
 	// Build swagger documentation
@@ -27,7 +25,7 @@ export async function bootstrap() {
 	buildCompodocDocumentation()
 
 	// Listen on selected application port (with grace)
-	const openPortForAllocation = await portAllocator(env.PORT as number);
+	let openPortForAllocation = await portAllocator(env.PORT as number);
 
 	if (openPortForAllocation.wasReplaced) {
 		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPortForAllocation.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
@@ -57,7 +55,8 @@ export async function bootstrap() {
 				e as unknown as any
 			).message}`);
 			await delay(retryDelay);
-			retryDelay = retryDelay * 2;
+			openPortForAllocation = await portAllocator(env.PORT as number);
+			retryDelay            = retryDelay * 2;
 		}
 
 		if (retryCount === 0) {
