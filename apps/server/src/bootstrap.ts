@@ -1,14 +1,18 @@
-import {Logger}                     from "@nestjs/common"
-import {NestFactory}                from "@nestjs/core"
+import {Logger}      from "@nestjs/common"
+import {NestFactory} from "@nestjs/core"
+
+import x                            from 'craftpack'
 import delay                        from "delay"
 import ms                           from "ms"
 import {env, HEALTHCHECK_PATH}      from "./configs/env.js"
 import {Container}                  from "./container.js"
 import {buildCompodocDocumentation} from "./infrastructure/docs/compodoc/compodoc.js"
 import {buildSwaggerDocumentation}  from "./infrastructure/docs/swagger/swagger.js"
-import {portAllocator}              from "./utilities/port-allocator.js"
+import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
 
 
+
+x
 
 export async function bootstrap() {
 	const app = await NestFactory.create(Container);

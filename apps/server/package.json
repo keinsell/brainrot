@@ -42,6 +42,7 @@
     "@opentelemetry/sdk-metrics": "^1.17.1",
     "@opentelemetry/sdk-node": "^0.44.0",
     "@prisma/client": "5.4.2",
+    "craftpack": "^0.0.16",
     "delay": "^4.4.1",
     "figlet": "^1.6.0",
     "ms": "^2.1.3",
