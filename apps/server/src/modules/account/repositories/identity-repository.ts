@@ -1,0 +1,11 @@
+import {Injectable, NotImplementedException} from "@nestjs/common"
+import {Identity}                            from "../domain/entities/identity.js"
+
+
+
+@Injectable()
+export class IdentityRepository {
+	async save(identity: Identity): Promise<Identity> {
+		throw new NotImplementedException()
+	}
+}

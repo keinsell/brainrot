@@ -20,6 +20,11 @@
     "types": [
       "@types/node"
     ],
+    "paths": {
+      "@module/*": [
+        "./src/module/*"
+      ]
+    },
     "plugins": [
       {
         "transform": "@formatjs/ts-transformer",
