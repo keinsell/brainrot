@@ -1,7 +1,6 @@
-import {RecursiveKeyOf} from "nestjs-cls/dist/src/types/recursive-key-of.type.js"
-import {Email}          from "../value-objects/email.js"
-import {Password}       from "../value-objects/password.js"
-import {Username}       from "../value-objects/username.js"
+import {Email}    from "../value-objects/email.js"
+import {Password} from "../value-objects/password.js"
+import {Username} from "../value-objects/username.js"
 
 
 
@@ -20,7 +19,7 @@ export class Identity implements IdentityProperties {
 
 	public username: Username
 
-	public readonly usernameFields: RecursiveKeyOf<Identity> = ["username", "email"]
+	public readonly usernameFields: any = ["username", "email"]
 
 	private constructor(payload: IdentityProperties) {
 		this.email    = payload.email

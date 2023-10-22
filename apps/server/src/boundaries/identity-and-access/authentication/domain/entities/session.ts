@@ -15,3 +15,20 @@
 //Session Expiration Time: Sessions typically have a predefined expiration time to ensure that they do not persist indefinitely. This expiration time can be included in the session data.
 //
 //	Security Information: Information related to session security, such as IP address, user agent, and other data used for security checks and fraud prevention, may be included.
+
+import {IpAddress} from "../value-objects/ip-address.js"
+
+
+
+export class Session {
+	id: string
+
+	accountId: string;
+
+	lastActivity: Date;
+
+	ipAddress: IpAddress
+
+	userAgent: string;
+}
+

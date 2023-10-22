@@ -1,6 +1,25 @@
 import {Controller, Get, Post} from "@nestjs/common"
 import {ApiOperation}          from "@nestjs/swagger"
+import {readFileSync}          from 'node:fs'
+import {dirname}               from "path"
+import {fileURLToPath}         from "url"
 
+
+
+function getOperationDocumentation(operation: string): string {
+	const __filename         = fileURLToPath(import.meta.url);
+	const __dirname          = dirname(__filename);
+	const docsDirectory      = `${__dirname}/docs`
+	const operationDirectory = `${docsDirectory}/operations`
+
+	try {
+		return readFileSync(`${operationDirectory}/${operation}.md`, "utf8")
+		//return import(`${operationDirectory}/${operation}.md`) as string
+	} catch (e) {
+		return ''
+	}
+
+}
 
 
 @Controller("account")
@@ -17,30 +36,12 @@ export class AccountController {
 	}
 
 	@ApiOperation({
-		operationId: "authenticate",
-		description: "Logs the user in",
-		tags:        ['account'],
-	}) @Post('authenticate')
-	async authenticate(): Promise<string> {
-		return "authenticate"
-	}
-
-	@ApiOperation({
 		operationId: "register",
-		description: "Registers a new user",
+		description: getOperationDocumentation("register"),
 		tags:        ['account'],
 	}) @Post()
 	async register(): Promise<string> {
 		return "register"
-	}
-
-	@ApiOperation({
-		operationId: "logout",
-		description: "Logs the user out",
-		tags:        ['account'],
-	}) @Post('logout')
-	async logout(): Promise<string> {
-		return "logout"
 	}
 
 	@ApiOperation({
@@ -99,7 +100,7 @@ export class AccountController {
 
 	@ApiOperation({
 		operationId: "verify-email",
-		description: "Verifies the user's email",
+		description: "Verifies the user’s email",
 		tags:        ['account'],
 	}) @Post('verify-email')
 	async verifyEmail(): Promise<string> {
