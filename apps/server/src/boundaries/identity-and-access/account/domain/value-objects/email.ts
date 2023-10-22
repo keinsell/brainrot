@@ -1,0 +1,1 @@
+export type Email = { address: string, isVerified: boolean }

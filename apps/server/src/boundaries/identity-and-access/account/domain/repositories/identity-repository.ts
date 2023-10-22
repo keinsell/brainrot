@@ -1,5 +1,5 @@
 import {Injectable, NotImplementedException} from "@nestjs/common"
-import {Identity}                            from "../domain/entities/identity.js"
+import {Identity}                            from "../entities/identity.js"
 
 
 
