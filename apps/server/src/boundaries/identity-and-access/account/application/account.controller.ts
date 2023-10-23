@@ -1,8 +1,10 @@
-import {Controller, Get, Post} from "@nestjs/common"
-import {ApiOperation}          from "@nestjs/swagger"
-import {readFileSync}          from 'node:fs'
-import {dirname}               from "path"
-import {fileURLToPath}         from "url"
+import {RegisterAccount}             from "@boundary/identity-and-access/account/application/commands/register-account.js"
+import {AccountService}              from "@boundary/identity-and-access/account/services/account.service.js"
+import {Body, Controller, Get, Post} from "@nestjs/common"
+import {ApiOperation}                from "@nestjs/swagger"
+import {readFileSync}                from 'node:fs'
+import {dirname}                     from "path"
+import {fileURLToPath}               from "url"
 
 
 
@@ -24,7 +26,8 @@ function getOperationDocumentation(operation: string): string {
 
 @Controller("account")
 export class AccountController {
-	constructor() {}
+	constructor(private service: AccountService) {}
+
 
 	@ApiOperation({
 		operationId: "whoami",
@@ -35,14 +38,28 @@ export class AccountController {
 		return "whoami"
 	}
 
+
 	@ApiOperation({
 		operationId: "register",
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
 	}) @Post()
-	async register(): Promise<string> {
-		return "register"
+	async register(@Body() registerAccountBody: RegisterAccount): Promise<string> {
+		const {
+				  username,
+				  email,
+				  password,
+			  } = registerAccountBody
+
+		const result = await this.service.register({
+			username,
+			email,
+			password,
+		})
+
+		return result
 	}
+
 
 	@ApiOperation({
 		operationId: "forgot-password",
@@ -53,6 +70,7 @@ export class AccountController {
 		return "forgot-password"
 	}
 
+
 	@ApiOperation({
 		operationId: "reset-password",
 		description: "Resets the user's password",
@@ -61,6 +79,7 @@ export class AccountController {
 	async resetPassword(): Promise<string> {
 		return "reset-password"
 	}
+
 
 	@ApiOperation({
 		operationId: "change-password",
@@ -71,6 +90,7 @@ export class AccountController {
 		return "change-password"
 	}
 
+
 	@ApiOperation({
 		operationId: "change-email",
 		description: "Changes the user's email",
@@ -79,6 +99,7 @@ export class AccountController {
 	async changeEmail(): Promise<string> {
 		return "change-email"
 	}
+
 
 	@ApiOperation({
 		operationId: "change-username",
@@ -89,6 +110,7 @@ export class AccountController {
 		return "change-username"
 	}
 
+
 	@ApiOperation({
 		operationId: "delete-account",
 		description: "Deletes the user's account",
@@ -98,6 +120,7 @@ export class AccountController {
 		return "delete-account"
 	}
 
+
 	@ApiOperation({
 		operationId: "verify-email",
 		description: "Verifies the user’s email",
@@ -106,6 +129,7 @@ export class AccountController {
 	async verifyEmail(): Promise<string> {
 		return "verify-email"
 	}
+
 
 	@ApiOperation({
 		operationId: "resend-verification-email",
