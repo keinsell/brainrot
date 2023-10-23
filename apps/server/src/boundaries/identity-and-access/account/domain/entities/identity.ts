@@ -21,20 +21,25 @@ export class Identity implements IdentityProperties {
 
 	public readonly usernameFields: any = ["username", "email"]
 
+
 	private constructor(payload: IdentityProperties) {
 		this.email    = payload.email
 		this.username = payload.email.address
 		this.password = payload.password
 	}
 
-	static registerAccount(payload: IdentityProperties) {
+
+	static RegisterAccount(payload: IdentityProperties) {
 		const identity = new Identity(payload)
 		// Execute register account method
+		return identity;
 	}
+
 
 	static CreateAccount(payload: IdentityProperties) {
 		return new Identity(payload)
 	}
+
 
 	public changeUsername(username: Username) {
 		this.username = username
@@ -42,18 +47,29 @@ export class Identity implements IdentityProperties {
 		return this
 	}
 
+
 	public requestPasswordReset() {}
 
+
 	public resetPassword() {}
+
 
 	public changeEmail(email: Email) {
 		this.email = email
 		return this
 	}
 
+
 	public changePassword() {}
+
 
 	public deleteAccount() {}
 
+
 	public verifyEmail() {}
+
+
+	public registerAccount(): void {
+
+	}
 }

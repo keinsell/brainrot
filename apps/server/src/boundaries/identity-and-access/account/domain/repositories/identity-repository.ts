@@ -1,11 +1,15 @@
-import {Injectable, NotImplementedException} from "@nestjs/common"
-import {Identity}                            from "../entities/identity.js"
+import {Identity} from "../entities/identity.js"
+import {Email}    from "../value-objects/email.js"
+import {Username} from "../value-objects/username.js"
 
 
 
-@Injectable()
-export class IdentityRepository {
-	async save(identity: Identity): Promise<Identity> {
-		throw new NotImplementedException()
-	}
+export abstract class IdentityRepository {
+	abstract save(identity: Identity): Promise<Identity>
+
+	abstract getById(id: string): Promise<Identity>
+
+	abstract findByUsername(username: Username): Promise<Identity>
+
+	abstract findByEmail(email: Email): Promise<Identity>
 }

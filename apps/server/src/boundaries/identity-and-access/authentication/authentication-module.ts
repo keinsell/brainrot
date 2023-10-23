@@ -1,3 +1,4 @@
+import {AccountModule}              from "@boundary/identity-and-access/account/account.module.js"
 import {Module}                     from "@nestjs/common"
 import {JwtModule}                  from "@nestjs/jwt"
 import {PassportModule}             from "@nestjs/passport"
@@ -10,7 +11,7 @@ import {AuthenticationGuard}        from "./services/guards/authentication-guard
 
 @Module({
 	imports:   [
-		// TODO: Use it as Async Module with ConfigService
+		AccountModule, // TODO: Use it as Async Module with ConfigService
 		JwtModule.register({
 			global:      true,
 			secret:      authorizationConfiguration.jwtSecret,

@@ -7,9 +7,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "build:tsc": "tspc -p tsconfig.json",
+    "build:tsc": "tspc -p tsconfig.json && pnpm copy:markdown",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "copy:markdown": "copyfiles -e \"**/node_modules/**\" -u 1 \"src/**/*.md\" dist",
     "dev": "pnpm run dev:nest",
     "dev:nest": "nest start --watch",
     "dev:tsx": "tsx src/main.ts --clear",
@@ -46,6 +47,7 @@
     "@opentelemetry/sdk-metrics": "^1.17.1",
     "@opentelemetry/sdk-node": "^0.44.0",
     "@prisma/client": "5.4.2",
+    "copyfiles": "^2.4.1",
     "craftpack": "^0.0.16",
     "delay": "^6.0.0",
     "dotenv": "^16.3.1",
@@ -91,7 +93,8 @@
     "tsc-progress": "^1.0.4",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^3.14.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "typescript-transform-paths": "^3.4.6"
   },
   "jest": {
     "moduleFileExtensions": [

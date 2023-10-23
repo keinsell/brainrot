@@ -21,11 +21,15 @@
       "@types/node"
     ],
     "paths": {
-      "@module/*": [
-        "./src/module/*"
+      "@boundary/*": [
+        "./src/boundaries/*"
       ]
     },
     "plugins": [
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": false
+      },
       {
         "transform": "@formatjs/ts-transformer",
         "import": "transform",
