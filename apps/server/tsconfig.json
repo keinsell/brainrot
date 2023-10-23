@@ -23,6 +23,12 @@
     "paths": {
       "@boundary/*": [
         "./src/boundaries/*"
+      ],
+      "@filesystem/*": [
+        "./src/utilities/filesystem-utils/*"
+      ],
+      "@database/*": [
+        "./src/infrastructure/storage/database/*"
       ]
     },
     "plugins": [

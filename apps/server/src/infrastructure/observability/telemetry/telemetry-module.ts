@@ -2,6 +2,7 @@ import {
 	ConsoleLoggerInjector,
 	ControllerInjector,
 	EventEmitterInjector,
+	GraphQLResolverInjector,
 	GuardInjector,
 	OpenTelemetryModule,
 	OpenTelemetryModuleDefaultConfig,
@@ -17,7 +18,7 @@ import {Module} from "@nestjs/common"
 		OpenTelemetryModule.forRoot({
 			traceAutoInjectors:  [
 				ControllerInjector, GuardInjector, EventEmitterInjector, ScheduleInjector, PipeInjector,
-				ConsoleLoggerInjector,
+				ConsoleLoggerInjector, GraphQLResolverInjector,
 			],
 			autoDetectResources: true,
 			instrumentations:    [...OpenTelemetryModuleDefaultConfig.instrumentations],

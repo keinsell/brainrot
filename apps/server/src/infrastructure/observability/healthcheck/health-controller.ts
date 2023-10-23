@@ -8,7 +8,7 @@ import {
 	PrismaHealthIndicator,
 }                          from "@nestjs/terminus";
 import {HealthCheckResult} from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
-import {PrismaService}     from "../database/prisma/prisma-service.js"
+import {PrismaService}     from "../../storage/database/prisma/prisma-service.js"
 
 
 
@@ -26,6 +26,7 @@ import {PrismaService}     from "../database/prisma/prisma-service.js"
 export class HealthController {
 	constructor(private health: HealthCheckService, private memory: MemoryHealthIndicator, private prisma: PrismaHealthIndicator, private prismaService: PrismaService) {}
 
+
 	/**
 	 * Checks the health status of the application.
 	 *
@@ -42,6 +43,7 @@ export class HealthController {
 		]);
 	}
 
+
 	/**
 	 * Checks the memory usage of the service.
 	 * The service should not use more than 150MB of memory.
@@ -52,6 +54,7 @@ export class HealthController {
 		// Service should not use more than 150MB memory
 		return this.memory.checkHeap("memory_heap", 150 * 1024 * 1024)
 	}
+
 
 	/**
 	 * The checkPrisma function is a helper function that checks to see if the Prisma service is up and running.
@@ -65,6 +68,7 @@ export class HealthController {
 		// Prisma should be able to ping database
 		return this.prisma.pingCheck("prisma", this.prismaService)
 	}
+
 
 	private checkRedis() {
 		// Service should be able to ping redis

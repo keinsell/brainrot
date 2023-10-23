@@ -5,8 +5,8 @@ import ms                           from "ms"
 import process                      from "node:process"
 import {env, HEALTHCHECK_PATH}      from "./configs/env.js"
 import {Container}                  from "./container.js"
-import {buildCompodocDocumentation} from "./infrastructure/docs/compodoc/compodoc.js"
-import {buildSwaggerDocumentation}  from "./infrastructure/docs/swagger/swagger.js"
+import {buildCompodocDocumentation} from "./infrastructure/documentation/compodoc/compodoc.js"
+import {buildSwaggerDocumentation}  from "./infrastructure/documentation/swagger/swagger.js"
 import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
 
 

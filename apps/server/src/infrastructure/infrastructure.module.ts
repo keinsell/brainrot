@@ -1,9 +1,9 @@
 import {Module}                         from "@nestjs/common"
-import {ContinuationLocalStorageModule} from "./cls/continuation-local-storage-module.js"
-import {DatabaseModule}                 from "./database/database.module.js"
-import {DocumentaitonModule}            from "./docs/documentaiton-module.js"
-import {HealthModule}                   from "./healthcheck/health-module.js"
-import {TelemetryModule}                from "./telemetry/telemetry-module.js"
+import {DocumentaitonModule}            from "./documentation/documentaiton-module.js"
+import {ContinuationLocalStorageModule} from "./environment/cls/continuation-local-storage-module.js"
+import {HealthModule}                   from "./observability/healthcheck/health-module.js"
+import {TelemetryModule}                from "./observability/telemetry/telemetry-module.js"
+import {DatabaseModule}                 from "./storage/database/database.module.js"
 
 
 
