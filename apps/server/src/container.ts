@@ -1,11 +1,11 @@
-import {Module}               from '@nestjs/common';
-import {InfrastructureModule} from "./infrastructure/infrastructure.module.js"
-import {AccountModule}        from "./modules/account/account.module.js"
+import {IdentityAndAccessModule} from "@boundary/identity-and-access/identity-and-access.module.js"
+import {Module}                  from '@nestjs/common';
+import {InfrastructureModule}    from "./infrastructure/infrastructure.module.js"
 
 
 
 @Module({
-	imports:     [InfrastructureModule, AccountModule],
+	imports:     [IdentityAndAccessModule, InfrastructureModule],
 	controllers: [],
 	providers:   [],
 })

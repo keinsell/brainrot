@@ -10,27 +10,37 @@ export const env = cleanEnv(process.env, {
 	PROTOCOL:            str({
 		default: "http",
 		choices: ["http", "https"],
+		desc:    "Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'.",
 	}),
-	HOST:                host({devDefault: "localhost"}),
+	HOST:                host({
+		devDefault: "localhost",
+		desc:       "Defines the host on which the application runs. Default for development is 'localhost'.",
+	}),
 	PORT:                port({
 		devDefault: 1337,
 		default:    80,
-		desc:       "PORT stands for port on which application will be listening.",
+		desc:       "Defines the port on which the application listens. Default for development is 1337, otherwise it's 80.",
 	}),
-	SERVICE_NAME:        str({default: "methylophenidate"}),
-	SERVICE_DESCRIPTION: str({default: "Methylophenidate is a boilerplate for Nest.js applications with batteries included."}),
+	SERVICE_NAME:        str({
+		default: "methylphenidate",
+		desc:    "Defines the name of the service. Default is 'methylphenidate'.",
+	}),
+	SERVICE_DESCRIPTION: str({
+		default: "Methylphenidate is a boilerplate for Nest.js applications with batteries included.",
+		desc:    "Provides a brief description of the service. Default description is set.",
+	}),
 	NODE_ENV:            str({
 		choices:    ['development', 'test', 'production', 'staging'],
 		default:    'development',
 		devDefault: 'development',
-		desc:       "NODE_ENV stands for environment in which application is run. It can" + " control features and functionality of software, it is strongly not" + " advised to publicly share application under development or test environments.",
+		desc:       "Sets the application environment. Can be one of 'development', 'test', 'production', or 'staging'. Default is 'development'.",
 	}),
 	TRACING:             bool({
 		default:    true,
-		desc:       "TRACING stands for OpenTelemetry tracing. It can be used to trace requests and responses" + " between services and applications. It is strongly not advised to publicly share" + " application under development or test environments.",
 		devDefault: false,
+		desc:       "Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.",
 	}),
-})
+});
 
 export function getApplicationUrl() {
 	return `${env.PROTOCOL}://${env.HOST}:${env.PORT}`;
