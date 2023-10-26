@@ -47,6 +47,7 @@
     "@opentelemetry/sdk-metrics": "^1.17.1",
     "@opentelemetry/sdk-node": "^0.44.0",
     "@prisma/client": "5.4.2",
+    "argon2": "^0.31.1",
     "copyfiles": "^2.4.1",
     "craftpack": "^0.0.16",
     "delay": "^6.0.0",
