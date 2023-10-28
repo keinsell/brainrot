@@ -5,9 +5,9 @@
 
 ## Table of Contents
 
-## Getting Started
+TODO
 
-NOTICE: If you're Widnows user please use WSL2, in other words: "Fuck You" :P
+## Getting Started
 
 ### Prerequisites
 
@@ -19,6 +19,24 @@ Application requires few standard tools to be installed on your machine, you can
 - [Docker Compose](https://docs.docker.com/compose/)
 - [pnpm](https://pnpm.js.org/)
 
+#### Recommended Knowledge
+
+Repository isn't mean to be next "copy-paste" boilerplate, it is mean to be a boilerplate that you can use to learn and
+actually use a little of such code for your own purposes. Also this repository will/should appearch somehow complicated
+for new programmers however I swear things aren't as much complicated as they could be once you will understand internal
+library, I recommend you to have at least basic knowledge about
+following topics:
+
+- Essential knowledge about TypeScript
+- Essential knowledge about Docker and Docker Compose
+- Essential knowledge about Hexagonal Architecture
+- Understanding of model happening in DDD (Aggregate, Value Object)
+- Understanding of CQRS (Command, Event, Query)
+
+#### Windows Support
+
+Nobody likes you, use Unix-like system (WSL2, MacOS, Linux) or go away.
+
 ### Installation
 
 ```bash
@@ -28,6 +46,8 @@ pnpm install
 ```
 
 ### Usage
+
+TODO.
 
 ### Development
 
