@@ -27,8 +27,8 @@
       "@filesystem/*": [
         "./src/utilities/filesystem-utils/*"
       ],
-      "@database/*": [
-        "./src/infrastructure/storage/database/*"
+      "@storage": [
+        "./src/infrastructure/storage/*"
       ]
     },
     "plugins": [
