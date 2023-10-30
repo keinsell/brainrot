@@ -51,13 +51,15 @@ export class AccountController {
 				  password,
 			  } = registerAccountBody
 
+		console.log(registerAccountBody)
+
 		const result = await this.service.register({
 			username,
 			email,
 			password,
 		})
 
-		return result
+		return result.id
 	}
 
 

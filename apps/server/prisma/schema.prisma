@@ -1,5 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
+  output          = "../src/externals/generated/prisma"
   previewFeatures = ["tracing", "metrics", "fieldReference", "clientExtensions"]
 }
 
@@ -9,8 +10,18 @@ datasource db {
   relationMode = "foreignKeys"
 }
 
+enum EmailVerificationStatus {
+  VERIFIED
+  UNVERIFIED
+}
+
 model Account {
-  id       String @id @default(cuid())
-  username String @unique
-  password String
+  id                      String                  @id @default(cuid())
+  username                String                  @unique
+  email                   String                  @unique
+  emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
+  salt                    String
+  password                String
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
 }

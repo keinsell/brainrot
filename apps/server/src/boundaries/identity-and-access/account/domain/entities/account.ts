@@ -1,20 +1,21 @@
-import {Email}    from "../value-objects/email.js"
-import {Password} from "../value-objects/password.js"
-import {Username} from "../value-objects/username.js"
+import {AggregateRoot} from "../../../../../externals/libs/domain/aggregate.js"
+import {Email}         from "../value-objects/email.js"
+import {Password}      from "../value-objects/password.js"
+import {Username}      from "../value-objects/username.js"
 
 
 
 export interface IdentityProperties {
+	id: string
 	email: Email
 	password: Password
 	username: Username
 }
 
 
-export class Identity implements IdentityProperties {
-
+export class Account extends AggregateRoot implements IdentityProperties {
 	public email: Email
-
+	id: string
 	public password: Password
 
 	public username: Username
@@ -23,6 +24,8 @@ export class Identity implements IdentityProperties {
 
 
 	private constructor(payload: IdentityProperties) {
+		super()
+		this.id       = payload.id
 		this.email    = payload.email
 		this.username = payload.email.address
 		this.password = payload.password
@@ -30,14 +33,12 @@ export class Identity implements IdentityProperties {
 
 
 	static RegisterAccount(payload: IdentityProperties) {
-		const identity = new Identity(payload)
-		// Execute register account method
-		return identity;
+		return new Account(payload)
 	}
 
 
 	static CreateAccount(payload: IdentityProperties) {
-		return new Identity(payload)
+		return new Account(payload)
 	}
 
 
@@ -69,7 +70,7 @@ export class Identity implements IdentityProperties {
 	public verifyEmail() {}
 
 
-	public registerAccount(): void {
-
+	public registerAccount(): Account {
+		return this;
 	}
 }
