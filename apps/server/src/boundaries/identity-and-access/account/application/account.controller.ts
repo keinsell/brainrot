@@ -1,3 +1,4 @@
+import {CreateAccount}               from "@boundary/identity-and-access/account/application/commands/create-account.js"
 import {RegisterAccount}             from "@boundary/identity-and-access/account/application/commands/register-account.js"
 import {AccountService}              from "@boundary/identity-and-access/account/services/account.service.js"
 import {Body, Controller, Get, Post} from "@nestjs/common"
@@ -41,22 +42,17 @@ export class AccountController {
 
 	@ApiOperation({
 		operationId: "register",
+		summary:     "Register account",
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
 	}) @Post()
 	async register(@Body() registerAccountBody: RegisterAccount): Promise<string> {
-		const {
-				  username,
-				  email,
-				  password,
-			  } = registerAccountBody
-
-		console.log(registerAccountBody)
+		const body = registerAccountBody as CreateAccount
 
 		const result = await this.service.register({
-			username,
-			email,
-			password,
+			username: body.username,
+			email:    body.email,
+			password: body.password,
 		})
 
 		return result.id

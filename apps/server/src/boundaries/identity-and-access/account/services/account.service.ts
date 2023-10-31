@@ -28,11 +28,16 @@ export class AccountService {
 	public async register(accountPayload: {
 		username: string; email: string; password: string;
 	}): Promise<{ id: any; email: string; username: string }> {
+
+		// TODO: Create factories for value objects?
+
 		const username = accountPayload.username as Username;
-		const email    = {
+
+		const email = {
 			isVerified: false,
 			address:    accountPayload.email,
 		} as Email;
+
 		const password = {
 			hash: accountPayload.password,
 		} as Password
@@ -44,11 +49,11 @@ export class AccountService {
 			password: password,
 		});
 
-		const maybePolicy = this.policy.merge(this.policy.isUniqueEmail(identity.email))
+		const maybePolicy = this.policy.merge(await this.policy.isUniqueEmail(identity.email), await this.policy.isUniqueUsername(identity.username))
 
-		//if (maybePolicy.isErr()) {
-		//	throw maybePolicy._unsafeUnwrapErr()
-		//}
+		if (maybePolicy.isErr()) {
+			throw maybePolicy._unsafeUnwrapErr()
+		}
 
 		identity = identity.registerAccount()
 

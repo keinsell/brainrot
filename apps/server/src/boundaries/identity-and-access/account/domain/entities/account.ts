@@ -15,7 +15,7 @@ export interface IdentityProperties {
 
 export class Account extends AggregateRoot implements IdentityProperties {
 	public email: Email
-	id: string
+	public id: string
 	public password: Password
 
 	public username: Username
@@ -27,7 +27,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 		super()
 		this.id       = payload.id
 		this.email    = payload.email
-		this.username = payload.email.address
+		this.username = payload.username
 		this.password = payload.password
 	}
 

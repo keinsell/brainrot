@@ -1,9 +1,9 @@
-import {IdentityRepository} from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
-import {Email}              from "@boundary/identity-and-access/account/domain/value-objects/email.js"
-import {Username}           from "@boundary/identity-and-access/account/domain/value-objects/username.js"
-import {Injectable}         from "@nestjs/common"
-import {err, ok, Result}    from "neverthrow"
-import {BasePolicy}         from "../../../../../externals/libs/policy/base-policy.js"
+import {IdentityRepository}            from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
+import {Email}                         from "@boundary/identity-and-access/account/domain/value-objects/email.js"
+import {Username}                      from "@boundary/identity-and-access/account/domain/value-objects/username.js"
+import {ConflictException, Injectable} from "@nestjs/common"
+import {err, ok}                       from "neverthrow"
+import {BasePolicy}                    from "../../../../../externals/libs/policy/base-policy.js"
 
 
 
@@ -14,16 +14,22 @@ export class AccountPolicy extends BasePolicy {
 	}
 
 
-	public isUniqueUsername(username: Username) {
-		console.log(username)
+	public async isUniqueUsername(username: Username) {
+		const identity = await this.accountRepository.findByUsername(username)
+
+		if (identity) {
+			return err(new ConflictException("Username is already in use in system, try logging in instead."))
+		}
+
+		return ok(true)
 	}
 
 
-	public isUniqueEmail(email: Email): Result<boolean, any> {
-		const identity = this.accountRepository.findByEmail(email)
+	public async isUniqueEmail(email: Email) {
+		const identity = await this.accountRepository.findByEmail(email)
 
 		if (identity) {
-			return err("Email is already taken.")
+			return err(new ConflictException("Email is already in use in system, try logging in instead."))
 		}
 
 		return ok(true)
