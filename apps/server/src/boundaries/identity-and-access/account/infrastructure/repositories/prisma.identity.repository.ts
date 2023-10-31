@@ -77,4 +77,19 @@ export class PrismaIdentityRepository implements IdentityRepository {
 
 		return createdAccountModel.toDomainModel()
 	}
+
+
+	public create(entity: Account): Promise<void> {
+		return Promise.resolve(undefined)
+	}
+
+
+	public delete(entity: Account): Promise<void> {
+		return Promise.resolve(undefined)
+	}
+
+
+	public update(entity: Account): Promise<void> {
+		return Promise.resolve(undefined)
+	}
 }

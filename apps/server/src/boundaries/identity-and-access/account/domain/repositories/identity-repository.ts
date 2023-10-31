@@ -1,10 +1,11 @@
-import {Account}  from "../entities/account.js"
-import {Email}    from "../value-objects/email.js"
-import {Username} from "../value-objects/username.js"
+import {GenericRepository} from "../../../../../externals/libs/persistence/repository.js"
+import {Account}           from "../entities/account.js"
+import {Email}             from "../value-objects/email.js"
+import {Username}          from "../value-objects/username.js"
 
 
 
-export abstract class IdentityRepository {
+export abstract class IdentityRepository extends GenericRepository<Account> {
 	abstract save(identity: Account): Promise<Account>
 
 
