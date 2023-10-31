@@ -1,39 +1,37 @@
 import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
-import {Prisma, PrismaClient}                              from "@prisma/client"
 import delay                                               from 'delay'
 import ms                                                  from 'ms'
+import {Prisma, PrismaClient}                              from "../../../../externals/generated/prisma/index.js"
 
 
 
 @Injectable()
-export class PrismaService
-	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
+export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
 	implements OnModuleInit, OnModuleDestroy {
 	private logger: Logger = new Logger("database:prisma")
 
+
 	constructor() {
 		super({
-			      errorFormat: "pretty",
-			      log        : [
-				      {
-					      emit : 'event',
-					      level: 'query',
-				      },
-				      {
-					      emit : 'event',
-					      level: 'error',
-				      },
-				      {
-					      emit : 'event',
-					      level: 'info',
-				      },
-				      {
-					      emit : 'event',
-					      level: 'warn',
-				      },
-			      ],
-		      });
+			errorFormat: "pretty",
+			log:         [
+				{
+					emit:  'event',
+					level: 'query',
+				}, {
+					emit:  'event',
+					level: 'error',
+				}, {
+					emit:  'event',
+					level: 'info',
+				}, {
+					emit:  'event',
+					level: 'warn',
+				},
+			],
+		});
 	}
+
 
 	async onModuleInit() {
 		this.$on('error', (event) => {
@@ -52,7 +50,7 @@ export class PrismaService
 		// Use an immediately invoked asynchronous function to handle the connection in the background.
 		(
 			async () => {
-				let connectionState = false;
+				let connectionState      = false;
 				let connectionRetryDelay = ms('5s')
 
 				// Handle retries to the database and don't throw an error if the connection failed.
@@ -76,6 +74,7 @@ export class PrismaService
 			}
 		)();
 	}
+
 
 	async onModuleDestroy() {
 		await this.$disconnect();

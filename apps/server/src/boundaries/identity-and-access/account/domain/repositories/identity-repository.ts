@@ -1,15 +1,18 @@
-import {Identity} from "../entities/identity.js"
+import {Account}  from "../entities/account.js"
 import {Email}    from "../value-objects/email.js"
 import {Username} from "../value-objects/username.js"
 
 
 
 export abstract class IdentityRepository {
-	abstract save(identity: Identity): Promise<Identity>
+	abstract save(identity: Account): Promise<Account>
 
-	abstract getById(id: string): Promise<Identity>
 
-	abstract findByUsername(username: Username): Promise<Identity>
+	abstract getById(id: string): Promise<Account>
 
-	abstract findByEmail(email: Email): Promise<Identity>
+
+	abstract findByUsername(username: Username): Promise<Account | null>
+
+
+	abstract findByEmail(email: Email): Promise<Account | null>
 }

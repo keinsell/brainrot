@@ -18,7 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "types": [
-      "@types/node"
+      "@types/node",
+      "./node_modules/@prisma/client/index.d.ts",
+      "./node_modules/.pnpm/@prisma+client@5.4.2_prisma@5.4.2/node_modules/@prisma/client/index.d.ts"
     ],
     "paths": {
       "@boundary/*": [
@@ -36,13 +38,13 @@
         "transform": "typescript-transform-paths",
         "afterDeclarations": false
       },
-      {
-        "transform": "@formatjs/ts-transformer",
-        "import": "transform",
-        "type": "config",
-        "overrideIdFn": "[sha512:contenthash:base64:6]",
-        "ast": true
-      },
+      //      {
+      //        "transform": "@formatjs/ts-transformer",
+      //        "import": "transform",
+      //        "type": "config",
+      //        "overrideIdFn": "[sha512:contenthash:base64:6]",
+      //        "ast": true
+      //      },
       {
         "transform": "tsc-progress",
         "title": "Transpiration"
@@ -51,5 +53,14 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.e2e-spec.ts",
+    "src/**/*.e2e-test.ts"
   ]
 }

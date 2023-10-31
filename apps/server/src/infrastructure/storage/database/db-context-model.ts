@@ -1,4 +1,4 @@
-import type {Account as PrismaAccount} from '@prisma/client'
+import {$Enums, Account as PrismaAccount, Prisma} from '../../../externals/generated/prisma/index.js'
 
 
 
@@ -6,8 +6,15 @@ import type {Account as PrismaAccount} from '@prisma/client'
  *  application, to not be confused with domain models - these models are only responsible for providing
  *  type-safe interaction with database inputs and reads. */
 export namespace DbContextModel {
+	export namespace Enums {
+		export type EmailVerificationStatus = $Enums.EmailVerificationStatus
+	}
+
 	export namespace Account {
 		export type Entity = PrismaAccount;
-		//export type Create = Prisma.CreateAccountInput;
+		export type CreatePayload = Prisma.AccountCreateInput;
+		export type UpdatePayload = Prisma.AccountUpdateInput;
+		export type WhereUnique = Prisma.AccountWhereUniqueInput;
+		export type Where = Prisma.AccountWhereInput;
 	}
 }
