@@ -1,5 +1,6 @@
-import {Account}        from "@boundary/identity-and-access/account/domain/entities/account.js"
-import {DbContextModel} from "../../../../../infrastructure/storage/database/db-context-model.js"
+import {Account}        from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {AccountStatus}  from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
+import {DbContextModel} from "../../../../../../infrastructure/storage/database/db-context-model.js"
 
 
 
@@ -36,7 +37,9 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 			},
 			password: {
 				hash: this.password,
+				salt: this.salt,
 			},
+			status:   AccountStatus.ACTIVE,
 		})
 	}
 }

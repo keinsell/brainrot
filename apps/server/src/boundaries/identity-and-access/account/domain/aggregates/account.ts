@@ -1,3 +1,4 @@
+import {AccountStatus} from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
 import {AggregateRoot} from "../../../../../externals/libs/domain/aggregate.js"
 import {Email}         from "../value-objects/email.js"
 import {Password}      from "../value-objects/password.js"
@@ -10,6 +11,7 @@ export interface IdentityProperties {
 	email: Email
 	password: Password
 	username: Username
+	status: AccountStatus
 }
 
 
@@ -17,7 +19,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 	public email: Email
 	public id: string
 	public password: Password
-
+	public status: AccountStatus
 	public username: Username
 
 	public readonly usernameFields: any = ["username", "email"]
@@ -32,8 +34,11 @@ export class Account extends AggregateRoot implements IdentityProperties {
 	}
 
 
-	static RegisterAccount(payload: IdentityProperties) {
-		return new Account(payload)
+	static RegisterAccount(payload: Omit<IdentityProperties, 'status'>) {
+		return new Account({
+			...payload,
+			status: AccountStatus.INACTIVE,
+		})
 	}
 
 

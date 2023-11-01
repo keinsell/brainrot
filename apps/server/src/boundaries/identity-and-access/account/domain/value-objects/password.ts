@@ -1,3 +1,3 @@
 export type Password = {
-	hash: string;
+	hash: string; salt: string;
 }

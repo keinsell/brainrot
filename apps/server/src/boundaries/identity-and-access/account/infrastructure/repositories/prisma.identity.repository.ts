@@ -1,8 +1,9 @@
-import {AccountEntityModel}                          from "@boundary/identity-and-access/account/infrastructure/persistence/account-entity-model.js"
+import {Account}                                     from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {AccountWriteModel}                           from "@boundary/identity-and-access/account/infrastructure/persistence/account-write-model.js"
+import {AccountEntityModel}                          from "@boundary/identity-and-access/account/infrastructure/persistence/account/account-entity-model.js"
 import {Injectable, Logger, NotImplementedException} from "@nestjs/common"
 import {DbContextModel}                              from "../../../../../infrastructure/storage/database/db-context-model.js"
 import {PrismaService}                               from "../../../../../infrastructure/storage/database/prisma/prisma-service.js"
-import {Account}                                     from "../../domain/entities/account.js"
 import {IdentityRepository}                          from "../../domain/repositories/identity-repository.js"
 import {Email}                                       from "../../domain/value-objects/email.js"
 import {Username}                                    from "../../domain/value-objects/username.js"
@@ -37,11 +38,17 @@ export class PrismaIdentityRepository implements IdentityRepository {
 
 
 	public async findByUsername(username: Username): Promise<Account | undefined> {
-		const maybeAccount = await this.prismaService.account.findFirst({
-			where: {
-				username: username,
-			},
-		})
+		let maybeAccount: DbContextModel.Account.Entity | null = null
+
+		try {
+			maybeAccount = await this.prismaService.account.findFirst({
+				where: {
+					username: username,
+				},
+			}) as DbContextModel.Account.Entity | null
+		} catch (e) {
+			this.logger.error(e)
+		}
 
 		this.logger.verbose(`findByUsername(${username}) => ${JSON.stringify(maybeAccount)}`)
 
@@ -49,7 +56,7 @@ export class PrismaIdentityRepository implements IdentityRepository {
 			return undefined
 		}
 
-		const account = maybeAccount as DbContextModel.Account.Entity
+		const account = maybeAccount
 
 		return new AccountEntityModel(account).toDomainModel()
 	}
@@ -61,26 +68,34 @@ export class PrismaIdentityRepository implements IdentityRepository {
 
 
 	public async save(identity: Account): Promise<Account> {
-		const pendingAccount: DbContextModel.Account.CreatePayload = {
-			username:                identity.username,
-			password:                identity.password.hash,
-			email:                   identity.email.address,
-			emailVerificationStatus: identity.email.isVerified ? "VERIFIED" : "UNVERIFIED",
-			salt:                    "",
+		let entity: DbContextModel.Account.Entity
+
+		try {
+			entity = await this.prismaService.account.create({
+				data: AccountWriteModel.fromDomainModel(identity),
+			}) as DbContextModel.Account.Entity
+		} catch (e) {
+			this.logger.error(e)
+			throw e
 		}
 
-		const createdAccount = await this.prismaService.account.create({
-			data: pendingAccount,
-		}) as DbContextModel.Account.Entity
-
-		const createdAccountModel = new AccountEntityModel(createdAccount)
-
-		return createdAccountModel.toDomainModel()
+		return new AccountEntityModel(entity).toDomainModel()
 	}
 
 
-	public create(entity: Account): Promise<void> {
-		return Promise.resolve(undefined)
+	public async create(identity: Account): Promise<Account> {
+		let entity: DbContextModel.Account.Entity
+
+		try {
+			entity = await this.prismaService.account.create({
+				data: AccountWriteModel.fromDomainModel(identity),
+			}) as DbContextModel.Account.Entity
+		} catch (e) {
+			this.logger.error(e)
+			throw e
+		}
+
+		return new AccountEntityModel(entity).toDomainModel()
 	}
 
 
@@ -89,7 +104,7 @@ export class PrismaIdentityRepository implements IdentityRepository {
 	}
 
 
-	public update(entity: Account): Promise<void> {
+	public update(entity: Account): Promise<Account> {
 		return Promise.resolve(undefined)
 	}
 }

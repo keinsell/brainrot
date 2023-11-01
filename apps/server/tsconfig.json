@@ -26,6 +26,9 @@
       "@boundary/*": [
         "./src/boundaries/*"
       ],
+      "@boundary/iam": [
+        "./src/boundaries/identity-and-access/*"
+      ],
       "@filesystem/*": [
         "./src/utilities/filesystem-utils/*"
       ],

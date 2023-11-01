@@ -1,4 +1,4 @@
-import {Account}            from "@boundary/identity-and-access/account/domain/entities/account.js"
+import {Account}            from "@boundary/identity-and-access/account/domain/aggregates/account.js"
 import {AccountPolicy}      from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
 import {IdentityRepository} from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
 import {Email}              from "@boundary/identity-and-access/account/domain/value-objects/email.js"
