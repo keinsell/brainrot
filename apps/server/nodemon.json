@@ -1,0 +1,11 @@
+{
+  "quiet": false,
+  "delay": 2000,
+  "signal": "SIGQUIT",
+  "watch": [
+    "src"
+  ],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "pnpm build:tsc && node dist/main.js"
+}
