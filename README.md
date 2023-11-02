@@ -18,6 +18,7 @@ Application requires few standard tools to be installed on your machine, you can
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [pnpm](https://pnpm.js.org/)
+- [pre-commit](https://pre-commit.com)
 
 #### Recommended Knowledge
 
@@ -72,4 +73,4 @@ TODO.
   API, and `eventsdoc` for event-driven applications. I would like to document websockets with `asyncapi` but sorry
   ecosystem isn't ready for that yet. I mean... You still can completly do not give a fuck about documentation and will
   hear such thing but I think you can say you tried at least lol
-- 
+-
