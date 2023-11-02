@@ -9,3 +9,12 @@ repos:
     rev: v8.16.1
     hooks:
       - id: gitleaks-docker # use gitleaks when running locally
+  - repo: https://github.com/iamthefij/docker-pre-commit
+    rev: master
+    hooks:
+      - id: docker-compose-check
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.7.0-1
+    hooks:
+      # - id: shfmt # native (requires/installs Go to build)
+      - id: shfmt-docker
