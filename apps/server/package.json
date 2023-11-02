@@ -66,7 +66,9 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "swagger-themes": "^1.2.30"
+    "swagger-themes": "^1.2.30",
+    "tildify": "^3.0.0",
+    "untildify": "^5.0.0"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.22",

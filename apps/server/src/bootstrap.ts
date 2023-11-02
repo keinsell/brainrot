@@ -30,7 +30,7 @@ export async function bootstrap() {
 	if (openPortForAllocation.wasReplaced) {
 		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPortForAllocation.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
 	} else {
-		logger.log(`Application performed port availability check and ::${env.PORT} is available`);
+		logger.log(`Port availability check succeeded and requested ::${env.PORT} is available`);
 	}
 
 	let isApplicationListening = false;

@@ -3,6 +3,7 @@ import {DocumentBuilder, OpenAPIObject, SwaggerModule} from "@nestjs/swagger"
 import fs                                              from "node:fs"
 import process                                         from 'node:process'
 import {SwaggerTheme}                                  from "swagger-themes"
+import tildify                                         from "tildify"
 import {ApplicationConfiguration}                      from "../../../configs/application-configuration.js"
 import {env}                                           from "../../../configs/env.js"
 import {getMetadataStore}                              from "../../../utilities/docs-utils/swagger-api-model.js"
@@ -96,11 +97,11 @@ export async function buildSwaggerDocumentation(app: INestApplication): Promise<
 	.addTag('api')
 	.build()
 
-	logger.verbose(`Swagger documentation base built for ${env.SERVICE_NAME} service. ${JSON.stringify(config)}`);
+	logger.verbose(`Swagger documentation base built for ${env.SERVICE_NAME} service.`);
 
 	const document = SwaggerModule.createDocument(app, config);
 
-	logger.verbose(`Swagger documentation document built for ${env.SERVICE_NAME} service. ${JSON.stringify(document)}`);
+	logger.verbose(`Swagger documentation document built for ${env.SERVICE_NAME} service.`);
 
 	experimentalAddApiModelFunctionality(document);
 
@@ -109,9 +110,11 @@ export async function buildSwaggerDocumentation(app: INestApplication): Promise<
 		customCss: new SwaggerTheme('v3').getBuffer("flattop"), // OR newspaper
 	});
 
-	logger.log(`Swagger documentation was attached to ${env.SERVICE_NAME} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
+	logger.verbose(`Swagger documentation was attached to ${env.SERVICE_NAME} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
+
+	const documentationObjectPath = `${process.cwd()}/openapi3.json`;
 
 	// Save Swagger Documentation to File
 	fs.writeFileSync('./openapi3.json', JSON.stringify(document));
-	logger.verbose(`Swagger documentation was snapshot into ${process.cwd()}/swagger.json`);
+	logger.verbose(`Swagger documentation was snapshot into ${tildify(documentationObjectPath)}`);
 }
