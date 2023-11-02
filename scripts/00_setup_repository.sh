@@ -8,6 +8,10 @@ pre-commit autoupdate
 # https://pnpm.io/installation
 npm install -g pnpm
 
+# Install trunk
+# https://docs.trunk.io/cli/install-trunk
+# curl https://get.trunk.io -fsSL | bash
+
 # Install gitleaks to protect against exposing secrets
 # https://github.com/gitleaks/gitleaks
 docker pull ghcr.io/gitleaks/gitleaks:latest
