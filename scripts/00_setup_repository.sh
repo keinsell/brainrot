@@ -2,6 +2,7 @@
 # https://pre-commit.com/#install
 brew install pre-commit
 pre-commit install
+pre-commit autoupdate
 
 # Install and update pnpm
 # https://pnpm.io/installation

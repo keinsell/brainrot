@@ -6,11 +6,11 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.16.1
+    rev: v8.18.0
     hooks:
       - id: gitleaks-docker # use gitleaks when running locally
   - repo: https://github.com/iamthefij/docker-pre-commit
-    rev: master
+    rev: v3.0.1
     hooks:
       - id: docker-compose-check
   - repo: https://github.com/scop/pre-commit-shfmt
