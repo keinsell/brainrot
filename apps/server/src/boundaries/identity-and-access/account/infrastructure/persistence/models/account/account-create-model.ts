@@ -1,4 +1,4 @@
-import {Account} from '@boundary/identity-and-access/account/domain/aggregates/account.js';
+import {Account}        from '@boundary/identity-and-access/account/domain/aggregates/account.js';
 import {DbContextModel} from "../../../../../../../infrastructure/storage/database/db-context-model.js"
 
 
@@ -29,7 +29,7 @@ export class AccountCreateModel implements DbContextModel.Account.CreatePayload 
 			email: account.email.address,
 			emailVerificationStatus: account.email.isVerified ? 'VERIFIED' : 'UNVERIFIED',
 			password: account.password.hash,
-			salt: account.password.salt ?? '',
+			salt: account.password.salt,
 			username: account.username,
 		});
 	}

@@ -1,6 +1,8 @@
-import {Account}       from "@boundary/identity-and-access/account/domain/aggregates/account.js"
-import {AccountStatus} from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
-import {DbContextModel} from "../../../../../../../infrastructure/storage/database/db-context-model.js"
+import {Account}                  from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {AccountStatus}            from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
+import {Password}                 from "@boundary/identity-and-access/account/domain/value-objects/password.js"
+import {PasswordHashingAlgorithm} from "@libraries/security/password-hashing/model/password-hashing-algorithm.js"
+import {DbContextModel}           from "../../../../../../../infrastructure/storage/database/db-context-model.js"
 
 
 
@@ -35,10 +37,7 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 				address:    this.email,
 				isVerified: this.emailVerificationStatus === "VERIFIED",
 			},
-			password: {
-				hash: this.password,
-				salt: this.salt,
-			},
+			password: Password.fromHash(this.password, Buffer.from(this.salt, 'base64'), PasswordHashingAlgorithm.ARGON2ID),
 			status:   AccountStatus.ACTIVE,
 			updatedAt: this.updatedAt,
 			createdAt: this.createdAt,

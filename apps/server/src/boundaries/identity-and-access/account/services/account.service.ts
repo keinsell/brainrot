@@ -4,6 +4,7 @@ import {IdentityRepository}                  from "@boundary/identity-and-access
 import {Email}                               from "@boundary/identity-and-access/account/domain/value-objects/email.js"
 import {Password}                            from "@boundary/identity-and-access/account/domain/value-objects/password.js"
 import {Username}                            from "@boundary/identity-and-access/account/domain/value-objects/username.js"
+import {PasswordHashing}                     from "@libraries/security/password-hashing/password-hashing.js"
 import {Injectable, NotImplementedException} from "@nestjs/common"
 import {EventBus}                            from "../../../../infrastructure/messaging/event-bus.js"
 
@@ -11,7 +12,7 @@ import {EventBus}                            from "../../../../infrastructure/me
 
 @Injectable()
 export class AccountService {
-	constructor(private policy: AccountPolicy, private repository: IdentityRepository) {}
+	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashingStrategy: PasswordHashing) {}
 
 
 	/**
@@ -39,9 +40,7 @@ export class AccountService {
 			address:    accountPayload.email,
 		} as Email;
 
-		const password = {
-			hash: accountPayload.password,
-		} as Password
+		const password = await Password.fromPlain(accountPayload.password, this.hashingStrategy);
 
 		let identity = Account.RegisterAccount({
 			username: username,

@@ -1,6 +1,6 @@
 import {AccountEvent}                           from "@boundary/identity-and-access/account/domain/events/account-event.js"
 import {AccountStatus}                          from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
-import {AggregateRoot, AggregateRootProperties} from "../../../../../libraries/domain/aggregate.js"
+import {AggregateRoot, AggregateRootProperties} from "@libraries/domain/aggregate.js"
 import {Email}                                  from "../value-objects/email.js"
 import {Password}                               from "../value-objects/password.js"
 import {Username}                               from "../value-objects/username.js"
@@ -42,6 +42,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 		return new Account({
 			...payload,
 			status: AccountStatus.INACTIVE,
+			password: payload.password,
 		}).registerAccount()
 	}
 
