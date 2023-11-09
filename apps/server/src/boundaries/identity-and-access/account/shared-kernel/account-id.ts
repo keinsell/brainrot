@@ -1,0 +1,1 @@
+export type AccountId = string & { readonly __brand: unique symbol };

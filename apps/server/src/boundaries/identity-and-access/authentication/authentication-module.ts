@@ -1,3 +1,4 @@
+import {CredentialValidatorModule}  from "@boundary/identity-and-access/account/shared-kernel/credential-validator/credential-validator-module.js"
 import {AuthenticationService}      from "@boundary/identity-and-access/authentication/services/authentication-service.js"
 import {LocalAuthorizationStrategy} from "@boundary/identity-and-access/authentication/services/authorization-strategies/local-authorization-strategy.js"
 import {AuthenticationGuard}        from "@boundary/identity-and-access/authentication/shared-kernel/guards/authentication-guard.js"
@@ -10,6 +11,7 @@ import {authorizationConfiguration} from "../../../configs/authorization-configu
 
 @Module({
 	imports:   [
+		CredentialValidatorModule,
 		JwtModule.register({
 			// TODO: Use it as Async Module with ConfigService
 			global:      true,

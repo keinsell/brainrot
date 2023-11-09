@@ -1,11 +1,11 @@
-import {Account}            from "@boundary/identity-and-access/account/domain/aggregates/account.js"
-import {AccountPolicy}      from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
-import {IdentityRepository} from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
-import {Email}              from "@boundary/identity-and-access/account/domain/value-objects/email.js"
-import {Password}           from "@boundary/identity-and-access/account/domain/value-objects/password.js"
-import {Username}           from "@boundary/identity-and-access/account/domain/value-objects/username.js"
-import {Injectable}         from "@nestjs/common"
-import {EventBus}           from "../../../../infrastructure/messaging/event-bus.js"
+import {Account}                             from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {AccountPolicy}                       from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
+import {IdentityRepository}                  from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
+import {Email}                               from "@boundary/identity-and-access/account/domain/value-objects/email.js"
+import {Password}                            from "@boundary/identity-and-access/account/domain/value-objects/password.js"
+import {Username}                            from "@boundary/identity-and-access/account/domain/value-objects/username.js"
+import {Injectable, NotImplementedException} from "@nestjs/common"
+import {EventBus}                            from "../../../../infrastructure/messaging/event-bus.js"
 
 
 
@@ -22,7 +22,7 @@ export class AccountService {
 	 * @returns {Promise<any>} - A promise that resolves with the validation result.
 	 */
 	public validateCredentials(username: string, password: string): Promise<any> {
-		return;
+	throw new NotImplementedException(username, password)
 	}
 
 

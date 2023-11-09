@@ -16,6 +16,7 @@
 //
 //	Security Information: Information related to session security, such as IP address, user agent, and other data used for security checks and fraud prevention, may be included.
 
+import {AccountId} from "@boundary/identity-and-access/account/shared-kernel/account-id.js"
 import {IpAddress} from "../value-objects/ip-address.js"
 
 
@@ -23,7 +24,7 @@ import {IpAddress} from "../value-objects/ip-address.js"
 export class Session {
 	id: string
 
-	accountId: string;
+	accountId: AccountId;
 
 	lastActivity: Date;
 

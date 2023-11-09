@@ -1,4 +1,5 @@
-import {Injectable} from "@nestjs/common"
+import {AccountService} from "@boundary/identity-and-access/account/services/account.service.js"
+import {Injectable}     from "@nestjs/common"
 
 
 
@@ -9,9 +10,10 @@ import {Injectable} from "@nestjs/common"
 @Injectable()
 export class CredentialValidator {
 	constructor(
+		private accountService: AccountService,
 	) {}
 
 	public async validateCredentials(username: string, password: string): Promise<boolean> {
-		return true
+		return await this.accountService.validateCredentials(username, password)
 	}
 }
