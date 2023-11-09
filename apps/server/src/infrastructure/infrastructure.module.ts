@@ -1,3 +1,4 @@
+import {PasswordHashingModuleV2}        from "@libraries/security/password-hashing-v2/password-hashing-module-v2.js"
 import {Module}                         from "@nestjs/common"
 import {DocumentaitonModule}            from "./documentation/documentaiton-module.js"
 import {ContinuationLocalStorageModule} from "./environment/cls/continuation-local-storage-module.js"
@@ -8,7 +9,10 @@ import {DatabaseModule}                 from "./storage/database/database.module
 
 
 @Module({
-	imports: [TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, DocumentaitonModule, HealthModule],
+	imports: [
+		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, DocumentaitonModule, HealthModule,
+		PasswordHashingModuleV2,
+	],
 	exports: [TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, DocumentaitonModule, HealthModule],
 })
 export class InfrastructureModule {}

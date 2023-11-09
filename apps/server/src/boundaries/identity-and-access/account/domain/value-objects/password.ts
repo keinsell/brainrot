@@ -1,5 +1,5 @@
+import {Salt}                     from "@libraries/security/password-hashing-v2/VOs/salt.js"
 import {PasswordHashingAlgorithm} from "@libraries/security/password-hashing/model/password-hashing-algorithm.js"
-import {Salt}                     from "@libraries/security/password-hashing/model/salt.js"
 import {PasswordHashing}          from "@libraries/security/password-hashing/password-hashing.js"
 
 
