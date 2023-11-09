@@ -5,6 +5,7 @@ import {Email}              from "@boundary/identity-and-access/account/domain/v
 import {Password}           from "@boundary/identity-and-access/account/domain/value-objects/password.js"
 import {Username}           from "@boundary/identity-and-access/account/domain/value-objects/username.js"
 import {Injectable}         from "@nestjs/common"
+import {EventBus}           from "../../../../infrastructure/messaging/event-bus.js"
 
 
 
@@ -43,7 +44,6 @@ export class AccountService {
 		} as Password
 
 		let identity = Account.RegisterAccount({
-			id:       "",
 			username: username,
 			email:    email,
 			password: password,
@@ -57,7 +57,7 @@ export class AccountService {
 
 		identity = identity.registerAccount()
 
-		// TODO: Publish event
+		await new EventBus().publish(identity.getUncommittedEvents())
 
 		identity = await this.repository.save(identity)
 

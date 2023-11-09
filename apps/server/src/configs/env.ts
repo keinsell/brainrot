@@ -13,6 +13,7 @@ export const env = cleanEnv(process.env, {
 		desc:    "Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'.",
 	}),
 	HOST:                host({
+		default: "localhost",
 		devDefault: "localhost",
 		desc:       "Defines the host on which the application runs. Default for development is 'localhost'.",
 	}),

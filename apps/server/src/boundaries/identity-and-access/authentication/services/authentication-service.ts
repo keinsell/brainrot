@@ -1,16 +1,17 @@
-import {Injectable}     from "@nestjs/common"
-import {AccountService} from "../../account/services/account.service.js"
+import {Injectable}          from "@nestjs/common"
+import {CredentialValidator} from "src/boundaries/identity-and-access/account/shared-kernel/credential-validator/credential-validator.js"
 
 
 
 @Injectable()
 export class AuthenticationService {
-	constructor(private readonly accountService: AccountService) {
+	constructor(private readonly credentialValidator: CredentialValidator) {
 	}
 
 	public async authenticate(username: string, password: string) {
-		const validateCreds = await this.accountService.validateCredentials(username, password)
-		console.log(validateCreds)
+		const validateCreeds = await this.credentialValidator.validateCredentials(username, password)
+
+		console.log(validateCreeds)
 	}
 
 	public async refreshToken(refreshToken: string): Promise<string> {

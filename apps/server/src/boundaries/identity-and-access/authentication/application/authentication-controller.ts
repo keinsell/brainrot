@@ -16,7 +16,7 @@ export class AuthenticationController {
 
 	@ApiOperation({
 		operationId: "destroy-session",
-		description: "eletes the current session. This effectively logs out the user, and they must reauthenticate to continue using protected resources.",
+		description: "deletes the current session. This effectively logs out the user, and they must reauthenticate to continue using protected resources.",
 		tags:        ['account', "session", "authentication"],
 	}) @Delete()
 	async destroySession(): Promise<string> {

@@ -1,13 +1,13 @@
-import {AccountStatus} from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
-import {AggregateRoot} from "../../../../../externals/libs/domain/aggregate.js"
-import {Email}         from "../value-objects/email.js"
-import {Password}      from "../value-objects/password.js"
-import {Username}      from "../value-objects/username.js"
+import {AccountEvent}                           from "@boundary/identity-and-access/account/domain/events/account-event.js"
+import {AccountStatus}                          from "@boundary/identity-and-access/account/domain/value-objects/account-status.js"
+import {AggregateRoot, AggregateRootProperties} from "../../../../../libraries/domain/aggregate.js"
+import {Email}                                  from "../value-objects/email.js"
+import {Password}                               from "../value-objects/password.js"
+import {Username}                               from "../value-objects/username.js"
 
 
 
-export interface IdentityProperties {
-	id: string
+export interface IdentityProperties extends AggregateRootProperties {
 	email: Email
 	password: Password
 	username: Username
@@ -17,7 +17,6 @@ export interface IdentityProperties {
 
 export class Account extends AggregateRoot implements IdentityProperties {
 	public email: Email
-	public id: string
 	public password: Password
 	public status: AccountStatus
 	public username: Username
@@ -26,8 +25,13 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	private constructor(payload: IdentityProperties) {
-		super()
-		this.id       = payload.id
+		super(
+			{
+				...payload,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			}
+		)
 		this.email    = payload.email
 		this.username = payload.username
 		this.password = payload.password
@@ -38,7 +42,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 		return new Account({
 			...payload,
 			status: AccountStatus.INACTIVE,
-		})
+		}).registerAccount()
 	}
 
 
@@ -76,6 +80,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	public registerAccount(): Account {
+		this.appendEvent(new AccountEvent.Registered(this))
 		return this;
 	}
 }

@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true,
     "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
@@ -26,7 +27,10 @@
       "@boundary/*": [
         "./src/boundaries/*"
       ],
-      "@boundary/iam": [
+      "@boundary/iam/*": [
+        "./src/boundaries/identity-and-access/*"
+      ],
+      "@iam/*": [
         "./src/boundaries/identity-and-access/*"
       ],
       "@filesystem/*": [
@@ -34,13 +38,19 @@
       ],
       "@storage": [
         "./src/infrastructure/storage/*"
-      ]
+      ],
+      "@infrastructure": [
+        "./src/infrastructure/*"
+      ],
+      "@libraries/*": [
+        "./src/libraries/*"
+      ],
     },
     "plugins": [
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": false
-      },
+//      {
+//        "transform": "typescript-transform-paths",
+//        "afterDeclarations": false
+//      },
       //      {
       //        "transform": "@formatjs/ts-transformer",
       //        "import": "transform",
@@ -50,7 +60,7 @@
       //      },
       {
         "transform": "tsc-progress",
-        "title": "Transpiration"
+        "title": "TSC Status:"
       }
     ]
   },

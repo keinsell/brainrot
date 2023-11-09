@@ -3,7 +3,7 @@ import {Email}                         from "@boundary/identity-and-access/accou
 import {Username}                      from "@boundary/identity-and-access/account/domain/value-objects/username.js"
 import {ConflictException, Injectable} from "@nestjs/common"
 import {err, ok}                       from "neverthrow"
-import {BasePolicy}                    from "../../../../../externals/libs/policy/base-policy.js"
+import {BasePolicy}                    from "../../../../../libraries/policy/base-policy.js"
 
 
 

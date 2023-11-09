@@ -1,18 +1,19 @@
-import {AccountModule}              from "@boundary/identity-and-access/account/account.module.js"
+import {CredentialValidatorModule}  from "@iam/account/shared-kernel/credential-validator/credential-validator-module.js"
+import {AuthenticationService}      from "@iam/authentication/services/authentication-service.js"
+import {LocalAuthorizationStrategy} from "@iam/authentication/services/authorization-strategies/local-authorization-strategy.js"
+import {AuthenticationGuard}        from "@iam/authentication/shared-kernel/guards/authentication-guard.js"
 import {Module}                     from "@nestjs/common"
 import {JwtModule}                  from "@nestjs/jwt"
 import {PassportModule}             from "@nestjs/passport"
 import {authorizationConfiguration} from "../../../configs/authorization-configuration.js"
-import {AuthenticationService}      from "./services/authentication-service.js"
-import {LocalAuthorizationStrategy} from "./services/authorization-strategies/local-authorization-strategy.js"
-import {AuthenticationGuard}        from "./services/guards/authentication-guard.js"
 
 
 
 @Module({
 	imports:   [
-		AccountModule, // TODO: Use it as Async Module with ConfigService
+		CredentialValidatorModule,
 		JwtModule.register({
+			// TODO: Use it as Async Module with ConfigService
 			global:      true,
 			secret:      authorizationConfiguration.jwtSecret,
 			signOptions: {

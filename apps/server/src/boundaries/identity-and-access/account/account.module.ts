@@ -1,10 +1,10 @@
-import {AccountPolicy}            from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
-import {IdentityRepository}       from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
-import {PrismaIdentityRepository} from "@boundary/identity-and-access/account/infrastructure/repositories/prisma.identity.repository.js"
+import {AccountPolicy}            from "@iam/account/domain/policies/account-policy.js"
+import {IdentityRepository}       from "@iam/account/domain/repositories/identity-repository.js"
+import {PrismaIdentityRepository} from "@iam/account/infrastructure/persistence/repositories/prisma.identity.repository.js"
+import {AccountController}        from "@iam/account/presentation/account.controller.js"
+import {AccountService}           from "@iam/account/services/account.service.js"
 import {Module}                   from "@nestjs/common"
 import {DatabaseModule}           from "../../../infrastructure/storage/database/database.module.js"
-import {AccountController}        from "./application/account.controller.js"
-import {AccountService}           from "./services/account.service.js"
 
 
 
@@ -19,6 +19,4 @@ import {AccountService}           from "./services/account.service.js"
 	],
 	exports:     [AccountService],
 })
-export class AccountModule {
-
-}
+export class AccountModule {}

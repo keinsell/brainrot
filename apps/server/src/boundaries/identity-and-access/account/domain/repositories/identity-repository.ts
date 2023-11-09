@@ -1,7 +1,7 @@
-import {Account}           from "@boundary/identity-and-access/account/domain/aggregates/account.js"
-import {GenericRepository} from "../../../../../externals/libs/persistence/repository.js"
-import {Email}             from "../value-objects/email.js"
-import {Username}          from "../value-objects/username.js"
+import {Account}  from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {GenericRepository} from "../../../../../libraries/persistence/repository/repository.js"
+import {Email}    from "../value-objects/email.js"
+import {Username} from "../value-objects/username.js"
 
 
 

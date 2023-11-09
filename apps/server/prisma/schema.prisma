@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   output          = "../src/externals/generated/prisma"
-  previewFeatures = ["tracing", "metrics", "fieldReference", "clientExtensions"]
+  previewFeatures = ["tracing", "metrics", "extendedWhereUnique", "fieldReference", "fullTextSearch", "fullTextIndex", "views"]
 }
 
 datasource db {
