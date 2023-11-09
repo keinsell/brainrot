@@ -1,15 +1,18 @@
-import {IdentityRepository}            from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
-import {Email}                         from "@boundary/identity-and-access/account/domain/value-objects/email.js"
-import {Username}                      from "@boundary/identity-and-access/account/domain/value-objects/username.js"
-import {ConflictException, Injectable} from "@nestjs/common"
-import {err, ok}                       from "neverthrow"
-import {BasePolicy}                    from "../../../../../libraries/policy/base-policy.js"
+import {IdentityRepository}                                 from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
+import {Email}                                              from "@boundary/identity-and-access/account/domain/value-objects/email.js"
+import {Password}                                           from "@boundary/identity-and-access/account/domain/value-objects/password.js"
+import {Username}                                           from "@boundary/identity-and-access/account/domain/value-objects/username.js"
+import {BasePolicy}                                         from "@libraries/policy/base-policy.js"
+import {PasswordStrengthEstimator}                          from "@libraries/security/password-strength-estimator/password-strength-estimator.js"
+import {PasswordSecurityLevel}                              from "@libraries/security/password-strength-estimator/report/password-security-level.js"
+import {BadRequestException, ConflictException, Injectable} from "@nestjs/common"
+import {err, ok}                                            from "neverthrow"
 
 
 
 @Injectable()
 export class AccountPolicy extends BasePolicy {
-	constructor(private readonly accountRepository: IdentityRepository) {
+	constructor(private readonly accountRepository: IdentityRepository, private readonly passwordSecurity: PasswordStrengthEstimator) {
 		super()
 	}
 
@@ -36,6 +39,16 @@ export class AccountPolicy extends BasePolicy {
 	}
 
 
-	public shouldHaveSecurePassword() {}
+	public async shouldHaveSecurePassword(password: Password) {
+		const report = await this.passwordSecurity.generateReport(password._plain)
+
+		password.addReport(report)
+
+		if (report.isScoreHigherThan(PasswordSecurityLevel.WEAK)) {
+			return ok(true)
+		} else {
+			return err(new BadRequestException("Password is insecure enough."))
+		}
+	}
 
 }

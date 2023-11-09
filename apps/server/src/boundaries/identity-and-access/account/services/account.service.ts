@@ -23,7 +23,7 @@ export class AccountService {
 	 * @returns {Promise<any>} - A promise that resolves with the validation result.
 	 */
 	public validateCredentials(username: string, password: string): Promise<any> {
-	throw new NotImplementedException(username, password)
+		throw new NotImplementedException(username, password)
 	}
 
 
@@ -48,7 +48,7 @@ export class AccountService {
 			password: password,
 		});
 
-		const maybePolicy = this.policy.merge(await this.policy.isUniqueEmail(identity.email), await this.policy.isUniqueUsername(identity.username))
+		const maybePolicy = this.policy.merge(await this.policy.isUniqueEmail(identity.email), await this.policy.isUniqueUsername(identity.username), await this.policy.shouldHaveSecurePassword(identity.password))
 
 		if (maybePolicy.isErr()) {
 			throw maybePolicy._unsafeUnwrapErr()

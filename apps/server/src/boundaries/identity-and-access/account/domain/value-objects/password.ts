@@ -1,19 +1,29 @@
 import {PasswordHashingAlgorithm} from "@libraries/security/password-hashing/model/password-hashing-algorithm.js"
 import {Salt}                     from "@libraries/security/password-hashing/model/salt.js"
 import {PasswordHashing}          from "@libraries/security/password-hashing/password-hashing.js"
+import {PasswordSecurityReport}   from "@libraries/security/password-strength-estimator/report/password-security-report.js"
 
 
 
 export class Password {
-	private constructor(private readonly passwordHash: string, private readonly _salt: Salt, private algorithm: PasswordHashingAlgorithm) {}
+	public report: PasswordSecurityReport
+
+
+	private constructor(private readonly passwordHash: string, private readonly _salt: Salt, private algorithm: PasswordHashingAlgorithm, private readonly __plain?: string) {}
 
 
 	get salt(): string {
 		return this._salt.toString('base64')
 	}
 
+
 	get hash(): string {
 		return this.passwordHash
+	}
+
+
+	get _plain(): string {
+		return this.__plain
 	}
 
 
@@ -24,14 +34,16 @@ export class Password {
 
 	static async fromPlain(plain: string, hashingService: PasswordHashing): Promise<Password> {
 		const hashed = await hashingService.hashPassword(plain, await hashingService.generateSalt())
-		return new Password(hashed.hash, hashed.salt, hashingService.ALGORITHM)
+		return new Password(hashed.hash, hashed.salt, hashingService.ALGORITHM, plain)
 	}
 
 
-	public async compare(
-		plain: string,
-		hashingService: PasswordHashing
-	): Promise<boolean> {
+	public async compare(plain: string, hashingService: PasswordHashing): Promise<boolean> {
 		return hashingService.comparePassword(plain, this.passwordHash, this._salt)
+	}
+
+
+	public addReport(report: PasswordSecurityReport): void {
+		this.report = report
 	}
 }
