@@ -1,7 +1,7 @@
-import {CreateAccount}               from "@iam/account/application/commands/create-account.js"
-import {RegisterAccount}             from "@iam/account/application/commands/register-account.js"
-import {AccountDto}                  from "@iam/account/application/dtos/account.dto.js"
-import {AccountService}              from "@iam/account/services/account.service.js"
+import {CreateAccount}               from "@boundary/identity-and-access/account/application/commands/create-account.js"
+import {RegisterAccount}             from "@boundary/identity-and-access/account/application/commands/register-account.js"
+import {AccountDto}                  from "@boundary/identity-and-access/account/application/dtos/account.dto.js"
+import {AccountService}              from "@boundary/identity-and-access/account/services/account.service.js"
 import {Body, Controller, Get, Post} from "@nestjs/common"
 import {ApiOperation}                from "@nestjs/swagger"
 import {readFileSync}                from 'node:fs'

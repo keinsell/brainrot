@@ -1,4 +1,4 @@
-import {CreateAccount} from "@iam/account/application/commands/create-account.js"
+import {CreateAccount} from "@boundary/identity-and-access/account/application/commands/create-account.js"
 import {PickType}      from "@nestjs/swagger"
 
 

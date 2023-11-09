@@ -1,5 +1,5 @@
-import {AccountModule}       from "@iam/account/account.module.js"
-import {CredentialValidator} from "@iam/account/shared-kernel/credential-validator/credential-validator.js"
+import {AccountModule}       from "@boundary/identity-and-access/account/account.module.js"
+import {CredentialValidator} from "@boundary/identity-and-access/account/shared-kernel/credential-validator/credential-validator.js"
 import {Module}              from "@nestjs/common"
 
 

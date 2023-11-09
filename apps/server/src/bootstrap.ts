@@ -42,11 +42,12 @@ export async function bootstrap() {
 	while (!isApplicationListening) {
 		try {
 			await app.listen(openPortForAllocation.port, () => {
-				logger.log(`Application started on ${applicationUrl} in ${env.NODE_ENV} mode`);
 				logger.debug(`${"-".repeat(54)}`)
-				logger.debug(`Compodoc endpoint: ${applicationUrl + '/docs'}`)
-				logger.debug(`Swagger endpoint: ${applicationUrl + '/api'}`)
-				logger.debug(`Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`)
+				logger.log(`🚀 Application started on ${applicationUrl} in ${env.NODE_ENV} mode`);
+				logger.debug(`${"-".repeat(54)}`)
+				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
+				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
+				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`)
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;

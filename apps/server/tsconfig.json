@@ -27,12 +27,6 @@
       "@boundary/*": [
         "./src/boundaries/*"
       ],
-      "@boundary/iam/*": [
-        "./src/boundaries/identity-and-access/*"
-      ],
-      "@iam/*": [
-        "./src/boundaries/identity-and-access/*"
-      ],
       "@filesystem/*": [
         "./src/utilities/filesystem-utils/*"
       ],
@@ -47,10 +41,10 @@
       ],
     },
     "plugins": [
-//      {
-//        "transform": "typescript-transform-paths",
-//        "afterDeclarations": false
-//      },
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": false
+      },
       //      {
       //        "transform": "@formatjs/ts-transformer",
       //        "import": "transform",

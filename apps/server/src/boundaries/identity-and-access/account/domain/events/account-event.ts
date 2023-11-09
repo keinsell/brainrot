@@ -1,4 +1,4 @@
-import {RegisterAccount} from "@iam/account/application/commands/register-account.js"
+import {RegisterAccount} from "@boundary/identity-and-access/account/application/commands/register-account.js"
 
 
 
