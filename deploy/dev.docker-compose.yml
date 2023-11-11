@@ -1,9 +1,28 @@
 version: "3.7"
 
 services:
+  traefik:
+    container_name: ${SERVICE_NAME}-traefik
+    image: traefik:v2.3
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   jaeger:
     container_name: ${SERVICE_NAME}-jaeger
     image: jaegertracing/all-in-one:1.41
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jaeger.rule=Host(`jaeger.local`)"
+      - "traefik.http.routers.jaeger.entrypoints=web"
+      - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
     restart: unless-stopped
     ports:
       - "5775:5775/udp"
@@ -51,6 +70,9 @@ services:
     container_name: ${SERVICE_NAME}-redis
     image: redis:latest
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis.rule=Host(`redis.local`)"
     ports:
       - "6379:6379"
     volumes:
@@ -67,3 +89,7 @@ services:
         reservations:
           cpus: "0.25"
           memory: 512M
+
+networks:
+  default:
+    driver: bridge
