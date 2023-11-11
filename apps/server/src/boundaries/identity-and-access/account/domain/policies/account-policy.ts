@@ -40,7 +40,7 @@ export class AccountPolicy extends BasePolicy {
 
 
 	public async shouldHaveSecurePassword(password: Password) {
-		const report = await this.passwordSecurity.generateReport(password._plain)
+		const report = await password.generateReport(this.passwordSecurity)
 
 		password.addReport(report)
 
@@ -50,5 +50,4 @@ export class AccountPolicy extends BasePolicy {
 			return err(new BadRequestException("Password is insecure enough."))
 		}
 	}
-
 }

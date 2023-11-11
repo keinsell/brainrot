@@ -15,18 +15,12 @@ enum EmailVerificationStatus {
   UNVERIFIED
 }
 
-enum HashAlgorithm {
-  BCRYPT
-  ARGON2
-}
-
 model Account {
   id                      String                  @id @default(cuid())
   username                String                  @unique
   email                   String                  @unique
   emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
   password                String
-  salt                    String
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
 }

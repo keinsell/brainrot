@@ -3,5 +3,5 @@ import {PasswordAttack} from "@libraries/security/password-strength-estimator/re
 
 
 export type CrackingTime = {
-	[key in PasswordAttack]: string
+	[key in PasswordAttack]: number
 }

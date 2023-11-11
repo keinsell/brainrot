@@ -3,6 +3,6 @@ import {PasswordAttack} from "@libraries/security/password-strength-estimator/re
 
 
 /** "less than a second", "3 hours", "centuries", etc. */
-	export type CrackingTimeDisplay = {
-		[key in PasswordAttack]: string
+export type PasswordAttackTimeDisplay = {
+	[key in PasswordAttack]: string
 }

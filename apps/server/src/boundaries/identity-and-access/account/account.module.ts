@@ -3,7 +3,6 @@ import {IdentityRepository}              from "@boundary/identity-and-access/acc
 import {PrismaIdentityRepository}        from "@boundary/identity-and-access/account/infrastructure/persistence/repositories/prisma.identity.repository.js"
 import {AccountController}               from "@boundary/identity-and-access/account/presentation/account.controller.js"
 import {AccountService}                  from "@boundary/identity-and-access/account/services/account.service.js"
-import {PasswordHashingModule}           from "@libraries/security/password-hashing/password-hashing-module.js"
 import {PasswordStrengthEstimatorModule} from "@libraries/security/password-strength-estimator/password-strength-estimator-module.js"
 import {Module}                          from "@nestjs/common"
 import {DatabaseModule}                  from "../../../infrastructure/storage/database/database.module.js"
@@ -11,7 +10,7 @@ import {DatabaseModule}                  from "../../../infrastructure/storage/d
 
 
 @Module({
-	imports:     [DatabaseModule, PasswordHashingModule, PasswordStrengthEstimatorModule],
+	imports:     [DatabaseModule, PasswordStrengthEstimatorModule],
 	controllers: [AccountController],
 	providers:   [
 		AccountService, AccountPolicy, {

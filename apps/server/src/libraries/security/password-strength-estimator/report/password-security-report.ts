@@ -1,15 +1,26 @@
-import {CrackingTimeDisplay}   from "@libraries/security/password-strength-estimator/report/cracking-time-display.js"
-import {CrackingTime}          from "@libraries/security/password-strength-estimator/report/cracking-time.js"
-import {PasswordFeedback}      from "@libraries/security/password-strength-estimator/report/password-feedback.js"
-import {PasswordSecurityLevel} from "@libraries/security/password-strength-estimator/report/password-security-level.js"
+import {CrackingTime}              from "@libraries/security/password-strength-estimator/report/cracking-time.js"
+import {PasswordAttackTimeDisplay} from "@libraries/security/password-strength-estimator/report/password-attack-time-display.js"
+import {PasswordFeedback}          from "@libraries/security/password-strength-estimator/report/password-feedback.js"
+import {PasswordSecurityLevel}     from "@libraries/security/password-strength-estimator/report/password-security-level.js"
 
 
 
 export class PasswordSecurityReport {
 	public feedback: PasswordFeedback
 	public crackingTime: CrackingTime
-	public crackingTimeDisplay: CrackingTimeDisplay
+	public crackingTimeDisplay: PasswordAttackTimeDisplay
 	public score: PasswordSecurityLevel
+
+
+	constructor(payload: {
+		feedback: PasswordFeedback, crackingTime: CrackingTime, crackingTimeDisplay: PasswordAttackTimeDisplay,
+		score: PasswordSecurityLevel
+	}) {
+		this.feedback            = payload.feedback
+		this.crackingTime        = payload.crackingTime
+		this.crackingTimeDisplay = payload.crackingTimeDisplay
+		this.score               = payload.score
+	}
 
 
 	isScoreHigherThan(score: PasswordSecurityLevel) {

@@ -1,4 +1,4 @@
 export interface PasswordFeedback {
 	warning?: string
-	suggestions?: string[]
+	suggestions?: string[] | string
 }

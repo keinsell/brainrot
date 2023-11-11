@@ -1,49 +1,62 @@
-import {Salt}                     from "@libraries/security/password-hashing-v2/VOs/salt.js"
-import {PasswordHashingAlgorithm} from "@libraries/security/password-hashing/model/password-hashing-algorithm.js"
-import {PasswordHashing}          from "@libraries/security/password-hashing/password-hashing.js"
-import {PasswordSecurityReport}   from "@libraries/security/password-strength-estimator/report/password-security-report.js"
+import {PasswordHashingAlgorithm}  from "@libraries/security/password-hashing-v2/password-hashing-algorithm.js"
+import {PhcString}                 from "@libraries/security/password-hashing-v2/VOs/phc-string.js"
+import {PasswordStrengthEstimator} from "@libraries/security/password-strength-estimator/password-strength-estimator.js"
+import {PasswordSecurityReport}    from "@libraries/security/password-strength-estimator/report/password-security-report.js"
 
 
 
-export class Password {
-	public report: PasswordSecurityReport
+interface PasswordProperties {
+	hash: PhcString
+	plain?: string
+	report?: PasswordSecurityReport
+}
 
 
-	private constructor(private readonly passwordHash: string, private readonly _salt: Salt, private algorithm: PasswordHashingAlgorithm, private readonly __plain?: string) {}
+export class Password implements PasswordProperties {
+	hash: PhcString
+	plain?: string
+	report?: PasswordSecurityReport
 
 
-	get salt(): string {
-		return this._salt.toString('base64')
+	private constructor(payload: PasswordProperties) {
+		this.hash   = payload.hash
+		this.plain  = payload.plain
+		this.report = payload.report
 	}
 
 
-	get hash(): string {
-		return this.passwordHash
+	static fromHash(hash: PhcString): Password {
+		return new Password({
+			hash,
+		})
 	}
 
 
-	get _plain(): string {
-		return this.__plain
+	static async fromPlain(plain: string, hashingService: PasswordHashingAlgorithm): Promise<Password> {
+		const hash = await hashingService.hash(plain)
+		return new Password({
+			hash: PhcString.deserialize(hash),
+			plain,
+		})
 	}
 
 
-	static fromHash(hash: string, salt: Salt, algorithm: PasswordHashingAlgorithm): Password {
-		return new Password(hash, salt, PasswordHashingAlgorithm.ARGON2ID)
+	public async compare(plain: string, hashingService: PasswordHashingAlgorithm): Promise<boolean> {
+		return hashingService.verify(this.hash.serialize(), plain)
 	}
 
 
-	static async fromPlain(plain: string, hashingService: PasswordHashing): Promise<Password> {
-		const hashed = await hashingService.hashPassword(plain, await hashingService.generateSalt())
-		return new Password(hashed.hash, hashed.salt, hashingService.ALGORITHM, plain)
+	public async generateReport(passwordStrengthEstimator: PasswordStrengthEstimator): Promise<PasswordSecurityReport> {
+		if (!this.plain) {
+			throw new Error("Cannot generate report for a password that was not created from plain text.")
+		}
+
+		return await passwordStrengthEstimator.generateReport(this.plain)
 	}
 
 
-	public async compare(plain: string, hashingService: PasswordHashing): Promise<boolean> {
-		return hashingService.comparePassword(plain, this.passwordHash, this._salt)
-	}
-
-
-	public addReport(report: PasswordSecurityReport): void {
+	public addReport(report: PasswordSecurityReport): Password {
 		this.report = report
+		return this
 	}
 }

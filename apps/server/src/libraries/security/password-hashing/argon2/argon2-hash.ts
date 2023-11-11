@@ -1,1 +1,0 @@
-export type Argon2Hash = string;
