@@ -9,28 +9,27 @@ export class AccountCreateModel implements DbContextModel.Account.CreatePayload 
 	public emailVerificationStatus: DbContextModel.Enums.EmailVerificationStatus;
 	public id?: string;
 	public password: string;
-	public salt: string;
 	public updatedAt?: Date | string;
 	public username: string;
 
+
 	constructor(properties: DbContextModel.Account.CreatePayload) {
-		this.createdAt = properties.createdAt;
-		this.email = properties.email;
+		this.createdAt               = properties.createdAt;
+		this.email                   = properties.email;
 		this.emailVerificationStatus = properties.emailVerificationStatus;
-		this.id = properties.id;
-		this.password = properties.password;
-		this.salt = properties.salt;
-		this.updatedAt = properties.updatedAt;
-		this.username = properties.username;
+		this.id                      = properties.id;
+		this.password                = properties.password;
+		this.updatedAt               = properties.updatedAt;
+		this.username                = properties.username;
 	}
+
 
 	static fromDomainModel(account: Account): AccountCreateModel {
 		return new AccountCreateModel({
-			email: account.email.address,
+			email:                   account.email.address,
 			emailVerificationStatus: account.email.isVerified ? 'VERIFIED' : 'UNVERIFIED',
-			password: account.password.hash,
-			salt: account.password.salt,
-			username: account.username,
+			password:                account.password.hash.serialize(),
+			username:                account.username,
 		});
 	}
 }

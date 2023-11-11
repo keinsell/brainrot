@@ -6,7 +6,6 @@ import {Password}                            from "@boundary/identity-and-access
 import {Username}                            from "@boundary/identity-and-access/account/domain/value-objects/username.js"
 import {KdfAlgorithm}                        from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
 import {UnifiedPasswordHashing}              from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
-import {PasswordHashing}                     from "@libraries/security/password-hashing/password-hashing.js"
 import {Injectable, NotImplementedException} from "@nestjs/common"
 import {EventBus}                            from "../../../../infrastructure/messaging/event-bus.js"
 
@@ -14,7 +13,7 @@ import {EventBus}                            from "../../../../infrastructure/me
 
 @Injectable()
 export class AccountService {
-	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashingStrategy: PasswordHashing, private hashing: UnifiedPasswordHashing) {}
+	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashing: UnifiedPasswordHashing) {}
 
 
 	/**
@@ -25,16 +24,13 @@ export class AccountService {
 	 * @returns {Promise<any>} - A promise that resolves with the validation result.
 	 */
 	public validateCredentials(username: string, password: string): Promise<any> {
-	throw new NotImplementedException(username, password)
+		throw new NotImplementedException(username, password)
 	}
 
 
 	public async register(accountPayload: {
 		username: string; email: string; password: string;
 	}): Promise<{ id: any; email: string; username: string }> {
-
-		// TODO: Create factories for value objects?
-
 		const username = accountPayload.username as Username;
 
 		const email = {
@@ -42,14 +38,7 @@ export class AccountService {
 			address:    accountPayload.email,
 		} as Email;
 
-		const x = await this.hashing.use(KdfAlgorithm.Argon2id).hash(accountPayload.password)
-
-		const y = await this.hashing.which(x).verify(x, accountPayload.password)
-
-		console.log(x)
-		console.log(y)
-
-		const password = await Password.fromPlain(accountPayload.password, this.hashingStrategy);
+		const password = await Password.fromPlain(accountPayload.password, this.hashing.use(KdfAlgorithm.Argon2id));
 
 		let identity = Account.RegisterAccount({
 			username: username,
@@ -57,13 +46,11 @@ export class AccountService {
 			password: password,
 		});
 
-		const maybePolicy = this.policy.merge(await this.policy.isUniqueEmail(identity.email), await this.policy.isUniqueUsername(identity.username))
+		const maybePolicy = this.policy.merge(await this.policy.isUniqueEmail(identity.email), await this.policy.isUniqueUsername(identity.username), await this.policy.shouldHaveSecurePassword(identity.password))
 
 		if (maybePolicy.isErr()) {
 			throw maybePolicy._unsafeUnwrapErr()
 		}
-
-		identity = identity.registerAccount()
 
 		await new EventBus().publish(identity.getUncommittedEvents())
 

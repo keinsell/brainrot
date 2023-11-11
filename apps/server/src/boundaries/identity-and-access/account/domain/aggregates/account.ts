@@ -25,13 +25,11 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	private constructor(payload: IdentityProperties) {
-		super(
-			{
-				...payload,
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			}
-		)
+		super({
+			...payload,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		})
 		this.email    = payload.email
 		this.username = payload.username
 		this.password = payload.password
@@ -41,7 +39,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 	static RegisterAccount(payload: Omit<IdentityProperties, 'status'>) {
 		return new Account({
 			...payload,
-			status: AccountStatus.INACTIVE,
+			status:   AccountStatus.INACTIVE,
 			password: payload.password,
 		}).registerAccount()
 	}
@@ -81,7 +79,7 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	public registerAccount(): Account {
-		this.appendEvent(new AccountEvent.Registered(this))
+		this.appendEvent(new AccountEvent.AccountRegistered(this))
 		return this;
 	}
 }
