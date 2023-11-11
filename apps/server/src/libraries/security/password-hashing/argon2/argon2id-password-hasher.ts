@@ -1,7 +1,7 @@
+import {Salt}                     from "@libraries/security/password-hashing-v2/VOs/salt.js"
 import {Argon2Hash}               from "@libraries/security/password-hashing/argon2/argon2-hash.js"
 import {Hash}                     from "@libraries/security/password-hashing/model/hash.js"
 import {PasswordHashingAlgorithm} from "@libraries/security/password-hashing/model/password-hashing-algorithm.js"
-import {Salt}                     from "@libraries/security/password-hashing/model/salt.js"
 import {PasswordHashing}          from "@libraries/security/password-hashing/password-hashing.js"
 import {Injectable, Logger}       from "@nestjs/common"
 import * as argon2                from "argon2"
