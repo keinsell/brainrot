@@ -1,32 +1,19 @@
-import {Account}                             from "@boundary/identity-and-access/account/domain/aggregates/account.js"
-import {AccountPolicy}                       from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
-import {IdentityRepository}                  from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
-import {Email}                               from "@boundary/identity-and-access/account/domain/value-objects/email.js"
-import {Password}                            from "@boundary/identity-and-access/account/domain/value-objects/password.js"
-import {Username}                            from "@boundary/identity-and-access/account/domain/value-objects/username.js"
-import {KdfAlgorithm}                        from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
-import {UnifiedPasswordHashing}              from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
-import {Injectable, NotImplementedException} from "@nestjs/common"
-import {EventBus}                            from "../../../../infrastructure/messaging/event-bus.js"
+import {Account}                from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {AccountPolicy}          from "@boundary/identity-and-access/account/domain/policies/account-policy.js"
+import {IdentityRepository}     from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
+import {Email}                  from "@boundary/identity-and-access/account/domain/value-objects/email.js"
+import {Password}               from "@boundary/identity-and-access/account/domain/value-objects/password.js"
+import {Username}               from "@boundary/identity-and-access/account/domain/value-objects/username.js"
+import {KdfAlgorithm}           from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
+import {UnifiedPasswordHashing} from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
+import {Injectable}             from "@nestjs/common"
+import {EventBus}               from "../../../../infrastructure/messaging/event-bus.js"
 
 
 
 @Injectable()
 export class AccountService {
 	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashing: UnifiedPasswordHashing) {}
-
-
-	/**
-	 * Validates the credentials of a user.
-	 *
-	 * @param {string} username - The username of the user.
-	 * @param {string} password - The password of the user.
-	 * @returns {Promise<any>} - A promise that resolves with the validation result.
-	 */
-	public validateCredentials(username: string, password: string): Promise<any> {
-		throw new NotImplementedException(username, password)
-	}
-
 
 	public async register(accountPayload: {
 		username: string; email: string; password: string;

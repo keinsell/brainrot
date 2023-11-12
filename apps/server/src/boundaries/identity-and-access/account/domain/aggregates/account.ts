@@ -79,7 +79,12 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	public registerAccount(): Account {
-		this.appendEvent(new AccountEvent.AccountRegistered(this))
+		this.appendEvent(new AccountEvent.Registred(this))
 		return this;
+	}
+
+
+	public authenticate(): Account {
+		return this
 	}
 }

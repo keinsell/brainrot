@@ -18,6 +18,6 @@ import {DatabaseModule}                  from "../../../infrastructure/storage/d
 			useClass: PrismaIdentityRepository,
 		},
 	],
-	exports:     [AccountService],
+	exports:     [AccountService, IdentityRepository],
 })
 export class AccountModule {}

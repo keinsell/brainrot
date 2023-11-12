@@ -1,7 +1,7 @@
-import {Account}  from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {Account}           from "@boundary/identity-and-access/account/domain/aggregates/account.js"
 import {GenericRepository} from "../../../../../libraries/persistence/repository/repository.js"
-import {Email}    from "../value-objects/email.js"
-import {Username} from "../value-objects/username.js"
+import {Email}             from "../value-objects/email.js"
+import {Username}          from "../value-objects/username.js"
 
 
 
@@ -16,4 +16,6 @@ export abstract class IdentityRepository extends GenericRepository<Account> {
 
 
 	abstract findByEmail(email: Email): Promise<Account | null>
+
+	abstract findByUsernameFields(username: string): Promise<Account | null>
 }
