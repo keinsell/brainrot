@@ -1,5 +1,9 @@
-import {AccountService} from "@boundary/identity-and-access/account/services/account.service.js"
-import {Injectable}     from "@nestjs/common"
+import {Account}                                              from "@boundary/identity-and-access/account/domain/aggregates/account.js"
+import {IdentityRepository}                                   from "@boundary/identity-and-access/account/domain/repositories/identity-repository.js"
+import {UnifiedPasswordHashing}                               from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
+import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
+import {err, ok, Result}                                      from "neverthrow"
+import {EventBus}                                             from "../../../../../infrastructure/messaging/event-bus.js"
 
 
 
@@ -10,10 +14,37 @@ import {Injectable}     from "@nestjs/common"
 @Injectable()
 export class CredentialValidator {
 	constructor(
-		private accountService: AccountService,
+		private repository: IdentityRepository,
+		private hashingService: UnifiedPasswordHashing
 	) {}
 
-	public async validateCredentials(username: string, password: string): Promise<boolean> {
-		return await this.accountService.validateCredentials(username, password)
+	/**
+	 * Validates the credentials of a user.
+	 *
+	 * @param {string} username - The username of the user.
+	 * @param {string} password - The password of the user.
+	 * @returns {Promise<any>} - A promise that resolves with the validation result.
+	 */
+	public async validateCredentials(username: string, password: string): Promise<Result<Account, NotFoundException | UnauthorizedException>> {
+		// Find the account by any username field (email, username)
+		const user = await this.repository.findByUsernameFields(username)
+
+		if (!user) {
+			return err(new NotFoundException("User not found"))
+		}
+
+		// Verify the password
+
+		const passwordVerified = await user.password.compare(password, this.hashingService.which(user.password.hash.serialize()))
+
+		if (!passwordVerified) {
+			return err(new UnauthorizedException("Invalid credentials"))
+		}
+
+		user.authenticate()
+
+		new EventBus().publish(user.getUncommittedEvents())
+
+		return ok(user)
 	}
 }

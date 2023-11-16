@@ -1,5 +1,5 @@
-import {Module}    from "@nestjs/common"
-import {ClsModule} from "nestjs-cls"
+import {Global, Module} from "@nestjs/common"
+import {ClsModule}      from "nestjs-cls"
 
 
 
@@ -18,6 +18,7 @@ import {ClsModule} from "nestjs-cls"
  *
  *   https://papooch.github.io/nestjs-cls/
  */
+@Global()
 @Module({
 	imports: [
 		ClsModule.forRoot({

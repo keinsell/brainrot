@@ -83,6 +83,30 @@ export class PrismaIdentityRepository implements IdentityRepository {
 	}
 
 
+	public async findByUsernameFields(username: string): Promise<Account | undefined> {
+		// Find account by provided username, try to fit it into the username and email fields
+		let maybeAccount: DbContextModel.Account.Entity | null = null
+
+		try {
+			maybeAccount = await this.prismaService.account.findFirst({
+			where: {OR: [{username: username}, {email: username}]},
+			}) as DbContextModel.Account.Entity | null
+		} catch (e) {
+			this.logger.error(e)
+		}
+
+		this.logger.verbose(`findByUsernameFields(${username}) => ${JSON.stringify(maybeAccount)}`)
+
+		if (!maybeAccount) {
+			return undefined
+		}
+
+		const account = maybeAccount
+
+		return new AccountEntityModel(account).toDomainModel()
+	}
+
+
 	public async create(identity: Account): Promise<Account> {
 		let entity: DbContextModel.Account.Entity
 

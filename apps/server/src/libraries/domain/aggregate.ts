@@ -6,16 +6,7 @@ export interface AggregateRootProperties {
 
 // TODO: https://linear.app/keinsell/issue/PROD-93/add-aggregate-root-base-class
 export class AggregateRoot<T extends Object = {}> implements AggregateRootProperties {
-	private _id: any | undefined;
-
-	constructor(
-	aggregateBaseProperties: Partial<AggregateRootProperties>,
-	) {
-		this._id = aggregateBaseProperties.id
-		this.createdAt = new Date()
-		this.updatedAt = new Date()
-	}
-
+	public readonly createdAt: Date
 	/**
 	 * Array that holds events data.
 	 *
@@ -29,11 +20,33 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 	 */
 	private _version: number    = 1
 
-	public readonly createdAt: Date
-	public updatedAt: Date
+
+	constructor(
+	aggregateBaseProperties: Partial<AggregateRootProperties>,
+	) {
+		this._id = aggregateBaseProperties.id
+		this.createdAt = new Date()
+		this.updatedAt = new Date()
+	}
+
+
+	private _id: any | undefined;
+
+
+	get id(): any | undefined {
+		if (!this._id) {
+			throw new Error("AggregateRoot: id is undefined")
+		}
+
+		return this._id
+	}
 
 
 	//private _stateMachine: StateMachine<T>
+
+
+	public updatedAt: Date
+
 
 	/**
 	 * Retrieves the uncommitted events.
@@ -41,7 +54,10 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 	 * @returns {Array} An array containing the uncommitted events.
 	 */
 	public getUncommittedEvents() {
-		return this._events
+		const eventsSnapshot = this._events.slice()
+		// Remove events from aggregate as we already have a copy of them.
+		this._events = []
+		return eventsSnapshot
 	}
 
 
@@ -72,15 +88,8 @@ protected bumpVersion() {
 	 */
 	protected executeCommand(command: any) {}
 
+
 	private bumpUpdateDate() {
 		this.updatedAt = new Date()
-	}
-
-	get id(): any | undefined {
-		if (!this._id) {
-			throw new Error("AggregateRoot: id is undefined")
-		}
-
-		return this._id
 	}
 }

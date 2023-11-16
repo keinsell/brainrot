@@ -12,8 +12,8 @@ export class AuthenticationService {
 	public async authenticate(username: string, password: string) {
 		const isValid = await this.credentialValidator.validateCredentials(username, password)
 
-		if (!isValid) {
-			throw new Error("Invalid credentials")
+		if (isValid.isErr()) {
+			throw isValid.error
 		}
 
 		return "accessToken"
