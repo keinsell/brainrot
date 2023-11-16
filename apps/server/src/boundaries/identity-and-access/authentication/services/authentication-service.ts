@@ -1,7 +1,11 @@
-import {CredentialValidator} from "@boundary/identity-and-access/account/shared-kernel/credential-validator/credential-validator.js"
-import {TokenManagement}     from "@boundary/identity-and-access/authentication/services/token-management.js"
-import {Injectable}          from "@nestjs/common"
-import {ok, Result}          from "neverthrow"
+import {
+	CredentialValidator,
+}                   from "@boundary/identity-and-access/account/shared-kernel/credential-validator/credential-validator.js"
+import {
+	TokenManagement,
+}                   from "@boundary/identity-and-access/authentication/services/token-management.js"
+import {Injectable} from "@nestjs/common"
+import {ok, Result} from "neverthrow"
 
 
 
@@ -12,6 +16,7 @@ export class AuthenticationService {
 
 
 	public async authenticate(username: string, password: string): Promise<Result<{
+		accountId: string,
 		accessToken: string, refreshToken: string,
 	}, any>> {
 		const isValid = await this.credentialValidator.validateCredentials(username, password)
@@ -20,13 +25,20 @@ export class AuthenticationService {
 			throw isValid.error
 		}
 
-		const accessToken  = await this.tokenManagement.generateToken({username: username})
-		const refreshToken = await this.tokenManagement.generateToken({username: username})
+		const account = isValid.value
+
+		const accessToken  = await this.tokenManagement.generateAccessToken({username: username})
+		const refreshToken = await this.tokenManagement.generateRefreshToken({username: username})
 
 		return ok({
+			accountId: account.id,
 			accessToken:  accessToken,
 			refreshToken: refreshToken,
 		})
+	}
+
+	public async  logout(): Promise<void> {
+		return Promise.resolve(undefined)
 	}
 
 

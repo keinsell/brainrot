@@ -1,5 +1,12 @@
-import {Authenticate}                   from "@boundary/identity-and-access/authentication/application/authenticate.js"
-import {AuthenticationService}          from "@boundary/identity-and-access/authentication/services/authentication-service.js"
+import {
+	Authenticate,
+}                                       from "@boundary/identity-and-access/authentication/application/authenticate.js"
+import {
+	AuthenticationResponse,
+}                                       from "@boundary/identity-and-access/authentication/application/dtos/authentication-response.js"
+import {
+	AuthenticationService,
+}                                       from "@boundary/identity-and-access/authentication/services/authentication-service.js"
 import {Body, Controller, Delete, Post} from "@nestjs/common"
 import {ApiOperation}                   from "@nestjs/swagger"
 
@@ -19,19 +26,25 @@ export class AuthenticationController {
 		description: "Logs the user in",
 		tags:        ['account', 'authentication'],
 	}) @Post()
-	async authenticate(@Body() body: Authenticate ): Promise<string> {
+	async authenticate(@Body() body: Authenticate ): Promise<AuthenticationResponse> {
 		const {username, password} = body
 
-		const maybeAuthenticationTokens = await this.authenticationService.authenticate(username, password)
+		const maybeAuthenticated = await this.authenticationService.authenticate(username, password)
 
-		if (maybeAuthenticationTokens.isErr()) {
-			throw maybeAuthenticationTokens.error
+		if (maybeAuthenticated.isErr()) {
+			throw maybeAuthenticated.error
 		}
+
+		const authenticationResult = maybeAuthenticated.value
 
 		// TODO: Check if user have 2FA enabled
 		// TODO: If 2FA is enabled, thow error
 
-		return "login"
+	return {
+			id: authenticationResult.accountId,
+			accessToken: authenticationResult.accessToken,
+		mfa: false,
+	}
 	}
 
 

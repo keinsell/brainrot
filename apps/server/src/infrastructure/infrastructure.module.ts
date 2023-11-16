@@ -7,7 +7,7 @@ import {
 }               from "./documentation/documentaiton-module.js"
 import {
 	ContinuationLocalStorageModule,
-}               from "./environment/local-storage/continuation-local-storage-module.js"
+}               from "./environment/cls/continuation-local-storage-module.js"
 import {
 	HealthModule,
 }               from "./observability/healthcheck/health-module.js"

@@ -4,11 +4,8 @@ export interface TokenOptions {
 
 
 export abstract class TokenManagement {
-	abstract generateToken(payload: any, options?: TokenOptions): Promise<string>
-
-
+	abstract generateAccessToken(payload: any): Promise<string>
+	abstract generateRefreshToken(payload: any): Promise<string>
 	abstract verifyToken(token: string): Promise<any>
-
-
-	abstract decodeToken(token: string): Promise<any>
+	abstract decodeToken<T = unknown>(token: string): Promise<T>
 }
