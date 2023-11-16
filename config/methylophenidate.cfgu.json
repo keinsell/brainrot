@@ -1,0 +1,20 @@
+{
+  "NODE_ENV": {
+    "type": "String",
+    "pattern": "^(development|testing|staging|production)$",
+    "description": "...",
+    "default": "development"
+  },
+  "PORT": {
+    "type": "String",
+    "pattern": "^(development|testing|staging|production)$",
+    "description": "...",
+    "default": "development"
+  },
+  "PROTOCOL": {
+    "type": "String",
+    "pattern": "^(development|testing|staging|production)$",
+    "description": "...",
+    "default": "development"
+  }
+}

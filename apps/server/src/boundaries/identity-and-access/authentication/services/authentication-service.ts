@@ -1,22 +1,32 @@
 import {CredentialValidator} from "@boundary/identity-and-access/account/shared-kernel/credential-validator/credential-validator.js"
+import {TokenManagement}     from "@boundary/identity-and-access/authentication/services/token-management.js"
 import {Injectable}          from "@nestjs/common"
+import {ok, Result}          from "neverthrow"
 
 
 
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private credentialValidator: CredentialValidator) {}
+	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement) {}
 
 
-	public async authenticate(username: string, password: string) {
+	public async authenticate(username: string, password: string): Promise<Result<{
+		accessToken: string, refreshToken: string,
+	}, any>> {
 		const isValid = await this.credentialValidator.validateCredentials(username, password)
 
 		if (isValid.isErr()) {
 			throw isValid.error
 		}
 
-		return "accessToken"
+		const accessToken  = await this.tokenManagement.generateToken({username: username})
+		const refreshToken = await this.tokenManagement.generateToken({username: username})
+
+		return ok({
+			accessToken:  accessToken,
+			refreshToken: refreshToken,
+		})
 	}
 
 

@@ -21,6 +21,30 @@ export class AuthenticationController {
 	}) @Post()
 	async authenticate(@Body() body: Authenticate ): Promise<string> {
 		const {username, password} = body
+
+		const maybeAuthenticationTokens = await this.authenticationService.authenticate(username, password)
+
+		if (maybeAuthenticationTokens.isErr()) {
+			throw maybeAuthenticationTokens.error
+		}
+
+		// TODO: Check if user have 2FA enabled
+		// TODO: If 2FA is enabled, thow error
+
+		return "login"
+	}
+
+
+	@ApiOperation({
+		operationId: "refresh-token",
+		description: "Use a refresh token to extend a session and generate another access token",
+		tags:        ['account', 'authentication'],
+	}) @Post()
+	async refreshToken(@Body() body: Authenticate): Promise<string> {
+		const {
+				  username,
+				  password,
+			  } = body
 		const isValid = await this.authenticationService.authenticate(username, password)
 
 		//if (isValid.isErr()) {
@@ -38,7 +62,7 @@ export class AuthenticationController {
 		description: "deletes the current session. This effectively logs out the user, and they must reauthenticate to continue using protected resources.",
 		tags:        ['account', "session", "authentication"],
 	}) @Delete()
-	async destroySession(): Promise<string> {
+	async logout(): Promise<string> {
 		return "logout"
 	}
 }
