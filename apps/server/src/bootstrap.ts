@@ -1,27 +1,22 @@
-import {Logger}      from "@nestjs/common"
-import {NestFactory} from "@nestjs/core"
-import delay         from "delay"
-import ms            from "ms"
-import process       from "node:process"
-import {
-	ApplicationConfiguration,
-}                    from "./configs/application-configuration.js"
-import {env}         from "./configs/env.js"
-import {Container}   from "./container.js"
-import {
-	buildCompodocDocumentation,
-}                    from "./infrastructure/documentation/compodoc/compodoc.js"
-import {
-	buildSwaggerDocumentation,
-}                    from "./infrastructure/documentation/swagger/swagger.js"
-import {
-	portAllocator,
-}                    from "./utilities/network-utils/port-allocator.js"
+import {Logger}                     from "@nestjs/common"
+import {NestFactory}                from "@nestjs/core"
+import delay                        from "delay"
+import ms                           from "ms"
+import process                      from "node:process"
+import {ApplicationConfiguration}   from "./configs/application-configuration.js"
+import {env}                        from "./configs/env.js"
+import {Container}                  from "./container.js"
+import {buildCompodocDocumentation} from "./infrastructure/documentation/compodoc/compodoc.js"
+import {buildSwaggerDocumentation}  from "./infrastructure/documentation/swagger/swagger.js"
+import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
 
 
 
 export async function bootstrap() {
-	const app = await NestFactory.create(Container);
+	const app = await NestFactory.create(Container, {
+		abortOnError: false,
+		snapshot:     true,
+	});
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("Bootstrap");
@@ -38,7 +33,8 @@ export async function bootstrap() {
 
 	if (openPortForAllocation.wasReplaced) {
 		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPortForAllocation.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
-	} else {
+	}
+	else {
 		logger.log(`Port availability check succeeded and requested ::${env.PORT} is available`);
 	}
 
@@ -60,7 +56,8 @@ export async function bootstrap() {
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
-		} catch (e) {
+		}
+		catch (e) {
 			logger.error(`Error while trying to start application: ${(
 				e as unknown as any
 			).message}`);

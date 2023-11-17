@@ -7,6 +7,7 @@
                 <option name="buildKitEnabled" value="true"/>
                 <option name="containerName" value="methylphenidate-server"/>
                 <option name="contextFolderPath" value="apps/server"/>
+                <option name="publishAllPorts" value="true"/>
                 <option name="sourceFilePath" value="apps/server/build/Dockerfile"/>
             </settings>
         </deployment>

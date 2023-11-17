@@ -36,7 +36,7 @@ export class PrismaService
 
 	async onModuleInit() {
 		this.$on('error', (event) => {
-			this.logger.error(event.message);
+			//			this.logger.error(event.message);
 		});
 		this.$on('warn', (event) => {
 			this.logger.warn(event.message);
@@ -49,36 +49,32 @@ export class PrismaService
 		});
 
 		// Use an immediately invoked asynchronous function to handle the connection in the background.
-		await (
-			async () => {
-				let connectionState      = false;
-				let connectionRetryDelay = ms('5s')
-
-				// Handle retries to the database and don't throw an error if the connection failed.
-				while (!connectionState) {
-					try {
-						await this.$connect();
-						this.logger.log("Connection with a database established.")
-						connectionState = true
-					}
-					catch (error) {
-						// if (error instanceof PrismaClientInitializationError) {
-						//     this.logger.error(`Encountered error while establishing connection with database:
-						// ${error.message.split('\n')[2]}`)
-						// } else {
-						this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`)
-						//}
-
-						await delay(connectionRetryDelay)
-						connectionRetryDelay = connectionRetryDelay * 2
-					}
-				}
-			}
-		)();
+		//noinspection ES6MissingAwait
+		this.startConnection()
 	}
 
 
 	async onModuleDestroy() {
 		await this.$disconnect();
+	}
+
+
+	private async startConnection() {
+		let connectionState      = false;
+		let connectionRetryDelay = ms('5s');
+
+		// Handle retries to the database without blocking
+		while (!connectionState) {
+			try {
+				await this.$connect();
+				this.logger.log("Connection with a database established.");
+				connectionState = true;
+			}
+			catch (error) {
+				this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`);
+				await delay(connectionRetryDelay);
+				connectionRetryDelay = connectionRetryDelay * 2;
+			}
+		}
 	}
 }
