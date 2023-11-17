@@ -1,7 +1,9 @@
 # ⚡ Methylphenidate ⚡
 
-> Boilerplate that kick your project like a good coffee.
+> Boilerplate that will save you few lines
 > ~ @keinsell
+
+Methylophenidate is caffeinated language-agnostic repository boilerplate for modern software applications built around open-source technologies (nothing feels that great as vendor-locked cloud-native). Featuring release management, CI/CD, Deployment, Infrastructure Management, Application Observability and bunch of other famous buzzwords minus the blockchain and AI (however it's on the roadmap)
 
 ## Table of Contents
 
@@ -17,6 +19,12 @@ Application requires few standard tools to be installed on your machine, you can
 - [Node.js](https://nodejs.org/en/)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
+- [`bash`]().
+
+#### Additional Dependencies
+
+Where they are also bare minimum to use repository, we do not require strict installation of them as there is `scripts/00_setup_repository.sh` script which have purpose to setup your environment, if you do not want to use a script install dependencies listed below.
+
 - [pnpm](https://pnpm.js.org/)
 - [pre-commit](https://pre-commit.com)
 
@@ -48,29 +56,21 @@ pnpm install
 
 ### Usage
 
-TODO.
+> "If modern repositories cannot be ran just for a quick demo with less than 5 commands they can be dropped stright out to trash, we have abstraction ffs."
+> ~ @keinsell
+
+```bash
+# And by such statement throw this repo to trash (at least for now)
+```
 
 ### Development
 
-- Read Fucking `doc/ARCHITECTURE.md`
-- **Run `xyz deps`**, this will prepare all of the dependencies needed to run applicaton in development mode, namely:
-  database, cache, tracer all of third-pary services that are out of our control.
--
+You do not.
 
 ## Features
 
 - `[TODO]` **⚡🔋 High Fckin' Voltage Batteries Included**, boilerplate it is providing all the information needed and
   documentation to just plug-and-play all the features, starting from set upping databases in local environment and
   ending up at "good enough" Continuous Integration (CI) pipeline to start playing with your application.
-- **🍭 Eye Candies**, who would like to look at a boring wall of text all the time, since start of application it gives
-  you
-  nice and friendly developer feel, as all of us - keeping candies for ourselves so these features are disabled
-  for "serious" deployments.
-- **Steel-ass security**, `argon2`, `rsa4096` and `jwt` along with secure environmental variable configuration should
+- `[TODO]` **Language-agnostic**, even through this repository is written mostly in TypeScript there's no problem to use it with application written in other languages, if you find deployment logic, versioning and packaing somehow useful for your application you can still use `turborepo` and ex. `cargo` under it.
   deliver you a good enough security for most purposes.
-- **"Where is the fucking documentation?"**, no fucking more fellas, there you have static documentation dedicated for
-  Angular-like projects (`compodoc`), static generation of `GraphQL` documentation, `Swagger` documentation for REST
-  API, and `eventsdoc` for event-driven applications. I would like to document websockets with `asyncapi` but sorry
-  ecosystem isn't ready for that yet. I mean... You still can completly do not give a fuck about documentation and will
-  hear such thing but I think you can say you tried at least lol
--

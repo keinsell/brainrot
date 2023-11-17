@@ -7,7 +7,7 @@ import {
 }               from "./documentation/documentaiton-module.js"
 import {
 	ContinuationLocalStorageModule,
-}               from "./environment/cls/continuation-local-storage-module.js"
+}               from "./environment/local-storage/continuation-local-storage-module.js"
 import {
 	HealthModule,
 }               from "./observability/healthcheck/health-module.js"
@@ -22,9 +22,9 @@ import {
 
 @Module({
 	imports: [
-		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, DocumentaitonModule, HealthModule,
+		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule, HealthModule,
 		PasswordHashingModuleV2,
 	],
-	exports: [TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, DocumentaitonModule, HealthModule],
+	exports: [TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule, HealthModule],
 })
 export class InfrastructureModule {}
