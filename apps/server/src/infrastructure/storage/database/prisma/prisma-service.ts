@@ -6,7 +6,8 @@ import {Prisma, PrismaClient}                              from "../../../../ext
 
 
 @Injectable()
-export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
+export class PrismaService
+	extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
 	implements OnModuleInit, OnModuleDestroy {
 	private logger: Logger = new Logger("database:prisma")
 
@@ -48,7 +49,7 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
 		});
 
 		// Use an immediately invoked asynchronous function to handle the connection in the background.
-		(
+		await (
 			async () => {
 				let connectionState      = false;
 				let connectionRetryDelay = ms('5s')
@@ -59,7 +60,8 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
 						await this.$connect();
 						this.logger.log("Connection with a database established.")
 						connectionState = true
-					} catch (error) {
+					}
+					catch (error) {
 						// if (error instanceof PrismaClientInitializationError) {
 						//     this.logger.error(`Encountered error while establishing connection with database:
 						// ${error.message.split('\n')[2]}`)

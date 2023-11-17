@@ -6,6 +6,8 @@
     "src"
   ],
   "ext": ".ts,.js",
-  "ignore": [],
+  "ignore": [
+    "src/externals/compodoc"
+  ],
   "exec": "pnpm build:tsc && node dist/main.js"
 }

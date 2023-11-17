@@ -32,7 +32,7 @@
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate & pnpm docs:compodoc",
     "prepare": "ts-patch install -s",
-    "docs:compodoc": "compodoc -p build_utilss/tsconfig.doc.json --output docs/generated/compodoc --theme laravel"
+    "docs:compodoc": "compodoc -p tsconfig.compodoc.json --output src/externals/compodoc --theme laravel"
   },
   "type": "module",
   "dependencies": {

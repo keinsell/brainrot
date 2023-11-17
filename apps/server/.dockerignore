@@ -1,0 +1,11 @@
+node_modules/**
+docs
+.run
+dist
+.eslintrc.js
+.prettierrc
+http-client.env.json
+README.md
+.env
+.editorconfig
+**/Dockerfile

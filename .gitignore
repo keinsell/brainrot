@@ -149,3 +149,5 @@ dist
 !.idea/modules.xml
 # Contains module-specific settings and dependencies.
 !.idea/*.iml
+
+src/externals/compodoc

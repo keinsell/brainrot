@@ -8,7 +8,7 @@ import process             from "node:process"
 @Module({
 	imports: [
 		ServeStaticModule.forRoot({
-			rootPath:   join(process.cwd(), 'docs/generated/compodoc'),
+			rootPath:   join(process.cwd(), 'src/externals/compodoc'),
 			renderPath: "/docs",
 			serveRoot:  "/docs",
 		}),
