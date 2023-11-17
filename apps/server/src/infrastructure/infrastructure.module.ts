@@ -6,9 +6,6 @@ import {
 	DocumentaitonModule,
 }               from "./documentation/documentaiton-module.js"
 import {
-	AsyncLocalStorageModule,
-}               from "./environment/local-storage/async-local-storage-module.js"
-import {
 	ContinuationLocalStorageModule,
 }               from "./environment/local-storage/continuation-local-storage-module.js"
 import {

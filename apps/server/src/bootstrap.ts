@@ -1,13 +1,22 @@
-import {Logger}                     from "@nestjs/common"
-import {NestFactory}                from "@nestjs/core"
-import delay                        from "delay"
-import ms                           from "ms"
-import process                      from "node:process"
-import {env, HEALTHCHECK_PATH}      from "./configs/env.js"
-import {Container}                  from "./container.js"
-import {buildCompodocDocumentation} from "./infrastructure/documentation/compodoc/compodoc.js"
-import {buildSwaggerDocumentation}  from "./infrastructure/documentation/swagger/swagger.js"
-import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
+import {Logger}      from "@nestjs/common"
+import {NestFactory} from "@nestjs/core"
+import delay         from "delay"
+import ms            from "ms"
+import process       from "node:process"
+import {
+	ApplicationConfiguration,
+}                    from "./configs/application-configuration.js"
+import {env}         from "./configs/env.js"
+import {Container}   from "./container.js"
+import {
+	buildCompodocDocumentation,
+}                    from "./infrastructure/documentation/compodoc/compodoc.js"
+import {
+	buildSwaggerDocumentation,
+}                    from "./infrastructure/documentation/swagger/swagger.js"
+import {
+	portAllocator,
+}                    from "./utilities/network-utils/port-allocator.js"
 
 
 
@@ -47,7 +56,7 @@ export async function bootstrap() {
 				logger.debug(`${"-".repeat(54)}`)
 				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
 				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
-				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + HEALTHCHECK_PATH}`)
+				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + ApplicationConfiguration.healthCheckPath}`)
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;

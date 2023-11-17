@@ -11,3 +11,4 @@ linked to both the security and productivity of organizations in the digital env
 - `Account` - Account management
 - `Authentication` - Authentication and authorization
 - `Authorization` - Authorization
+- `Audit` - Auditing actions taken by users

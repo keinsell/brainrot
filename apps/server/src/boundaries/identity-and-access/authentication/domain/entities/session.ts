@@ -1,3 +1,11 @@
+import {
+	AccountId,
+}                      from "@boundary/identity-and-access/account/shared-kernel/account-id.js"
+import {
+	SessionEvent,
+}                      from "@boundary/identity-and-access/authentication/domain/events/session-event.js"
+import {AggregateRoot} from "@libraries/domain/aggregate.js"
+
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or email address. This is crucial for associating user-specific data and permissions with the session.
 //
 //	Authentication Token: A session may include an authentication token or session token that is used to verify the user's identity and ensure that they are authenticated for subsequent requests.
@@ -16,20 +24,57 @@
 //
 //	Security Information: Information related to session security, such as IP address, user agent, and other data used for security checks and fraud prevention, may be included.
 
-import {AccountId} from "@boundary/identity-and-access/account/shared-kernel/account-id.js"
-import {IpAddress} from "../value-objects/ip-address.js"
-
-
-
-export class Session {
+export interface SessionProps {
 	id: string
+	subject: AccountId;
+	jti: string;
+	expiresAt: Date;
+	userAgent?: string;
+	ipAddress?: string;
+}
 
-	accountId: AccountId;
+export class Session extends AggregateRoot implements SessionProps{
 
-	lastActivity: Date;
 
-	ipAddress: IpAddress
+	public expiresAt: Date
+	public ipAddress: string
+	public jti: string
+	public subject: AccountId
+	public userAgent: string
 
-	userAgent: string;
+
+	constructor(props: SessionProps) {
+		super(props)
+		this.expiresAt = props.expiresAt
+		this.ipAddress = props.ipAddress
+		this.jti = props.jti
+		this.subject = props.subject
+		this.userAgent = props.userAgent
+	}
+
+
+	public static CreateSession(props: SessionProps): Session {
+		return new Session(props).startSession()
+	}
+
+	public RestoreSession(props: SessionProps): Session {
+		return new Session(props)
+	}
+
+
+	public refreshSession(): Session {
+		return this
+	}
+
+
+	public destroySession(): Session {
+		return this
+	}
+
+
+	protected startSession(): Session {
+		this.appendEvent(new SessionEvent.SessionCreated(this))
+		return this
+	}
 }
 
