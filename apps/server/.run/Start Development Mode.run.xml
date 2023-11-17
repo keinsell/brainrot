@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Start Development Mode" type="js.build_tools.npm" focusToolWindowBeforeRun="true">
-    <package-json value="$PROJECT_DIR$/package.json" />
+    <package-json value="$PROJECT_DIR$/apps/server/package.json" />
     <command value="run" />
     <scripts>
       <script value="dev" />

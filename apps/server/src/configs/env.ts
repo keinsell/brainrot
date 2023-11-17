@@ -46,5 +46,3 @@ export const env = cleanEnv(process.env, {
 export function getApplicationUrl() {
 	return `${env.PROTOCOL}://${env.HOST}:${env.PORT}`;
 }
-
-export const HEALTHCHECK_PATH = "/healthcheck";

@@ -34,8 +34,12 @@ export class JwtTokenManagement extends TokenManagement {
 	}
 
 
-	public generateRefreshToken(payload: any): Promise<string> {
-		return Promise.resolve("")
+	public async generateRefreshToken(payload: any): Promise<string> {
+		const refreshToken =	await this.jwtService.signAsync(payload, {secret: authorizationConfiguration.jwtSecret})
+
+		this.logger.debug(`Generated refresh token ${refreshToken.slice(0, 10)}...: ${JSON.stringify(payload)}`)
+
+		return refreshToken
 	}
 
 

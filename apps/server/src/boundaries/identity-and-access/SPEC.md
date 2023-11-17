@@ -14,3 +14,4 @@
 - User must be able to login using his phone number and password.
 - User must be able to change his phone number.
 - User must be able to delete his account.
+- User should be able to use decentralized identity
