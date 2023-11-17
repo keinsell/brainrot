@@ -1,0 +1,2 @@
+/** Message Bus is abstraction that will use in-memory registrations based on the message type, serialization logic and decorators. This is one-stop place to publish events to other parts of application. */
+export abstract class Bus {}
