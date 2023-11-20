@@ -130,7 +130,7 @@ dist
 .pnp.*
 
 # Docker-based development environment (https://www.docker.com/)
-.docker/
+# .docker/
 
 # InteliJ IDEA (https://www.jetbrains.com/idea/)
 # Lightweight ignore which store project-wide configuration.
