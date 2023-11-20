@@ -2,7 +2,7 @@ import {Authenticate}                                          from "@boundary/i
 import {AuthenticationResponse}                                from "@boundary/identity-and-access/modules/authentication/application/dtos/authentication-response.js"
 import {IpAddress}                                             from "@boundary/identity-and-access/modules/authentication/domain/value-objects/ip-address.js"
 import {AuthenticationService}                                 from "@boundary/identity-and-access/modules/authentication/services/authentication-service.js"
-import {Body, Controller, Delete, Post, Req}                   from "@nestjs/common"
+import {Body, Controller, Delete, Get, Post, Req}              from "@nestjs/common"
 import {ApiCreatedResponse, ApiNotFoundResponse, ApiOperation} from "@nestjs/swagger"
 import {Request}                                               from "express"
 
@@ -56,6 +56,16 @@ export class AuthenticationController {
 			accessToken: authenticationResult.accessToken,
 			mfa:         false,
 		}
+	}
+
+
+	@ApiOperation({
+		operationId: "whoami",
+		description: "Returns the current user",
+		tags:        ['account'],
+	}) @Get()
+	async whoami(): Promise<string> {
+		return "whoami"
 	}
 
 

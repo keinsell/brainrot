@@ -1,4 +1,4 @@
-import {$Enums, Account as PrismaAccount, Prisma} from '../../../externals/generated/prisma/index.js'
+import {$Enums, Account as PrismaAccount, Prisma} from '../../../vendor/prisma/index.js'
 
 
 

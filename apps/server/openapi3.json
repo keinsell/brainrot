@@ -2,20 +2,6 @@
   "openapi": "3.0.0",
   "paths": {
     "/account": {
-      "get": {
-        "operationId": "whoami",
-        "summary": "",
-        "description": "Returns the current user",
-        "tags": [
-          "account"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
       "post": {
         "operationId": "register",
         "summary": "Register account",
@@ -205,6 +191,20 @@
           }
         }
       },
+      "get": {
+        "operationId": "whoami",
+        "summary": "",
+        "description": "Returns the current user",
+        "tags": [
+          "account"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
       "delete": {
         "operationId": "logout",
         "summary": "",
@@ -271,31 +271,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Kadin.Lehner@gmail.com",
+            "example": "May.Casper92@gmail.com",
             "examples": [
-              "Kiera_Brekke69@gmail.com",
-              "Jarrett_Crooks@hotmail.com",
-              "Rubie24@gmail.com"
+              "Pink.Harber70@hotmail.com",
+              "Anissa_Williamson24@gmail.com",
+              "Ethel34@yahoo.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "zMt5TKVXwB3u2Dh",
+            "example": "6xUFis8ihgTt88C",
             "examples": [
-              "E8v6FKAcuMfMLDF",
-              "6sKPk78BS1lazw4",
-              "TjorZUSqmlG747R"
+              "hkKlSp4zVSd7lgB",
+              "LbYloS_CtjOuO_p",
+              "GUEOGJo2_jx3KIK"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Reuben.Ebert-Gleason",
+            "example": "Reinhold_Grady-Anderson51",
             "examples": [
-              "Alycia4",
-              "Toy_Carroll",
-              "Alexandra.Lakin"
+              "Rodolfo_Smith",
+              "Vivian27",
+              "Harley.Breitenberg"
             ]
           }
         },
@@ -333,21 +333,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Reuben.Ebert-Gleason",
+            "example": "Reinhold_Grady-Anderson51",
             "examples": [
-              "Angel_Homenick",
-              "Liliana38",
-              "Adeline17"
+              "Eden8",
+              "Murl.Hoeger",
+              "Sterling15"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "zMt5TKVXwB3u2Dh",
+            "example": "6xUFis8ihgTt88C",
             "examples": [
-              "MTB3XFIZBBjy6wm",
-              "iwSkK0BOiPsOsFN",
-              "jxGYMyvEbkoPqXg"
+              "sNmcXP1vkzNaAGw",
+              "g624UE5U_lb2saA",
+              "7I0nLZfJmAn5Abs"
             ]
           }
         },

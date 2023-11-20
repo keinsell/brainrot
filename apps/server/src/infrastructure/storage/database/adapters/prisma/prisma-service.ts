@@ -1,7 +1,7 @@
 import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
 import delay                                               from 'delay'
 import ms                                                  from 'ms'
-import {Prisma, PrismaClient}                              from "../../../../../externals/generated/prisma/index.js"
+import {Prisma, PrismaClient}                              from "../../../../../vendor/prisma/index.js"
 
 
 

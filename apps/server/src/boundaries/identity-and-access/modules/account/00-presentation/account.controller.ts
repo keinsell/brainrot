@@ -1,12 +1,12 @@
-import {CreateAccount}               from "@boundary/identity-and-access/modules/account/10-application/commands/create-account.js"
-import {RegisterAccount}             from "@boundary/identity-and-access/modules/account/10-application/commands/register-account.js"
-import {AccountDto}                  from "@boundary/identity-and-access/modules/account/10-application/dtos/account.dto.js"
-import {AccountService}              from "@boundary/identity-and-access/modules/account/20-service/account.service.js"
-import {Body, Controller, Get, Post} from "@nestjs/common"
-import {ApiOperation}                from "@nestjs/swagger"
-import {readFileSync}                from 'node:fs'
-import {dirname}                     from "path"
-import {fileURLToPath}               from "url"
+import {CreateAccount}          from "@boundary/identity-and-access/modules/account/10-application/commands/create-account.js"
+import {RegisterAccount}        from "@boundary/identity-and-access/modules/account/10-application/commands/register-account.js"
+import {AccountDto}             from "@boundary/identity-and-access/modules/account/10-application/dtos/account.dto.js"
+import {AccountService}         from "@boundary/identity-and-access/modules/account/20-service/account.service.js"
+import {Body, Controller, Post} from "@nestjs/common"
+import {ApiOperation}           from "@nestjs/swagger"
+import {readFileSync}           from 'node:fs'
+import {dirname}                from "path"
+import {fileURLToPath}          from "url"
 
 
 
@@ -30,16 +30,6 @@ function getOperationDocumentation(operation: string): string {
 @Controller("account")
 export class AccountController {
 	constructor(private service: AccountService) {}
-
-
-	@ApiOperation({
-		operationId: "whoami",
-		description: "Returns the current user",
-		tags:        ['account'],
-	}) @Get()
-	async whoami(): Promise<string> {
-		return "whoami"
-	}
 
 
 	@ApiOperation({

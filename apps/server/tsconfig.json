@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": false,
     "types": [
       "@types/node",
-      "./src/externals/generated/prisma/index.d.ts"
+      "./src/vendor/prisma/index.d.ts"
     ],
     "paths": {
       "@boundary/*": [
