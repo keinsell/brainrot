@@ -1,4 +1,4 @@
-import {PasswordHashingModuleV2}        from "@libraries/security/password-hashing-v2/password-hashing-module-v2.js"
+import {PasswordHashingModule}          from "@libraries/security/password-hashing-v2/password-hashing-module.js"
 import {Module}                         from "@nestjs/common"
 import {DocumentaitonModule}            from "./documentation/documentaiton-module.js"
 import {AsyncLocalStorageModule}        from "./environment/local-storage/async-local-storage-module.js"
@@ -13,7 +13,7 @@ import {DatabaseModule}                 from "./storage/database/database.module
 	imports: [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule,
 		AsyncLocalStorageModule, DocumentaitonModule, HealthModule,
-		PasswordHashingModuleV2,
+		PasswordHashingModule,
 	],
 	exports: [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule,

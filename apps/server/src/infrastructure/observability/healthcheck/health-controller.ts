@@ -1,14 +1,7 @@
-import {Controller, Get}   from "@nestjs/common";
-import {
-	HealthCheck,
-	HealthCheckService,
-	HealthIndicatorFunction,
-	HealthIndicatorResult,
-	MemoryHealthIndicator,
-	PrismaHealthIndicator,
-}                          from "@nestjs/terminus";
-import {HealthCheckResult} from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
-import {PrismaService}     from "../../storage/database/prisma/prisma-service.js"
+import {Controller, Get}                                                                                                               from "@nestjs/common";
+import {HealthCheck, HealthCheckService, HealthIndicatorFunction, HealthIndicatorResult, MemoryHealthIndicator, PrismaHealthIndicator} from "@nestjs/terminus";
+import {HealthCheckResult}                                                                                                             from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
+import {PrismaService}                                                                                                                 from "../../storage/database/adapters/prisma/prisma-service.js"
 
 
 

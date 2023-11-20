@@ -1,5 +1,5 @@
-import {AccountModule}        from "@boundary/identity-and-access/account/account.module.js"
-import {AuthenticationModule} from "@boundary/identity-and-access/authentication/authentication-module.js"
+import {AccountModule}        from "@boundary/identity-and-access/modules/account/account.module.js"
+import {AuthenticationModule} from "@boundary/identity-and-access/modules/authentication/authentication-module.js"
 import {Module}               from "@nestjs/common"
 
 

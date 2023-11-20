@@ -1,9 +1,0 @@
-import {
-	SessionCreated,
-} from "@boundary/identity-and-access/authentication/domain/events/session-created.js"
-
-
-
-export const SessionEvent = {
-	SessionCreated: SessionCreated,
-}
