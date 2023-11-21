@@ -1,16 +1,16 @@
-import {IdentityRepository}                                 from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
-import {Email}                                              from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
-import {Password}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
-import {Username}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
-import {BasePolicy}                                         from "@libraries/domain/policy/base-policy.js"
-import {PasswordStrengthEstimator}                          from "@libraries/security/password-strength-estimator/password-strength-estimator.js"
-import {PasswordSecurityLevel}                              from "@libraries/security/password-strength-estimator/report/password-security-level.js"
-import {BadRequestException, ConflictException, Injectable} from "@nestjs/common"
-import {err, ok}                                            from "neverthrow"
+import {IdentityRepository}                                        from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
+import {Email}                                                     from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
+import {Password}                                                  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
+import {Username}                                                  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
+import {BasePolicy}                                                from "@libraries/domain/policy/base-policy.js"
+import {PasswordStrengthEstimator}                                 from "@libraries/security/password-strength-estimator/password-strength-estimator.js"
+import {PasswordSecurityLevel}                                     from "@libraries/security/password-strength-estimator/report/password-security-level.js"
+import {BadRequestException, ConflictException, Injectable, Scope} from "@nestjs/common"
+import {err, ok}                                                   from "neverthrow"
 
 
 
-@Injectable()
+@Injectable({scope: Scope.REQUEST})
 export class AccountPolicy extends BasePolicy {
 	constructor(private readonly accountRepository: IdentityRepository, private readonly passwordSecurity: PasswordStrengthEstimator) {
 		super()

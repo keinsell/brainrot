@@ -1,4 +1,4 @@
-import {AccountId}     from "@boundary/identity-and-access/modules/account/shared-kernel/account-id.js"
+import {AccountId}     from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/account-id.js"
 import {SessionEvent}  from "@boundary/identity-and-access/modules/authentication/domain/events/session-event.js"
 import {AggregateRoot} from "@libraries/domain/aggregate.js"
 

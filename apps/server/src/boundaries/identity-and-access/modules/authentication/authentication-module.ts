@@ -1,10 +1,9 @@
-import {CredentialValidatorModule}  from "@boundary/identity-and-access/modules/account/shared-kernel/credential-validator/credential-validator-module.js"
+import {CredentialValidatorModule}  from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/credential-validator/credential-validator-module.js"
 import {AuthenticationController}   from "@boundary/identity-and-access/modules/authentication/application/authentication-controller.js"
 import {AuthenticationService}      from "@boundary/identity-and-access/modules/authentication/services/authentication-service.js"
 import {LocalAuthorizationStrategy} from "@boundary/identity-and-access/modules/authentication/services/authorization-strategies/local-authorization-strategy.js"
 import {TokenManagement}            from "@boundary/identity-and-access/modules/authentication/services/token-management.js"
 import {JwtTokenManagement}         from "@boundary/identity-and-access/modules/authentication/services/token-management/jwt.token-management.js"
-import {AuthenticationGuard}        from "@boundary/identity-and-access/modules/authentication/shared-kernel/guards/authentication-guard.js"
 import {Module}                     from "@nestjs/common"
 import {JwtModule}                  from "@nestjs/jwt"
 import {PassportModule}             from "@nestjs/passport"
@@ -29,12 +28,12 @@ import {authorizationConfiguration} from "../../../../configs/authorization-conf
 	],
 	controllers: [AuthenticationController],
 	providers:   [
-		AuthenticationService, AuthenticationGuard, LocalAuthorizationStrategy,
+		AuthenticationService, LocalAuthorizationStrategy,
 		{
 			provide:  TokenManagement,
 			useClass: JwtTokenManagement,
 		},
 	],
-	exports:     [AuthenticationService, AuthenticationGuard],
+	exports:     [AuthenticationService],
 })
 export class AuthenticationModule {}

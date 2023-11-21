@@ -31,22 +31,12 @@ import {ClsModule}      from "nestjs-cls"
 				saveReq:      true,
 				saveRes:      true,
 				useEnterWith: true,
+				idGenerator: () => Math.random().toString(36).slice(2),
 			},
 		}),
 	],
 	exports: [
-		ClsModule.forRoot({
-			global:      true,
-			interceptor: {mount: true},
-			guard:       {mount: true},
-			middleware:  {
-				mount:        true,
-				generateId:   true,
-				saveReq:      true,
-				saveRes:      true,
-				useEnterWith: true,
-			},
-		}),
+		ClsModule,
 	],
 })
 export class ContinuationLocalStorageModule {}

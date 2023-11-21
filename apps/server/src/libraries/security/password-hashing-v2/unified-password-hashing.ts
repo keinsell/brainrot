@@ -1,10 +1,8 @@
-import {KDF_PROVIDER_TOKEN}             from "@libraries/security/password-hashing-v2/DI/KDF_PROVIDER_TOKEN.js"
-import {
-	KdfAlgorithm, KeyDerivationFunction,
-}                                       from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
-import {PasswordHashingAlgorithm}       from "@libraries/security/password-hashing-v2/password-hashing-algorithm.js"
-import {PhcString, SerializedPhcString} from "@libraries/security/password-hashing-v2/VOs/phc-string.js"
-import {Inject, Injectable, Logger}     from "@nestjs/common"
+import {KDF_PROVIDER_TOKEN}                  from "@libraries/security/password-hashing-v2/DI/KDF_PROVIDER_TOKEN.js"
+import {KdfAlgorithm, KeyDerivationFunction} from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
+import {PasswordHashingAlgorithm}            from "@libraries/security/password-hashing-v2/password-hashing-algorithm.js"
+import {PhcString, SerializedPhcString}      from "@libraries/security/password-hashing-v2/VOs/phc-string.js"
+import {Inject, Injectable, Logger}          from "@nestjs/common"
 
 
 
