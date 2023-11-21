@@ -17,6 +17,27 @@ program in decoupled way to allow easy testing and development, and have fun whi
   ecosystem isn't ready for that yet. I mean... You still can completly do not give a fuck about documentation and will
   hear such thing but I think you can say you tried at least lol
 
+- [ ] Circuit Breaker
+- [ ] Service Discovery
+- [ ] Error Handling
+- [ ] Exception Handling
+- [ ] RxJS
+- [ ] API Response Time
+- [ ] Serialization
+- [ ] Deserialization
+- [ ] Prometheus Metrics
+- [ ] Logging
+- [ ] Concurrency Control
+- [ ] Externalized Configuration
+- [ ] Deployment Profiles
+- [ ] OpenTracing
+- [ ] XSS
+- [ ] CORS
+- [ ] CSRF
+- [ ] OAuth 2.0
+- [ ] GraphQL
+- [ ] Rest
+
 ## Installation
 
 ```bash
