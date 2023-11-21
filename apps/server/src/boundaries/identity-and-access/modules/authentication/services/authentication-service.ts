@@ -1,4 +1,4 @@
-import {CredentialValidator}                               from "@boundary/identity-and-access/modules/account/shared-kernel/credential-validator/credential-validator.js"
+import {CredentialValidator}                               from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/credential-validator/credential-validator.js"
 import {Session}                                           from "@boundary/identity-and-access/modules/authentication/domain/entities/session.js"
 import {TokenManagement}                                   from "@boundary/identity-and-access/modules/authentication/services/token-management.js"
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common"

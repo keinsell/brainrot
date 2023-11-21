@@ -1,4 +1,4 @@
-import {AccountId} from "@boundary/identity-and-access/modules/account/shared-kernel/account-id.js"
+import {AccountId} from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/account-id.js"
 import {Address}   from "@boundary/identity-and-access/modules/profile/value-objects/address.js"
 
 

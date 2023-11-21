@@ -2,11 +2,11 @@ import {KDF_PROVIDER_TOKEN}     from "@libraries/security/password-hashing-v2/DI
 import {Argon2Kdf}              from "@libraries/security/password-hashing-v2/KDFs/argon2.kdf.js"
 import {KeyDerivationFunction}  from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
 import {UnifiedPasswordHashing} from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
-import {Global, Module}         from "@nestjs/common"
+import {Module}                 from "@nestjs/common"
 
 
 
-@Global() @Module({
+@Module({
 	imports:     [],
 	controllers: [],
 	providers:   [

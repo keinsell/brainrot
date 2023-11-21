@@ -3,7 +3,7 @@ import {IdentityRepository}                                   from "@boundary/id
 import {UnifiedPasswordHashing}                               from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
 import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {err, ok, Result}                                      from "neverthrow"
-import {EventBus}                                             from "../../../../../../infrastructure/messaging/event-bus.js"
+import {EventBus}                                             from "../../../../../../../infrastructure/messaging/event-bus.js"
 
 
 

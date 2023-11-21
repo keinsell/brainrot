@@ -271,31 +271,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "May.Casper92@gmail.com",
+            "example": "Bryce_Ruecker@yahoo.com",
             "examples": [
-              "Pink.Harber70@hotmail.com",
-              "Anissa_Williamson24@gmail.com",
-              "Ethel34@yahoo.com"
+              "Sebastian18@gmail.com",
+              "Brice_Lockman9@yahoo.com",
+              "Diana.Schiller@hotmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "6xUFis8ihgTt88C",
+            "example": "AUSnohccy3QUCZm",
             "examples": [
-              "hkKlSp4zVSd7lgB",
-              "LbYloS_CtjOuO_p",
-              "GUEOGJo2_jx3KIK"
+              "jtiHYvc_Pnki92P",
+              "9pMNquxaWWuReqw",
+              "oh6qNbEP2QCXIxX"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Reinhold_Grady-Anderson51",
+            "example": "Anabelle.Parisian60",
             "examples": [
-              "Rodolfo_Smith",
-              "Vivian27",
-              "Harley.Breitenberg"
+              "Hayden.Fisher",
+              "Desmond.Krajcik",
+              "Amina61"
             ]
           }
         },
@@ -333,21 +333,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Reinhold_Grady-Anderson51",
+            "example": "Anabelle.Parisian60",
             "examples": [
-              "Eden8",
-              "Murl.Hoeger",
-              "Sterling15"
+              "Nicolette_Emmerich",
+              "Alexandre.Krajcik",
+              "Ruby_Ernser"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "6xUFis8ihgTt88C",
+            "example": "AUSnohccy3QUCZm",
             "examples": [
-              "sNmcXP1vkzNaAGw",
-              "g624UE5U_lb2saA",
-              "7I0nLZfJmAn5Abs"
+              "8sCu09SwnJreNvn",
+              "XZD13looDgl_l2N",
+              "WPVKIP59g2s6_gK"
             ]
           }
         },

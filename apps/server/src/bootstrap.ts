@@ -15,7 +15,7 @@ import {portAllocator}              from "./utilities/network-utils/port-allocat
 export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
 		abortOnError: false,
-		snapshot:     true,
+		snapshot: !!env.isDev,
 	});
 
 	// Implement logger used for bootstrapping and notifying about application state
