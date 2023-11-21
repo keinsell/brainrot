@@ -1,8 +1,10 @@
-name: hello-world
-on: push
+name: Actions Runner Controller Demo
+on:
+  workflow_dispatch:
+
 jobs:
-  my-job:
-    runs-on: self-hosted
+  Explore-GitHub-Actions:
+    # You need to use the INSTALLATION_NAME from the previous step
+    runs-on: arc-runner-set
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+    - run: echo "🎉 This job uses runner scale set runners!"
