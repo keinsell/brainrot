@@ -1,7 +1,8 @@
 {
   "name": "methylphenidate",
+  "private": true,
+  "packageManager": "pnpm@8.10.5",
   "description": "⚡ The caffeinated Node.js boilerplate powered by Nest.js. It handles all the tedious stuff you'd rather not do in every new project – so you can code like it's xmas (minus the snow)",
-  "module": "apps/custom-nestjs-bundler/src/main.ts",
   "readme": "README.md",
   "author": {
     "email": "keinsell@protonmail.com",
