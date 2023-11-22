@@ -5,7 +5,7 @@ on:
   push:
 
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: arc-runner-set
     strategy:
       matrix:
@@ -13,18 +13,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      - uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: "pnpm"
-
-      - run: npm ci
-      - run: npm test
-
-      - name: Install pnpm
-        run: npm i -g pnpm
 
       - name: Install dependencies
         run: pnpm install
