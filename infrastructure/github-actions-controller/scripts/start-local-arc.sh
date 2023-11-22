@@ -9,8 +9,8 @@ op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
-# Start Minikube with multi-node configuration
-minikube start --nodes 2 -p local-arc
+# Start Minikube with signle-node configuration
+minikube start -p local-arc
 
 # Install ARC
 helm install arc \
@@ -25,7 +25,7 @@ helm install "${INSTALLATION_NAME}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
     --set minRunners=1 \
-    --set maxRunners=10 \
+    --set maxRunners=3 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 
 # Upgrade Runner Set
@@ -33,6 +33,6 @@ helm upgrade "${INSTALLATION_NAME}" \
     --namespace "${NAMESPACE}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-    --set minRunners=5 \
-    --set maxRunners=40 \
+    --set minRunners=1 \
+    --set maxRunners=3 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
