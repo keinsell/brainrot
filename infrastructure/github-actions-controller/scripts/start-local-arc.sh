@@ -10,7 +10,7 @@ op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
 # Start Minikube with multi-node configuration
-minikube start --nodes 2 -p local-arc minikube start --driver=docker
+minikube start --nodes 2 -p local-arc
 
 # Install ARC
 helm install arc \
