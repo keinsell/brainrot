@@ -2,9 +2,9 @@ name: Build Server Application
 
 on:
   push:
-    # Run only when server files were modified
-    paths:
-      - 'apps/server/src/**'
+# Run only when server files were modified
+#    paths:
+#      - 'apps/server/src/**'
 
 jobs:
   build:
