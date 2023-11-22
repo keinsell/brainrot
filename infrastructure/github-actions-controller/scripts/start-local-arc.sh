@@ -9,9 +9,11 @@ op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
-# Start Minikube and Create a Kind Cluster
+# Start Minikube
 minikube start --driver=docker
-kind create cluster --name gh-arc
+
+# TODO: Create cluster with multiple workers and deploy ARC on them
+#kind create cluster --name gh-arc
 
 # Install ARC
 helm install arc \
