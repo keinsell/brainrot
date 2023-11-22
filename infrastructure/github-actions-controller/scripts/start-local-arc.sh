@@ -9,11 +9,8 @@ op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
-# Start Minikube
-minikube start --driver=docker
-
-# TODO: Create cluster with multiple workers and deploy ARC on them
-#kind create cluster --name gh-arc
+# Start Minikube with multi-node configuration
+minikube start --nodes 2 -p local-arc minikube start --driver=docker
 
 # Install ARC
 helm install arc \
@@ -36,6 +33,6 @@ helm upgrade "${INSTALLATION_NAME}" \
     --namespace "${NAMESPACE}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-    --set minRunners=1 \
-    --set maxRunners=10 \
+    --set minRunners=5 \
+    --set maxRunners=40 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
