@@ -1,0 +1,21 @@
+name: Build Server Application
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: arc-runner-set
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
