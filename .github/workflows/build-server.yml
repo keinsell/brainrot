@@ -1,8 +1,10 @@
 name: Build Server Application
 
 on:
-  workflow_dispatch:
   push:
+    # Run only when server files were modified
+    paths:
+      - 'apps/server/src/**'
 
 jobs:
   build:
