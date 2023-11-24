@@ -1,6 +1,6 @@
 import {Session}    from "@boundary/identity-and-access/modules/authentication/domain/entities/session.js"
-import {Event}      from "@libraries/message/event.js"
 import {randomUUID} from "node:crypto"
+import {Event}      from "../../../../../../common/libraries/message/event.js"
 
 
 

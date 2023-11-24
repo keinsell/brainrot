@@ -1,5 +1,5 @@
 import {Account}        from '@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js';
-import {DbContextModel} from "../../../../../../../../infrastructure/storage/database/db-context-model.js"
+import {DbContextModel} from "../../../../../../../../common/infrastructure/storage/database/db-context-model.js"
 
 
 

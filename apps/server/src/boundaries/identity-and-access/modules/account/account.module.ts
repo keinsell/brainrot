@@ -3,10 +3,10 @@ import {AccountService}                  from "@boundary/identity-and-access/mod
 import {AccountPolicy}                   from "@boundary/identity-and-access/modules/account/30-domain/policies/account-policy.js"
 import {IdentityRepository}              from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
 import {PrismaIdentityRepository}        from "@boundary/identity-and-access/modules/account/40-infrastructure/persistence/repositories/prisma.identity.repository.js"
-import {PasswordHashingModule}           from "@libraries/security/password-hashing-v2/password-hashing-module.js"
-import {PasswordStrengthEstimatorModule} from "@libraries/security/password-strength-estimator/password-strength-estimator-module.js"
 import {Module}                          from "@nestjs/common"
-import {DatabaseModule}                  from "../../../../infrastructure/storage/database/database.module.js"
+import {DatabaseModule}                  from "../../../../common/infrastructure/storage/database/database.module.js"
+import {PasswordHashingModule}           from "../../../../common/libraries/security/password-hashing-v2/password-hashing-module.js"
+import {PasswordStrengthEstimatorModule} from "../../../../common/libraries/security/password-strength-estimator/password-strength-estimator-module.js"
 
 
 

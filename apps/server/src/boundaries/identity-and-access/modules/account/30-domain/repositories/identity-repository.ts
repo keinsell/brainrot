@@ -1,5 +1,5 @@
 import {Account}           from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
-import {GenericRepository} from "@libraries/persistence/repository/repository.js"
+import {GenericRepository} from "../../../../../../common/libraries/persistence/repository/repository.js"
 import {Email}             from "../value-objects/email.js"
 import {Username}          from "../value-objects/username.js"
 

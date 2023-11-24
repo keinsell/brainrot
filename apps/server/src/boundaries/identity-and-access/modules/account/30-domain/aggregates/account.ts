@@ -1,6 +1,6 @@
 import {AccountEvent}                           from "@boundary/identity-and-access/modules/account/30-domain/events/account-event.js"
 import {AccountStatus}                          from "@boundary/identity-and-access/modules/account/30-domain/value-objects/account-status.js"
-import {AggregateRoot, AggregateRootProperties} from "@libraries/domain/aggregate.js"
+import {AggregateRoot, AggregateRootProperties} from "../../../../../../common/libraries/domain/aggregate.js"
 import {Email}                                  from "../value-objects/email.js"
 import {Password}                               from "../value-objects/password.js"
 import {Username}                               from "../value-objects/username.js"

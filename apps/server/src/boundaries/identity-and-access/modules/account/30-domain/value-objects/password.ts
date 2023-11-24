@@ -1,7 +1,7 @@
-import {PasswordHashingAlgorithm}  from "@libraries/security/password-hashing-v2/password-hashing-algorithm.js"
-import {PhcString}                 from "@libraries/security/password-hashing-v2/VOs/phc-string.js"
-import {PasswordStrengthEstimator} from "@libraries/security/password-strength-estimator/password-strength-estimator.js"
-import {PasswordSecurityReport}    from "@libraries/security/password-strength-estimator/report/password-security-report.js"
+import {PasswordHashingAlgorithm}  from "../../../../../../common/libraries/security/password-hashing-v2/password-hashing-algorithm.js"
+import {PhcString}                 from "../../../../../../common/libraries/security/password-hashing-v2/VOs/phc-string.js"
+import {PasswordStrengthEstimator} from "../../../../../../common/libraries/security/password-strength-estimator/password-strength-estimator.js"
+import {PasswordSecurityReport}    from "../../../../../../common/libraries/security/password-strength-estimator/report/password-security-report.js"
 
 
 

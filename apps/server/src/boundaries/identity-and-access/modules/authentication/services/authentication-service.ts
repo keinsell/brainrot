@@ -4,7 +4,7 @@ import {TokenManagement}                                   from "@boundary/ident
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common"
 import {ok, Result}                                        from "neverthrow"
 import {randomUUID}                                        from "node:crypto"
-import {EventBus}                                          from "../../../../../infrastructure/messaging/event-bus.js"
+import {EventBus}                                          from "../../../../../common/infrastructure/messaging/event-bus.js"
 
 
 

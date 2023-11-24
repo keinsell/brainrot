@@ -1,6 +1,6 @@
 import {AccountId}     from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/account-id.js"
 import {SessionEvent}  from "@boundary/identity-and-access/modules/authentication/domain/events/session-event.js"
-import {AggregateRoot} from "@libraries/domain/aggregate.js"
+import {AggregateRoot} from "../../../../../../common/libraries/domain/aggregate.js"
 
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or email address. This is crucial for associating user-specific data and permissions with the session.
 //

@@ -1,9 +1,9 @@
 import {Account}                                              from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
 import {IdentityRepository}                                   from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
-import {UnifiedPasswordHashing}                               from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
 import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {err, ok, Result}                                      from "neverthrow"
-import {EventBus}                                             from "../../../../../../../infrastructure/messaging/event-bus.js"
+import {EventBus}                                             from "../../../../../../../common/infrastructure/messaging/event-bus.js"
+import {UnifiedPasswordHashing}                               from "../../../../../../../common/libraries/security/password-hashing-v2/unified-password-hashing.js"
 
 
 

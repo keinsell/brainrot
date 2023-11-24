@@ -4,10 +4,10 @@ import {IdentityRepository}     from "@boundary/identity-and-access/modules/acco
 import {Email}                  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
 import {Password}               from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
 import {Username}               from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
-import {KdfAlgorithm}           from "@libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
-import {UnifiedPasswordHashing} from "@libraries/security/password-hashing-v2/unified-password-hashing.js"
 import {Injectable, Scope}      from "@nestjs/common"
-import {EventBus}               from "../../../../../infrastructure/messaging/event-bus.js"
+import {EventBus}               from "../../../../../common/infrastructure/messaging/event-bus.js"
+import {KdfAlgorithm}           from "../../../../../common/libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
+import {UnifiedPasswordHashing} from "../../../../../common/libraries/security/password-hashing-v2/unified-password-hashing.js"
 
 
 

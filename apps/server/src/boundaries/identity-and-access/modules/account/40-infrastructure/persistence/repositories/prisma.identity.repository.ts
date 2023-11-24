@@ -5,8 +5,8 @@ import {Username}                                    from "@boundary/identity-an
 import {AccountCreateModel}                          from "@boundary/identity-and-access/modules/account/40-infrastructure/persistence/models/account/account-create-model.js"
 import {AccountEntityModel}                          from "@boundary/identity-and-access/modules/account/40-infrastructure/persistence/models/account/account-entity-model.js"
 import {Injectable, Logger, NotImplementedException} from "@nestjs/common"
-import {PrismaService}                               from "../../../../../../../infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {DbContextModel}                              from "../../../../../../../infrastructure/storage/database/db-context-model.js"
+import {PrismaService}                               from "../../../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {DbContextModel}                              from "../../../../../../../common/infrastructure/storage/database/db-context-model.js"
 
 
 
