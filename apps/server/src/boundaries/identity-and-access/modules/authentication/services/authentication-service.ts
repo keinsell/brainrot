@@ -1,5 +1,7 @@
 import {CredentialValidator}                               from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/credential-validator/credential-validator.js"
 import {Session}                                           from "@boundary/identity-and-access/modules/authentication/domain/entities/session.js"
+import {AccessToken}                                       from "@boundary/identity-and-access/modules/authentication/domain/value-objects/access-token.js"
+import {RefreshToken}                                      from "@boundary/identity-and-access/modules/authentication/domain/value-objects/refresh-token.js"
 import {TokenManagement}                                   from "@boundary/identity-and-access/modules/authentication/services/token-management.js"
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common"
 import {ok, Result}                                        from "neverthrow"
@@ -41,15 +43,23 @@ export class AuthenticationService {
 
 		const account = isValid.value
 
-		const accessToken  = await this.tokenManagement.generateAccessToken({username: username})
-		const refreshToken = await this.tokenManagement.generateRefreshToken({username: username})
+		const jwtPayload = new AccessToken({
+			sub:      account.id,
+			aud:      "aud",
+			metadata: {
+				email: account.email.address,
+			},
+		})
+
+		const accessToken  = await this.tokenManagement.signAccessToken(new AccessToken(jwtPayload))
+		const refreshToken = await this.tokenManagement.signRefreshToken(new RefreshToken(jwtPayload))
 
 		const session = Session.CreateSession({
 			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
 			ipAddress: metadata?.ipAddress,
 			userAgent: metadata?.userAgent,
 			subject:   account.id,
-			jti:       "jti",
+			jti: jwtPayload.jti,
 			id:        randomUUID(),
 		})
 

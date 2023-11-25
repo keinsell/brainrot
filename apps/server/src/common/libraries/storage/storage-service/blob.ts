@@ -20,17 +20,6 @@ export class Blob {
 	) {
 	}
 
-
-	static fromExpressFile(file: Express.Multer.File): Blob {
-		return new Blob(
-			file.originalname,
-			file.mimetype,
-			file.size,
-			file.stream,
-		)
-	}
-
-
 	static fromStream(
 		stream: Readable,
 		originalName: string,

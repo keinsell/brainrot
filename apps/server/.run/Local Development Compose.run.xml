@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="Local Development Compose" type="docker-deploy"
-                   factoryName="docker-compose.yml" activateToolWindowBeforeRun="false" server-name="Docker">
+                   factoryName="docker-compose.yml" activateToolWindowBeforeRun="false" server-name="Docker Rootless">
         <deployment type="docker-compose.yml">
             <settings>
                 <option name="envFilePath" value=""/>

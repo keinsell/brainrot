@@ -17,9 +17,6 @@ import {authorizationConfiguration} from "../../../../configs/authorization-conf
 		JwtModule.register({
 			global:      true,
 			secret:      authorizationConfiguration.jwtSecret,
-			signOptions: {
-				expiresIn: authorizationConfiguration.accessTokenExpirationTime,
-			},
 		}), PassportModule.register({
 			defaultStrategy: "jwt",
 			session:         true,

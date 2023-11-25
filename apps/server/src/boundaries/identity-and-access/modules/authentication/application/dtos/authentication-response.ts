@@ -20,4 +20,10 @@ export class AuthenticationResponse {
 		description: "Access token.",
 	})
 	accessToken: string
+
+	@ApiProperty({
+		name:        "refreshToken",
+		description: "Refresh token.",
+	})
+	refreshToken: string
 }

@@ -1,11 +1,17 @@
-export interface TokenOptions {
-	expiresIn: string
-}
+import {JsonWebToken} from "@boundary/identity-and-access/modules/authentication/domain/value-objects/jsonwebtoken.js"
+import {JwtPayload}   from "@boundary/identity-and-access/modules/authentication/domain/value-objects/jwt-payload.js"
+
 
 
 export abstract class TokenManagement {
-	abstract generateAccessToken(payload: any): Promise<string>
-	abstract generateRefreshToken(payload: any): Promise<string>
-	abstract verifyToken(token: string): Promise<any>
-	abstract decodeToken<T = unknown>(token: string): Promise<T>
+	abstract signAccessToken(payload: JsonWebToken): Promise<string>
+
+
+	abstract signRefreshToken(payload: JsonWebToken): Promise<string>
+
+
+	abstract verifyToken(token: string): Promise<boolean>
+
+
+	abstract decodeToken<T = JwtPayload>(token: string): Promise<T>
 }

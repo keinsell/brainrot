@@ -1,7 +1,6 @@
-/**
- * Represents a refresh token.
- *
- * @typedef {string} RefreshToken
- * @description A string that represents a refresh token used for authentication purposes.
- */
-export type RefreshToken = string;
+import {JsonWebToken} from "@boundary/identity-and-access/modules/authentication/domain/value-objects/jsonwebtoken.js"
+
+
+
+export class RefreshToken extends JsonWebToken {
+}

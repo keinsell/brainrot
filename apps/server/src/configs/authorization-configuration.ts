@@ -18,4 +18,5 @@ export const authorizationConfiguration = {
 	 */
 	jwtSecret:                 "secret",
 	accessTokenExpirationTime: ms("2h"),
+	refreshTokenExpirationTime: ms("32w"),
 }

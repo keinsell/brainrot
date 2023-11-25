@@ -271,31 +271,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Bryce_Ruecker@yahoo.com",
+            "example": "Sven79@yahoo.com",
             "examples": [
-              "Sebastian18@gmail.com",
-              "Brice_Lockman9@yahoo.com",
-              "Diana.Schiller@hotmail.com"
+              "Kenyatta42@yahoo.com",
+              "Rebeka95@hotmail.com",
+              "Nathen_Gislason69@gmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "AUSnohccy3QUCZm",
+            "example": "DINJQyRJreSyXi_",
             "examples": [
-              "jtiHYvc_Pnki92P",
-              "9pMNquxaWWuReqw",
-              "oh6qNbEP2QCXIxX"
+              "5lvKmShvFoCwFw1",
+              "5RXK2IebHHQUblK",
+              "Lw_eud7wgTBv4Z1"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Anabelle.Parisian60",
+            "example": "Orville.Mosciski",
             "examples": [
-              "Hayden.Fisher",
-              "Desmond.Krajcik",
-              "Amina61"
+              "Laverna_Gusikowski80",
+              "Nola59",
+              "Skylar.Larson61"
             ]
           }
         },
@@ -319,12 +319,17 @@
           "accessToken": {
             "type": "string",
             "description": "Access token."
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token."
           }
         },
         "required": [
           "id",
           "mfa",
-          "accessToken"
+          "accessToken",
+          "refreshToken"
         ]
       },
       "Auhenticate": {
@@ -333,21 +338,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Anabelle.Parisian60",
+            "example": "Orville.Mosciski",
             "examples": [
-              "Nicolette_Emmerich",
-              "Alexandre.Krajcik",
-              "Ruby_Ernser"
+              "Barry_Cummerata55",
+              "Cesar.Christiansen23",
+              "Judd87"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "AUSnohccy3QUCZm",
+            "example": "DINJQyRJreSyXi_",
             "examples": [
-              "8sCu09SwnJreNvn",
-              "XZD13looDgl_l2N",
-              "WPVKIP59g2s6_gK"
+              "4Eo7tbd4_vQz9bR",
+              "EIe_fYUjPGNfuqG",
+              "Lm9W3k4XBql5FDr"
             ]
           }
         },

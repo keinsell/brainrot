@@ -54,6 +54,7 @@ export class AuthenticationController {
 		return {
 			id:          authenticationResult.accountId,
 			accessToken: authenticationResult.accessToken,
+			refreshToken: authenticationResult.refreshToken,
 			mfa:         false,
 		}
 	}
