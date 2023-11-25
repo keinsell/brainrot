@@ -1,4 +1,5 @@
 import {Controller, Get}                                                                                                               from "@nestjs/common";
+import {ApiOperation}                                                                                                                  from "@nestjs/swagger"
 import {HealthCheck, HealthCheckService, HealthIndicatorFunction, HealthIndicatorResult, MemoryHealthIndicator, PrismaHealthIndicator} from "@nestjs/terminus";
 import {HealthCheckResult}                                                                                                             from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
 import {PrismaService}                                                                                                                 from "../../storage/database/adapters/prisma/prisma-service.js"
@@ -15,6 +16,7 @@ import {PrismaService}                                                          
  * @param {PrismaHealthIndicator} prisma - The Prisma health indicator used to check the health status of the Prisma service.
  * @param {PrismaService} prismaService - The Prisma service used to interact with the database.
  */
+
 @Controller("health")
 export class HealthController {
 	constructor(private health: HealthCheckService, private memory: MemoryHealthIndicator, private prisma: PrismaHealthIndicator, private prismaService: PrismaService) {}
@@ -25,6 +27,10 @@ export class HealthController {
 	 *
 	 * @returns {Promise<HealthCheckResult>} - A promise that resolves to an array of health indicator results.
 	 */
+	@ApiOperation({
+		summary:     "Health check endpoint",
+		operationId: "healthcheck",
+	})
 	@Get() @HealthCheck() check(): Promise<HealthCheckResult> {
 		const healthIndicators: HealthIndicatorFunction[] = []
 

@@ -39,6 +39,7 @@ export class AuthenticationController {
 
 		const ipAddress = request.ip as IpAddress
 		const userAgent = request.headers['user-agent'] as string
+		request.user
 
 		const maybeAuthenticated = await this.authenticationService.authenticate(username, password, {
 			userAgent: userAgent,

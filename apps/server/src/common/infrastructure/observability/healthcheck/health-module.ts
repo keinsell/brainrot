@@ -1,15 +1,18 @@
-import {Module} from "@nestjs/common"
+import {Module}           from "@nestjs/common"
+import {TerminusModule}   from "@nestjs/terminus"
+import {DatabaseModule}   from "../../storage/database/database.module.js"
+import {HealthController} from "./health-controller.js"
 
 
 
 @Module({
-	//imports:     [
-	//	DatabaseModule, TerminusModule.forRoot({
-	//		//errorLogStyle: isDevelopment() ? 'pretty' : 'json',
-	//		errorLogStyle: 'pretty',
-	//	}),
-	//],
-	//controllers: [HealthController],
-	//exports:     [TerminusModule],
+	imports:     [
+		DatabaseModule, TerminusModule.forRoot({
+			errorLogStyle: 'pretty',
+			logger:        false,
+		}),
+	],
+	controllers: [HealthController],
+	exports:     [TerminusModule],
 })
 export class HealthModule {}

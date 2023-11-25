@@ -248,6 +248,166 @@
           }
         }
       }
+    },
+    "/health": {
+      "get": {
+        "operationId": "healthcheck",
+        "summary": "Health check endpoint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -271,31 +431,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "John.Quigley46@yahoo.com",
+            "example": "Francis_Roberts@yahoo.com",
             "examples": [
-              "Eduardo.Gleichner@hotmail.com",
-              "Demarco.Herman@gmail.com",
-              "Jayde.Ondricka@hotmail.com"
+              "Eryn16@gmail.com",
+              "Ayana.Hermiston22@yahoo.com",
+              "Lizeth64@gmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "mNP0bdfGaktwPYt",
+            "example": "zllHTIycgZslEeW",
             "examples": [
-              "6bBIxc2SQFXNLNu",
-              "Q9pPJdJugG06avM",
-              "T8r75PnNQyqMJmz"
+              "2UV03gAtRlqevgv",
+              "l6sLeas4Trh1RKI",
+              "o0_IFM_i5fnvSNc"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Geraldine_Kunde55",
+            "example": "Michale_Rosenbaum",
             "examples": [
-              "Sabryna76",
-              "Travon.McClure",
-              "Remington97"
+              "Keaton_Cormier",
+              "Lucio.Jenkins",
+              "Kaitlyn.Towne81"
             ]
           }
         },
@@ -338,21 +498,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Geraldine_Kunde55",
+            "example": "Michale_Rosenbaum",
             "examples": [
-              "Julianne96",
-              "Kay.Larson",
-              "Marguerite_Mosciski22"
+              "Crystel_Champlin",
+              "Verlie.Heidenreich95",
+              "Emery39"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "mNP0bdfGaktwPYt",
+            "example": "zllHTIycgZslEeW",
             "examples": [
-              "oTCqCdsRC4OPIkD",
-              "cHbjki9WBrNm3vJ",
-              "V3TaQLEukJKOyAQ"
+              "JGrQZiN4EhZS9Rs",
+              "JlK1i5i_gO0Su5J",
+              "g3XGUA626To0cbV"
             ]
           }
         },
