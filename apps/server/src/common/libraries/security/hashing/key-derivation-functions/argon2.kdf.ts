@@ -1,7 +1,7 @@
 import {Injectable}                          from "@nestjs/common"
 import * as argon2                           from "argon2"
-import {PhcString, SerializedPhcString}      from "../VOs/phc-string.js"
-import {Salt}                                from "../VOs/salt.js"
+import {PhcString, SerializedPhcString}      from "../types/phc-string.js"
+import {Salt}                                from "../types/salt.js"
 import {KdfAlgorithm, KeyDerivationFunction} from "./key-derivation-function.js"
 
 

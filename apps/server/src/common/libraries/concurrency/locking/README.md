@@ -1,3 +1,0 @@
-# Locking Mechanism
-
-- [ ] Optimistic Locking

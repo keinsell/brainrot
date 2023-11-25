@@ -29,6 +29,9 @@
       "@filesystem/*": [
         "./src/utilities/filesystem-utils/*"
       ],
+      "@lib/security/*": [
+        "./src/common/libraries/security/*"
+      ],
       "@storage": [
         "./src/infrastructure/storage/*"
       ],

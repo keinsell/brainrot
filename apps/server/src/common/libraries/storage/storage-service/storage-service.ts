@@ -1,7 +1,10 @@
-import type {Multer} from 'multer'
+import {Blob} from "./blob.js"
 
 
 
 export interface StorageService {
-	upload(file: Multer): Promise<string>
+	upload(blob: Blob): Promise<string>
+	delete(blob: Blob): Promise<void>
+	getDownloadStream(blob: Blob): Promise<NodeJS.ReadableStream>
+	getPresignedDownloadUrl(blob: Blob): Promise<string>
 }

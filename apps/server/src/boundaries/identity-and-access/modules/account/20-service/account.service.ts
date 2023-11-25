@@ -1,19 +1,19 @@
-import {Account}                from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
-import {AccountPolicy}          from "@boundary/identity-and-access/modules/account/30-domain/policies/account-policy.js"
-import {IdentityRepository}     from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
-import {Email}                  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
-import {Password}               from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
-import {Username}               from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
-import {Injectable, Scope}      from "@nestjs/common"
-import {EventBus}               from "../../../../../common/infrastructure/messaging/event-bus.js"
-import {KdfAlgorithm}           from "../../../../../common/libraries/security/password-hashing-v2/KDFs/key-derivation-function.js"
-import {UnifiedPasswordHashing} from "../../../../../common/libraries/security/password-hashing-v2/unified-password-hashing.js"
+import {Account}            from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
+import {AccountPolicy}      from "@boundary/identity-and-access/modules/account/30-domain/policies/account-policy.js"
+import {IdentityRepository} from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
+import {Email}              from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
+import {Password}           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
+import {Username}           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
+import {Injectable, Scope}  from "@nestjs/common"
+import {EventBus}           from "../../../../../common/infrastructure/messaging/event-bus.js"
+import {KdfAlgorithm}       from "../../../../../common/libraries/security/hashing/key-derivation-functions/key-derivation-function.js"
+import {UnifiedHashing}     from "../../../../../common/libraries/security/hashing/unified-hashing.js"
 
 
 
 @Injectable({scope: Scope.REQUEST})
 export class AccountService {
-	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashing: UnifiedPasswordHashing) {}
+	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashing: UnifiedHashing) {}
 
 
 	public async register(accountPayload: {

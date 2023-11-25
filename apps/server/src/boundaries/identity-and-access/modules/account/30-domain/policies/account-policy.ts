@@ -5,8 +5,8 @@ import {Username}                                                  from "@bounda
 import {BadRequestException, ConflictException, Injectable, Scope} from "@nestjs/common"
 import {err, ok}                                                   from "neverthrow"
 import {BasePolicy}                                                from "../../../../../../common/libraries/domain/policy/base-policy.js"
-import {PasswordStrengthEstimator}                                 from "../../../../../../common/libraries/security/password-strength-estimator/password-strength-estimator.js"
-import {PasswordSecurityLevel}                                     from "../../../../../../common/libraries/security/password-strength-estimator/report/password-security-level.js"
+import {PasswordStrengthEstimator}                                 from "../../../../../../common/libraries/security/password-estimation/password-strength-estimator.js"
+import {PasswordSecurityLevel}                                     from "../../../../../../common/libraries/security/password-estimation/report/password-security-level.js"
 
 
 

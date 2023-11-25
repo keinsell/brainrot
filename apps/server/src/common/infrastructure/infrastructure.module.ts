@@ -1,5 +1,4 @@
 import {Module}                         from "@nestjs/common"
-import {PasswordHashingModule}          from "../libraries/security/password-hashing-v2/password-hashing-module.js"
 import {DocumentaitonModule}            from "./documentation/documentaiton-module.js"
 import {DeveloperToolsModule}           from "./environment/dev-tools/developer-tools.module.js"
 import {AsyncLocalStorageModule}        from "./environment/local-storage/async-local-storage-module.js"
@@ -14,7 +13,7 @@ import {DatabaseModule}                 from "./storage/database/database.module
 	imports: [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule,
 		AsyncLocalStorageModule, DocumentaitonModule, HealthModule,
-		PasswordHashingModule, DeveloperToolsModule,
+		DeveloperToolsModule,
 	],
 	exports: [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule,

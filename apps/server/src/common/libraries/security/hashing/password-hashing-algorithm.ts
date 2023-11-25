@@ -1,7 +1,7 @@
 import {Logger}                         from "@nestjs/common"
-import {KeyDerivationFunction}          from "./KDFs/key-derivation-function.js"
-import {PhcString, SerializedPhcString} from "./VOs/phc-string.js"
-import {Salt}                           from "./VOs/salt.js"
+import {KeyDerivationFunction}          from "./key-derivation-functions/key-derivation-function.js"
+import {PhcString, SerializedPhcString} from "./types/phc-string.js"
+import {Salt}                           from "./types/salt.js"
 
 
 

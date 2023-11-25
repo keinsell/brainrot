@@ -1,5 +1,5 @@
 import {Buffer}       from 'buffer';
-import {KdfAlgorithm} from "../KDFs/key-derivation-function.js"
+import {KdfAlgorithm} from "../key-derivation-functions/key-derivation-function.js"
 
 // Regular expressions can be encapsulated into a separate validation module
 const idRegex      = /^[a-z0-9-]{1,32}$/;

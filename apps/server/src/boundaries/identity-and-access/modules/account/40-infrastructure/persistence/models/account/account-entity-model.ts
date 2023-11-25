@@ -2,7 +2,7 @@ import {Account}        from "@boundary/identity-and-access/modules/account/30-d
 import {AccountStatus}  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/account-status.js"
 import {Password}       from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
 import {DbContextModel} from "../../../../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {PhcString}      from "../../../../../../../../common/libraries/security/password-hashing-v2/VOs/phc-string.js"
+import {PhcString}      from "../../../../../../../../common/libraries/security/hashing/types/phc-string.js"
 
 
 

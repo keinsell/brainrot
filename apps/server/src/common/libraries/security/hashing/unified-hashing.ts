@@ -1,13 +1,13 @@
 import {Inject, Injectable, Logger}          from "@nestjs/common"
-import {KDF_PROVIDER_TOKEN}                  from "./DI/KDF_PROVIDER_TOKEN.js"
-import {KdfAlgorithm, KeyDerivationFunction} from "./KDFs/key-derivation-function.js"
+import {KDF_PROVIDER_TOKEN}                  from "./constraints/KDF_PROVIDER_TOKEN.js"
+import {KdfAlgorithm, KeyDerivationFunction} from "./key-derivation-functions/key-derivation-function.js"
 import {PasswordHashingAlgorithm}            from "./password-hashing-algorithm.js"
-import {PhcString, SerializedPhcString}      from "./VOs/phc-string.js"
+import {PhcString, SerializedPhcString}      from "./types/phc-string.js"
 
 
 
 @Injectable()
-export class UnifiedPasswordHashing {
+export class UnifiedHashing {
 	private readonly logger: Logger                                       = new Logger("security:hashing")
 	private readonly algorithms: Map<KdfAlgorithm, KeyDerivationFunction> = new Map()
 

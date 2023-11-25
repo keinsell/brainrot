@@ -1,5 +1,5 @@
-import {PhcString} from "../VOs/phc-string.js"
-import {Salt}      from "../VOs/salt.js"
+import {PhcString} from "../types/phc-string.js"
+import {Salt}      from "../types/salt.js"
 
 
 

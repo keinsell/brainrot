@@ -3,7 +3,7 @@ import {IdentityRepository}                                   from "@boundary/id
 import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {err, ok, Result}                                      from "neverthrow"
 import {EventBus}                                             from "../../../../../../../common/infrastructure/messaging/event-bus.js"
-import {UnifiedPasswordHashing}                               from "../../../../../../../common/libraries/security/password-hashing-v2/unified-password-hashing.js"
+import {UnifiedHashing}                                       from "../../../../../../../common/libraries/security/hashing/unified-hashing.js"
 
 
 
@@ -15,7 +15,7 @@ import {UnifiedPasswordHashing}                               from "../../../../
 export class CredentialValidator {
 	constructor(
 		private repository: IdentityRepository,
-		private hashingService: UnifiedPasswordHashing,
+		private hashingService: UnifiedHashing,
 	) {}
 
 

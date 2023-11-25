@@ -251,6 +251,9 @@ importers:
       signale:
         specifier: ^1.4.0
         version: 1.4.0
+      stripe:
+        specifier: ^14.5.0
+        version: 14.5.0
       swagger-themes:
         specifier: ^1.2.30
         version: 1.2.30
@@ -8968,7 +8971,7 @@ packages:
       dezalgo: 1.0.4
       hexoid: 1.0.0
       once: 1.4.0
-      qs: 6.11.0
+      qs: 6.11.2
     dev: true
 
   /forwarded@0.2.0:
@@ -12306,7 +12309,6 @@ packages:
     engines: { node: '>=0.6' }
     dependencies:
       side-channel: 1.0.4
-    dev: false
 
   /querystring-es3@0.2.1:
     resolution: { integrity: sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA== }
@@ -13297,6 +13299,14 @@ packages:
     resolution: { integrity: sha512-A21Xsm1XzUkK0qK1ZrytDUvqsQWict2Cykhvi0fBQntGG5JSprESasEyV1EZ/4CiR5WB5KjzLTrP/bO37B0wPg== }
     engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
     dev: true
+
+  /stripe@14.5.0:
+    resolution: { integrity: sha512-MTt0P0VYDAj2VZyZMW41AxcXVs9s06EDFIHYat4UUkluJgnBHo4T4E2byPhnxoJCPvdzWBwBLnhWbSOg//VTpA== }
+    engines: { node: '>=12.*' }
+    dependencies:
+      '@types/node': 20.9.0
+      qs: 6.11.2
+    dev: false
 
   /strtok3@7.0.0:
     resolution: { integrity: sha512-pQ+V+nYQdC5H3Q7qBZAz/MO6lwGhoC2gOAjuouGf/VO0m7vQRh8QNMl2Uf6SwAtzZ9bOw3UIeBukEGNJl5dtXQ== }
