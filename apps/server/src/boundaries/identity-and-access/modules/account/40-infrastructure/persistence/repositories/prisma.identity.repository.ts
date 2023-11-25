@@ -132,6 +132,18 @@ export class PrismaIdentityRepository implements IdentityRepository {
 	}
 
 
+	async exists(entity: Account): Promise<boolean> {
+		const count = await this.prismaService.account.count({
+			where: {
+				id: entity.id,
+
+			},
+		})
+
+		return count > 0
+	}
+
+
 	public update(entity: Account): Promise<Account> {
 		return Promise.resolve(undefined)
 	}

@@ -271,31 +271,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Sven79@yahoo.com",
+            "example": "John.Quigley46@yahoo.com",
             "examples": [
-              "Kenyatta42@yahoo.com",
-              "Rebeka95@hotmail.com",
-              "Nathen_Gislason69@gmail.com"
+              "Eduardo.Gleichner@hotmail.com",
+              "Demarco.Herman@gmail.com",
+              "Jayde.Ondricka@hotmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "DINJQyRJreSyXi_",
+            "example": "mNP0bdfGaktwPYt",
             "examples": [
-              "5lvKmShvFoCwFw1",
-              "5RXK2IebHHQUblK",
-              "Lw_eud7wgTBv4Z1"
+              "6bBIxc2SQFXNLNu",
+              "Q9pPJdJugG06avM",
+              "T8r75PnNQyqMJmz"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Orville.Mosciski",
+            "example": "Geraldine_Kunde55",
             "examples": [
-              "Laverna_Gusikowski80",
-              "Nola59",
-              "Skylar.Larson61"
+              "Sabryna76",
+              "Travon.McClure",
+              "Remington97"
             ]
           }
         },
@@ -338,21 +338,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Orville.Mosciski",
+            "example": "Geraldine_Kunde55",
             "examples": [
-              "Barry_Cummerata55",
-              "Cesar.Christiansen23",
-              "Judd87"
+              "Julianne96",
+              "Kay.Larson",
+              "Marguerite_Mosciski22"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "DINJQyRJreSyXi_",
+            "example": "mNP0bdfGaktwPYt",
             "examples": [
-              "4Eo7tbd4_vQz9bR",
-              "EIe_fYUjPGNfuqG",
-              "Lm9W3k4XBql5FDr"
+              "oTCqCdsRC4OPIkD",
+              "cHbjki9WBrNm3vJ",
+              "V3TaQLEukJKOyAQ"
             ]
           }
         },

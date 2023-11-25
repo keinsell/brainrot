@@ -1,5 +1,6 @@
 import {CredentialValidator}                               from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/credential-validator/credential-validator.js"
 import {Session}                                           from "@boundary/identity-and-access/modules/authentication/domain/entities/session.js"
+import {SessionRepository}                                 from "@boundary/identity-and-access/modules/authentication/domain/repositories/session-repository.js"
 import {AccessToken}                                       from "@boundary/identity-and-access/modules/authentication/domain/value-objects/access-token.js"
 import {RefreshToken}                                      from "@boundary/identity-and-access/modules/authentication/domain/value-objects/refresh-token.js"
 import {TokenManagement}                                   from "@boundary/identity-and-access/modules/authentication/services/token-management.js"
@@ -13,7 +14,7 @@ import {EventBus}                                          from "../../../../../
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement) {}
+	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement, private sessionRepository: SessionRepository) {}
 
 
 	/**
@@ -65,7 +66,16 @@ export class AuthenticationService {
 
 		await new EventBus().publish(session.getUncommittedEvents())
 
-		// TODO: Store session in database
+		// TODO: Not implemented yet
+
+		try {
+			await this.sessionRepository.save(session)
+		}
+		catch (e) {
+			console.error(e)
+		}
+
+
 
 		return ok({
 			accountId:    account.id,
