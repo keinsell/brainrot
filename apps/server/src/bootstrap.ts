@@ -1,3 +1,4 @@
+import {AccountSeeder}              from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
 import {Logger}                     from "@nestjs/common"
 import {NestFactory}                from "@nestjs/core"
 import delay                        from "delay"
@@ -5,9 +6,12 @@ import ms                           from "ms"
 import process                      from "node:process"
 import {buildCompodocDocumentation} from "./common/infrastructure/documentation/compodoc/compodoc.js"
 import {buildSwaggerDocumentation}  from "./common/infrastructure/documentation/swagger/swagger.js"
+import {DatabaseModule}             from "./common/infrastructure/storage/database/database.module.js"
+import {seeder}                     from "./common/libraries/seeder/seeder.js"
 import {ApplicationConfiguration}   from "./configs/application-configuration.js"
 import {env}                        from "./configs/env.js"
 import {Container}                  from "./container.js"
+import {ProductSeeder}              from "./modules/product/product-seeder.js"
 import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
 
 
@@ -15,7 +19,7 @@ import {portAllocator}              from "./utilities/network-utils/port-allocat
 export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
 		abortOnError: false,
-		snapshot: !!env.isDev,
+		snapshot:     !!env.isDev,
 	});
 
 	// Implement logger used for bootstrapping and notifying about application state
@@ -43,6 +47,14 @@ export async function bootstrap() {
 	let retryCount             = 3
 
 	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPortForAllocation.port}`
+
+	// If application is running in development mode, try to seed the database
+	if (env.isDev) {
+		seeder({
+			imports:   [DatabaseModule],
+			providers: [ProductSeeder, AccountSeeder],
+		}).run([ProductSeeder, AccountSeeder]);
+	}
 
 	while (!isApplicationListening) {
 		try {
@@ -73,5 +85,7 @@ export async function bootstrap() {
 
 		retryCount--;
 	}
+
+	return app;
 }
 
