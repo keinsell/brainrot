@@ -1,4 +1,4 @@
-import {Payment}    from "@boundary/billing/domain/payment.js"
+import {Payment}    from "@boundary/billing/domain/entities/payment.js"
 import {randomUUID} from "node:crypto"
 import {Event}      from "../../../../common/libraries/message/event.js"
 
