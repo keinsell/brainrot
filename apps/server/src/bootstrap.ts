@@ -1,4 +1,5 @@
 import {AccountSeeder}              from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
+import {AccountModule}              from "@boundary/identity-and-access/modules/account/account.module.js"
 import {Logger}                     from "@nestjs/common"
 import {NestFactory}                from "@nestjs/core"
 import delay                        from "delay"
@@ -48,14 +49,6 @@ export async function bootstrap() {
 
 	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPortForAllocation.port}`
 
-	// If application is running in development mode, try to seed the database
-	if (env.isDev) {
-		seeder({
-			imports:   [DatabaseModule],
-			providers: [ProductSeeder, AccountSeeder],
-		}).run([ProductSeeder, AccountSeeder]);
-	}
-
 	while (!isApplicationListening) {
 		try {
 			await app.listen(openPortForAllocation.port, () => {
@@ -84,6 +77,25 @@ export async function bootstrap() {
 		}
 
 		retryCount--;
+	}
+
+	// If application is running in development mode, try to seed the database
+	if (env.isDev) {
+		try {
+			seeder({
+				imports:   [
+					DatabaseModule, AccountModule,
+				],
+				providers: [
+					ProductSeeder, AccountSeeder,
+				],
+			}).run([ProductSeeder, AccountSeeder]);
+		}
+		catch (e) {
+			logger.error(`Error while trying to seed database: ${(
+				e as unknown as any
+			).message}`);
+		}
 	}
 
 	return app;

@@ -1,50 +1,54 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {Seeder}             from "../../common/libraries/seeder/interfaces/seeder-interface.js"
+import {SeederV2}           from "../../common/libraries/seeder/seeder-v2.js"
+import {Prisma}             from "../../vendor/prisma/index.js"
+import ProductCreateInput = Prisma.ProductCreateInput
 
 
 
 @Injectable()
-export class ProductSeeder implements Seeder {
-	private logger: Logger = new Logger("product::seeder")
-
+export class ProductSeeder extends SeederV2<ProductCreateInput> {
 
 	constructor(
 		private prismaService: PrismaService,
-	) {}
-
-
-	public drop(): Promise<any> {
-		return Promise.resolve(undefined)
+	) {
+		super(new Logger("seeder:product"))
 	}
 
 
-	public async seed(): Promise<any> {
-		const DESIRED_PRODUCTS_COUNT = 100
+	public async count(): Promise<number> {
+		return this.prismaService.product.count()
+	}
 
-		const productsCount = await this.prismaService.product.count()
 
-		if (productsCount >= DESIRED_PRODUCTS_COUNT) {
-			this.logger.log(`Skipping products creation, already ${productsCount} products`)
-			return
+	public async exists(input: Prisma.ProductCreateInput): Promise<boolean> {
+		const exists = await this.prismaService.product.findFirst({
+			where: {
+				name: input.name,
+			},
+		})
+
+		return exists !== null
+	}
+
+
+	public async fabricate(): Promise<Prisma.ProductCreateInput> {
+		return {
+			name:      faker.commerce.productName(),
+			price:     faker.number.int({
+				min: 1,
+				max: 1_000_000,
+			}),
+			currency:  "PLN",
+			createdAt: faker.date.recent(),
 		}
+	}
 
-		for (let i = 0; i < DESIRED_PRODUCTS_COUNT; i++) {
-			const product = await this.prismaService.product.create({
-				data: {
-					name:     faker.commerce.productName(),
-					currency: "PLN" ?? faker.finance.currencyCode(),
-					price:    Number.parseInt(faker.commerce.price({
-						min: 1,
-						max: 1_000_000,
-					})),
-				},
-			})
 
-			this.logger.verbose(`Factorized seedling product "${product.name}"`)
-		}
-
-		this.logger.log(`Created ${DESIRED_PRODUCTS_COUNT} products`)
+	public save(input: Prisma.ProductCreateInput): Promise<unknown> {
+		return this.prismaService.product.create({
+			data: input,
+		})
 	}
 }

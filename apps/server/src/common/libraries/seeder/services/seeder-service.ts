@@ -9,7 +9,6 @@ export class SeederService {
 
 
 	async run(): Promise<any> {
-		if (this.shouldRefresh()) await this.drop();
 		return this.seed();
 	}
 
@@ -20,16 +19,5 @@ export class SeederService {
 		for (const seeder of this.seeders) {
 			await seeder.seed();
 		}
-	}
-
-
-	async drop(): Promise<any> {
-		return;
-	}
-
-
-	shouldRefresh(): boolean {
-		const argv = process.argv;
-		return argv.includes("-r") || argv.includes("--refresh");
 	}
 }

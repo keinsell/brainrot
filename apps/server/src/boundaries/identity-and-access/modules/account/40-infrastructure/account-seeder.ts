@@ -1,17 +1,21 @@
+import {RegisterAccount}    from "@boundary/identity-and-access/modules/account/10-application/commands/register-account.js"
+import {AccountService}     from "@boundary/identity-and-access/modules/account/20-service/account.service.js"
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {SeederV2}           from "../../../../../common/libraries/seeder/seeder-v2.js"
-import {Prisma}             from "../../../../../vendor/prisma/index.js"
-import AccountCreateInput = Prisma.AccountCreateInput
+import {AccountFixture}     from "../../../../../utilities/fixtures/account-fixture.js"
+import {$Enums}             from "../../../../../vendor/prisma/index.js"
+import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 
 
 @Injectable()
-export class AccountSeeder extends SeederV2<AccountCreateInput> {
+export class AccountSeeder extends SeederV2<RegisterAccount> {
 
 	constructor(
 		private prismaService: PrismaService,
+		private accountService: AccountService,
 	) {
 		super(new Logger("seeder:account"))
 	}
@@ -22,7 +26,7 @@ export class AccountSeeder extends SeederV2<AccountCreateInput> {
 	}
 
 
-	public async exists(input: Prisma.AccountCreateInput): Promise<boolean> {
+	public async exists(input: RegisterAccount): Promise<boolean> {
 		const exists = await this.prismaService.account.findUnique({
 			where: {
 				email: input.email,
@@ -33,18 +37,29 @@ export class AccountSeeder extends SeederV2<AccountCreateInput> {
 	}
 
 
-	public async fabricate(): Promise<Prisma.AccountCreateInput> {
+	public async fabricate(): Promise<RegisterAccount> {
 		return {
 			email:    faker.internet.email(),
-			password: faker.internet.password(),
+			password: AccountFixture.password,
 			username: faker.internet.userName(),
 		}
 	}
 
 
-	public async save(input: Prisma.AccountCreateInput): Promise<unknown> {
-		return this.prismaService.account.create({
-			data: input,
+	public async save(input: RegisterAccount): Promise<unknown> {
+		const account = await this.accountService.register(input)
+
+		// Verify account
+
+		await this.prismaService.account.update({
+			where: {
+				id: account.id,
+			},
+			data:  {
+				emailVerificationStatus: EmailVerificationStatus.VERIFIED,
+			},
 		})
+
+		return account
 	}
 }

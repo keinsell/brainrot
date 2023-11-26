@@ -531,31 +531,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Emiliano_Pollich@gmail.com",
+            "example": "Maya_Huels94@yahoo.com",
             "examples": [
-              "Eldridge_Hudson@hotmail.com",
-              "Novella.Zulauf10@yahoo.com",
-              "Isaiah.Kuhn@hotmail.com"
+              "Chelsie.Heidenreich84@yahoo.com",
+              "Madisen61@hotmail.com",
+              "Karen_Jones@hotmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "uawJePe7pwTpFZj",
+            "example": "SuperSecretPassword123!",
             "examples": [
-              "SDrkbq3t5W0CYd4",
-              "RRcOrMxRTwaMhkH",
-              "qzKn8iliMZ73ooz"
+              "_9rUlW7AQ0eWEPq",
+              "YHM8hd7ACzvMThs",
+              "qpx3rrxMz4apOxU"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Colby97",
+            "example": "Roosevelt_Dach52",
             "examples": [
-              "Demarco0",
-              "Elfrieda.Stracke57",
-              "Faustino_Larson"
+              "Beryl.Simonis",
+              "Stefanie.Littel",
+              "Lizeth.DAmore38"
             ]
           }
         },
@@ -598,21 +598,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Colby97",
+            "example": "Roosevelt_Dach52",
             "examples": [
-              "Dusty_Little53",
-              "Jalen85",
-              "Maye_Walsh72"
+              "Yesenia21",
+              "Eldridge.Schultz93",
+              "Vaughn0"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "uawJePe7pwTpFZj",
+            "example": "SuperSecretPassword123!",
             "examples": [
-              "RZIEOOn9dHdKYrh",
-              "qR9NqPLgwJDpN6M",
-              "taJlafzM9WmdnyQ"
+              "9c6UsUAhlQ3xmew",
+              "N38ptTOCyDgeO0k",
+              "mwJWWWCRI3pCPJr"
             ]
           }
         },

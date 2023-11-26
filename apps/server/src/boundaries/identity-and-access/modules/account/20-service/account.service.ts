@@ -6,12 +6,12 @@ import {Password}           from "@boundary/identity-and-access/modules/account/
 import {Username}           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
 import {UnifiedHashing}     from "@lib/security/hashing/index.js"
 import {KdfAlgorithm}       from "@lib/security/hashing/key-derivation-functions/key-derivation-function.js"
-import {Injectable, Scope}  from "@nestjs/common"
+import {Injectable}         from "@nestjs/common"
 import {EventBus}           from "../../../../../common/infrastructure/messaging/event-bus.js"
 
 
 
-@Injectable({scope: Scope.REQUEST})
+@Injectable()
 export class AccountService {
 	constructor(private policy: AccountPolicy, private repository: IdentityRepository, private hashing: UnifiedHashing) {}
 
