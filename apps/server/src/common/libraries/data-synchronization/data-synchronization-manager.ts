@@ -33,12 +33,12 @@ export class DataSynchronizationManager<T, E> extends EventEmitter {
 	}
 
 
-	async pull(reference: T) {
+	async pull() {
 		for (const dataSource of this._dataSources) {
 			try {
-				const data = await dataSource.pull(reference);
+				const data = await dataSource.pull();
 				await Promise.all(this._dataDestinations.map(dest => dest.push(data)));
-				this.emit('pulled', data, reference);
+				this.emit('pulled', data);
 			}
 			catch (error) {
 				this.emit('error', error);

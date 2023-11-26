@@ -7,5 +7,7 @@ export abstract class DataSource<T, E> {
 	}
 
 
-	abstract pull(reference: T): Promise<E>;
+	public async pull(): Promise<E> {
+		return this._data;
+	}
 }
