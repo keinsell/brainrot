@@ -408,6 +408,155 @@
           }
         }
       }
+    },
+    "/product": {
+      "post": {
+        "operationId": "ProductController_createProduct",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "ProductController_listProducts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "operationId": "ProductController_getProduct",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "ProductController_updateProduct",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "ProductController_deleteProduct",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/inventory": {
+      "post": {
+        "operationId": "InventoryController_createInventory",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "InventoryController_listInventories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/inventory/{id}": {
+      "get": {
+        "operationId": "InventoryController_getInventory",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "InventoryController_deleteInventory",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cart": {
+      "post": {
+        "operationId": "CartController_createCart",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "CartController_listCarts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cart/{id}": {
+      "get": {
+        "operationId": "CartController_getCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "CartController_deleteCart",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cart/{id}/checkout": {
+      "post": {
+        "operationId": "CartController_checkoutCart",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "CartController_cancelCheckoutCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -431,31 +580,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Francis_Roberts@yahoo.com",
+            "example": "Bethel53@yahoo.com",
             "examples": [
-              "Eryn16@gmail.com",
-              "Ayana.Hermiston22@yahoo.com",
-              "Lizeth64@gmail.com"
+              "Mariano.Goyette-Windler95@yahoo.com",
+              "Pablo.Wolff@yahoo.com",
+              "Kelly.Tromp@gmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "zllHTIycgZslEeW",
+            "example": "uwuglfa5l8tECdG",
             "examples": [
-              "2UV03gAtRlqevgv",
-              "l6sLeas4Trh1RKI",
-              "o0_IFM_i5fnvSNc"
+              "arBshcQxQh1Nq0r",
+              "5QkDUA7F4jklUCo",
+              "_kesNzrObqIr0VZ"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Michale_Rosenbaum",
+            "example": "Rogers21",
             "examples": [
-              "Keaton_Cormier",
-              "Lucio.Jenkins",
-              "Kaitlyn.Towne81"
+              "Bradford_Block13",
+              "Presley22",
+              "Erin_Deckow"
             ]
           }
         },
@@ -498,21 +647,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Michale_Rosenbaum",
+            "example": "Rogers21",
             "examples": [
-              "Crystel_Champlin",
-              "Verlie.Heidenreich95",
-              "Emery39"
+              "Hillary.Conn",
+              "America.Walsh",
+              "Rashawn90"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "zllHTIycgZslEeW",
+            "example": "uwuglfa5l8tECdG",
             "examples": [
-              "JGrQZiN4EhZS9Rs",
-              "JlK1i5i_gO0Su5J",
-              "g3XGUA626To0cbV"
+              "JoBTI2iibcKP_eq",
+              "qUdAeWsDV0PUGbl",
+              "ZqpqiKrCpjvnEFI"
             ]
           }
         },

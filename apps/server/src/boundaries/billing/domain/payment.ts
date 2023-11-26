@@ -3,4 +3,6 @@ export interface Payment {
 	accountId: string
 	amount: number
 	currency: string
+	billingAddress?: any
+	shippingAddress: any
 }
