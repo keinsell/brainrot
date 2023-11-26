@@ -29,10 +29,7 @@ export class CreateAccount {
 		name:        "email",
 		description: "The account's email address",
 		example:     AccountFixture.email,
-		examples:    [
-			faker.internet.email(), faker.internet.email(),
-			faker.internet.email(),
-		],
+		examples:    AccountFixture._examples.emails,
 	}) email: string;
 	/**
 	 * Indicates whether the email associated with a user account has been verified.
@@ -53,10 +50,7 @@ export class CreateAccount {
 		name:        "password",
 		description: "The account's password",
 		example:     AccountFixture.password,
-		examples:    [
-			faker.internet.password(), faker.internet.password(),
-			faker.internet.password(),
-		],
+		examples:    AccountFixture._examples.passwords,
 	}) password: string;
 	/**
 	 * Represents a username.
@@ -66,9 +60,6 @@ export class CreateAccount {
 		name:        "username",
 		description: "The account's username",
 		example:     AccountFixture.username,
-		examples:    [
-			faker.internet.userName(), faker.internet.userName(),
-			faker.internet.userName(),
-		],
+		examples:    AccountFixture._examples.usernames,
 	}) username: string;
 }

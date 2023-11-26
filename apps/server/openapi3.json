@@ -531,7 +531,7 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Johnathon5@hotmail.com",
+            "example": "Lucio84@hotmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -551,11 +551,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Jamar52",
+            "example": "Stuart.Rosenbaum",
             "examples": [
-              "Ramiro.Swift",
-              "Kenny78",
-              "Khalil.Hansen"
+              "Raul_Marks",
+              "Buddy.Schulist",
+              "Anibal_Pouros"
             ]
           }
         },
@@ -598,11 +598,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Jamar52",
+            "example": "Stuart.Rosenbaum",
             "examples": [
-              "Stefan_Blick",
-              "Raleigh17",
-              "Effie_Mante24"
+              "Johnnie55",
+              "Kenny10",
+              "Lera.Reinger52"
             ]
           },
           "password": {
@@ -610,9 +610,9 @@
             "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "CuQQJymY3XOcmQ0",
-              "LuTdMLyAnaZ0yRt",
-              "ncqMz5TDAFwV_ch"
+              "T1hKDCmLFIvjjX1",
+              "AHi04hM81O45D_y",
+              "OUtxBvUhHbqXbr3"
             ]
           }
         },
