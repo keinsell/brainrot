@@ -56,18 +56,39 @@ model VerificationRequest {
 }
 
 model User {
-  id        String     @id @default(cuid())
+  id              String         @id @default(cuid())
   // --------------------------------------------------
-  accountId String     @unique
-  name      String
+  accountId       String         @unique
+  firstName       String
+  lastName        String
+  email           String
+  phoneNumber     String?
+  avatar          String?
+  billingAddress  Json?
+  shippingAddress Json?
+  about           String?
   // --------------------------------------------------
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   // --------------------------------------------------
-  Account   Account    @relation(fields: [accountId], references: [id])
-  Payments  Payment[]
-  Checkout  Checkout[]
-  Order     Order[]
+  Account         Account        @relation(fields: [accountId], references: [id])
+  Payments        Payment[]
+  Checkout        Checkout[]
+  Order           Order[]
+  Metadata        UserMetadata[]
+}
+
+model UserMetadata {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  userId    String
+  key       String
+  value     String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  User      User     @relation(fields: [userId], references: [id])
 }
 
 model Product {

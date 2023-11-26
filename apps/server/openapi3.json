@@ -531,11 +531,11 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Christy.Ratke@yahoo.com",
+            "example": "Johnathon5@hotmail.com",
             "examples": [
-              "Shanny_Stracke93@gmail.com",
-              "Anya_Konopelski-Considine5@hotmail.com",
-              "Silas_Keeling@hotmail.com"
+              "Raul_Marks@gmail.com",
+              "Buddy.Schulist@gmail.com",
+              "Anibal_Pouros@hotmail.com"
             ]
           },
           "password": {
@@ -543,19 +543,19 @@
             "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "10ZCytaqUgyK_P4",
-              "bPwtwgOVIQvzObe",
-              "qMz2umz0NwbhsgO"
+              "LaW1KVuo69FG5Pf",
+              "9srQfkporSDhU76",
+              "74ETrfy3OQCdUzs"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Cara_Bartoletti99",
+            "example": "Jamar52",
             "examples": [
-              "Wilber_Ratke",
-              "Deja43",
-              "Luciano.Parker"
+              "Ramiro.Swift",
+              "Kenny78",
+              "Khalil.Hansen"
             ]
           }
         },
@@ -598,11 +598,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Cara_Bartoletti99",
+            "example": "Jamar52",
             "examples": [
-              "Gianni.Franey",
-              "Janice_Stanton",
-              "Austyn.Braun88"
+              "Stefan_Blick",
+              "Raleigh17",
+              "Effie_Mante24"
             ]
           },
           "password": {
@@ -610,9 +610,9 @@
             "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "PqnxYR88ml_Pg8f",
-              "E3kPjgKZo1QWyBj",
-              "H9VNC3_9iYLUqZ5"
+              "CuQQJymY3XOcmQ0",
+              "LuTdMLyAnaZ0yRt",
+              "ncqMz5TDAFwV_ch"
             ]
           }
         },
