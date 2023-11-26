@@ -1,4 +1,9 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
+import {EventBus}          from "../../../infrastructure/messaging/event-bus.js"
+import {GenericRepository} from "../../persistence/repository/repository.js"
+
+
+
 export class EntityBase {
 	private _updatedAt: Date
 	private _createdAt: Date
@@ -16,9 +21,19 @@ export class EntityBase {
 
 
 	/** Commits changes done on specific entity to the repository and publishes changes to other modules. */
-	public async commit(repository: any, bus: any): Promise<void> {
+	public async commit(repository: GenericRepository<this>, bus?: EventBus): Promise<void> {
+
+		this.bumpVersion()
+		this.bumpUpdateDate()
+
 		await repository.save(this)
-		await bus.publish(this.getPendingEvents())
+
+		if (!bus) {
+			console.warn("Event bus is not provided. Events will not be published.")
+			return
+		}
+
+		await bus.publishAll(this.getPendingEvents())
 	}
 
 
@@ -38,8 +53,22 @@ export class EntityBase {
 	}
 
 
+	/** Handle command in reflection-based method which will search an inter-class references for specific command and execute method basing on information from command. This method is used to handle commands in aggregates. */
+	public handleCommand(command: any) {
+		throw new Error("Method not implemented." + command)
+	}
+
+
 	protected bumpVersion() {
 		this._version = this._version + 1
+	}
+
+
+	protected appendEvent(event: any) {
+		this._events.push({
+			state: "PENDING",
+			event,
+		})
 	}
 
 
