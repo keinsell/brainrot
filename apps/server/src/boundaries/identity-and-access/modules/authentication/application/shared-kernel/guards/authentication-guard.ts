@@ -6,4 +6,6 @@ import {AuthGuard}  from "@nestjs/passport"
 // TODO: Add session to context
 // TODO: Add user to context
 @Injectable()
-export class AuthenticationGuard extends AuthGuard(["local", "jwt"]) {}
+export class AuthenticationGuard extends AuthGuard(["local", "jwt"]) {
+
+}

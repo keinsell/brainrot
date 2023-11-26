@@ -5,4 +5,10 @@ export interface Payment {
 	currency: string
 	billingAddress?: any
 	shippingAddress: any
+
+	initiate(): void
+	capture(): void
+	cancel(): void
+	refund(): void
+	retry(): void
 }

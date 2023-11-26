@@ -6,7 +6,7 @@ export interface PaymentProcessor {
 	/**
 	 * @example "Stripe"
 	 */
-	PAYMENT_METHOD_ID: string
+	PAYMENT_PROCESSOR_ID: string
 
 	createPayment(payment: any): Promise<Payment>
 }

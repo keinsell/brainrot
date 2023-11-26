@@ -1,3 +1,8 @@
+import {Controller} from "@nestjs/common"
+
+
+
+@Controller('payment')
 export class PaymentController {
 
 	/** Pay payment with given payment method */

@@ -47,8 +47,8 @@ export function experimentalOpenTelemetryTracker() {
 
 process.on("SIGTERM", () => {
 	OpenTelemetrySDK
-	.shutdown()
-	.then(() => signale.success("OpenTelemetry SDK has been shut successfully."), (err) => signale.error("Error shutting down SDK", err))
-	.finally(() => process.exit(0));
+		.shutdown()
+		.then(() => signale.success("OpenTelemetry SDK has been shut successfully."), (err) => signale.error("Error shutting down SDK", err))
+		.finally(() => process.exit(0));
 });
 

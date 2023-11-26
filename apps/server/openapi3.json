@@ -458,46 +458,6 @@
         }
       }
     },
-    "/inventory": {
-      "post": {
-        "operationId": "InventoryController_createInventory",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "operationId": "InventoryController_listInventories",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/inventory/{id}": {
-      "get": {
-        "operationId": "InventoryController_getInventory",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
-      "post": {
-        "operationId": "InventoryController_deleteInventory",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/cart": {
       "post": {
         "operationId": "CartController_createCart",
@@ -509,7 +469,7 @@
         }
       },
       "get": {
-        "operationId": "CartController_listCarts",
+        "operationId": "CartController_getCart",
         "parameters": [],
         "responses": {
           "200": {
@@ -519,15 +479,6 @@
       }
     },
     "/cart/{id}": {
-      "get": {
-        "operationId": "CartController_getCart",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
       "post": {
         "operationId": "CartController_deleteCart",
         "parameters": [],
@@ -580,31 +531,31 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Bethel53@yahoo.com",
+            "example": "Emiliano_Pollich@gmail.com",
             "examples": [
-              "Mariano.Goyette-Windler95@yahoo.com",
-              "Pablo.Wolff@yahoo.com",
-              "Kelly.Tromp@gmail.com"
+              "Eldridge_Hudson@hotmail.com",
+              "Novella.Zulauf10@yahoo.com",
+              "Isaiah.Kuhn@hotmail.com"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "uwuglfa5l8tECdG",
+            "example": "uawJePe7pwTpFZj",
             "examples": [
-              "arBshcQxQh1Nq0r",
-              "5QkDUA7F4jklUCo",
-              "_kesNzrObqIr0VZ"
+              "SDrkbq3t5W0CYd4",
+              "RRcOrMxRTwaMhkH",
+              "qzKn8iliMZ73ooz"
             ]
           },
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Rogers21",
+            "example": "Colby97",
             "examples": [
-              "Bradford_Block13",
-              "Presley22",
-              "Erin_Deckow"
+              "Demarco0",
+              "Elfrieda.Stracke57",
+              "Faustino_Larson"
             ]
           }
         },
@@ -647,21 +598,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Rogers21",
+            "example": "Colby97",
             "examples": [
-              "Hillary.Conn",
-              "America.Walsh",
-              "Rashawn90"
+              "Dusty_Little53",
+              "Jalen85",
+              "Maye_Walsh72"
             ]
           },
           "password": {
             "type": "string",
             "description": "The account's password",
-            "example": "uwuglfa5l8tECdG",
+            "example": "uawJePe7pwTpFZj",
             "examples": [
-              "JoBTI2iibcKP_eq",
-              "qUdAeWsDV0PUGbl",
-              "ZqpqiKrCpjvnEFI"
+              "RZIEOOn9dHdKYrh",
+              "qR9NqPLgwJDpN6M",
+              "taJlafzM9WmdnyQ"
             ]
           }
         },
