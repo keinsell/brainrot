@@ -1,5 +1,6 @@
 import {AccountSeeder}              from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
 import {AccountModule}              from "@boundary/identity-and-access/modules/account/account.module.js"
+import {ProfileSeeder}              from "@boundary/identity-and-access/modules/profile/infrastructure/profile-seeder.js"
 import {Logger}                     from "@nestjs/common"
 import {NestFactory}                from "@nestjs/core"
 import delay                        from "delay"
@@ -87,9 +88,9 @@ export async function bootstrap() {
 					DatabaseModule, AccountModule,
 				],
 				providers: [
-					ProductSeeder, AccountSeeder,
+					ProductSeeder, AccountSeeder, ProfileSeeder,
 				],
-			}).run([ProductSeeder, AccountSeeder]);
+			}).run([ProductSeeder, AccountSeeder, ProfileSeeder]);
 		}
 		catch (e) {
 			logger.error(`Error while trying to seed database: ${(
