@@ -1,0 +1,40 @@
+import {Controller, Headers, Post, Req} from "@nestjs/common"
+import {Request}                        from "express"
+import {InjectStripeModuleConfig}       from "./stripe-decorator.js"
+import {StripeModuleConfig}             from "./stripe-interface.js"
+import {StripePayloadService}           from "./stripe-payload-service.js"
+import {StripeWebhookService}           from "./stripe-webhook-service.js"
+
+
+
+@Controller('/stripe')
+export class StripeWebhookController {
+	private readonly requestBodyProperty: string;
+
+
+	constructor(
+		@InjectStripeModuleConfig()
+		private readonly config: StripeModuleConfig,
+		private readonly stripePayloadService: StripePayloadService,
+		private readonly stripeWebhookService: StripeWebhookService,
+	) {
+		this.requestBodyProperty =
+			config.webhookConfig?.requestBodyProperty || 'body';
+	}
+
+
+	@Post('/webhook')
+	async handleWebhook(
+		@Headers('stripe-signature') sig: string,
+		@Req() request: Request,
+	) {
+		if (!sig) {
+			throw new Error('Missing stripe-signature header');
+		}
+		const rawBody = request[this.requestBodyProperty];
+
+		const event = this.stripePayloadService.tryHydratePayload(sig, rawBody);
+
+		await this.stripeWebhookService.handleWebhook(event);
+	}
+}
