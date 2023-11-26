@@ -17,16 +17,126 @@ enum EmailVerificationStatus {
 
 model Account {
   id                      String                  @id @default(cuid())
+  // --------------------------------------------------
   username                String                  @unique
   email                   String                  @unique
   emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
   password                String
+  // --------------------------------------------------
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
+  // --------------------------------------------------
+  Sessions                Session[]
+  VerificationRequests    VerificationRequest[]
+  User                    User?
 }
 
 model Session {
   id        String   @id @default(cuid())
+  // --------------------------------------------------
   accountId String
+  // --------------------------------------------------
   createdAt DateTime @default(now())
+  // --------------------------------------------------
+  Account   Account  @relation(fields: [accountId], references: [id])
+}
+
+model VerificationRequest {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  accountId String
+  email     String
+  token     String
+  issuedAt  DateTime @default(now())
+  expiresAt DateTime
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  // --------------------------------------------------
+  Account   Account  @relation(fields: [accountId], references: [id])
+}
+
+model User {
+  id        String     @id @default(cuid())
+  // --------------------------------------------------
+  accountId String     @unique
+  name      String
+  // --------------------------------------------------
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  // --------------------------------------------------
+  Account   Account    @relation(fields: [accountId], references: [id])
+  Payments  Payment[]
+  Checkout  Checkout[]
+  Order     Order[]
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  name      String
+  price     Int
+  currency  String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Carts     Cart[]
+  Order     Order[]
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  userId    String
+  productId String
+  quantity  Int
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  User      User     @relation(fields: [userId], references: [id])
+  Product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Cart {
+  id        String    @id @default(cuid())
+  // --------------------------------------------------
+  accountId String
+  productId String
+  quantity  Int
+  // --------------------------------------------------
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // --------------------------------------------------
+  Checkout  Checkout?
+  Product   Product   @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id        String    @id @default(cuid())
+  // --------------------------------------------------
+  payerId   String
+  currency  String
+  amount    Int
+  // --------------------------------------------------
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // --------------------------------------------------
+  Payer     User      @relation(fields: [payerId], references: [id])
+  Checkout  Checkout?
+}
+
+model Checkout {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  userId    String
+  cartId    String   @unique
+  paymentId String   @unique
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Cart      Cart     @relation(fields: [cartId], references: [id])
+  Payment   Payment  @relation(fields: [paymentId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 }
