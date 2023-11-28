@@ -18,9 +18,12 @@ export abstract class SeederBase<INPUT = unknown> {
 
 	async seed(): Promise<void> {
 
+		let retryTime = 1000
+
 		while (!ApplicationState.isDatabaseConnected) {
 			this.logger.verbose(`🌱 Waiting for database connection...`)
-			await new Promise(resolve => setTimeout(resolve, 1000 * 60))
+			retryTime = Math.min(retryTime * 2, 10000)
+			await new Promise(resolve => setTimeout(resolve, retryTime))
 		}
 
 		if (await this.isEnough()) {

@@ -1,19 +1,19 @@
 version: "3.7"
 
 services:
-  traefik:
-    container_name: ${SERVICE_NAME}-traefik
-    image: traefik:v2.3
-    command:
-      - --api.insecure=true
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+  #  traefik:
+  #    container_name: ${SERVICE_NAME}-traefik
+  #    image: traefik:v2.3
+  #    command:
+  #      - --api.insecure=true
+  #      - --providers.docker
+  #      - --providers.docker.exposedbydefault=false
+  #      - --entrypoints.web.address=:80
+  #    ports:
+  #      - "80:80"
+  #      - "8080:8080"
+  #    volumes:
+  #      - /var/run/docker.sock:/var/run/docker.sock
 
   jaeger:
     container_name: ${SERVICE_NAME}-jaeger
