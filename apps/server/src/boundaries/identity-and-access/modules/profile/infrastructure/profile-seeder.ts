@@ -1,7 +1,7 @@
-import {Address}            from "@boundary/identity-and-access/modules/profile/domain/value-objects/address.js"
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {Address}            from "../../../../../common/libraries/address/address.js"
 import {SeederV2}           from "../../../../../common/libraries/seeder/seeder-v2.js"
 import {Prisma}             from "../../../../../vendor/prisma/index.js"
 import UserCreateInput = Prisma.UserCreateInput
@@ -55,12 +55,12 @@ export class ProfileSeeder extends SeederV2<UserCreateInput> {
 		this.excludedAccountIds.push(account.id)
 
 		const address: Address = {
-			street1: faker.location.streetAddress(),
-			street2: undefined,
-			city:    faker.location.city(),
-			zipCode: faker.location.zipCode(),
-			state:   faker.location.state(),
-			country: faker.location.countryCode(),
+			street1:    faker.location.streetAddress(),
+			street2:    undefined,
+			city:       faker.location.city(),
+			postalCode: faker.location.zipCode(),
+			state:      faker.location.state(),
+			country:    faker.location.countryCode(),
 		}
 
 		return {

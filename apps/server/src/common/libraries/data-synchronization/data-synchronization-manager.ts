@@ -4,17 +4,17 @@ import {DataSource}      from "./data-source.js"
 
 
 
-export class DataSynchronizationManager<T, E> extends EventEmitter {
-	private _dataSources: DataSource<T, E>[]        = [];
-	private _dataDestinations: DataDestination<E>[] = [];
+export class DataSynchronizationManager<T> extends EventEmitter {
+	private _dataSources: DataSource<T>[]           = [];
+	private _dataDestinations: DataDestination<T>[] = [];
 
 
-	public registerDataSource(dataSource: DataSource<T, E>) {
+	public registerDataSource(dataSource: DataSource<T>) {
 		this._dataSources.push(dataSource);
 	}
 
 
-	public registerDataDestination(dataDestination: DataDestination<E>) {
+	public registerDataDestination(dataDestination: DataDestination<T>) {
 		this._dataDestinations.push(dataDestination);
 	}
 
@@ -44,5 +44,14 @@ export class DataSynchronizationManager<T, E> extends EventEmitter {
 				this.emit('error', error);
 			}
 		}
+	}
+
+
+	provide(data: T) {
+		for (const dataSource of this._dataSources) {
+			dataSource.provide(data);
+		}
+
+		return this;
 	}
 }

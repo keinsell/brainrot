@@ -1,7 +1,7 @@
 import {Controller, Headers, Post, Req} from "@nestjs/common"
-import {Request}                        from "express"
+import type {Request}                   from "express"
 import {InjectStripeModuleConfig}       from "./stripe-decorator.js"
-import {StripeModuleConfig}             from "./stripe-interface.js"
+import type {StripeModuleConfig}        from "./stripe-interface.js"
 import {StripePayloadService}           from "./stripe-payload-service.js"
 import {StripeWebhookService}           from "./stripe-webhook-service.js"
 

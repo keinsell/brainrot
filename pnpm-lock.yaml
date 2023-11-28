@@ -222,8 +222,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
+        specifier: ^3.10.1
+        version: 3.10.1
       ms:
         specifier: ^2.1.3
         version: 2.1.3
@@ -245,6 +245,9 @@ importers:
       passport-local:
         specifier: ^1.0.0
         version: 1.0.0
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.13
@@ -294,6 +297,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.8
         version: 29.5.8
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.14.202
       '@types/ms':
         specifier: ^0.7.34
         version: 0.7.34
@@ -5511,6 +5517,10 @@ packages:
     dependencies:
       '@types/koa': 2.13.9
     dev: false
+
+  /@types/lodash@4.14.202:
+    resolution: { integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ== }
+    dev: true
 
   /@types/memcached@2.2.8:
     resolution: { integrity: sha512-ITIJmGByEheHtqCgwxlrW+x/NRUXE33f2qhA2imsUcIgaO1Z1qhNmDU1N1IDVg45yeKTt0AV81UREvdM4GUYxQ== }
@@ -10803,6 +10813,10 @@ packages:
     resolution: { integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg== }
     dev: false
 
+  /lodash@3.10.1:
+    resolution: { integrity: sha512-9mDDwqVIma6OZX79ZlDACZl8sBm0TEnkf99zV3iMA4GzkIT/9hiqP5mY0HoT1iNLCrKc/R1HByV+yJfRWVJryQ== }
+    dev: false
+
   /lodash@4.17.21:
     resolution: { integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg== }
 
@@ -12334,6 +12348,10 @@ packages:
       minimist: 1.2.8
       through2: 2.0.5
     dev: true
+
+  /ramda@0.29.1:
+    resolution: { integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA== }
+    dev: false
 
   /randombytes@2.1.0:
     resolution: { integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ== }

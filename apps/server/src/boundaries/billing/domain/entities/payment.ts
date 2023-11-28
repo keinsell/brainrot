@@ -4,7 +4,7 @@ import {PaymentProcessorIdentifier} from "@boundary/billing/domain/value-objects
 
 export interface Payment {
 	id: string
-	accountId: string
+	userId: string
 	processor: PaymentProcessorIdentifier
 	amount: number
 	currency: string

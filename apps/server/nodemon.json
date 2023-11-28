@@ -1,5 +1,5 @@
 {
-  "quiet": false,
+  "quiet": true,
   "delay": 2000,
   "signal": "SIGQUIT",
   "watch": [
@@ -9,5 +9,5 @@
   "ignore": [
     "src/externals/compodoc"
   ],
-  "exec": "pnpm build:tsc && node dist/main.js"
+  "exec": "pnpm build:tsc && node --enable-source-maps dist/main.js"
 }

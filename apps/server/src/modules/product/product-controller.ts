@@ -1,7 +1,6 @@
 import {Body, Controller, Delete, Get, Patch, Post} from "@nestjs/common"
 import {PrismaService}                              from "../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {Prisma, Product}                            from "../../vendor/prisma/index.js"
-import ProductCreateInput = Prisma.ProductCreateInput
+import type {Prisma, Product}                       from "../../vendor/prisma/index.js"
 
 
 
@@ -13,7 +12,7 @@ export class ProductController {
 
 
 	@Post()
-	async createProduct(@Body() create: ProductCreateInput): Promise<string> {
+	async createProduct(@Body() create: Prisma.ProductCreateInput): Promise<string> {
 		const product = await this.prismaService.product.create({
 			data: create,
 		})

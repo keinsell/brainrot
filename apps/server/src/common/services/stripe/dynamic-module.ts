@@ -1,7 +1,7 @@
-import {DynamicModule, OptionalFactoryDependency, Provider, Type} from '@nestjs/common';
-import {ModuleMetadata}                                           from '@nestjs/common/interfaces';
-import {interval, lastValueFrom, race, Subject}                   from 'rxjs';
-import {first, map}                                               from 'rxjs/operators';
+import type {DynamicModule, OptionalFactoryDependency, Provider, Type} from '@nestjs/common';
+import type {ModuleMetadata}                                           from '@nestjs/common/interfaces';
+import {interval, lastValueFrom, race, Subject}                        from 'rxjs';
+import {first, map}                                                    from 'rxjs/operators';
 
 
 

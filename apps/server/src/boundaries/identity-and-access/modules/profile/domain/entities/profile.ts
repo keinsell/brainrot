@@ -1,5 +1,5 @@
 import {AccountId} from "@boundary/identity-and-access/modules/account/10-application/shared-kernel/account-id.js"
-import {Address}   from "@boundary/identity-and-access/modules/profile/domain/value-objects/address.js"
+import {Address}   from "../../../../../../common/libraries/address/address.js"
 
 
 

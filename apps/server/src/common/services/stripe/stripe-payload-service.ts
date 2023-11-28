@@ -2,7 +2,7 @@ import {Injectable}                                   from '@nestjs/common';
 import {Buffer}                                       from 'node:buffer';
 import Stripe                                         from 'stripe';
 import {InjectStripeClient, InjectStripeModuleConfig} from "./stripe-decorator.js"
-import {StripeModuleConfig}                           from "./stripe-interface.js"
+import type {StripeModuleConfig}                      from "./stripe-interface.js"
 
 
 

@@ -9,10 +9,23 @@
     "skipDefaultLibCheck": true,
     "target": "ESNext",
     "sourceMap": true,
+    "inlineSources": true,
+    "inlineSourceMap": false,
+    "sourceRoot": "./src",
+    //    "traceResolution": true,
+    //    "assumeChangesOnlyAffectDirectDependencies": true,
+    //    // TODO: Migrate codebase to verbatimModuleSyntax in future
+    //    "verbatimModuleSyntax": false,
+    //    "emitBOM": true,
+    //    "declarationMap": true,
+    "generateCpuProfile": "profile.cpuprofile",
+    "noErrorTruncation": false,
+    "noEmitOnError": true,
+    "pretty": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
@@ -56,7 +69,7 @@
       //      },
       {
         "transform": "tsc-progress",
-        "title": "TSC Status:"
+        "title": "Compiling..."
       }
     ]
   },
