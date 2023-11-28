@@ -20,7 +20,7 @@ export const InjectStripeClient = makeInjectableDecorator(STRIPE_CLIENT_TOKEN);
 /**
  * Binds the decorated service method as a handler for incoming Stripe Webhook events.
  * Events will be automatically routed here based on their event type property
- * @param config The configuration for this handler
+ * @param eventType
  */
 export const StripeWebhookHandler = (
 	eventType: Stripe.WebhookEndpointCreateParams.EnabledEvent,

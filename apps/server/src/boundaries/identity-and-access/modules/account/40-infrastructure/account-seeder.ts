@@ -3,7 +3,7 @@ import {AccountService}     from "@boundary/identity-and-access/modules/account/
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {SeederV2}           from "../../../../../common/libraries/seeder/seeder-v2.js"
+import {SeederBase}         from "../../../../../common/libraries/seeder/seeder-base.js"
 import {AccountFixture}     from "../../../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../../../vendor/prisma/index.js"
 import EmailVerificationStatus = $Enums.EmailVerificationStatus
@@ -11,7 +11,7 @@ import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 
 @Injectable()
-export class AccountSeeder extends SeederV2<RegisterAccount> {
+export class AccountSeeder extends SeederBase<RegisterAccount> {
 
 	constructor(
 		private prismaService: PrismaService,

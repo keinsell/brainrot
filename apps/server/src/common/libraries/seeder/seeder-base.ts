@@ -1,8 +1,9 @@
-import {Logger} from "@nestjs/common"
+import {Logger}           from "@nestjs/common"
+import {ApplicationState} from "../../state.js"
 
 
 
-export abstract class SeederV2<INPUT = unknown> {
+export abstract class SeederBase<INPUT = unknown> {
 	private logger: Logger        = new Logger("seeder")
 	private inputStorage: INPUT[] = []
 	private limit: number         = 300
@@ -16,6 +17,12 @@ export abstract class SeederV2<INPUT = unknown> {
 
 
 	async seed(): Promise<void> {
+
+		while (!ApplicationState.isDatabaseConnected) {
+			this.logger.verbose(`🌱 Waiting for database connection...`)
+			await new Promise(resolve => setTimeout(resolve, 1000 * 60))
+		}
+
 		if (await this.isEnough()) {
 			this.logger.verbose(`🌱 Seedling is already enough. Skipping.`)
 			return
@@ -98,6 +105,11 @@ export abstract class SeederV2<INPUT = unknown> {
 
 	private async isEnough(): Promise<boolean> {
 		const count = await this.count()
-		return count >= this.limit
+
+		const isEnoughFabricated = this.inputStorage.length >= this.limit
+		const isCustomDataset    = this.inputStorage.length > 0
+
+		// Should run if there's a custom dataset or if fabricated entities are not enough
+		return isCustomDataset || count >= this.limit
 	}
 }

@@ -33,6 +33,11 @@ export class PrismaSessionRepository extends SessionRepository {
 	}
 
 
+	public async findById(id: string): Promise<Session | undefined> {
+		throw new Error("Not implemented")
+	}
+
+
 	public async update(entity: Session): Promise<Session> {
 		throw new Error("Not implemented")
 	}

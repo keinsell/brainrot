@@ -1,7 +1,7 @@
 import {DynamicModule, ForwardReference, Provider, Type} from "@nestjs/common";
 import {NestFactory}                                     from "@nestjs/core";
+import {SeederBase}                                      from "./seeder-base.js"
 import {SeederModule, SeederModuleOptions}               from "./seeder-module.js"
-import {SeederV2}                                        from "./seeder-v2.js"
 import {SeederService}                                   from "./services/seeder-service.js"
 
 
@@ -15,7 +15,7 @@ export interface SeederOptions {
 
 
 export interface SeederRunner {
-	run(seeders: Provider<SeederV2<unknown>>[]): void;
+	run(seeders: Provider<SeederBase<unknown>>[]): void;
 }
 
 
@@ -32,7 +32,7 @@ async function bootstrap(options: SeederModuleOptions) {
 
 export const seeder = (options: SeederOptions): SeederRunner => {
 	return {
-		run(seeders: Provider<SeederV2>[]): void {
+		run(seeders: Provider<SeederBase>[]): void {
 			bootstrap({
 				...options,
 				seeders,

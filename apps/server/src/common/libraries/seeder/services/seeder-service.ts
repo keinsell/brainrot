@@ -1,11 +1,11 @@
 import {Injectable} from "@nestjs/common";
-import {SeederV2}   from "../seeder-v2.js"
+import {SeederBase} from "../seeder-base.js"
 
 
 
 @Injectable()
 export class SeederService {
-	constructor(private readonly seeders: SeederV2<unknown>[]) {}
+	constructor(private readonly seeders: SeederBase[]) {}
 
 
 	async run(): Promise<any> {

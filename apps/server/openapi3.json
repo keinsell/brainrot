@@ -508,6 +508,26 @@
           }
         }
       }
+    },
+    "/stripe/webhook": {
+      "post": {
+        "operationId": "StripeWebhookController_handleWebhook",
+        "parameters": [
+          {
+            "name": "stripe-signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -531,7 +551,7 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Callie_Boyer54@hotmail.com",
+            "example": "Yvette.Thompson@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -551,7 +571,7 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Alexanne.Moen",
+            "example": "Tyra_Cole28",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -598,11 +618,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Alexanne.Moen",
+            "example": "Tyra_Cole28",
             "examples": [
-              "Elouise80",
-              "Lafayette.Pacocha76",
-              "Lon80"
+              "Ludie.Veum",
+              "Deontae18",
+              "Ron70"
             ]
           },
           "password": {
@@ -610,9 +630,9 @@
             "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "yapO6UfI72OHMRP",
-              "sH0fLhfNZ4oyH0p",
-              "AawroAlKvUGYa7f"
+              "7DEsnpsz8RHsTP9",
+              "KZexCs8ssCE0ZIZ",
+              "uv1VuEPWcssjZq3"
             ]
           }
         },

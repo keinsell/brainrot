@@ -5,7 +5,7 @@ import {STATIC_CONTEXT}                                                         
 import {InstanceWrapper}                                                                     from "@nestjs/core/injector/instance-wrapper.js"
 import {Module}                                                                              from "@nestjs/core/injector/module.js"
 import {MetadataScanner}                                                                     from "@nestjs/core/metadata-scanner.js"
-import {flatMap, get, isNil, some, uniqBy}                                                   from 'lodash';
+import * as R                                                                                from 'ramda';
 import {DiscoveredClass, DiscoveredClassWithMeta, DiscoveredMethodWithMeta, Filter, MetaKey} from "./discovery-interface.js"
 
 
@@ -42,12 +42,12 @@ export const withMetaAtKey: (key: MetaKey) => Filter<DiscoveredClass> =
 	(key) => (component) => {
 		// eslint-disable-next-line @typescript-eslint/ban-types
 		const metaTargets: Function[] = [
-			get(component, 'instance.constructor') as any,
+			R.path(['instance', 'constructor'], component) as any,
 			// eslint-disable-next-line @typescript-eslint/ban-types
 			component.injectType as Function,
-		].filter((x) => !isNil(x));
+		].filter((x) => !R.isNil(x));
 
-		return some(metaTargets, (x) => Reflect.getMetadata(key, x));
+		return R.any((x) => Reflect.getMetadata(key, x), metaTargets);
 	};
 
 
@@ -91,23 +91,18 @@ export class DiscoveryService {
 			await this.controllersWithMetaAtKey<T>(metaKey)
 		).filter((x) => metaFilter(x.meta));
 
-		const methodsFromDecoratedControllers = flatMap(
+		const methodsFromDecoratedControllers = R.chain(
+			controller => this.classMethodsWithMetaAtKey<T>(controller.discoveredClass, PATH_METADATA),
 			controllersWithMeta,
-			(controller) => {
-				return this.classMethodsWithMetaAtKey<T>(
-					controller.discoveredClass,
-					PATH_METADATA,
-				);
-			},
 		);
 
 		const decoratedMethods = (
 			await this.controllerMethodsWithMetaAtKey<T>(metaKey)
-		).filter((x) => metaFilter(x.meta));
+		).filter(x => metaFilter(x.meta));
 
-		return uniqBy(
+		return R.uniqBy(
+			x => x.discoveredMethod.handler,
 			[...methodsFromDecoratedControllers, ...decoratedMethods],
-			(x) => x.discoveredMethod.handler,
 		);
 	}
 
@@ -185,7 +180,7 @@ export class DiscoveryService {
 		           .scanFromPrototype(instance, prototype, (name) =>
 			           this.extractMethodMetaAtKey<T>(metaKey, component, prototype, name),
 		           )
-		           .filter((x) => !isNil(x.meta));
+		           .filter((x) => !R.isNil(x.meta));
 	}
 
 
@@ -200,8 +195,9 @@ export class DiscoveryService {
 	): Promise<DiscoveredMethodWithMeta<T>[]> {
 		const providers = await this.providers(providerFilter);
 
-		return flatMap(providers, (provider) =>
-			this.classMethodsWithMetaAtKey<T>(provider, metaKey),
+		return R.chain((provider) =>
+				this.classMethodsWithMetaAtKey<T>(provider, metaKey),
+			providers,
 		);
 	}
 
@@ -216,10 +212,7 @@ export class DiscoveryService {
 		controllerFilter: Filter<DiscoveredClass> = () => true,
 	): Promise<DiscoveredMethodWithMeta<T>[]> {
 		const controllers = await this.controllers(controllerFilter);
-
-		return flatMap(controllers, (controller) =>
-			this.classMethodsWithMetaAtKey<T>(controller, metaKey),
-		);
+		return R.chain(controller => this.classMethodsWithMetaAtKey<T>(controller, metaKey), controllers);
 	}
 
 
@@ -233,14 +226,14 @@ export class DiscoveryService {
 		);
 
 		if (instanceHost.isPending && !instanceHost.isResolved) {
-			await instanceHost.donePromise;
+			instanceHost.donePromise;
 		}
 
 		return {
 			name:           wrapper.name as string,
 			instance:       instanceHost.instance,
 			injectType:     wrapper.metatype,
-			dependencyType: get(instanceHost, 'instance.constructor'),
+			dependencyType: R.path(['instance', 'constructor'], instanceHost),
 			parentModule:   {
 				name:           nestModule.metatype.name,
 				instance:       nestModule.instance,
@@ -274,13 +267,12 @@ export class DiscoveryService {
 	private async discover(component: 'providers' | 'controllers') {
 		const modulesMap = [...this.modulesContainer.entries()];
 		return Promise.all(
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			flatMap(modulesMap, ([key, nestModule]) => {
+			R.chain(([key, nestModule]) => {
 				const components = [...nestModule[component].values()];
 				return components
 					.filter((component) => component.scope !== Scope.REQUEST)
 					.map((component) => this.toDiscoveredClass(nestModule, component));
-			}),
+			}, modulesMap),
 		);
 	}
 }

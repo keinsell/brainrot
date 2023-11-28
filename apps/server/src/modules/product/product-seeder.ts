@@ -1,13 +1,13 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {SeederV2}           from "../../common/libraries/seeder/seeder-v2.js"
+import {SeederBase}         from "../../common/libraries/seeder/seeder-base.js"
 import type {Prisma}        from "../../vendor/prisma/index.js"
 
 
 
 @Injectable()
-export class ProductSeeder extends SeederV2<Prisma.ProductCreateInput> {
+export class ProductSeeder extends SeederBase<Prisma.ProductCreateInput> {
 
 	constructor(
 		private prismaService: PrismaService,

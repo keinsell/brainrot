@@ -2,14 +2,14 @@ import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {PrismaService}      from "../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {Address}            from "../../../../../common/libraries/address/address.js"
-import {SeederV2}           from "../../../../../common/libraries/seeder/seeder-v2.js"
+import {SeederBase}         from "../../../../../common/libraries/seeder/seeder-base.js"
 import {Prisma}             from "../../../../../vendor/prisma/index.js"
 import UserCreateInput = Prisma.UserCreateInput
 
 
 
 @Injectable()
-export class ProfileSeeder extends SeederV2<UserCreateInput> {
+export class ProfileSeeder extends SeederBase<UserCreateInput> {
 	private excludedAccountIds = new Array<string>()
 
 

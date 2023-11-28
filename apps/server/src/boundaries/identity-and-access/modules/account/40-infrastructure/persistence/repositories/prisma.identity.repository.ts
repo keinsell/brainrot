@@ -144,6 +144,11 @@ export class PrismaIdentityRepository implements IdentityRepository {
 	}
 
 
+	public findById(id: string): Promise<Account | null> {
+		return Promise.resolve(undefined)
+	}
+
+
 	public update(entity: Account): Promise<Account> {
 		return Promise.resolve(undefined)
 	}

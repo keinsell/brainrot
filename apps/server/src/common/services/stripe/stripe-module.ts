@@ -3,7 +3,7 @@
 import {Logger, Module, OnModuleInit}                                                                    from '@nestjs/common';
 import {PATH_METADATA}                                                                                   from "@nestjs/common/constants.js"
 import {ExternalContextCreator}                                                                          from "@nestjs/core"
-import {flatten, groupBy}                                                                                from 'lodash';
+import {flatten, groupBy}                                                                                from "ramda"
 import Stripe                                                                                            from 'stripe';
 import {DiscoveryModule}                                                                                 from "../discovery/discovery-module.js"
 import {DiscoveryService}                                                                                from "../discovery/discovery-service.js"
@@ -127,8 +127,8 @@ export class StripeModule
 			      )
 
 		const grouped = groupBy(
-			eventHandlerMeta,
 			(x) => x.discoveredMethod.parentClass.name,
+			eventHandlerMeta,
 		);
 
 		const webhookHandlers = flatten(
@@ -156,8 +156,7 @@ export class StripeModule
 				));
 			}),
 		);
-
-		const handleWebhook = async (webhookEvent: { type: string }) => {
+		const handleWebhook   = async (webhookEvent: { type: string }) => {
 			const {type}   = webhookEvent;
 			const handlers = webhookHandlers.filter((x) => x.key === type);
 

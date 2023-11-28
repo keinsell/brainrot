@@ -25,4 +25,5 @@ import {WriteRepository} from "./write-repository.js"
  *
  * @class
  */
+	// TODO: Add Mixin to extend WriteRepository and ReadRepository
 export abstract class GenericRepository<T> extends WriteRepository<T> {}

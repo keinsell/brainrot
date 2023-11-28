@@ -1,6 +1,6 @@
 import {DynamicModule, ForwardReference, Module, Provider, Type} from '@nestjs/common';
 import {Seeder}                                                  from "./interfaces/seeder-interface.js"
-import {SeederV2}                                                from "./seeder-v2.js"
+import {SeederBase}                                              from "./seeder-base.js"
 import {SeederService}                                           from "./services/seeder-service.js"
 
 
@@ -27,7 +27,7 @@ export class SeederModule {
 				...options.seeders,
 				{
 					provide:    SeederService,
-					useFactory: (...seeders: SeederV2<any>[]): SeederService => {
+					useFactory: (...seeders: SeederBase<any>[]): SeederService => {
 						return new SeederService(seeders);
 					},
 					inject:     options.seeders as Type<any>[],

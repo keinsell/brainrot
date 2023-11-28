@@ -2,6 +2,7 @@ import {Injectable, Logger, OnModuleDestroy, OnModuleInit} from "@nestjs/common"
 import delay                                               from 'delay'
 import ms                                                  from 'ms'
 import {Prisma, PrismaClient}                              from "../../../../../../vendor/prisma/index.js"
+import {ApplicationState}                                  from "../../../../../state.js"
 
 
 
@@ -60,15 +61,15 @@ export class PrismaService
 
 
 	private async startConnection() {
-		let connectionState      = false;
-		let connectionRetryDelay = ms('5s');
+		ApplicationState.isDatabaseConnected = false;
+		let connectionRetryDelay             = ms('5s');
 
 		// Handle retries to the database without blocking
-		while (!connectionState) {
+		while (!ApplicationState.isDatabaseConnected) {
 			try {
 				await this.$connect();
 				this.logger.log("Connection with a database established.");
-				connectionState = true;
+				ApplicationState.isDatabaseConnected = true;
 			}
 			catch (error) {
 				this.logger.error(`Error while connecting to a database: ${JSON.stringify(error)}`);
