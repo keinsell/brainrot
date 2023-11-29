@@ -76,6 +76,7 @@ model User {
   Checkout        Checkout[]
   Order           Order[]
   Metadata        UserMetadata[]
+  Cart            Cart?
 }
 
 model UserMetadata {
@@ -92,17 +93,17 @@ model UserMetadata {
 }
 
 model Product {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   // --------------------------------------------------
   name      String
   price     Int
   currency  String
   // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   // --------------------------------------------------
-  Carts     Cart[]
   Order     Order[]
+  CartItem  CartItem[]
 }
 
 model Order {
@@ -120,17 +121,31 @@ model Order {
 }
 
 model Cart {
-  id        String    @id @default(cuid())
+  id        String     @id @default(cuid())
   // --------------------------------------------------
-  accountId String
-  productId String
-  quantity  Int
+  profileId String?    @unique
   // --------------------------------------------------
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   // --------------------------------------------------
   Checkout  Checkout?
-  Product   Product   @relation(fields: [productId], references: [id])
+  CartItem  CartItem[]
+  User      User?      @relation(fields: [profileId], references: [id])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  cartId    String
+  productId String
+  price     Int
+  quantity  Int
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Cart      Cart     @relation(fields: [cartId], references: [id])
+  Product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Payment {

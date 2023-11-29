@@ -13,6 +13,7 @@ import {seeder}                     from "./common/libraries/seeder/seeder.js"
 import {ApplicationConfiguration}   from "./configs/application-configuration.js"
 import {env}                        from "./configs/env.js"
 import {Container}                  from "./container.js"
+import {CartSeeder}                 from "./modules/cart/cart-seeder.js"
 import {ProductSeeder}              from "./modules/product/product-seeder.js"
 import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
 
@@ -90,7 +91,7 @@ export async function bootstrap() {
 				providers: [
 					ProductSeeder, AccountSeeder, ProfileSeeder,
 				],
-			}).run([ProductSeeder, AccountSeeder, ProfileSeeder]);
+			}).run([ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder]);
 		}
 		catch (e) {
 			logger.error(`Error while trying to seed database: ${(

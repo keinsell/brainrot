@@ -459,15 +459,6 @@
       }
     },
     "/cart": {
-      "post": {
-        "operationId": "CartController_createCart",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      },
       "get": {
         "operationId": "CartController_getCart",
         "parameters": [],
@@ -479,6 +470,15 @@
       }
     },
     "/cart/{id}": {
+      "put": {
+        "operationId": "CartController_updateCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
       "post": {
         "operationId": "CartController_deleteCart",
         "parameters": [],
@@ -551,7 +551,7 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Delta.Wolff@gmail.com",
+            "example": "Ona.Wunsch@yahoo.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -571,7 +571,7 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Cornelius97",
+            "example": "Walker.Sipes65",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -618,11 +618,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Cornelius97",
+            "example": "Walker.Sipes65",
             "examples": [
-              "Albertha_Hane68",
-              "Shanelle_Zulauf31",
-              "Josiane_Marks"
+              "Golda.Boehm",
+              "Cecil.Gibson",
+              "Seth.Hackett"
             ]
           },
           "password": {
@@ -630,9 +630,9 @@
             "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "IpHMksqG8wiSFf4",
-              "9uw6o7Gy5hhqjdq",
-              "SY6quaELiQY_iKC"
+              "w2NEE8wrOlrZgee",
+              "CtmcawCjOGjNpdT",
+              "M2zT7FpIsUv2WEQ"
             ]
           }
         },

@@ -1,14 +1,9 @@
-import {Controller, Delete, Get, Post} from "@nestjs/common"
+import {Controller, Delete, Get, Post, Put} from "@nestjs/common"
 
 
 
 @Controller('cart')
 export class CartController {
-	@Post()
-	async createCart(): Promise<string> {
-		return 'create-cart'
-	}
-
 
 	@Get()
 	async getCart(): Promise<string> {
@@ -16,7 +11,7 @@ export class CartController {
 	}
 
 
-	@Post(':id')
+	@Put(':id')
 	async updateCart(): Promise<string> {
 		return 'update-cart'
 	}
