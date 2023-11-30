@@ -52,3 +52,9 @@ jobs:
       redis:
         # Docker Hub image
         image: redis
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup Repository
+        uses: ./.github/actions/setup-project
