@@ -1,4 +1,5 @@
 export const ApplicationConfiguration = {
 	openapiDocumentationPath: '/api',
-	healthCheckPath: '/health',
+	healthCheckPath:          '/health',
+	prismaAdminPort:          5555,
 }

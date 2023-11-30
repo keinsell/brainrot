@@ -1,4 +1,4 @@
-import {IdentityRepository}                                 from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
+import {AccountRepository}                                  from "@boundary/identity-and-access/modules/account/30-domain/repositories/account-repository.js"
 import {Email}                                              from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
 import {Password}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
 import {Username}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
@@ -12,7 +12,7 @@ import {BasePolicy}                                         from "../../../../..
 
 @Injectable()
 export class AccountPolicy extends BasePolicy {
-	constructor(private readonly accountRepository: IdentityRepository, private readonly passwordSecurity: PasswordStrengthEstimator) {
+	constructor(private readonly accountRepository: AccountRepository, private readonly passwordSecurity: PasswordStrengthEstimator) {
 		super()
 	}
 

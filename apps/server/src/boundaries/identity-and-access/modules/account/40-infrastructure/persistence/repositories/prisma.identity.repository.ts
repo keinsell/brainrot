@@ -1,5 +1,5 @@
 import {Account}                                     from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
-import {IdentityRepository}                          from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
+import {AccountRepository}                           from "@boundary/identity-and-access/modules/account/30-domain/repositories/account-repository.js"
 import {Email}                                       from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
 import {Username}                                    from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
 import {AccountCreateModel}                          from "@boundary/identity-and-access/modules/account/40-infrastructure/persistence/models/account/account-create-model.js"
@@ -11,7 +11,7 @@ import {DbContextModel}                              from "../../../../../../../
 
 
 @Injectable()
-export class PrismaIdentityRepository implements IdentityRepository {
+export class PrismaIdentityRepository implements AccountRepository {
 	private logger: Logger = new Logger("account:repository:prisma")
 
 

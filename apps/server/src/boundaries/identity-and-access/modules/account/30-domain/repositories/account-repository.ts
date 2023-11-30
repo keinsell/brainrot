@@ -5,11 +5,11 @@ import {Username}          from "../value-objects/username.js"
 
 
 
-export abstract class IdentityRepository extends GenericRepository<Account> {
-	abstract save(identity: Account): Promise<Account>
-
-
+export abstract class AccountRepository extends GenericRepository<Account> {
 	abstract getById(id: string): Promise<Account>
+
+
+	abstract save(identity: Account): Promise<Account>
 
 
 	abstract findByUsername(username: Username): Promise<Account | null>

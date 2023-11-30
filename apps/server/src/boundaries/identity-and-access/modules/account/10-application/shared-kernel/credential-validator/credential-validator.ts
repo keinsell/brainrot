@@ -1,5 +1,5 @@
 import {Account}                                              from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
-import {IdentityRepository}                                   from "@boundary/identity-and-access/modules/account/30-domain/repositories/identity-repository.js"
+import {AccountRepository}                                    from "@boundary/identity-and-access/modules/account/30-domain/repositories/account-repository.js"
 import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {err, ok, Result}                                      from "neverthrow"
 import {EventBus}                                             from "../../../../../../../common/infrastructure/messaging/event-bus.js"
@@ -14,7 +14,7 @@ import {UnifiedHashing}                                       from "../../../../
 @Injectable()
 export class CredentialValidator {
 	constructor(
-		private repository: IdentityRepository,
+		private repository: AccountRepository,
 		private hashingService: UnifiedHashing,
 	) {}
 

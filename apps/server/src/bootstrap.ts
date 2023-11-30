@@ -1,21 +1,22 @@
-import {AccountSeeder}              from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
-import {AccountModule}              from "@boundary/identity-and-access/modules/account/account.module.js"
-import {ProfileSeeder}              from "@boundary/identity-and-access/modules/profile/infrastructure/profile-seeder.js"
-import {Logger}                     from "@nestjs/common"
-import {NestFactory}                from "@nestjs/core"
-import delay                        from "delay"
-import ms                           from "ms"
-import process                      from "node:process"
-import {buildCompodocDocumentation} from "./common/infrastructure/documentation/compodoc/compodoc.js"
-import {buildSwaggerDocumentation}  from "./common/infrastructure/documentation/swagger/swagger.js"
-import {DatabaseModule}             from "./common/infrastructure/storage/database/database.module.js"
-import {seeder}                     from "./common/libraries/seeder/seeder.js"
-import {ApplicationConfiguration}   from "./configs/application-configuration.js"
-import {env}                        from "./configs/env.js"
-import {Container}                  from "./container.js"
-import {CartSeeder}                 from "./modules/cart/cart-seeder.js"
-import {ProductSeeder}              from "./modules/product/product-seeder.js"
-import {portAllocator}              from "./utilities/network-utils/port-allocator.js"
+import {AccountSeeder}                 from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
+import {AccountModule}                 from "@boundary/identity-and-access/modules/account/account.module.js"
+import {ProfileSeeder}                 from "@boundary/identity-and-access/modules/profile/infrastructure/profile-seeder.js"
+import {Logger}                        from "@nestjs/common"
+import {NestFactory}                   from "@nestjs/core"
+import delay                           from "delay"
+import ms                              from "ms"
+import process                         from "node:process"
+import {buildCompodocDocumentation}    from "./common/infrastructure/documentation/compodoc/compodoc.js"
+import {buildSwaggerDocumentation}     from "./common/infrastructure/documentation/swagger/swagger.js"
+import {executePrismaRelatedProcesses} from "./common/infrastructure/storage/database/adapters/prisma/execute-prisma-related-processes.js"
+import {DatabaseModule}                from "./common/infrastructure/storage/database/database.module.js"
+import {seeder}                        from "./common/libraries/seeder/seeder.js"
+import {ApplicationConfiguration}      from "./configs/application-configuration.js"
+import {env}                           from "./configs/env.js"
+import {Container}                     from "./container.js"
+import {CartSeeder}                    from "./modules/cart/cart-seeder.js"
+import {ProductSeeder}                 from "./modules/product/product-seeder.js"
+import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
 
 
 
@@ -27,6 +28,8 @@ export async function bootstrap() {
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger("Bootstrap");
+
+	await executePrismaRelatedProcesses()
 
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
@@ -60,6 +63,7 @@ export async function bootstrap() {
 				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
 				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
 				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + ApplicationConfiguration.healthCheckPath}`)
+				logger.debug(`🧩 Prisma Admin is running on: http://localhost:${ApplicationConfiguration.prismaAdminPort}`)
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
