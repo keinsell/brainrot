@@ -31,15 +31,6 @@ runs:
     - name: ⚙️ Set up QEMU Virtualization
       uses: docker/setup-qemu-action@v2
 
-    - run: docker info
-      shell: bash
-
-    - run: docker run hello-world
-      shell: bash
-
-    - run: service docker start
-      shell: bash
-
     - name: ⚙️ Set up buildx
       uses: docker/setup-buildx-action@v2
 
@@ -51,16 +42,6 @@ runs:
       with:
         node-version: 'latest'
         cache: 'pnpm'
-
-    - name: 💵 Start Redis
-      if: ${{ inputs.slim == 'false' }}
-      uses: supercharge/redis-github-action@1.5.0
-
-    - name: 📚 Start MongoDB
-      if: ${{ inputs.slim == 'false' }}
-      uses: supercharge/mongodb-github-action@v1.9.0
-      with:
-        mongodb-version: 4.2.8
 
     - name: Cache Cypress Binary For Version
       id: cache-cypress-binary-version
