@@ -34,6 +34,17 @@ runs:
     - name: ⚙️ Set up buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: ⚙️ Set up Docker
+      uses: crazy-max/ghaction-setup-docker@v2
+      with:
+        daemon-config: |
+          {
+            "debug": true,
+            "features": {
+              "containerd-snapshotter": true
+            }
+          }
+
     - name: ⚙️ Setup pnpm
       uses: pnpm/action-setup@v2
 
