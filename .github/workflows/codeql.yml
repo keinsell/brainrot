@@ -1,14 +1,16 @@
 name: CodeQL
 
+# Not available in private repositories
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: '31 7 * * 3'
+  workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   schedule:
+#     - cron: '31 7 * * 3'
 
 jobs:
   analyze:
