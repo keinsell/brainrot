@@ -39,30 +39,21 @@ jobs:
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
 
-  # Label of the container job
   container-job:
     runs-on: arc-runner-set
 
     services:
-      # Label used to access the service container
       redis:
         image: redis
-        # Set health checks to wait until redis has started
-        options: --health-cmd redis-cli ping --health-interval 10s --health-timeout 5s --health-retries 5
-        # Expose ports to the host operating system
         ports:
           - 6379:6379
 
       postgres:
         image: postgres
-        # Set health checks to wait until postgres has started
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        # Set environment variables for the service container
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-        # Expose ports to the host operating system
         ports:
           - 5432:5432
 
