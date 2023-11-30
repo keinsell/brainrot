@@ -1,0 +1,34 @@
+name: Deploy Development APIs
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - next
+      - main
+    paths:
+      - 'package.json'
+      - 'yarn.lock'
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'libs/shared/**'
+env:
+  TF_WORKSPACE: novu-dev
+
+jobs:
+  # TODO: Add testing
+  deploy_dev_api:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    #    environment: Development
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-project
