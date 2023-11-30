@@ -34,6 +34,12 @@ runs:
     - run: docker info
       shell: bash
 
+    - run: docker run hello-world
+      shell: bash
+
+    - run: service docker start
+      shell: bash
+
     - name: ⚙️ Set up buildx
       uses: docker/setup-buildx-action@v2
 
