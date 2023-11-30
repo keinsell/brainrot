@@ -10,7 +10,8 @@ op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
 # Start Minikube with signle-node configuration
-minikube start -p local-arc
+#minikube start -p local-arc
+kind create cluster --name local-arc
 
 # Install ARC
 helm install arc \
