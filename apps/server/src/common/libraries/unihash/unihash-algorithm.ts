@@ -1,4 +1,5 @@
 import {Logger}                         from "@nestjs/common"
+import {env}                            from "../../../configs/env.js"
 import {KeyDerivationFunction}          from "./key-derivation-functions/key-derivation-function.js"
 import {PhcString, SerializedPhcString} from "./types/phc-string.js"
 import {Salt}                           from "./types/salt.js"
@@ -10,7 +11,7 @@ export class UnihashAlgorithm {
 
 
 	constructor(private readonly kdf: KeyDerivationFunction) {
-		this.logger = new Logger(`security:hashing:${kdf.name}`)
+		this.logger = new Logger(`${kdf.name}`)
 	}
 
 
@@ -31,34 +32,35 @@ export class UnihashAlgorithm {
 
 
 	private preHash(plain: string): void {
-		this.logger.debug(`Hashing password ${this.maskPassword(plain)}`)
+		this.logger.verbose(`hash(${this.maskPassword(plain)})`)
 	}
 
 
 	private postHash(plain: string, hash: string): void {
-		this.logger.debug(`Created hash of password ${this.maskPassword(plain)}: ${this.formatHash(hash)}`)
+		this.logger.debug(`hash(${this.maskPassword(plain)}) => ${this.formatHash(hash)}`)
 	}
 
 
 	private preVerify(hash: string, plain: string): void {
-		this.logger.debug(`Verifying password ${this.maskPassword(plain)} against hash ${this.formatHash(hash)}`)
+		this.logger.verbose(`verify(${this.maskPassword(plain)}, ${this.formatHash(hash)})`)
 	}
 
 
 	private postVerify(hash: string, plain: string, result: boolean): void {
-		this.logger.debug(`Verified password ${this.maskPassword(plain)} against hash ${this.formatHash(hash)}: ${result ?
+		this.logger.debug(`verify(${this.maskPassword(plain)},${this.formatHash(hash)}) => ${result ?
 			"OK" :
 			"FAIL"}`)
 	}
 
 
 	private maskPassword(plain: string): string {
-		return plain.slice(0, 3) + "█".repeat(plain.length - 3)
+		return env.isDev ? plain : "[REDACTED]"
+		//		return plain.slice(0, 3) + "#".repeat(plain.length - 3)
 	}
 
 
 	/** Return last 20 characters of hash */
 	private formatHash(hash: string): string {
-		return `[...]${hash.slice(-20)}`
+		return `${hash.slice(0, 10)}...${hash.slice(hash.length - 10)}`
 	}
 }

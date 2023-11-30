@@ -1,6 +1,6 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
-import {EventBus}          from "../../../infrastructure/messaging/event-bus.js"
-import {GenericRepository} from "../../storr/repository/repository.js"
+import {EventBus}   from "../../../infrastructure/messaging/event-bus.js"
+import {Repository} from "../../storr/repository/repository.js"
 
 
 
@@ -21,7 +21,7 @@ export class EntityBase {
 
 
 	/** Commits changes done on specific entity to the repository and publishes changes to other modules. */
-	public async commit(repository: GenericRepository<this>, bus?: EventBus): Promise<void> {
+	public async commit(repository: Repository<this>, bus?: EventBus): Promise<void> {
 
 		this.bumpVersion()
 		this.bumpUpdateDate()

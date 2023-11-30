@@ -1,11 +1,11 @@
-import {EntityBase}        from "../domain/entity/entity-base.js"
-import {GenericRepository} from "../storr/repository/repository.js"
+import {EntityBase} from "../domain/entity/entity-base.js"
+import {Repository} from "../storr/index.js"
 
 
 
 export class ServiceAbstract<T extends EntityBase> {
 	constructor(
-		private _repository: GenericRepository<T>,
+		private _repository: Repository<T>,
 	) {}
 
 

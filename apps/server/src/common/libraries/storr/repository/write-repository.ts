@@ -1,4 +1,4 @@
-import {NotFoundException} from "@nestjs/common"
+import {Logger, NotFoundException} from "@nestjs/common"
 
 // WriteRepository can:
 // - Fetch an entity by unique identifier
@@ -20,6 +20,9 @@ import {NotFoundException} from "@nestjs/common"
  * @template T - The type of the entity.
  */
 export abstract class WriteRepository<T> {
+	private _hookLogger: Logger = new Logger("repository:hooks");
+
+
 	abstract create(entity: T): Promise<T>;
 
 
@@ -33,11 +36,25 @@ export abstract class WriteRepository<T> {
 
 
 	async save(entity: T): Promise<T> {
-		if (await this.exists(entity)) {
-			return this.update(entity);
+		this.beforeHook(this.save, entity);
+
+		this.beforeHook(this.exists, entity);
+		const doesExist = await this.exists(entity);
+		this.after(this.exists, doesExist);
+
+		if (doesExist) {
+			this.beforeHook(this.update, entity);
+			const updated = await this.update(entity);
+			this.after(this.update, entity);
+			this.after(this.save, updated);
+			return updated;
 		}
 		else {
-			return this.create(entity);
+			this.beforeHook(this.create, entity)
+			const created = await this.create(entity);
+			this.after(this.create, created);
+			this.after(this.save, created);
+			return created;
 		}
 	}
 
@@ -53,5 +70,15 @@ export abstract class WriteRepository<T> {
 		}
 
 		return entity;
+	}
+
+
+	beforeHook(func: Function, payload?: unknown) {
+		this._hookLogger.verbose(`${this.constructor.name}.${func.name}(${JSON.stringify(payload)})`)
+	}
+
+
+	after(func: Function, result?: unknown) {
+		this._hookLogger.debug(`${this.constructor.name}.${func.name}(...) => ${JSON.stringify(result)}`)
 	}
 }

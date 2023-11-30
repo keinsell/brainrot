@@ -11,11 +11,13 @@ import {DbContextModel}                              from "../../../../../../../
 
 
 @Injectable()
-export class PrismaIdentityRepository implements AccountRepository {
+export class PrismaIdentityRepository extends AccountRepository {
 	private logger: Logger = new Logger("account:repository:prisma")
 
 
-	constructor(private prismaService: PrismaService) {}
+	constructor(private prismaService: PrismaService) {
+		super()
+	}
 
 
 	public async findByEmail(email: Email): Promise<Account | undefined> {
@@ -88,28 +90,6 @@ export class PrismaIdentityRepository implements AccountRepository {
 	}
 
 
-	public getById(id: string): Promise<Account> {
-		throw new NotImplementedException(id)
-	}
-
-
-	public async save(identity: Account): Promise<Account> {
-		let entity: DbContextModel.Account.Entity
-
-		try {
-			entity = await this.prismaService.account.create({
-				data: AccountCreateModel.fromDomainModel(identity),
-			}) as DbContextModel.Account.Entity
-		}
-		catch (e) {
-			this.logger.error(e)
-			throw e
-		}
-
-		return new AccountEntityModel(entity).toDomainModel()
-	}
-
-
 	public async create(identity: Account): Promise<Account> {
 		let entity: DbContextModel.Account.Entity
 
@@ -135,8 +115,11 @@ export class PrismaIdentityRepository implements AccountRepository {
 	async exists(entity: Account): Promise<boolean> {
 		const count = await this.prismaService.account.count({
 			where: {
-				id: entity.id,
-
+				OR: [
+					{email: entity.email.address},
+					{username: entity.username},
+					{id: entity.id},
+				],
 			},
 		})
 
@@ -146,6 +129,11 @@ export class PrismaIdentityRepository implements AccountRepository {
 
 	public findById(id: string): Promise<Account | null> {
 		return Promise.resolve(undefined)
+	}
+
+
+	public getById(id: string): Promise<Account> {
+		throw new NotImplementedException(id)
 	}
 
 

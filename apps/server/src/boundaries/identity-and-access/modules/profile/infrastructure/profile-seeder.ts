@@ -54,7 +54,7 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 
 		this.excludedAccountIds.push(account.id)
 
-		const address: Address = {
+		const address: Omit<Address, "stringify" | "coordinates"> = {
 			street1:    faker.location.streetAddress(),
 			street2:    undefined,
 			city:       faker.location.city(),

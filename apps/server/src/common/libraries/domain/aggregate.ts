@@ -1,11 +1,17 @@
+import {randomUUID} from "node:crypto"
+
+
+
 export interface AggregateRootProperties {
 	id?: any | undefined
 	createdAt?: Date
 	updatedAt?: Date
 }
 
+
 // TODO: https://linear.app/keinsell/issue/PROD-93/add-aggregate-root-base-class
-export class AggregateRoot<T extends Object = {}> implements AggregateRootProperties {
+export class AggregateRoot<T extends Object = {}>
+	implements AggregateRootProperties {
 	public readonly createdAt: Date
 	/**
 	 * Array that holds events data.
@@ -22,9 +28,9 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 
 
 	constructor(
-	aggregateBaseProperties: Partial<AggregateRootProperties>,
+		aggregateBaseProperties: Partial<AggregateRootProperties>,
 	) {
-		this._id = aggregateBaseProperties.id
+		this._id       = aggregateBaseProperties.id
 		this.createdAt = new Date()
 		this.updatedAt = new Date()
 	}
@@ -32,10 +38,9 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 
 	private _id: any | undefined;
 
-
 	get id(): any | undefined {
 		if (!this._id) {
-			throw new Error("AggregateRoot: id is undefined")
+			return randomUUID()
 		}
 
 		return this._id
@@ -43,7 +48,6 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 
 
 	//private _stateMachine: StateMachine<T>
-
 
 	public updatedAt: Date
 
@@ -56,7 +60,7 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 	public getUncommittedEvents() {
 		const eventsSnapshot = this._events.slice()
 		// Remove events from aggregate as we already have a copy of them.
-		this._events = []
+		this._events         = []
 		return eventsSnapshot
 	}
 
@@ -74,9 +78,9 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 	}
 
 
-protected bumpVersion() {
-	this._version = this._version + 1
-}
+	protected bumpVersion() {
+		this._version = this._version + 1
+	}
 
 
 	/**
