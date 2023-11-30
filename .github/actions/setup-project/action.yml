@@ -31,10 +31,7 @@ runs:
     - name: ⚙️ Set up QEMU Virtualization
       uses: docker/setup-qemu-action@v2
 
-    - name: Use Docker in rootless mode.
-      uses: ScribeMD/rootless-docker@0.2.2
-
-    - run: systemctl --user start docker
+    - run: docker info
       shell: bash
 
     - name: ⚙️ Set up buildx
