@@ -4,6 +4,9 @@ name: Deploy Development APIs
 # events but only for the master branch
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - next
@@ -15,13 +18,13 @@ on:
       - 'packages/**'
       - 'libs/shared/**'
 env:
-  TF_WORKSPACE: novu-dev
+  TF_WORKSPACE: keinsell-dev
 
 jobs:
   # TODO: Add testing
   deploy_dev_api:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     timeout-minutes: 80
     #    environment: Development
     permissions:
