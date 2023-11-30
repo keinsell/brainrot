@@ -4,8 +4,8 @@ import {AccountRepository} from "@boundary/identity-and-access/modules/account/3
 import {Email}             from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
 import {Password}          from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
 import {Username}          from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
-import {UnifiedHashing}    from "@lib/security/hashing/index.js"
-import {KdfAlgorithm}      from "@lib/security/hashing/key-derivation-functions/key-derivation-function.js"
+import {Unihash}           from "../../../../../common/libraries/unihash/index.js"
+import {KdfAlgorithm}      from "../../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
 import {Injectable}        from "@nestjs/common"
 import {EventBus}          from "../../../../../common/infrastructure/messaging/event-bus.js"
 
@@ -13,7 +13,7 @@ import {EventBus}          from "../../../../../common/infrastructure/messaging/
 
 @Injectable()
 export class AccountService {
-	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: UnifiedHashing) {}
+	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: Unihash) {}
 
 
 	public async register(accountPayload: {

@@ -2,17 +2,17 @@ import {AccountRepository}                                  from "@boundary/iden
 import {Email}                                              from "@boundary/identity-and-access/modules/account/30-domain/value-objects/email.js"
 import {Password}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
 import {Username}                                           from "@boundary/identity-and-access/modules/account/30-domain/value-objects/username.js"
-import {PasswordStrengthEstimator}                          from "@lib/security/password-estimation/password-strength-estimator.js"
-import {PasswordSecurityLevel}                              from "@lib/security/password-estimation/report/password-security-level.js"
 import {BadRequestException, ConflictException, Injectable} from "@nestjs/common"
 import {err, ok}                                            from "neverthrow"
 import {BasePolicy}                                         from "../../../../../../common/libraries/domain/policy/base-policy.js"
+import {Pwnproc}                                            from "../../../../../../common/libraries/pwnproc/pwnproc.js"
+import {PasswordSecurityLevel}                              from "../../../../../../common/libraries/pwnproc/report/password-security-level.js"
 
 
 
 @Injectable()
 export class AccountPolicy extends BasePolicy {
-	constructor(private readonly accountRepository: AccountRepository, private readonly passwordSecurity: PasswordStrengthEstimator) {
+	constructor(private readonly accountRepository: AccountRepository, private readonly passwordSecurity: Pwnproc) {
 		super()
 	}
 

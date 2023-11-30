@@ -1,5 +1,5 @@
 import {Logger}  from "@nestjs/common"
-import {Message} from "../../libraries/message/message.js"
+import {Message} from "../../_unknown_lib/message/message.js"
 
 
 

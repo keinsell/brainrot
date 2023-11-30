@@ -1,5 +1,5 @@
 import {EntityBase}        from "../domain/entity/entity-base.js"
-import {GenericRepository} from "../persistence/repository/repository.js"
+import {GenericRepository} from "../storr/repository/repository.js"
 
 
 

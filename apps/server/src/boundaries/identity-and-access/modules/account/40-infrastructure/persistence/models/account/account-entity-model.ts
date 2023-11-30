@@ -1,8 +1,8 @@
 import {Account}        from "@boundary/identity-and-access/modules/account/30-domain/aggregates/account.js"
 import {AccountStatus}  from "@boundary/identity-and-access/modules/account/30-domain/value-objects/account-status.js"
 import {Password}       from "@boundary/identity-and-access/modules/account/30-domain/value-objects/password.js"
+import {PhcString}      from "../../../../../../../../common/libraries/unihash/types/phc-string.js"
 import {DbContextModel} from "../../../../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {PhcString}      from "../../../../../../../../common/libraries/security/hashing/types/phc-string.js"
 
 
 

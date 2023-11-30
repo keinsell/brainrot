@@ -1,5 +1,5 @@
 import {Global, Module}                  from "@nestjs/common"
-import {PasswordStrengthEstimator}       from "./password-strength-estimator.js"
+import {Pwnproc}                         from "./pwnproc.js"
 import {ZxcvbnPasswordStrengthEstimator} from "./zxcbn/zxcvbn-password-strength-estimator.js"
 
 
@@ -8,10 +8,10 @@ import {ZxcvbnPasswordStrengthEstimator} from "./zxcbn/zxcvbn-password-strength-
 	imports:   [],
 	providers: [
 		{
-			provide:  PasswordStrengthEstimator,
+			provide:  Pwnproc,
 			useClass: ZxcvbnPasswordStrengthEstimator,
 		},
 	],
-	exports:   [PasswordStrengthEstimator],
+	exports:   [Pwnproc],
 })
-export class PasswordStrengthEstimatorModule {}
+export class PwnprocModule {}

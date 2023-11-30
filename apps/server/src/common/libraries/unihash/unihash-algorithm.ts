@@ -5,7 +5,7 @@ import {Salt}                           from "./types/salt.js"
 
 
 
-export class PasswordHashingAlgorithm {
+export class UnihashAlgorithm {
 	private readonly logger: Logger
 
 

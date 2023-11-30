@@ -1,13 +1,13 @@
 import {Inject, Injectable, Logger}          from "@nestjs/common"
 import {KDF_PROVIDER_TOKEN}                  from "./constraints/KDF_PROVIDER_TOKEN.js"
 import {KdfAlgorithm, KeyDerivationFunction} from "./key-derivation-functions/key-derivation-function.js"
-import {PasswordHashingAlgorithm}            from "./password-hashing-algorithm.js"
+import {UnihashAlgorithm}                    from "./unihash-algorithm.js"
 import {PhcString, SerializedPhcString}      from "./types/phc-string.js"
 
 
 
 @Injectable()
-export class UnifiedHashing {
+export class Unihash {
 	private readonly logger: Logger                                       = new Logger("security:hashing")
 	private readonly algorithms: Map<KdfAlgorithm, KeyDerivationFunction> = new Map()
 
@@ -21,7 +21,7 @@ export class UnifiedHashing {
 	}
 
 
-	use(algorithm: KdfAlgorithm): PasswordHashingAlgorithm {
+	use(algorithm: KdfAlgorithm): UnihashAlgorithm {
 		const kdf = this.algorithms.get(algorithm)
 
 		if (!kdf) {
@@ -30,7 +30,7 @@ export class UnifiedHashing {
 
 		this.logger.debug(`Using algorithm: ${algorithm}`)
 
-		return new PasswordHashingAlgorithm(kdf)
+		return new UnihashAlgorithm(kdf)
 	}
 
 
@@ -46,7 +46,7 @@ export class UnifiedHashing {
 	}
 
 
-	which(hash: string): PasswordHashingAlgorithm {
+	which(hash: string): UnihashAlgorithm {
 		const algorithm = this.determineAlgorithm(hash)
 		return this.use(algorithm)
 	}
@@ -55,7 +55,8 @@ export class UnifiedHashing {
 	private determineAlgorithm(hash: string): KdfAlgorithm {
 		const phcString = PhcString.deserialize(hash as unknown as SerializedPhcString)
 
-		const algorithm = Object.values(KdfAlgorithm).find((value) => value === phcString.id)
+		const algorithm = Object.values(KdfAlgorithm)
+		                        .find((value) => value === phcString.id)
 
 		if (!algorithm) {
 			throw new Error(`Unknown algorithm: ${phcString.id}`)

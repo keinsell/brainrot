@@ -1,5 +1,5 @@
 import {EventEmitter} from "events"
-import {Message}      from "../../libraries/message/message.js"
+import {Message}      from "../../_unknown_lib/message/message.js"
 
 
 

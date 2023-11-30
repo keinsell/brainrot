@@ -1,4 +1,4 @@
-import {Blob} from "./blob.js"
+import {Blob} from "../model/blob.js"
 
 
 

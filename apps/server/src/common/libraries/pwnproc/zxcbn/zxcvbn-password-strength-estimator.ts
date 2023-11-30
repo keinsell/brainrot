@@ -1,14 +1,14 @@
-import {Injectable}                from "@nestjs/common"
-import zxcvbn                      from "zxcvbn"
-import {PasswordStrengthEstimator} from "../password-strength-estimator.js"
-import {PasswordAttack}            from "../report/password-attack.js"
-import {PasswordSecurityLevel}     from "../report/password-security-level.js"
-import {PasswordSecurityReport}    from "../report/password-security-report.js"
+import {Injectable}             from "@nestjs/common"
+import zxcvbn                   from "zxcvbn"
+import {Pwnproc}                from "../pwnproc.js"
+import {PasswordAttack}         from "../report/password-attack.js"
+import {PasswordSecurityLevel}  from "../report/password-security-level.js"
+import {PasswordSecurityReport} from "../report/password-security-report.js"
 
 
 
 @Injectable()
-export class ZxcvbnPasswordStrengthEstimator extends PasswordStrengthEstimator {
+export class ZxcvbnPasswordStrengthEstimator extends Pwnproc {
 	public async generateReport(password: string): Promise<PasswordSecurityReport> {
 		const result = zxcvbn(password)
 

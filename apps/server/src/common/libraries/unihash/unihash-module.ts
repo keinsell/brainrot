@@ -2,7 +2,7 @@ import {Module}                from "@nestjs/common"
 import {KDF_PROVIDER_TOKEN}    from "./constraints/KDF_PROVIDER_TOKEN.js"
 import {Argon2Kdf}             from "./key-derivation-functions/argon2.kdf.js"
 import {KeyDerivationFunction} from "./key-derivation-functions/key-derivation-function.js"
-import {UnifiedHashing}        from "./unified-hashing.js"
+import {Unihash}               from "./unihash.js"
 
 
 
@@ -17,9 +17,9 @@ import {UnifiedHashing}        from "./unified-hashing.js"
 					new Argon2Kdf(),
 				]
 			},
-		}, UnifiedHashing,
+		}, Unihash,
 	],
-	exports:     [UnifiedHashing],
+	exports:     [Unihash],
 })
-export class PasswordHashingModule {
+export class UnihashModule {
 }

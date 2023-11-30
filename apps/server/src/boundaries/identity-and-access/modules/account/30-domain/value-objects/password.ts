@@ -1,7 +1,7 @@
-import {PasswordHashingAlgorithm}  from "../../../../../../common/libraries/security/hashing/password-hashing-algorithm.js"
-import {PhcString}                 from "../../../../../../common/libraries/security/hashing/types/phc-string.js"
-import {PasswordStrengthEstimator} from "../../../../../../common/libraries/security/password-estimation/password-strength-estimator.js"
-import {PasswordSecurityReport}    from "../../../../../../common/libraries/security/password-estimation/report/password-security-report.js"
+import {Pwnproc}                from "../../../../../../common/libraries/pwnproc/pwnproc.js"
+import {PasswordSecurityReport} from "../../../../../../common/libraries/pwnproc/report/password-security-report.js"
+import {PhcString}              from "../../../../../../common/libraries/unihash/types/phc-string.js"
+import {UnihashAlgorithm}       from "../../../../../../common/libraries/unihash/unihash-algorithm.js"
 
 
 
@@ -32,7 +32,7 @@ export class Password implements PasswordProperties {
 	}
 
 
-	static async fromPlain(plain: string, hashingService: PasswordHashingAlgorithm): Promise<Password> {
+	static async fromPlain(plain: string, hashingService: UnihashAlgorithm): Promise<Password> {
 		const hash = await hashingService.hash(plain)
 		return new Password({
 			hash: PhcString.deserialize(hash),
@@ -41,12 +41,12 @@ export class Password implements PasswordProperties {
 	}
 
 
-	public async compare(plain: string, hashingService: PasswordHashingAlgorithm): Promise<boolean> {
+	public async compare(plain: string, hashingService: UnihashAlgorithm): Promise<boolean> {
 		return hashingService.verify(this.hash.serialize(), plain)
 	}
 
 
-	public async generateReport(passwordStrengthEstimator: PasswordStrengthEstimator): Promise<PasswordSecurityReport> {
+	public async generateReport(passwordStrengthEstimator: Pwnproc): Promise<PasswordSecurityReport> {
 		if (!this.plain) {
 			throw new Error("Cannot generate report for a password that was not created from plain text.")
 		}

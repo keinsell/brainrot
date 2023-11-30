@@ -2,6 +2,6 @@ import {PasswordSecurityReport} from "./report/password-security-report.js"
 
 
 
-export abstract class PasswordStrengthEstimator {
+export abstract class Pwnproc {
 	abstract generateReport(password: string): Promise<PasswordSecurityReport>
 }

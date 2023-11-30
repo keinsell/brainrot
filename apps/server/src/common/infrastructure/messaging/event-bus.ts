@@ -1,5 +1,5 @@
-import {Event}   from "../../libraries/message/event.js"
-import {Message} from "../../libraries/message/message.js"
+import {Event}   from "../../_unknown_lib/message/event.js"
+import {Message} from "../../_unknown_lib/message/message.js"
 
 
 

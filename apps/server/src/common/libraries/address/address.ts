@@ -1,12 +1,13 @@
 import {AddressCity}       from "./address-city.js"
 import {AddressState}      from "./address-state.js"
 import {AddressStreetLine} from "./address-street-line.js"
+import {Coordinates}       from "./coordinates.js"
 import {CountryCode}       from "./country-code.js"
-import {Latitude}          from "./latitude.js"
-import {Longitude}         from "./longitude.js"
 import {PostalCode}        from "./postal-code.js"
 
 
+
+export type AddressString = string
 
 export type Address = {
 	street1: AddressStreetLine
@@ -15,6 +16,7 @@ export type Address = {
 	state?: AddressState
 	postalCode: PostalCode
 	country: CountryCode
-	latitude?: Latitude
-	longitude?: Longitude
+	coordinates?: Coordinates
+
+	stringify(): AddressString
 }
