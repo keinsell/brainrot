@@ -37,6 +37,9 @@ runs:
     - uses: docker/setup-buildx-action@v2
     - uses: pnpm/action-setup@v2
 
+    - run: apk --no-cache add curl
+      shell: bash
+
     - uses: actions/setup-node@v3
       name: ⚙️ Setup Node Version
       with:
