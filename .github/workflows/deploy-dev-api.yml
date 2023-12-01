@@ -1,0 +1,70 @@
+name: Deploy Development APIs
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - next
+      - main
+    paths:
+      - 'package.json'
+      - 'yarn.lock'
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'libs/shared/**'
+env:
+  TF_WORKSPACE: keinsell-dev
+
+jobs:
+  # TODO: Add testing
+  deploy_dev_api:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: arc-runner-set
+    timeout-minutes: 80
+    #    environment: Development
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup Repository
+        uses: ./.github/actions/setup-project
+
+  container-job:
+    runs-on: arc-runner-set
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+
+      nats:
+        image: nats
+        ports:
+          - 4222:4222
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup Repository
+        uses: ./.github/actions/setup-project
