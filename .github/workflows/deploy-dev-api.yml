@@ -19,6 +19,8 @@ on:
       - 'libs/shared/**'
 env:
   TF_WORKSPACE: keinsell-dev
+  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
+  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
 
 jobs:
   # TODO: Add testing
@@ -36,35 +38,49 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: ⚙️ Setup Repository
-        uses: ./.github/actions/setup-project
 
-  container-job:
-    runs-on: arc-runner-set
-
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-
-      postgres:
-        image: postgres
+      - name: ⚙️ Setup Runner
+        uses: ./.github/actions/setup-machine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-
-      nats:
-        image: nats
-        ports:
-          - 4222:4222
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
+
+#      - name: ⚙️ Import Secrets to PATH
+#        shell: bash
+#        run: |
+#          configu eval --store 'configu' --set development --schema 'get-started.cfgu.json' | configu export
+#        env:
+#          CONFIGU_ORG: ${{ env.CONFIGU_ORG }}
+#          CONFIGU_SECRET: ${{ env.CONFIGU_SECRET }}
+
+#  container-job:
+#    runs-on: arc-runner-set
+#
+#    services:
+#      redis:
+#        image: redis
+#        ports:
+#          - 6379:6379
+#
+#      postgres:
+#        image: postgres
+#        env:
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: postgres
+#          POSTGRES_DB: postgres
+#        ports:
+#          - 5432:5432
+#
+#      nats:
+#        image: nats
+#        ports:
+#          - 4222:4222
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - name: ⚙️ Setup Repository
+#        uses: ./.github/actions/setup-project
