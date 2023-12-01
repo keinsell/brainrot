@@ -1,12 +1,8 @@
-name: Setup repository
+name: Setup project
 
-description: Sets up the whole monorepo and install dependencies
+description: Sets up the project, installs dependencies, and links submodules
 
 inputs:
-  environment:
-    description: 'The environment to setup'
-    required: false
-    default: 'development'
   cypress_version:
     description: 'The version of cypress to install'
     required: false
@@ -24,38 +20,10 @@ outputs:
   cypress_cache_hit:
     description: 'Did cypress use binary cache'
     value: ${{ inputs.cypress_version != '' && steps.cache-cypress-binary-version.outputs.cache-hit || steps.cache-cypress-binary.outputs.cache-hit}}
-  docker_cache_hit:
-    description: 'Did docker use binary cache'
-    value: ${{ steps.docker-cache.outputs.cache-hit }}
 
 runs:
   using: composite
   steps:
-    - name: ⚙️ Install System Packages
-      run: sudo apt update && sudo apt-get install -y curl
-      shell: bash
-
-    - uses: ScribeMD/docker-cache@0.3.6
-      with:
-        key: docker-engine-${{ runner.os }}
-
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: ⚙️ Setup kernel for react native, increase watchers
-      shell: bash
-      run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-    - uses: docker/setup-qemu-action@v2
-    - uses: docker/setup-buildx-action@v2
-
-    - uses: pnpm/action-setup@v2
-    - uses: configu/setup-cli-action@v1
-
-    - uses: actions/setup-node@v3
-      name: ⚙️ Setup Node Version
-      with:
-        node-version: 'latest'
-        cache: 'pnpm'
-
     - name: Cache Cypress Binary For Version
       id: cache-cypress-binary-version
       if: ${{ inputs.cypress_version != '' }}
