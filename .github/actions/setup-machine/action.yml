@@ -11,11 +11,20 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: ⚙️ Disable initramfs update
+      shell: bash
+      run: sudo sed -i 's/yes/no/g' /etc/initramfs-tools/update-initramfs.conf
+
+    - name: ⚙️ Disable man-db update
+      shell: bash
+      run: sudo rm -f /var/lib/man-db/auto-update
+
     - name: ⚙️ Install System Packages
       run: sudo apt update && sudo apt-get install -y curl
       shell: bash
 
-    - uses: ScribeMD/docker-cache@0.3.6
+    - name: ⚙️ Restore Docker Cache
+      uses: ScribeMD/docker-cache@0.3.6
       with:
         key: docker-engine-${{ runner.os }}
 
