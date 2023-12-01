@@ -15,6 +15,13 @@ inputs:
     description: 'Should link submodules'
     required: false
     default: 'false'
+  CONFIGU_ORG:
+    description: 'Configu organization'
+    required: true
+  CONFIGU_TOKEN:
+    description: 'Configu token'
+    required: true
+
 outputs:
   cypress_cache_hit:
     description: 'Did cypress use binary cache'
@@ -45,8 +52,8 @@ runs:
 
     - uses: configu/setup-cli-action@v1.0.0
       with:
-        org: ${{ secrets.CONFIGU_ORG }}
-        token: ${{ secrets.CONFIGU_TOKEN }}
+        org: ${{ inputs.CONFIGU_ORG }}
+        token: ${{ inputs.CONFIGU_TOKEN }}
 
     - name: Cache Cypress Binary For Version
       id: cache-cypress-binary-version
