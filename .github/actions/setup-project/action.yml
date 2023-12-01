@@ -3,6 +3,10 @@ name: Setup repository
 description: Sets up the whole monorepo and install dependencies
 
 inputs:
+  environment:
+    description: 'The environment to setup'
+    required: false
+    default: 'development'
   cypress_version:
     description: 'The version of cypress to install'
     required: false
@@ -15,12 +19,6 @@ inputs:
     description: 'Should link submodules'
     required: false
     default: 'false'
-  CONFIGU_ORG:
-    description: 'Configu organization'
-    required: true
-  CONFIGU_TOKEN:
-    description: 'Configu token'
-    required: true
 
 outputs:
   cypress_cache_hit:
@@ -41,6 +39,9 @@ runs:
     - name: ⚙️ Set up buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: Setup Configu CLI
+      uses: configu/setup-cli-action@v1
+
     - name: ⚙️ Setup pnpm
       uses: pnpm/action-setup@v2
 
@@ -50,10 +51,10 @@ runs:
         node-version: 'latest'
         cache: 'pnpm'
 
-    - uses: configu/setup-cli-action@v1.0.0
-      with:
-        org: ${{ inputs.CONFIGU_ORG }}
-        token: ${{ inputs.CONFIGU_TOKEN }}
+    - name: ⚙️ Import Secrets to PATH
+      shell: bash
+      run: |
+        configu eval --store 'configu' --set ${{ inputs.environment }} --schema 'get-started.cfgu.json' | configu export
 
     - name: Cache Cypress Binary For Version
       id: cache-cypress-binary-version
