@@ -29,7 +29,7 @@ runs:
   using: composite
   steps:
     - name: ⚙️ Install System Packages
-      run: apt update && apt-get curl -y
+      run: sudo apt update && apt-get curl -y
       shell: bash
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
