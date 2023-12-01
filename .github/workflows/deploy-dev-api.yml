@@ -47,13 +47,13 @@ jobs:
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
 
-      - name: ⚙️ Import Secrets to PATH
-        shell: bash
-        run: |
-          configu eval --store 'configu' --set development --schema 'get-started.cfgu.json' | configu export
-        env:
-          CONFIGU_ORG: ${{ env.CONFIGU_ORG }}
-          CONFIGU_SECRET: ${{ env.CONFIGU_SECRET }}
+#      - name: ⚙️ Import Secrets to PATH
+#        shell: bash
+#        run: |
+#          configu eval --store 'configu' --set development --schema 'get-started.cfgu.json' | configu export
+#        env:
+#          CONFIGU_ORG: ${{ env.CONFIGU_ORG }}
+#          CONFIGU_SECRET: ${{ env.CONFIGU_SECRET }}
 
 #  container-job:
 #    runs-on: arc-runner-set
