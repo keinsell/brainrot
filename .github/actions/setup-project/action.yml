@@ -24,6 +24,9 @@ outputs:
   cypress_cache_hit:
     description: 'Did cypress use binary cache'
     value: ${{ inputs.cypress_version != '' && steps.cache-cypress-binary-version.outputs.cache-hit || steps.cache-cypress-binary.outputs.cache-hit}}
+  docker_cache_hit:
+    description: 'Did docker use binary cache'
+    value: ${{ steps.docker-cache.outputs.cache-hit }}
 
 runs:
   using: composite
@@ -34,7 +37,7 @@ runs:
 
     - uses: ScribeMD/docker-cache@0.3.6
       with:
-        key: docker-${{ runner.os }}-${{ hashFiles(paths) }}
+        key: docker-engine-${{ runner.os }}
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: ⚙️ Setup kernel for react native, increase watchers
