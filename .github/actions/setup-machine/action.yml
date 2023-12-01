@@ -11,10 +11,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: ⚙️ Disable initramfs update
-      shell: bash
-      run: sudo sed -i 's/yes/no/g' /etc/initramfs-tools/update-initramfs.conf
-
     - name: ⚙️ Disable man-db update
       shell: bash
       run: sudo rm -f /var/lib/man-db/auto-update
