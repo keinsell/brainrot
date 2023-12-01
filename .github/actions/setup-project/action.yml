@@ -43,6 +43,11 @@ runs:
         node-version: 'latest'
         cache: 'pnpm'
 
+    - uses: configu/setup-cli-action@v1.0.0
+      with:
+        org: ${{ secrets.CONFIGU_ORG }}
+        token: ${{ secrets.CONFIGU_TOKEN }}
+
     - name: Cache Cypress Binary For Version
       id: cache-cypress-binary-version
       if: ${{ inputs.cypress_version != '' }}
