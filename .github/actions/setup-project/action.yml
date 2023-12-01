@@ -28,6 +28,10 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: ⚙️ Install System Packages
+      run: apt update && apt-get curl -y
+      shell: bash
+
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: ⚙️ Setup kernel for react native, increase watchers
       shell: bash
@@ -36,9 +40,12 @@ runs:
     - uses: docker/setup-qemu-action@v2
     - uses: docker/setup-buildx-action@v2
     - uses: pnpm/action-setup@v2
+    - uses: configu/setup-cli-action@v1
 
-    - run: apt-get --no-cache add curl
+    - name: ⚙️ Import Secrets to PATH
       shell: bash
+      run: |
+        configu eval --store 'configu' --set ${{ inputs.environment }} --schema 'get-started.cfgu.json' | configu export
 
     - uses: actions/setup-node@v3
       name: ⚙️ Setup Node Version

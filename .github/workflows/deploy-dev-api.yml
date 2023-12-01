@@ -40,11 +40,6 @@ jobs:
           fetch-depth: 0
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
-      - uses: configu/setup-cli-action@v1
-      - name: ⚙️ Import Secrets to PATH
-        shell: bash
-        run: |
-          configu eval --store 'configu' --set ${{ inputs.environment }} --schema 'get-started.cfgu.json' | configu export
 
   container-job:
     runs-on: arc-runner-set
