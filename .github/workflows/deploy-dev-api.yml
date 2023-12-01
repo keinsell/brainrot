@@ -4,9 +4,6 @@ name: Deploy Development APIs
 # events but only for the master branch
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - next
@@ -44,8 +41,18 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
+
+      - name: 🐳 Publish Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: apps/server
+          file: apps/server/build/Dockerfile
+          push: true
+          tags: keinsell/methylphenidate-server:latest
+
 
 #      - name: ⚙️ Import Secrets to PATH
 #        shell: bash
