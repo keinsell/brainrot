@@ -42,7 +42,7 @@ jobs:
       - name: ⚙️ Setup Runner
         uses: ./.github/actions/setup-machine
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ variables.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: ⚙️ Setup Repository
         uses: ./.github/actions/setup-project
