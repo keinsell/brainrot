@@ -1,0 +1,19 @@
+name: Build TypeScript Application
+
+description: Creates a docker image for a TypeScript application
+
+runs:
+  using: composite
+  steps:
+    - name: 🐳 Build Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: apps/server
+        file: apps/server/build/Dockerfile
+        tags: keinsell/methylphenidate-server:${{ github.sha }}
+
+    - name: 🐳 Publish Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        tags: keinsell/methylphenidate-server:${{ github.sha }}
+        push: ${{ inputs.push }}

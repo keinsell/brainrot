@@ -31,6 +31,23 @@ jobs:
       packages: write
       deployments: write
       id-token: write
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+      nats:
+        image: nats
+        ports:
+          - 4222:4222
     steps:
       - uses: actions/checkout@v3
         with:
@@ -51,8 +68,11 @@ jobs:
           context: apps/server
           file: apps/server/build/Dockerfile
           push: true
-          tags: keinsell/methylphenidate-server:latest
+          tags: keinsell/methylphenidate-server:${{ github.sha }}
 
+      # TODO: Deploy Terraform
+      # TODO: Deploy Pulumi
+      # TODO: Create Sentry Version
 
 #      - name: ⚙️ Import Secrets to PATH
 #        shell: bash
@@ -61,33 +81,3 @@ jobs:
 #        env:
 #          CONFIGU_ORG: ${{ env.CONFIGU_ORG }}
 #          CONFIGU_SECRET: ${{ env.CONFIGU_SECRET }}
-
-#  container-job:
-#    runs-on: arc-runner-set
-#
-#    services:
-#      redis:
-#        image: redis
-#        ports:
-#          - 6379:6379
-#
-#      postgres:
-#        image: postgres
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_DB: postgres
-#        ports:
-#          - 5432:5432
-#
-#      nats:
-#        image: nats
-#        ports:
-#          - 4222:4222
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#      - name: ⚙️ Setup Repository
-#        uses: ./.github/actions/setup-project
