@@ -1,4 +1,5 @@
-import {Blob} from "../model/blob.js"
+import {NotImplementedException} from "@nestjs/common"
+import {Blob}                    from "../model/blob.js"
 
 
 
@@ -14,7 +15,7 @@ export class BlobberConverter {
 
 
 	toStream(): Promise<NodeJS.ReadableStream> {
-		return Promise.resolve(new Readable())
+		throw new NotImplementedException()
 	}
 
 
