@@ -12,3 +12,9 @@ root of the repository that can be used to run these services locally.
 - `preview` - Preview environment
 - `canary` - Canary environment
 - `production` - Production environment
+
+## ...
+
+- `redis`
+- `postgres`
+- `minio`

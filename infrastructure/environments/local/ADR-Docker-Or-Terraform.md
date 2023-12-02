@@ -1,0 +1,1 @@
+# Should Local Infrastructure be managed by Docker or Terraform?
