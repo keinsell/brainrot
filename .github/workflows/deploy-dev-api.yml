@@ -68,17 +68,12 @@ jobs:
           context: apps/server
           file: apps/server/build/Dockerfile
           push: true
-          tags: keinsell/methylphenidate-server:${{ github.sha }}
+          tags: |
+            keinsell/methylphenidate-server:${{ github.sha }}
+            ${{ github.event_name != 'pull_request' && 'keinsell/methylphenidate-server:dev' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
       # TODO: Deploy Terraform
       # TODO: Deploy Pulumi
       # TODO: Create Sentry Version
-
-#      - name: ⚙️ Import Secrets to PATH
-#        shell: bash
-#        run: |
-#          configu eval --store 'configu' --set development --schema 'get-started.cfgu.json' | configu export
-#        env:
-#          CONFIGU_ORG: ${{ env.CONFIGU_ORG }}
-#          CONFIGU_SECRET: ${{ env.CONFIGU_SECRET }}
