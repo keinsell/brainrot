@@ -176,3 +176,16 @@ model Checkout {
   Payment   Payment  @relation(fields: [paymentId], references: [id])
   User      User     @relation(fields: [userId], references: [id])
 }
+
+model Blob {
+  id       String @id @default(cuid())
+  // --------------------------------------------------
+  checksum String
+
+  type      String
+  size      Int
+  url       String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
