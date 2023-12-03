@@ -69,7 +69,8 @@ jobs:
           file: apps/server/build/Dockerfile
           push: true
           tags: keinsell/methylphenidate-server:${{ github.sha }}
-
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       # TODO: Deploy Terraform
       # TODO: Deploy Pulumi
       # TODO: Create Sentry Version
