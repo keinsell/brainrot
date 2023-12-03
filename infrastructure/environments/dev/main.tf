@@ -14,42 +14,42 @@ terraform {
       source  = "hashicorp/random"
       version = "3.4.3"
     }
+    neon = {
+      source  = "terraform-community-providers/neon"
+      version = "0.1.5"
+    }
   }
   required_version = ">= 1.0"
 }
 
-
-resource "random_pet" "cluster" {}
-resource "random_pet" "pool" {}
 resource "random_pet" "database_name" {}
 
-resource "scaleway_account_project" "project" {
-  name = "methylphenidate"
+resource "neon_project" "default" {
+  name       = var.project_name
+  region_id  = "aws-us-west-2"
+  pg_version = 16
+  branch     = {
+    endpoint = {
+      suspend_timeout = 0
+    }
+    name = "main"
+  }
 }
 
-resource "scaleway_k8s_cluster" "cluster" {
-  project_id                  = var.scaleway_project
-  name                        = random_pet.cluster.id
-  version                     = "1.24.3"
-  cni                         = "cilium"
-  delete_additional_resources = true
-
-  depends_on = [scaleway_account_project.project]
+resource "neon_role" "db_owner" {
+  name       = "owner"
+  branch_id  = neon_project.default.branch.id
+  project_id = neon_project.default.id
 }
 
-resource "scaleway_rdb_database" "postgres" {
-  instance_id = ""
-  name        = ""
-  depends_on  = [scaleway_account_project.project]
-}
+resource "neon_database" "postgres" {
+  name       = random_pet.database_name.id
+  owner_name = neon_role.db_owner.name
+  project_id = neon_project.default.id
+  branch_id  = neon_project.default.branch.id
 
-resource "scaleway_k8s_pool" "pool" {
-  depends_on          = [scaleway_k8s_cluster.cluster]
-  cluster_id          = scaleway_k8s_cluster.cluster.id
-  region              = var.scaleway_region
-  name                = random_pet.pool.id
-  node_type           = "PLAY2-NANO"
-  size                = 1
-  zone                = var.scaleway_zone
-  wait_for_pool_ready = true
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+  ]
 }

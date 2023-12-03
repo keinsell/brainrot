@@ -1,0 +1,12 @@
+{
+  "name": "infrastructure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "init": "terraform init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
