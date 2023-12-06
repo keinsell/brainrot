@@ -1,5 +1,0 @@
-# KeeID
-
-```
-<namespace>_KUID
-```
