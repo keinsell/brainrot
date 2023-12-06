@@ -1,6 +1,6 @@
-import {PaymentOrchestrator} from "@boundary/billing/domain/services/payment-orchestrator.js"
-import {PaymentController}   from "@boundary/billing/presentation/payment-controller.js"
 import {Module}              from "@nestjs/common"
+import {PaymentOrchestrator} from "../../domain/payment/services/payment-orchestrator.js"
+import {PaymentController}   from "../../modules/payment/payment-controller.js"
 
 
 

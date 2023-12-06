@@ -1,4 +1,4 @@
-import {ShippingAddress} from "@boundary/identity-and-access/modules/profile/domain/value-objects/shipping-address.js"
+import {ShippingAddress} from "../profile/domain/value-objects/shipping-address.js"
 
 
 

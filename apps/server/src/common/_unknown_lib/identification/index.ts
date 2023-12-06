@@ -1,7 +1,7 @@
 export class Identification {}
 
 
-export type TypeID<T extends string = string> = `${T}_${string}` | string;
+export type NSUID<T extends string = string> = `${T}_${string}` | string;
 export type CUID = string;
 
 export type UUIDV4 = `${string}-${string}-${string}-${string}-${string}`;
@@ -17,7 +17,7 @@ export type UniqueIdentifier =
 	string
 	| number
 	| bigint
-	| TypeID
+	| NSUID
 	| CUID
 	| UUID
 	| KSUID;
