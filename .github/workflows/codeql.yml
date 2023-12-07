@@ -15,7 +15,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: arc-runner-set
+    runs-on: methylphenidate-runner-set
 
     permissions:
       actions: read

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INSTALLATION_NAME="arc-runner-set"
-NAMESPACE="arc-runners"
+INSTALLATION_NAME="methylphenidate-runner-set"
+NAMESPACE="methylphenidate-runners"
 GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
 
 # TODO: Use Configu
@@ -34,7 +34,7 @@ helm upgrade "${INSTALLATION_NAME}" \
     --namespace "${NAMESPACE}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-    --set containerMode.type=kubernetes \
+    --set containerMode.type=dind \
     --set minRunners=3 \
     --set maxRunners=10 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
