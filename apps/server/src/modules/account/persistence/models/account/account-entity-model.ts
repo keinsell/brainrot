@@ -1,8 +1,8 @@
-import {DbContextModel} from "../../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {PhcString}      from "../../../../../../common/libraries/unihash/types/phc-string.js"
-import {Account}        from "../../../../../../domain/account/account.js"
-import {AccountStatus}  from "../../../../../../domain/account/value-objects/account-status.js"
-import {Password}       from "../../../../../../domain/account/value-objects/password.js"
+import {DbContextModel} from "../../../../../common/infrastructure/storage/database/db-context-model.js"
+import {PhcString}     from "../../../../../common/libraries/unihash/types/phc-string.js"
+import {Account}       from "../../../domain/account.js"
+import {AccountStatus} from "../../../domain/value-objects/account-status.js"
+import {Password}      from "../../../domain/value-objects/password.js"
 
 
 

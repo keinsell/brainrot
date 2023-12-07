@@ -16,7 +16,7 @@ export class Authenticate {
 	 */
 	@ApiProperty({
 		name:        "username",
-		description: "The account's username",
+		description: "The domain's username",
 		example:     AccountFixture.username,
 		examples:    [
 			faker.internet.userName(), faker.internet.userName(),
@@ -31,7 +31,7 @@ export class Authenticate {
 	 */
 	@ApiProperty({
 		name:        "password",
-		description: "The account's password",
+		description: "The domain's password",
 		example:     AccountFixture.password,
 		examples:    [
 			faker.internet.password(), faker.internet.password(),

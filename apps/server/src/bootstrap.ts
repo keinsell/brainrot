@@ -12,7 +12,7 @@ import {ApplicationConfiguration}      from "./configs/application-configuration
 import {env}                           from "./configs/env.js"
 import {StaticFeatureFlags}            from "./configs/static-feature-flags.js"
 import {Container}                     from "./container.js"
-import {AccountSeeder}                 from "./modules/account/40-infrastructure/account-seeder.js"
+import {AccountSeeder}                 from "./modules/account/persistence/account-seeder.js"
 import {AccountModule}                 from "./modules/account/account.module.js"
 import {CartSeeder}                    from "./modules/cart/cart-seeder.js"
 import {ProductSeeder}                 from "./modules/product/product-seeder.js"
@@ -120,4 +120,3 @@ export async function bootstrap() {
 
 	return app;
 }
-

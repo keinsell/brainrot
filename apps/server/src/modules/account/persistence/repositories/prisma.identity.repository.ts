@@ -1,18 +1,18 @@
 import {Injectable, Logger, NotImplementedException} from "@nestjs/common"
-import {PrismaService}                               from "../../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
-import {DbContextModel}                              from "../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {Account}                                     from "../../../../../domain/account/account.js"
-import {AccountRepository}                           from "../../../../../domain/account/repositories/account-repository.js"
-import {Email}                                       from "../../../../../domain/account/value-objects/email.js"
-import {Username}                                    from "../../../../../domain/account/value-objects/username.js"
-import {AccountCreateModel}                          from "../models/account/account-create-model.js"
-import {AccountEntityModel}                          from "../models/account/account-entity-model.js"
+import {PrismaService}                               from "../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {DbContextModel}     from "../../../../common/infrastructure/storage/database/db-context-model.js"
+import {Account}            from "../../domain/account.js"
+import {AccountRepository}  from "../../domain/repositories/account-repository.js"
+import {Email}              from "../../domain/value-objects/email.js"
+import {Username}           from "../../domain/value-objects/username.js"
+import {AccountCreateModel} from "../models/account/account-create-model.js"
+import {AccountEntityModel} from "../models/account/account-entity-model.js"
 
 
 
 @Injectable()
 export class PrismaIdentityRepository extends AccountRepository {
-	private logger: Logger = new Logger("account:repository:prisma")
+	private logger: Logger = new Logger("domain:repository:prisma")
 
 
 	constructor(private prismaService: PrismaService) {
@@ -20,14 +20,14 @@ export class PrismaIdentityRepository extends AccountRepository {
 	}
 
 
-	public async findByEmail(email: Email): Promise<Account | undefined> {
+	public async findByEmail(email: string): Promise<Account | undefined> {
 		const maybeAccount = await this.prismaService.account.findFirst({
 			where: {
-				email: email.address,
+				email: email,
 			},
 		})
 
-		this.logger.verbose(`findByEmail(${email.address}) => ${JSON.stringify(maybeAccount)}`)
+		this.logger.verbose(`findByEmail(${email}) => ${JSON.stringify(maybeAccount)}`)
 
 		if (!maybeAccount) {
 			return undefined
@@ -66,7 +66,7 @@ export class PrismaIdentityRepository extends AccountRepository {
 
 
 	public async findByUsernameFields(username: string): Promise<Account | undefined> {
-		// Find account by provided username, try to fit it into the username and email fields
+		// Find domain by provided username, try to fit it into the username and email fields
 		let maybeAccount: DbContextModel.Account.Entity | null = null
 
 		try {

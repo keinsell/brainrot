@@ -1,6 +1,10 @@
-import {AggregateRoot} from "../../../../common/libraries/domain/aggregate.js"
-import {AccountId}     from "../../../account/10-application/shared-kernel/account-id.js"
-import {SessionEvent}  from "../events/session-event.js"
+import {AggregateRoot}         from "../../../../common/libraries/domain/aggregate.js"
+import {AccountId}             from "../../../account/10-application/shared-kernel/account-id.js"
+import {SessionEvent}          from "../events/session-event.js"
+import {IpAddress}             from "../value-objects/ip-address.js"
+import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"
+import {SessionStatus}         from "../value-objects/session-status.js"
+import {UserAgent}             from "../value-objects/user-agent.js"
 
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or email address. This is crucial for associating user-specific data and permissions with the session.
 //
@@ -21,31 +25,44 @@ import {SessionEvent}  from "../events/session-event.js"
 //	Security Information: Information related to session security, such as IP address, user agent, and other data used for security checks and fraud prevention, may be included.
 
 export interface SessionProps {
+	/** unique identifier for the session */
 	id: string
+	/** The timestamp when the session started */
+	startTime: Date
+	/** The timestamp when the session ended. */
+	endTime: Date | null
 	subject: AccountId;
-	jti: string;
-	expiresAt: Date;
-	userAgent?: string;
-	ipAddress?: string;
+	expiresAt: SessionExpirationDate;
+	userAgent?: UserAgent;
+	ipAddress?: IpAddress;
+	location?: string;
+	device?: string;
+	status: SessionStatus
 }
 
 
 export class Session extends AggregateRoot implements SessionProps {
 
 	public expiresAt: Date
-	public ipAddress: string
-	public jti: string
+	public ipAddress: IpAddress
 	public subject: AccountId
 	public userAgent: string
+	public device: string
+	public endTime: Date | null
+	public location: string
+	public startTime: Date
+	public status: SessionStatus
 
 
 	constructor(props: SessionProps) {
 		super(props)
 		this.expiresAt = props.expiresAt
 		this.ipAddress = props.ipAddress
-		this.jti       = props.jti
 		this.subject   = props.subject
 		this.userAgent = props.userAgent
+		this.endTime   = props.endTime;
+		this.location  = props.location;
+		this.device    = props.device;
 	}
 
 
@@ -74,4 +91,3 @@ export class Session extends AggregateRoot implements SessionProps {
 		return this
 	}
 }
-

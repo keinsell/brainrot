@@ -1,7 +1,7 @@
-import {Pwnproc}                from "../../../common/libraries/pwnproc/pwnproc.js"
-import {PasswordSecurityReport} from "../../../common/libraries/pwnproc/report/password-security-report.js"
-import {PhcString}              from "../../../common/libraries/unihash/types/phc-string.js"
-import {UnihashAlgorithm}       from "../../../common/libraries/unihash/unihash-algorithm.js"
+import {Pwnproc}                from "../../../../common/libraries/pwnproc/pwnproc.js"
+import {PasswordSecurityReport} from "../../../../common/libraries/pwnproc/report/password-security-report.js"
+import {PhcString}              from "../../../../common/libraries/unihash/types/phc-string.js"
+import {UnihashAlgorithm}       from "../../../../common/libraries/unihash/unihash-algorithm.js"
 
 
 

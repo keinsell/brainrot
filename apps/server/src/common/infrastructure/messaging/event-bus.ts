@@ -1,15 +1,20 @@
+import {Logger}  from "@nestjs/common"
 import {Event}   from "../../_unknown_lib/message/event.js"
 import {Message} from "../../_unknown_lib/message/message.js"
 
 
 
 export class EventBus {
-	async publish(event: any) {
-		console.log(event)
+	private logger: Logger = new Logger("event_bus")
+
+
+	async publish(event: Event) {
+		this.logger.verbose(`Publishing ${event.constructor.name} to namespace ${event.namespace} (${event.id}) => ${JSON.stringify(event)}`)
+		this.logger.debug(`Published ${event.id} to ${event.namespace}`)
 	}
 
 
-	async publishAll(events: any[]) {
+	async publishAll(events: Event[]) {
 		for (const event of events) {
 			await this.publish(event)
 		}
@@ -21,9 +26,7 @@ export abstract class EventBusBase {
 	private messageBus: MessageBusBase
 
 
-	constructor(
-		messageBus: MessageBusBase,
-	) {
+	constructor(messageBus: MessageBusBase) {
 		this.messageBus = messageBus
 	}
 

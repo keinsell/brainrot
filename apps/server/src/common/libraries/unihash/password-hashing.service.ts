@@ -7,7 +7,7 @@ import {PhcString, SerializedPhcString}      from "./types/phc-string.js"
 
 
 @Injectable()
-export class Unihash {
+export class PasswordHashing {
 	private readonly logger: Logger                                       = new Logger("security:hashing")
 	private readonly algorithms: Map<KdfAlgorithm, KeyDerivationFunction> = new Map()
 

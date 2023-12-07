@@ -1,0 +1,1 @@
+export type SessionExpirationDate = Date

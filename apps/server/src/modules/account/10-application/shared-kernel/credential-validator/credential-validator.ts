@@ -1,22 +1,19 @@
 import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {err, ok, Result}                                      from "neverthrow"
 import {EventBus}                                             from "../../../../../common/infrastructure/messaging/event-bus.js"
-import {Unihash}                                              from "../../../../../common/libraries/unihash/unihash.js"
-import {Account}                                              from "../../../../../domain/account/account.js"
-import {AccountRepository}                                    from "../../../../../domain/account/repositories/account-repository.js"
+import {PasswordHashing}                                      from "../../../../../common/libraries/unihash/password-hashing.service.js"
+import {Account}                                              from "../../../domain/account.js"
+import {AccountRepository}                                    from "../../../domain/repositories/account-repository.js"
 
 
 
 /**
  * This class is responsible for validating credentials. This is exposed by shared-kernel and further used by
- * authentication to encapsulate the logic of validating credentials as authentication do not have access to account itself.
+ * authentication to encapsulate the logic of validating credentials as authentication do not have access to domain itself.
  */
 @Injectable()
 export class CredentialValidator {
-	constructor(
-		private repository: AccountRepository,
-		private hashingService: Unihash,
-	) {}
+	constructor(private repository: AccountRepository, private hashingService: PasswordHashing) {}
 
 
 	/**
@@ -27,7 +24,7 @@ export class CredentialValidator {
 	 * @returns {Promise<any>} - A promise that resolves with the validation result.
 	 */
 	public async validateCredentials(username: string, password: string): Promise<Result<Account, NotFoundException | UnauthorizedException>> {
-		// Find the account by any username field (email, username)
+		// Find the domain by any username field (email, username)
 		const user = await this.repository.findByUsernameFields(username)
 
 		if (!user) {
@@ -44,7 +41,7 @@ export class CredentialValidator {
 
 		user.authenticate()
 
-		new EventBus().publish(user.getUncommittedEvents())
+		new EventBus().publishAll(user.getUncommittedEvents() as any)
 
 		return ok(user)
 	}

@@ -9,7 +9,7 @@ export class BasePolicy {
 	merge(...args: Result<boolean, any>[]): Result<boolean, any> {
 		for (const result of args) {
 			if (result.isErr()) {
-				return err(result._unsafeUnwrapErr())
+				return err(result.error)
 			}
 		}
 		return ok(true)

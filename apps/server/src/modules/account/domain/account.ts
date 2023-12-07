@@ -1,4 +1,4 @@
-import {AggregateRoot, AggregateRootProperties} from "../../common/libraries/domain/aggregate.js"
+import {AggregateRoot, AggregateRootProperties} from "../../../common/libraries/domain/aggregate.js"
 import {AccountEvent}                           from "./events/account-event.js"
 import {AccountStatus}                          from "./value-objects/account-status.js"
 import {Email}                                  from "./value-objects/email.js"
@@ -79,7 +79,9 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	public register(): Account {
-		this.appendEvent(new AccountEvent.Registred(this))
+		this.appendEvent(new AccountEvent.Registred({
+			accountId: this.id,
+		}))
 		return this;
 	}
 

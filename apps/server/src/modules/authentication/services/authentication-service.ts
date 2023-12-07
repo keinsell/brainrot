@@ -6,7 +6,9 @@ import {CredentialValidator}                               from "../../account/1
 import {Session}                                           from "../domain/entities/session.js"
 import {SessionRepository}                                 from "../domain/repositories/session-repository.js"
 import {AccessToken}                                       from "../domain/value-objects/access-token.js"
+import {IpAddress}                                         from "../domain/value-objects/ip-address.js"
 import {RefreshToken}                                      from "../domain/value-objects/refresh-token.js"
+import {SessionStatus}                                     from "../domain/value-objects/session-status.js"
 import {TokenManagement}                                   from "./token-management.js"
 
 
@@ -26,15 +28,13 @@ export class AuthenticationService {
 	 * @param {string} [metadata.userAgent] - The user agent of the client.
 	 * @param {string} [metadata.ipAddress] - The IP address of the client.
 	 * @returns {Promise<Result<{accountId: string, accessToken: string, refreshToken: string}, any>>} - The result of the authentication.
-	 *   If successful, it contains the account ID, access token, and refresh token.
+	 *   If successful, it contains the domain ID, access token, and refresh token.
 	 *   If unsuccessful, it contains the error.
 	 */
 	public async authenticate(username: string, password: string, metadata?: {
-		userAgent?: string,
-		ipAddress?: string,
+		userAgent?: string, ipAddress?: string,
 	}): Promise<Result<{
-		accountId: string,
-		accessToken: string, refreshToken: string,
+		accountId: string, accessToken: string, refreshToken: string,
 	}, NotFoundException | ForbiddenException>> {
 		const isValid = await this.credentialValidator.validateCredentials(username, password)
 
@@ -52,33 +52,37 @@ export class AuthenticationService {
 			},
 		})
 
-		const accessToken  = await this.tokenManagement.signAccessToken(new AccessToken(jwtPayload))
-		const refreshToken = await this.tokenManagement.signRefreshToken(new RefreshToken(jwtPayload))
+		const accessToken  = new AccessToken(jwtPayload)
+		const refreshToken = new RefreshToken(jwtPayload)
+
+		const signedAccessToken  = await this.tokenManagement.signAccessToken(accessToken)
+		const signedRefreshToken = await this.tokenManagement.signRefreshToken(refreshToken)
 
 		const session = Session.CreateSession({
+			device:    "",
+			location:  "",
+			status:    SessionStatus.ACTIVE,
 			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-			ipAddress: metadata?.ipAddress,
+			ipAddress: metadata?.ipAddress as IpAddress,
 			userAgent: metadata?.userAgent,
 			subject:   account.id,
-			jti:       jwtPayload.jti,
+			startTime: new Date(),
+			endTime:   null,
 			id:        randomUUID(),
 		})
 
-		await new EventBus().publish(session.getUncommittedEvents())
-
-		// TODO: Not implemented yet
+		await new EventBus().publishAll(session.getUncommittedEvents() as any)
 
 		try {
 			await this.sessionRepository.save(session)
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e)
 		}
 
 		return ok({
 			accountId:    account.id,
-			accessToken:  accessToken,
-			refreshToken: refreshToken,
+			accessToken:  signedAccessToken,
+			refreshToken: signedRefreshToken,
 		})
 	}
 

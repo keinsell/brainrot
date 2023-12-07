@@ -10,9 +10,9 @@ export interface AggregateRootProperties {
 
 
 // TODO: https://linear.app/keinsell/issue/PROD-93/add-aggregate-root-base-class
-export class AggregateRoot<T extends Object = {}>
-	implements AggregateRootProperties {
+export class AggregateRoot<T extends Object = {}> implements AggregateRootProperties {
 	public readonly createdAt: Date
+	public updatedAt: Date
 	/**
 	 * Array that holds events data.
 	 *
@@ -27,9 +27,7 @@ export class AggregateRoot<T extends Object = {}>
 	private _version: number    = 1
 
 
-	constructor(
-		aggregateBaseProperties: Partial<AggregateRootProperties>,
-	) {
+	constructor(aggregateBaseProperties: Partial<AggregateRootProperties>) {
 		this._id       = aggregateBaseProperties.id
 		this.createdAt = new Date()
 		this.updatedAt = new Date()
@@ -38,6 +36,9 @@ export class AggregateRoot<T extends Object = {}>
 
 	private _id: any | undefined;
 
+
+	//private _stateMachine: StateMachine<T>
+
 	get id(): any | undefined {
 		if (!this._id) {
 			return randomUUID()
@@ -45,11 +46,6 @@ export class AggregateRoot<T extends Object = {}>
 
 		return this._id
 	}
-
-
-	//private _stateMachine: StateMachine<T>
-
-	public updatedAt: Date
 
 
 	/**

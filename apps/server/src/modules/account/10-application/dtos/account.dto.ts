@@ -15,7 +15,7 @@ export class AccountDto {
 	 */
 	@ApiProperty({
 		name:        "id",
-		description: "The account's unique identifier",
+		description: "The domain's unique identifier",
 		example:     "",
 		required:    true,
 	}) id: string;

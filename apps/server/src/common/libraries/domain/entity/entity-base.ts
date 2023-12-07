@@ -17,7 +17,7 @@ export class EntityBase {
 	 *
 	 * @type {Array<any>}
 	 */
-	private _events: Array<{ state: "PENDING" | "COMMITTED", event: any }> = []
+	private _events: Array<any> = []
 
 
 	/** Commits changes done on specific entity to the repository and publishes changes to other modules. */
@@ -49,7 +49,7 @@ export class EntityBase {
 		this._events = []
 
 		// Filter snapshot to only include pending events.
-		return eventsSnapshot.filter((event) => event.state === "PENDING")
+		return eventsSnapshot;
 	}
 
 

@@ -1,5 +1,5 @@
-import {DbContextModel} from "../../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {Account}        from '../../../../../../domain/account/account.js';
+import {DbContextModel} from "../../../../../common/infrastructure/storage/database/db-context-model.js"
+import {Account}        from '../../../domain/account.js';
 
 
 

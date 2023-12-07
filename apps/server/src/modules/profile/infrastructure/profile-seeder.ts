@@ -39,14 +39,14 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 
 
 	public async fabricate(): Promise<Prisma.UserCreateInput> {
-		// Find account entity without a profile entity to gain account ID
+		// Find domain entity without a profile entity to gain domain ID
 		const account = await this.prismaService.account.findFirst({
 			where: {
 				id: {notIn: this.excludedAccountIds},
 			},
 		})
 
-		if (!account) throw new Error("No account found without a profile entity")
+		if (!account) throw new Error("No domain found without a profile entity")
 
 		if (this.excludedAccountIds.includes(account.id)) {
 			return this.fabricate()

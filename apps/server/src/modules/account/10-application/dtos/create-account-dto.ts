@@ -9,7 +9,7 @@ import {AccountFixture} from "../../../../utilities/fixtures/account-fixture.js"
 	name:        "CreateAccount",
 	description: "asdasd",
 })
-export class CreateAccount {
+export class CreateAccountDto {
 	/**
 	 * Represents the unique identifier of an entity.
 	 *
@@ -17,30 +17,33 @@ export class CreateAccount {
 	 */
 	@ApiProperty({
 		name:        "id",
-		description: "The account's unique identifier",
+		description: "The domain's unique identifier",
 		example:     "",
 		required:    false,
 	}) id?: string;
+
 	/**
 	 * Represents an email address.
 	 * @typedef {string} email
 	 */
 	@ApiProperty({
 		name:        "email",
-		description: "The account's email address",
+		description: "The domain's email address",
 		example:     AccountFixture.email,
 		examples:    AccountFixture._examples.emails,
 	}) email: string;
+
 	/**
-	 * Indicates whether the email associated with a user account has been verified.
+	 * Indicates whether the email associated with a user domain has been verified.
 	 *
 	 * @type {boolean}
 	 */
 	@ApiProperty({
 		name:        "emailVerified",
-		description: "Indicates whether the email associated with a user account has been verified",
+		description: "Indicates whether the email associated with a user domain has been verified",
 		example:     faker.datatype.boolean(),
 	}) emailVerified: boolean;
+
 	/**
 	 * The password variable is a string that represents a user's password.
 	 *
@@ -48,17 +51,18 @@ export class CreateAccount {
 	 */
 	@ApiProperty({
 		name:        "password",
-		description: "The account's password",
+		description: "The domain's password",
 		example:     AccountFixture.password,
 		examples:    AccountFixture._examples.passwords,
 	}) password: string;
+
 	/**
 	 * Represents a username.
 	 * @typedef {string} username
 	 */
 	@ApiProperty({
 		name:        "username",
-		description: "The account's username",
+		description: "The domain's username",
 		example:     AccountFixture.username,
 		examples:    AccountFixture._examples.usernames,
 	}) username: string;

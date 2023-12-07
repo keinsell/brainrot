@@ -3,10 +3,10 @@ import {ApiOperation}           from "@nestjs/swagger"
 import {readFileSync}           from 'node:fs'
 import {dirname}                from "path"
 import {fileURLToPath}          from "url"
-import {CreateAccount}          from "../10-application/commands/create-account.js"
-import {RegisterAccount}        from "../10-application/commands/register-account.js"
 import {AccountDto}             from "../10-application/dtos/account.dto.js"
-import {AccountService}         from "../20-service/account.service.js"
+import {CreateAccountDto}       from "../10-application/dtos/create-account-dto.js"
+import {RegisterAccountDto}     from "../10-application/dtos/register-account-dto.js"
+import {AccountService}         from "../domain/services/account-service.js"
 
 
 
@@ -19,8 +19,7 @@ function getOperationDocumentation(operation: string): string {
 	try {
 		return readFileSync(`${operationDirectory}/${operation}.md`, "utf8")
 		//return import(`${operationDirectory}/${operation}.md`) as string
-	}
-	catch (e) {
+	} catch (e) {
 		return ''
 	}
 
@@ -37,10 +36,12 @@ export class AccountController {
 		summary:     "Register account",
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
-	})
-	@Post()
-	async register(@Body() registerAccountBody: RegisterAccount): Promise<AccountDto> {
-		const body = registerAccountBody as CreateAccount
+	}) @Post()
+	async register(@Body() registerAccountBody: RegisterAccountDto): Promise<AccountDto> {
+		const body = registerAccountBody as CreateAccountDto
+
+		// TODO: Normalize Email
+		// TODO: Normalize Username
 
 		const result = await this.service.register({
 			username: body.username,
@@ -58,6 +59,10 @@ export class AccountController {
 		tags:        ['account'],
 	}) @Post('forgot-password')
 	async forgotPassword(): Promise<string> {
+		// TODO: Generate Password Reset Request
+		// TODO: Save PasswordResetRequest in cache for specific user
+		// TODO: Send verification email for domain
+		// TODO: Perform such actions only if domain is verified.
 		return "forgot-password"
 	}
 
@@ -103,12 +108,12 @@ export class AccountController {
 
 
 	@ApiOperation({
-		operationId: "delete-account",
-		description: "Deletes the user's account",
+		operationId: "delete-domain",
+		description: "Deletes the user's domain",
 		tags:        ['account'],
-	}) @Post('delete-account')
+	}) @Post('delete-domain')
 	async deleteAccount(): Promise<string> {
-		return "delete-account"
+		return "delete-domain"
 	}
 
 

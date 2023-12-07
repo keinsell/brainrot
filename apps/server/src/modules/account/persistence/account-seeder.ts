@@ -4,20 +4,20 @@ import {PrismaService}      from "../../../common/infrastructure/storage/databas
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
 import {AccountFixture}     from "../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../vendor/prisma/index.js"
-import {RegisterAccount}    from "../10-application/commands/register-account.js"
-import {AccountService}     from "../20-service/account.service.js"
+import {RegisterAccountDto} from "../10-application/dtos/register-account-dto.js"
+import {AccountService}     from "../domain/services/account-service.js"
 import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 
 
 @Injectable()
-export class AccountSeeder extends SeederBase<RegisterAccount> {
+export class AccountSeeder extends SeederBase<RegisterAccountDto> {
 
 	constructor(
 		private prismaService: PrismaService,
 		private accountService: AccountService,
 	) {
-		super(new Logger("seeder:account"))
+		super(new Logger("seeder:domain"))
 	}
 
 
@@ -26,7 +26,7 @@ export class AccountSeeder extends SeederBase<RegisterAccount> {
 	}
 
 
-	public async exists(input: RegisterAccount): Promise<boolean> {
+	public async exists(input: RegisterAccountDto): Promise<boolean> {
 		const exists = await this.prismaService.account.findUnique({
 			where: {
 				email: input.email,
@@ -37,7 +37,7 @@ export class AccountSeeder extends SeederBase<RegisterAccount> {
 	}
 
 
-	public async fabricate(): Promise<RegisterAccount> {
+	public async fabricate(): Promise<RegisterAccountDto> {
 		return {
 			email:    faker.internet.email(),
 			password: AccountFixture.password,
@@ -46,10 +46,10 @@ export class AccountSeeder extends SeederBase<RegisterAccount> {
 	}
 
 
-	public async save(input: RegisterAccount): Promise<unknown> {
+	public async save(input: RegisterAccountDto): Promise<unknown> {
 		const account = await this.accountService.register(input)
 
-		// Verify account
+		// Verify domain
 
 		await this.prismaService.account.update({
 			where: {

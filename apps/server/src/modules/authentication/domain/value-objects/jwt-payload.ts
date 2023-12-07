@@ -4,6 +4,7 @@ export interface JwtPayload {
    The "iss" value is a case-sensitive string containing a StringOrURI
    value.  Use of this claim is OPTIONAL. */
 	iss?: string;
+	
 	/** The "sub" (subject) claim identifies the principal that is the
    subject of the JWT.  The claims in a JWT are normally statements
    about the subject.  The subject value MUST either be scoped to be
@@ -25,7 +26,7 @@ export interface JwtPayload {
    processing of the "exp" claim requires that the current date/time
    MUST be before the expiration date/time listed in the "exp" claim.
    Implementers MAY provide for some small leeway, usually no more than
-   a few minutes, to account for clock skew.  Its value MUST be a number
+   a few minutes, to domain for clock skew.  Its value MUST be a number
    containing a NumericDate value.  Use of this claim is OPTIONAL. */
 	exp?: number;
 
@@ -34,7 +35,7 @@ export interface JwtPayload {
    claim requires that the current date/time MUST be after or equal to
    the not-before date/time listed in the "nbf" claim.  Implementers MAY
    provide for some small leeway, usually no more than a few minutes, to
-   account for clock skew.  Its value MUST be a number containing a
+   domain for clock skew.  Its value MUST be a number containing a
    NumericDate value.  Use of this claim is OPTIONAL. */
 	nbf?: number;
 
@@ -54,5 +55,3 @@ export interface JwtPayload {
    sensitive string.  Use of this claim is OPTIONAL. */
 	jti: string;
 }
-
-
