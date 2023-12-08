@@ -3,18 +3,21 @@ import {Repository} from "../storr/index.js"
 
 
 
-export class ServiceAbstract<T extends EntityBase> {
-	constructor(
-		private _repository: Repository<T>,
-	) {}
+export class ServiceAbstract<T extends EntityBase | any> {
+	private serviceRepository: Repository<T>
+
+
+	constructor(serviceRepository: Repository<T>) {
+		this.serviceRepository = serviceRepository
+	}
 
 
 	public async getById(id: string): Promise<T> {
-		return this._repository.getById(id)
+		return this.serviceRepository.getById(id)
 	}
 
 
 	protected async save(entity: T): Promise<T> {
-		return this._repository.save(entity)
+		return this.serviceRepository.save(entity)
 	}
 }

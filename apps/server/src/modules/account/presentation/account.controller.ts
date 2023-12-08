@@ -3,17 +3,17 @@ import {ApiOkResponse, ApiOperation} from "@nestjs/swagger"
 import {readFileSync}                from 'node:fs'
 import {dirname}                     from "path"
 import {fileURLToPath}               from "url"
-import {AccountDto}                  from "../10-application/dtos/account.dto.js"
-import {CreateAccountDto}            from "../10-application/dtos/create-account-dto.js"
-import {RegisterAccountDto}          from "../10-application/dtos/register-account-dto.js"
 import {AccountService}              from "../domain/services/account-service.js"
+import {AccountDto}                  from "../dtos/account.dto.js"
+import {CreateAccountDto}            from "../dtos/create-account-dto.js"
+import {RegisterAccountDto}          from "../dtos/register-account-dto.js"
 
 
 
 function getOperationDocumentation(operation: string): string {
 	const __filename         = fileURLToPath(import.meta.url);
 	const __dirname          = dirname(__filename);
-	const docsDirectory      = `${__dirname}/docs`
+	const docsDirectory      = `${__dirname}/../10-application/docs`
 	const operationDirectory = `${docsDirectory}/operations`
 
 	try {
@@ -37,7 +37,8 @@ export class AccountController {
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
 	}) @ApiOkResponse({
-		type: AccountDto,
+		type:        AccountDto,
+		description: "Account was successfully registered in system.",
 	}) @Post()
 	async register(@Body() registerAccountBody: RegisterAccountDto): Promise<AccountDto> {
 		const body = registerAccountBody as CreateAccountDto
@@ -52,30 +53,6 @@ export class AccountController {
 		})
 
 		return {id: result.id}
-	}
-
-
-	@ApiOperation({
-		operationId: "forgot-password",
-		description: "Sends a password reset email",
-		tags:        ['account'],
-	}) @Post('forgot-password')
-	async forgotPassword(): Promise<string> {
-		// TODO: Generate Password Reset Request
-		// TODO: Save PasswordResetRequest in cache for specific user
-		// TODO: Send verification email for domain
-		// TODO: Perform such actions only if domain is verified.
-		return "forgot-password"
-	}
-
-
-	@ApiOperation({
-		operationId: "reset-password",
-		description: "Resets the user's password",
-		tags:        ['account'],
-	}) @Post('reset-password')
-	async resetPassword(): Promise<string> {
-		return "reset-password"
 	}
 
 
@@ -116,25 +93,5 @@ export class AccountController {
 	}) @Post('delete-domain')
 	async deleteAccount(): Promise<string> {
 		return "delete-domain"
-	}
-
-
-	@ApiOperation({
-		operationId: "verify-email",
-		description: "Verifies the user’s email",
-		tags:        ['account'],
-	}) @Post('verify-email')
-	async verifyEmail(): Promise<string> {
-		return "verify-email"
-	}
-
-
-	@ApiOperation({
-		operationId: "resend-verification-email",
-		description: "Resends the verification email",
-		tags:        ['account'],
-	}) @Post('resend-verification-email')
-	async resendVerificationEmail(): Promise<string> {
-		return "resend-verification-email"
 	}
 }

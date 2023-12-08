@@ -1,7 +1,7 @@
 import {faker}          from "@faker-js/faker"
 import {ApiProperty}    from "@nestjs/swagger"
-import {ApiModel}       from "../../../../utilities/docs-utils/swagger-api-model.js"
-import {AccountFixture} from "../../../../utilities/fixtures/account-fixture.js"
+import {ApiModel}       from "../../../utilities/docs-utils/swagger-api-model.js"
+import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js"
 
 
 

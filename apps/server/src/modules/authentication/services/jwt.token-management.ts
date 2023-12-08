@@ -1,9 +1,9 @@
 import {Injectable, Logger}         from "@nestjs/common"
 import {JwtService}                 from "@nestjs/jwt"
-import {authorizationConfiguration} from "../../../../configs/authorization-configuration.js"
-import {censorString}               from "../../../../utilities/console-utils/censor-string.js"
-import {JsonWebToken}               from "../../domain/value-objects/jsonwebtoken.js"
-import {TokenManagement}            from "../token-management.js"
+import {authorizationConfiguration} from "../../../configs/authorization-configuration.js"
+import {censorString}               from "../../../utilities/console-utils/censor-string.js"
+import {TokenManagement}            from "../domain/services/token-management.js"
+import {JsonWebToken}               from "../domain/value-objects/jsonwebtoken.js"
 
 
 

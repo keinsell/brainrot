@@ -6,17 +6,21 @@ import {authorizationConfiguration} from "../../../../configs/authorization-conf
 
 
 @Injectable()
-export class JwtAuthorizationStrategy extends PassportStrategy(Strategy) {
+export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, "jwt") {
 	constructor() {
 		super({
-			jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
-			ignoreExpiration: false,
-			secretOrKey:      authorizationConfiguration.jwtSecret,
+			jwtFromRequest:    ExtractJwt.fromAuthHeaderAsBearerToken(),
+			ignoreExpiration:  true,
+			secretOrKey:       authorizationConfiguration.jwtSecret,
+			passReqToCallback: true,
 		});
 	}
 
 
 	async validate(payload: any) {
+		console.log('validate')
+		console.log(payload)
+
 		return {
 			userId:   payload.sub,
 			username: payload.username,

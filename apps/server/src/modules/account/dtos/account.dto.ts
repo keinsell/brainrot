@@ -1,5 +1,5 @@
 import {ApiProperty} from "@nestjs/swagger"
-import {ApiModel}    from "../../../../utilities/docs-utils/swagger-api-model.js"
+import {ApiModel}    from "../../../utilities/docs-utils/swagger-api-model.js"
 
 
 
@@ -16,7 +16,7 @@ export class AccountDto {
 	@ApiProperty({
 		name:        "id",
 		description: "The domain's unique identifier",
-		example:     "",
+		example:     "cjld2cjxh0000qzrmn831i7rn",
 		required:    true,
 	}) id: string;
 }

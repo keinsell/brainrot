@@ -1,15 +1,13 @@
-import {Session}           from "../domain/entities/session.js"
-import {SessionRepository} from "../domain/repositories/session-repository.js"
 import {Injectable}        from "@nestjs/common"
 import {PrismaService}     from "../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {Session}           from "../../session/session.js"
+import {SessionRepository} from "../domain/repositories/session-repository.js"
 
 
 
 @Injectable()
 export class PrismaSessionRepository extends SessionRepository {
-	constructor(
-		private prisma: PrismaService,
-	) {super()}
+	constructor(private prisma: PrismaService) {super()}
 
 
 	public create(entity: Session): Promise<Session> {

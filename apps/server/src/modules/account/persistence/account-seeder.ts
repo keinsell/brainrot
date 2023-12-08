@@ -4,8 +4,8 @@ import {PrismaService}      from "../../../common/infrastructure/storage/databas
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
 import {AccountFixture}     from "../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../vendor/prisma/index.js"
-import {RegisterAccountDto} from "../10-application/dtos/register-account-dto.js"
 import {AccountService}     from "../domain/services/account-service.js"
+import {RegisterAccountDto} from "../dtos/register-account-dto.js"
 import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 
@@ -13,53 +13,53 @@ import EmailVerificationStatus = $Enums.EmailVerificationStatus
 @Injectable()
 export class AccountSeeder extends SeederBase<RegisterAccountDto> {
 
-	constructor(
-		private prismaService: PrismaService,
-		private accountService: AccountService,
-	) {
-		super(new Logger("seeder:domain"))
-	}
+    constructor(
+        private prismaService: PrismaService,
+        private accountService: AccountService,
+    ) {
+        super(new Logger("seeder:domain"))
+    }
 
 
-	public async count(): Promise<number> {
-		return this.prismaService.account.count()
-	}
+    public async count(): Promise<number> {
+        return this.prismaService.account.count()
+    }
 
 
-	public async exists(input: RegisterAccountDto): Promise<boolean> {
-		const exists = await this.prismaService.account.findUnique({
-			where: {
-				email: input.email,
-			},
-		})
+    public async exists(input: RegisterAccountDto): Promise<boolean> {
+        const exists = await this.prismaService.account.findUnique({
+            where: {
+                email: input.email,
+            },
+        })
 
-		return exists !== null
-	}
-
-
-	public async fabricate(): Promise<RegisterAccountDto> {
-		return {
-			email:    faker.internet.email(),
-			password: AccountFixture.password,
-			username: faker.internet.userName(),
-		}
-	}
+        return exists !== null
+    }
 
 
-	public async save(input: RegisterAccountDto): Promise<unknown> {
-		const account = await this.accountService.register(input)
+    public async fabricate(): Promise<RegisterAccountDto> {
+        return {
+            email: faker.internet.email(),
+            password: AccountFixture.password,
+            username: faker.internet.userName(),
+        }
+    }
 
-		// Verify domain
 
-		await this.prismaService.account.update({
-			where: {
-				id: account.id,
-			},
-			data:  {
-				emailVerificationStatus: EmailVerificationStatus.VERIFIED,
-			},
-		})
+    public async save(input: RegisterAccountDto): Promise<unknown> {
+        const account = await this.accountService.register(input)
 
-		return account
-	}
+        // Verify domain
+
+        await this.prismaService.account.update({
+            where: {
+                id: account.id,
+            },
+            data: {
+                emailVerificationStatus: EmailVerificationStatus.VERIFIED,
+            },
+        })
+
+        return account
+    }
 }

@@ -1,10 +1,11 @@
-import {AggregateRoot}         from "../../../../common/libraries/domain/aggregate.js"
-import {AccountId}             from "../../../account/10-application/shared-kernel/account-id.js"
-import {SessionEvent}          from "../events/session-event.js"
-import {IpAddress}             from "../value-objects/ip-address.js"
-import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"
-import {SessionStatus}         from "../value-objects/session-status.js"
-import {UserAgent}             from "../value-objects/user-agent.js"
+import {randomUUID}            from "node:crypto"
+import {AggregateRoot}         from "../../common/libraries/domain/aggregate.js"
+import {AccountId}             from "../account/shared-kernel/account-id.js"
+import {IpAddress}             from "../authentication/domain/value-objects/ip-address.js"
+import {SessionExpirationDate} from "../authentication/domain/value-objects/session-expiration-date.js"
+import {SessionStatus}         from "../authentication/domain/value-objects/session-status.js"
+import {UserAgent}             from "../authentication/domain/value-objects/user-agent.js"
+import {SessionEvent}          from "./events/session-event.js"
 
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or email address. This is crucial for associating user-specific data and permissions with the session.
 //
@@ -24,7 +25,7 @@ import {UserAgent}             from "../value-objects/user-agent.js"
 //
 //	Security Information: Information related to session security, such as IP address, user agent, and other data used for security checks and fraud prevention, may be included.
 
-export interface SessionProps {
+export interface SessionProperties {
 	/** unique identifier for the session */
 	id: string
 	/** The timestamp when the session started */
@@ -41,7 +42,7 @@ export interface SessionProps {
 }
 
 
-export class Session extends AggregateRoot implements SessionProps {
+export class Session extends AggregateRoot implements SessionProperties {
 
 	public expiresAt: Date
 	public ipAddress: IpAddress
@@ -54,7 +55,7 @@ export class Session extends AggregateRoot implements SessionProps {
 	public status: SessionStatus
 
 
-	constructor(props: SessionProps) {
+	constructor(props: SessionProperties) {
 		super(props)
 		this.expiresAt = props.expiresAt
 		this.ipAddress = props.ipAddress
@@ -66,12 +67,16 @@ export class Session extends AggregateRoot implements SessionProps {
 	}
 
 
-	public static CreateSession(props: SessionProps): Session {
-		return new Session(props).startSession()
+	public static CreateSession(props: SessionProperties): Session {
+		const session = new Session({
+			id:        randomUUID(), ...props,
+			startTime: new Date(),
+		})
+		return session.startSession()
 	}
 
 
-	public RestoreSession(props: SessionProps): Session {
+	public RestoreSession(props: SessionProperties): Session {
 		return new Session(props)
 	}
 
