@@ -52,7 +52,12 @@ export class AccountController {
 			password: body.password,
 		})
 
-		return {id: result.id}
+		return {
+			id:            result.id,
+			email:         result.email.address,
+			emailVerified: result.email.isVerified,
+			username:      result.username,
+		}
 	}
 
 

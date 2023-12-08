@@ -4,34 +4,31 @@ import {JwtPayload} from "./jwt-payload.js"
 
 
 
+export type CreateJsonWebToken = Omit<JwtPayload, 'jti' | 'exp' | 'iat' | 'nbf'>
+
+
 export class JsonWebToken implements JwtPayload {
-	aud: string;
-	exp: number;
-	iat: number;
-	iss?: string;
-	jti: string;
-	metadata?: {
-		[key: string | "firstName" | "lastName" | "email" | "phoneNumber"]: string | undefined
-	}
-	nbf?: number;
-	sub?: string;
+	readonly aud: string;
+	readonly exp: number;
+	readonly iat: number;
+	readonly iss?: string;
+	readonly jti: string;
+	readonly metadata?: {
+		[key: string]: string | undefined;
+	};
+	readonly nbf?: number;
+	readonly sub?: string;
 
 
-	constructor(payload: Omit<JwtPayload, "jti" | "exp">) {
-		Object.assign(this, payload)
-		this.jti = randomUUID()
-
-		if (!this.iat) {
-			this.iat = Date.now()
-		}
-
-		if (!this.nbf) {
-			this.nbf = Date.now()
-		}
-
-		if (!this.exp) {
-			this.exp = Date.now() + ms("1h")
-		}
+	constructor(payload: CreateJsonWebToken, duration: string = '1h') {
+		this.aud      = payload.aud;
+		this.iss      = payload.iss;
+		this.sub      = payload.sub;
+		this.metadata = payload.metadata;
+		this.jti      = randomUUID();
+		this.iat      = Date.now();
+		this.nbf      = this.iat;
+		this.exp      = this.iat + ms(duration);
 	}
 
 
@@ -45,11 +42,12 @@ export class JsonWebToken implements JwtPayload {
 			metadata: this.metadata,
 			nbf:      this.nbf,
 			sub:      this.sub,
-		}
+		};
 	}
 
 
-	setExpriationTime(exp: number): void {
-		this.exp = exp
+	isValid(): boolean {
+		const now = Date.now();
+		return now >= this.nbf && now <= this.exp;
 	}
 }

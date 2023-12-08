@@ -1,22 +1,21 @@
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common"
+import {JwtService}                                        from "@nestjs/jwt"
 import {ok, Result}                                        from "neverthrow"
 import {randomUUID}                                        from "node:crypto"
 import {EventBus}                                          from "../../../../common/infrastructure/messaging/event-bus.js"
 import {CredentialValidator}                               from "../../../account/shared-kernel/credential-validator/credential-validator.js"
 import {Session}                                           from "../../../session/session.js"
 import {SessionRepository}                                 from "../repositories/session-repository.js"
-import {AccessToken}                                       from "../value-objects/access-token.js"
 import {IpAddress}                                         from "../value-objects/ip-address.js"
-import {RefreshToken}                                      from "../value-objects/refresh-token.js"
 import {SessionStatus}                                     from "../value-objects/session-status.js"
-import {TokenManagement}                                   from "./token-management.js"
+import {AccessToken}                                       from "../value-objects/tokens/access-token.js"
 
 
 
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement, private sessionRepository: SessionRepository) {}
+	constructor(private credentialValidator: CredentialValidator, private tokenManagement: JwtService, private sessionRepository: SessionRepository) {}
 
 
 	/**
@@ -52,11 +51,9 @@ export class AuthenticationService {
 			},
 		})
 
-		const accessToken  = new AccessToken(jwtPayload)
-		const refreshToken = new RefreshToken(jwtPayload)
+		const accessToken = new AccessToken(jwtPayload)
 
-		const signedAccessToken  = await this.tokenManagement.signAccessToken(accessToken)
-		const signedRefreshToken = await this.tokenManagement.signRefreshToken(refreshToken)
+		const signedAccessToken = await this.tokenManagement.signAsync(accessToken.toPlainObject())
 
 		const session = Session.CreateSession({
 			device:    "",
@@ -82,7 +79,7 @@ export class AuthenticationService {
 		return ok({
 			accountId:    account.id,
 			accessToken:  signedAccessToken,
-			refreshToken: signedRefreshToken,
+			refreshToken: signedAccessToken,
 		})
 	}
 

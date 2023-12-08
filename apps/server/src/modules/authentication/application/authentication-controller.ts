@@ -30,8 +30,6 @@ export class AuthenticationController {
 		description: "The user could not be found.",
 	})
 	async authenticate(@Req() request: Request, @Body() body: Authenticate): Promise<AuthenticationResponse> {
-		this.logger.verbose(JSON.stringify(request.user))
-
 		const ipAddress = request.ip as IpAddress
 		const userAgent = request.headers['user-agent'] as string
 
@@ -57,12 +55,19 @@ export class AuthenticationController {
 	}
 
 
-	@Get() @ApiBearerAuth() @UseGuards(JwtAuthorizatonGuard) @ApiOperation({
+	@Get() @ApiBearerAuth() @ApiOperation({
 		operationId: "whoami",
 		description: "Returns the current user",
 		tags:        ['authentication'],
 	})
-	async whoami(): Promise<string> {
+	async whoami(@Req() request: Request): Promise<string> {
+		this.logger.verbose(JSON.stringify(request.headers))
+		this.logger.verbose(JSON.stringify(request.headers))
+		this.logger.verbose(JSON.stringify(request.headers))
+		this.logger.verbose(JSON.stringify(request.headers))
+
+		// TODO: Validate token
+
 		return "whoami"
 	}
 

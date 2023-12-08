@@ -1,14 +1,12 @@
 import {faker}          from "@faker-js/faker"
 import {ApiProperty}    from "@nestjs/swagger"
-import {
-	ApiModel
-}                       from "../../../utilities/docs-utils/swagger-api-model.js"
+import {ApiModel}      from "../../../utilities/docs-utils/swagger-api-model.js"
 import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js"
 
 
 
 @ApiModel({
-	name       : "Auhenticate",
+	name:        "Auhenticate",
 	description: "asdasd",
 })
 export class Authenticate {
@@ -17,29 +15,26 @@ export class Authenticate {
 	 * @typedef {string} username
 	 */
 	@ApiProperty({
-		name       : "username",
+		name:        "username",
 		description: "The domain's username",
-		example    : AccountFixture.username,
-		examples   : [
-			faker.internet.userName(), faker.internet.userName(),
-			faker.internet.userName(),
+		example:     AccountFixture.username,
+		examples:    [
+			faker.internet.userName(), faker.internet.userName(), faker.internet.userName(),
 		],
-	})
-	username: string;
-	
+	}) username: string;
+
 	/**
 	 * The password variable is a string that represents a user's password.
 	 *
 	 * @type {string}
 	 */
 	@ApiProperty({
-		name       : "password",
+		name:        "password",
 		description: "The domain's password",
-		example    : AccountFixture.password,
-		examples   : [
-			faker.internet.password(), faker.internet.password(),
-			faker.internet.password(),
+		example:     AccountFixture.password,
+		examples:    [
+			faker.internet.password(), faker.internet.password(), faker.internet.password(),
 		],
-	})
-	password: string;
+
+	}) password: string;
 }

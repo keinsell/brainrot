@@ -1,17 +1,19 @@
 import {JsonWebToken} from "../value-objects/jsonwebtoken.js"
 import {JwtPayload}   from "../value-objects/jwt-payload.js"
+import {AccessToken}  from "../value-objects/tokens/access-token.js"
+import {RefreshToken} from "../value-objects/tokens/refresh-token.js"
 
 
 
 export abstract class TokenManagement {
-	abstract signAccessToken(payload: JsonWebToken): Promise<string>
+	abstract create(payload: JwtPayload): Promise<JsonWebToken | RefreshToken | AccessToken>
 
 
-	abstract signRefreshToken(payload: JsonWebToken): Promise<string>
+	abstract sign(payload: JsonWebToken | RefreshToken | AccessToken): Promise<string>
 
 
-	abstract verifyToken(token: string): Promise<boolean>
+	abstract verify(token: string): Promise<boolean>
 
 
-	abstract decodeToken<T = JwtPayload>(token: string): Promise<T>
+	abstract decode<T = JwtPayload>(token: string): Promise<T>
 }
