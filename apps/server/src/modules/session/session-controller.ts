@@ -1,10 +1,10 @@
 import {Body, Controller, Delete, Get, Post, Req}                             from "@nestjs/common"
 import {ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOperation} from "@nestjs/swagger"
 import {Request}                                                              from "express"
-import {AuthenticationService}                                                from "../domain/services/authentication-service.js"
-import {IpAddress}                                                            from "../domain/value-objects/ip-address.js"
-import {Authenticate}                                                         from "./authenticate.js"
-import {AuthenticationResponse}                                               from "./dtos/authentication-response.js"
+import {Authenticate}                                                         from "../authentication/application/authenticate.js"
+import {AuthenticationResponse}                                               from "../authentication/application/dtos/authentication-response.js"
+import {AuthenticationService}                                                from "../authentication/domain/services/authentication-service.js"
+import {IpAddress}                                                            from "../authentication/domain/value-objects/ip-address.js"
 
 
 

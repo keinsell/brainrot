@@ -57,30 +57,6 @@ export class AccountController {
 
 
 	@ApiOperation({
-		operationId: "forgot-password",
-		description: "Sends a password reset email",
-		tags:        ['account'],
-	}) @Post('forgot-password')
-	async forgotPassword(): Promise<string> {
-		// TODO: Generate Password Reset Request
-		// TODO: Save PasswordResetRequest in cache for specific user
-		// TODO: Send verification email for domain
-		// TODO: Perform such actions only if domain is verified.
-		return "forgot-password"
-	}
-
-
-	@ApiOperation({
-		operationId: "reset-password",
-		description: "Resets the user's password",
-		tags:        ['account'],
-	}) @Post('reset-password')
-	async resetPassword(): Promise<string> {
-		return "reset-password"
-	}
-
-
-	@ApiOperation({
 		operationId: "change-password",
 		description: "Changes the user's password",
 		tags:        ['account'],
@@ -117,25 +93,5 @@ export class AccountController {
 	}) @Post('delete-domain')
 	async deleteAccount(): Promise<string> {
 		return "delete-domain"
-	}
-
-
-	@ApiOperation({
-		operationId: "verify-email",
-		description: "Verifies the user’s email",
-		tags:        ['account'],
-	}) @Post('verify-email')
-	async verifyEmail(): Promise<string> {
-		return "verify-email"
-	}
-
-
-	@ApiOperation({
-		operationId: "resend-verification-email",
-		description: "Resends the verification email",
-		tags:        ['account'],
-	}) @Post('resend-verification-email')
-	async resendVerificationEmail(): Promise<string> {
-		return "resend-verification-email"
 	}
 }
