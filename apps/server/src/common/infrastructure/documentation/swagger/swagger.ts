@@ -2,7 +2,6 @@ import {INestApplication, Logger}                      from "@nestjs/common"
 import {DocumentBuilder, OpenAPIObject, SwaggerModule} from "@nestjs/swagger"
 import fs                                              from "node:fs"
 import process                                         from 'node:process'
-import {SwaggerTheme}                                  from "swagger-themes"
 import tildify                                         from "tildify"
 import {ApplicationConfiguration}                      from "../../../../configs/application-configuration.js"
 import {env}                                           from "../../../../configs/env.js"
@@ -105,16 +104,22 @@ export async function buildSwaggerDocumentation(app: INestApplication): Promise<
 
 	experimentalAddApiModelFunctionality(document);
 
-	SwaggerModule.setup(ApplicationConfiguration.openapiDocumentationPath, app, document, {
-		explorer:  true,
-		customCss: new SwaggerTheme('v3').getBuffer("flattop"), // OR newspaper
-	});
+	//SwaggerModule.setup(ApplicationConfiguration.openapiDocumentationPath, app, document, {
+	//	explorer:  true,
+	//	customCss: new SwaggerTheme('v3').getBuffer("flattop"), // OR newspaper
+	//});
+
+	//app.use("/api", apiReference({
+	//	spec: {
+	//		content: document,
+	//	},
+	//}))
 
 	logger.verbose(`Swagger documentation was attached to ${env.SERVICE_NAME} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
 
-	const documentationObjectPath = `${process.cwd()}/openapi3.json`;
+	const documentationObjectPath = `${process.cwd()}/public/api/openapi3.json`;
 
 	// Save Swagger Documentation to File
-	fs.writeFileSync('./openapi3.json', JSON.stringify(document));
+	fs.writeFileSync('./public/api/openapi3.json', JSON.stringify(document));
 	logger.verbose(`Swagger documentation was snapshot into ${tildify(documentationObjectPath)}`);
 }
