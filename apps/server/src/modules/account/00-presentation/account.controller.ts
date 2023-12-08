@@ -1,12 +1,12 @@
-import {Body, Controller, Post} from "@nestjs/common"
-import {ApiOperation}           from "@nestjs/swagger"
-import {readFileSync}           from 'node:fs'
-import {dirname}                from "path"
-import {fileURLToPath}          from "url"
-import {AccountDto}             from "../10-application/dtos/account.dto.js"
-import {CreateAccountDto}       from "../10-application/dtos/create-account-dto.js"
-import {RegisterAccountDto}     from "../10-application/dtos/register-account-dto.js"
-import {AccountService}         from "../domain/services/account-service.js"
+import {Body, Controller, Post}      from "@nestjs/common"
+import {ApiOkResponse, ApiOperation} from "@nestjs/swagger"
+import {readFileSync}                from 'node:fs'
+import {dirname}                     from "path"
+import {fileURLToPath}               from "url"
+import {AccountDto}                  from "../10-application/dtos/account.dto.js"
+import {CreateAccountDto}            from "../10-application/dtos/create-account-dto.js"
+import {RegisterAccountDto}          from "../10-application/dtos/register-account-dto.js"
+import {AccountService}              from "../domain/services/account-service.js"
 
 
 
@@ -36,6 +36,8 @@ export class AccountController {
 		summary:     "Register account",
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
+	}) @ApiOkResponse({
+		type: AccountDto,
 	}) @Post()
 	async register(@Body() registerAccountBody: RegisterAccountDto): Promise<AccountDto> {
 		const body = registerAccountBody as CreateAccountDto
