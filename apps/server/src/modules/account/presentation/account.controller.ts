@@ -3,17 +3,17 @@ import {ApiOkResponse, ApiOperation} from "@nestjs/swagger"
 import {readFileSync}                from 'node:fs'
 import {dirname}                     from "path"
 import {fileURLToPath}               from "url"
-import {AccountDto}                  from "../10-application/dtos/account.dto.js"
-import {CreateAccountDto}            from "../10-application/dtos/create-account-dto.js"
-import {RegisterAccountDto}          from "../10-application/dtos/register-account-dto.js"
 import {AccountService}              from "../domain/services/account-service.js"
+import {AccountDto}                  from "../dtos/account.dto.js"
+import {CreateAccountDto}            from "../dtos/create-account-dto.js"
+import {RegisterAccountDto}          from "../dtos/register-account-dto.js"
 
 
 
 function getOperationDocumentation(operation: string): string {
 	const __filename         = fileURLToPath(import.meta.url);
 	const __dirname          = dirname(__filename);
-	const docsDirectory      = `${__dirname}/docs`
+	const docsDirectory      = `${__dirname}/../10-application/docs`
 	const operationDirectory = `${docsDirectory}/operations`
 
 	try {
@@ -37,7 +37,8 @@ export class AccountController {
 		description: getOperationDocumentation("register"),
 		tags:        ['account'],
 	}) @ApiOkResponse({
-		type: AccountDto,
+		type:        AccountDto,
+		description: "Account was successfully registered in system.",
 	}) @Post()
 	async register(@Body() registerAccountBody: RegisterAccountDto): Promise<AccountDto> {
 		const body = registerAccountBody as CreateAccountDto

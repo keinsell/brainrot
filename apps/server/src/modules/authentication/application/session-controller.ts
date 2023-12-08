@@ -1,8 +1,8 @@
 import {Body, Controller, Delete, Get, Post, Req}                             from "@nestjs/common"
 import {ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOperation} from "@nestjs/swagger"
 import {Request}                                                              from "express"
+import {AuthenticationService}                                                from "../domain/services/authentication-service.js"
 import {IpAddress}                                                            from "../domain/value-objects/ip-address.js"
-import {AuthenticationService}                                                from "../services/authentication-service.js"
 import {Authenticate}                                                         from "./authenticate.js"
 import {AuthenticationResponse}                                               from "./dtos/authentication-response.js"
 
@@ -11,31 +11,26 @@ import {AuthenticationResponse}                                               fr
 @Controller('session')
 export class SessionController {
 
-	constructor(
-		private authenticationService: AuthenticationService,
-	) {
+	constructor(private authenticationService: AuthenticationService) {
 
 	}
 
 
-	@Post()
-	@ApiOperation({
+	@Post() @ApiOperation({
 		operationId: "authenticate",
 		description: "Logs the user in",
 		tags:        ['authentication'],
-	})
-	@ApiCreatedResponse({
+	}) @ApiCreatedResponse({
 		description: "The user has been successfully authenticated and session was created.",
 		type:        AuthenticationResponse,
-	})
-	@ApiNotFoundResponse({
+	}) @ApiNotFoundResponse({
 		description: "The user could not be found.",
 	})
 	async authenticate(@Req() request: Request, @Body() body: Authenticate): Promise<AuthenticationResponse> {
 		const {
-			      username,
-			      password,
-		      } = body
+				  username,
+				  password,
+			  } = body
 
 		const ipAddress = request.ip as IpAddress
 		const userAgent = request.headers['user-agent'] as string
@@ -60,8 +55,7 @@ export class SessionController {
 	}
 
 
-	@ApiBearerAuth("bearer")
-	@ApiOperation({
+	@ApiBearerAuth("bearer") @ApiOperation({
 		operationId: "whoami",
 		description: "Returns the current user",
 		tags:        ['session'],
@@ -78,9 +72,9 @@ export class SessionController {
 	}) @Post("refresh-token")
 	async refreshToken(@Body() body: Authenticate): Promise<string> {
 		const {
-			      username,
-			      password,
-		      } = body
+				  username,
+				  password,
+			  } = body
 
 		const isValid = await this.authenticationService.authenticate(username, password)
 

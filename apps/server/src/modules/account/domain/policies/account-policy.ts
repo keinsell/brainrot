@@ -53,7 +53,8 @@ export class AccountPolicy extends BasePolicy {
 		const identity = await this.accountRepository.findByEmail(email)
 
 		if (identity) {
-			return err(new ConflictException("Email is already in use in system, try logging in instead."))
+			const error = new ConflictException("Email is already in use in system, try logging in instead.")
+			return err(error)
 		}
 
 		return ok(true)
@@ -66,7 +67,8 @@ export class AccountPolicy extends BasePolicy {
 		if (report.isScoreHigherThan(PasswordSecurityLevel.WEAK)) {
 			return ok(true)
 		} else {
-			return err(new BadRequestException("Password is insecure enough."))
+			const error = new BadRequestException("Password is insecure enough.")
+			return err(error)
 		}
 	}
 }

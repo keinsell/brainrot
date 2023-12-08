@@ -1,5 +1,5 @@
 import {Address}   from "../../../../common/libraries/address/address.js"
-import {AccountId} from "../../../account/10-application/shared-kernel/account-id.js"
+import {AccountId} from "../../../account/shared-kernel/account-id.js"
 
 
 

@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Post, Req, UseGuards}                          from "@nestjs/common"
+import {Body, Controller, Get, Logger, Post, Req, UseGuards}                  from "@nestjs/common"
 import {AuthGuard}                                                            from "@nestjs/passport"
 import {ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOperation} from "@nestjs/swagger"
 import {Request}                                                              from "express"
+import {Account}                                                              from "../../account/domain/account.js"
+import {AuthenticationService}                                                from "../domain/services/authentication-service.js"
 import {IpAddress}                                                            from "../domain/value-objects/ip-address.js"
-import {AuthenticationService}                                                from "../services/authentication-service.js"
 import {Authenticate}                                                         from "./authenticate.js"
 import {AuthenticationResponse}                                               from "./dtos/authentication-response.js"
 
@@ -11,13 +12,13 @@ import {AuthenticationResponse}                                               fr
 
 @Controller('authenticate')
 export class AuthenticationController {
-
-	constructor(private authenticationService: AuthenticationService) {
-
-	}
+	private logger: Logger = new Logger("authenitcation::controller")
 
 
-	@Post() @ApiOperation({
+	constructor(private authenticationService: AuthenticationService) {}
+
+
+	@UseGuards(AuthGuard('local')) @Post() @ApiOperation({
 		operationId: "authenticate",
 		description: "Logs the user in",
 		tags:        ['authentication'],
@@ -28,15 +29,14 @@ export class AuthenticationController {
 		description: "The user could not be found.",
 	})
 	async authenticate(@Req() request: Request, @Body() body: Authenticate): Promise<AuthenticationResponse> {
-		const {
-				  username,
-				  password,
-			  } = body
+		this.logger.verbose(JSON.stringify(request.user))
 
 		const ipAddress = request.ip as IpAddress
 		const userAgent = request.headers['user-agent'] as string
 
-		const maybeAuthenticated = await this.authenticationService.authenticate(username.toLowerCase(), password, {
+		const user: Account = request.user as unknown as Account
+
+		const maybeAuthenticated = await this.authenticationService.authenticate(user.username, user.password.plain!, {
 			userAgent: userAgent,
 			ipAddress: ipAddress,
 		})
@@ -56,21 +56,21 @@ export class AuthenticationController {
 	}
 
 
-	@UseGuards(AuthGuard('jwt')) @ApiBearerAuth("bearer") @ApiOperation({
+	@Get() @ApiBearerAuth("bearer") @UseGuards(AuthGuard('jwt')) @ApiOperation({
 		operationId: "whoami",
 		description: "Returns the current user",
 		tags:        ['authentication'],
-	}) @Get()
+	})
 	async whoami(): Promise<string> {
 		return "whoami"
 	}
 
 
-	@ApiOperation({
+	@UseGuards(AuthGuard('jwt')) @Post("refresh-token") @ApiOperation({
 		operationId: "refresh-token",
 		description: "Use a refresh token to extend a session and generate another access token",
 		tags:        ['authentication'],
-	}) @Post("refresh-token")
+	})
 	async refreshToken(@Body() body: Authenticate): Promise<string> {
 		const {
 				  username,

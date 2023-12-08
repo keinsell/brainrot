@@ -1,5 +1,5 @@
 import {AggregateRoot}         from "../../../../common/libraries/domain/aggregate.js"
-import {AccountId}             from "../../../account/10-application/shared-kernel/account-id.js"
+import {AccountId}             from "../../../account/shared-kernel/account-id.js"
 import {SessionEvent}          from "../events/session-event.js"
 import {IpAddress}             from "../value-objects/ip-address.js"
 import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"

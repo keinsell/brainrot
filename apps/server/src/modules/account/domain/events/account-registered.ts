@@ -10,7 +10,7 @@ interface AccountRegisteredPayload {
 export class AccountRegistered extends Event<AccountRegisteredPayload> {
 	constructor(payload: AccountRegisteredPayload) {
 		super({
-			namespace: "domain.registered",
+			namespace: "account.registered",
 			body:      payload,
 		})
 	}

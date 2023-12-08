@@ -1,5 +1,5 @@
-import {JsonWebToken} from "../domain/value-objects/jsonwebtoken.js"
-import {JwtPayload}   from "../domain/value-objects/jwt-payload.js"
+import {JsonWebToken} from "../value-objects/jsonwebtoken.js"
+import {JwtPayload}   from "../value-objects/jwt-payload.js"
 
 
 

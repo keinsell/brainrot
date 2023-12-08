@@ -1,8 +1,9 @@
 import {Injectable, Logger} from "@nestjs/common"
 import {EventBus}           from "../../../../common/infrastructure/messaging/event-bus.js"
+import {ServiceAbstract}    from "../../../../common/libraries/services/service-abstract.js"
 import {PasswordHashing}    from "../../../../common/libraries/unihash/index.js"
 import {KdfAlgorithm}       from "../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
-import {RegisterAccountDto} from "../../10-application/dtos/register-account-dto.js"
+import {RegisterAccountDto} from "../../dtos/register-account-dto.js"
 import {Account}            from "../account.js"
 import {AccountPolicy}      from "../policies/account-policy.js"
 import {AccountRepository}  from "../repositories/account-repository.js"
@@ -12,11 +13,13 @@ import {Password}           from "../value-objects/password.js"
 
 
 @Injectable()
-export class AccountService {
+export class AccountService extends ServiceAbstract<Account> {
 	private logger: Logger = new Logger("account::service")
 
 
-	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: PasswordHashing) {}
+	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: PasswordHashing) {
+		super(repository)
+	}
 
 
 	/**
@@ -57,5 +60,4 @@ export class AccountService {
 
 		return identity
 	}
-
 }
