@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build:nest": "nest build",
+    "build": "build:tsc",
     "build:tsc": "tspc -p tsconfig.json && pnpm copy:markdown && pnpm copy:prisma",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

@@ -50,6 +50,11 @@ jobs:
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
 
+      - name: ✳️ Build server
+        id: build-node-server
+        run: pnpm run build
+        shell: bash
+
   # Testing is a step dedicated for running all tests associated with given app.
   testing:
     runs-on: methylphenidate-runner-set
