@@ -1,0 +1,68 @@
+name: 🧪 Test server application
+
+on:
+  workflow_call:
+
+jobs:
+  e2e_api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: keinsell
+          POSTGRES_PASSWORD: keinsell
+          POSTGRES_ROOT_PASSWORD: keinsell
+          POSTGRES_DB: methylophenidate
+        ports:
+          - 5432:5432
+      nats:
+        image: nats
+        ports:
+          - 4222:4222
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Runner
+        uses: ./.github/actions/setup-machine
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: ⚙️ Setup Repository
+        uses: ./.github/actions/setup-project
+
+      - name: Build API
+        run: cd apps/server && CI='' pnpm build:tsc
+
+      - shell: bash
+        run: cp example.env apps/server/.env
+      - shell: bash
+        run: cd apps/server && pnpm db:push
+      - name: Start API
+        shell: bash
+        run: cd apps/server && nohup pnpm dev &
+      - name: Wait on API
+        shell: bash
+        run: wait-on --timeout=180000 http://localhost:1337/health
+
+      - name: Run E2E tests
+        run: |
+          cd apps/server && pnpm test:e2e
+
+      - name: Kill port for server 1337 for unit tests
+        run: sudo kill -9 $(sudo lsof -t -i:1337)
+
+#      - name: Run unit tests
+#        run: |
+#          cd apps/api && pnpm test
