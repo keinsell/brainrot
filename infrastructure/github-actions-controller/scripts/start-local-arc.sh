@@ -34,6 +34,6 @@ helm upgrade "${INSTALLATION_NAME}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
     --set containerMode.type=dind \
-    --set minRunners=3 \
-    --set maxRunners=10 \
+    --set minRunners=1 \
+    --set maxRunners=30 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
