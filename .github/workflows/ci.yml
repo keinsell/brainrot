@@ -28,7 +28,8 @@ jobs:
     runs-on: methylphenidate-runner-set
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -41,7 +42,8 @@ jobs:
     name: 🔨 Build
     runs-on: methylphenidate-runner-set
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -54,7 +56,8 @@ jobs:
     name: 🔬 Testing
     needs: [ "build" ]
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

@@ -18,7 +18,8 @@ jobs:
   release:
     runs-on: methylphenidate-runner-set
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       # Bump Versions
@@ -31,7 +32,8 @@ jobs:
       group: "deploy"
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       # Push infrastructure
@@ -40,13 +42,15 @@ jobs:
   rollback:
     runs-on: methylphenidate-runner-set
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
   monitor:
     runs-on: methylphenidate-runner-set
     steps:
-      - uses: actions/checkout@v3
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
