@@ -1,21 +1,13 @@
 version: "1.1"
-name: Account Registration
+name: Methylphenidate
 env:
   protocol: http
   host: localhost
-  port: 45483
+  port: 1337
 tests:
-  example:
+  account-registration:
     steps:
-      - name: GET request
-        http:
-          url: https://example.com
-          method: GET
-          check:
-            status: /^20/
-  register-account:
-    steps:
-      - name: POST /account/
+      - name: Register Account
         http:
           url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account
           method: POST
@@ -24,6 +16,25 @@ tests:
           headers:
             Content-Type: application/json
           json:
-            username: ${{ internet.username | fake }}
-            password: fasasfaasdasdasd
-            email: keinsell@protonmail.com
+            username: ${{ internet.userName | fake }}
+            password: ${{ internet.password | fake }}
+            email: ${{ internet.email | fake }}
+          captures:
+            email:
+              jsonpath: $.email
+      - name: POST /account/verification/resend-verification-email
+        http:
+          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/resend-verification-email?email=${{ captures.email }}
+          method: POST
+          check:
+            status: /^20/
+          headers:
+            Content-Type: application/json
+      - name: POST /account/verification/verify-email
+        http:
+          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
+          method: POST
+          check:
+            status: /^20/
+          headers:
+            Content-Type: application/json
