@@ -40,20 +40,8 @@ jobs:
   # Build is a step dedicated for building application.
   build:
     name: 🔨 Build
-    runs-on: methylphenidate-runner-set
-    steps:
-      - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node"
-
-      - name: ✳️ Build server
-        id: build-node-server
-        run: pnpm run build
-        shell: bash
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
 
   # Testing is a step dedicated for running all tests associated with given app.
   testing:
