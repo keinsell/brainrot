@@ -3,6 +3,7 @@ name: CodeQL
 # Not available in private repositories
 on:
   workflow_dispatch:
+  workflow_call:
 #   push:
 #     branches:
 #       - main
