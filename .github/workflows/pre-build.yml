@@ -32,5 +32,5 @@ jobs:
 
   security_codeql:
     name: codeql
-    uses: ./.github/workflows/security/codeql.yml
+    uses: ./.github/workflows/codeql.yml
     secrets: inherit
