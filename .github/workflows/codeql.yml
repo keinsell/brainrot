@@ -15,7 +15,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
+    name: analyze
     runs-on: methylphenidate-runner-set
 
     permissions:
@@ -40,7 +40,7 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-          source-root: src
+          source-root: .
 
       - name: Autobuild
         id: autobuild
