@@ -1,1 +1,0 @@
-export type JwtString = string & { __stringifiedJwt: never }

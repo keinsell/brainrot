@@ -1,4 +1,5 @@
-export class Identification {}
+import {ULID} from "./ulid.js"
+
 
 
 export type TypeID<T extends string = string> = `${T}_${string}` | string;
@@ -20,4 +21,6 @@ export type UniqueIdentifier =
 	| TypeID
 	| CUID
 	| UUID
+	| ULID
 	| KSUID;
+

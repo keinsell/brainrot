@@ -1,12 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="Local Development Compose" type="docker-deploy"
-                   factoryName="docker-compose.yml" activateToolWindowBeforeRun="false" server-name="Docker">
-        <deployment type="docker-compose.yml">
-            <settings>
-                <option name="envFilePath" value=""/>
-                <option name="sourceFilePath" value="compose-dev.yml"/>
-            </settings>
-        </deployment>
-        <method v="2"/>
-    </configuration>
+  <configuration default="false" name="Local Development Compose" type="docker-deploy" factoryName="docker-compose.yml" activateToolWindowBeforeRun="false" server-name="docker-desktop-linux">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="envFilePath" value="" />
+        <option name="sourceFilePath" value="compose-dev.yml" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
 </component>

@@ -41,6 +41,26 @@ model Session {
   Account   Account  @relation(fields: [accountId], references: [id])
 }
 
+// TODO: Maybe instead Token Auditing we should use Token Blacklisting?
+model TokenRecord {
+  id         String   @id @default(cuid())
+  // --------------------------------------------------
+  /// ID of the user to whom the token belongs
+  accountId  String
+  /// The ID of the token (jti claim from JWT)
+  tokenId    String
+  ///  Information about the device (e.g., browser, OS)
+  deviceInfo String
+  /// The issue time of the token (iat claim from JWT)
+  issuedAt   DateTime
+  /// The expiration time of the token (exp claim from JWT)
+  expiresAt  DateTime
+  /// Indicates if the token is revoked
+  isRevoked  Boolean
+  /// The last time the token was used
+  lastUsedAt DateTime
+}
+
 model VerificationRequest {
   id        String   @id @default(cuid())
   // --------------------------------------------------

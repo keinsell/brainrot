@@ -1,0 +1,1 @@
+export type UserAgent = string

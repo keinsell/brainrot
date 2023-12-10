@@ -1,15 +1,26 @@
-import {Event}   from "../../_unknown_lib/message/event.js"
-import {Message} from "../../_unknown_lib/message/message.js"
+import {Injectable, Logger} from "@nestjs/common"
+import {EventEmitter2}      from "@nestjs/event-emitter"
+import {Event}              from "../../_unknown_lib/message/event.js"
+import {Message}            from "../../_unknown_lib/message/message.js"
 
 
 
+@Injectable()
 export class EventBus {
-	async publish(event: any) {
-		console.log(event)
+	private logger: Logger = new Logger("event_bus")
+
+
+	constructor(private eventEmitter: EventEmitter2) {}
+
+
+	async publish(event: Event) {
+		this.logger.verbose(`Publishing ${event.constructor.name} to namespace ${event.namespace} (${event.id}) => ${JSON.stringify(event)}`)
+		this.eventEmitter.emit(event.namespace, event)
+		this.logger.debug(`Published ${event.id} to ${event.namespace}`)
 	}
 
 
-	async publishAll(events: any[]) {
+	async publishAll(events: Event[]) {
 		for (const event of events) {
 			await this.publish(event)
 		}
@@ -21,9 +32,7 @@ export abstract class EventBusBase {
 	private messageBus: MessageBusBase
 
 
-	constructor(
-		messageBus: MessageBusBase,
-	) {
+	constructor(messageBus: MessageBusBase) {
 		this.messageBus = messageBus
 	}
 

@@ -38,7 +38,7 @@ export class CartSeeder extends SeederBase<Prisma.CartCreateInput> {
 			},
 		})
 
-		if (!user) throw new Error("No account found without a profile entity")
+		if (!user) throw new Error("No domain found without a profile entity")
 
 		if (this.excludedUserIds.includes(user.id)) {
 			return this.fabricate()

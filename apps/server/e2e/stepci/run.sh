@@ -1,0 +1,1 @@
+rtx x nodejs@20 -- node -v && stepci run ./account.workflow.yml

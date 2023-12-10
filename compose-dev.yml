@@ -47,16 +47,16 @@ services:
     restart: unless-stopped
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - "${PWD}/.docker/postgres:/var/lib/postgresql/data"
     environment:
-      - POSTGRES_USER=keinsell
-      - POSTGRES_PASSWORD=keinsell
-      - POSTGRES_DATABASE=keinsell
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DATABASE=${DATABASE_NAME}
       - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_ROOT_PASSWORD=keinsell
+      - POSTGRES_PORT=${DATABASE_PORT}
+      - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
     mem_reservation: 256M
     mem_swappiness: 50
     cpu_count: 1

@@ -1,6 +1,3 @@
-import {AccountSeeder}                 from "@boundary/identity-and-access/modules/account/40-infrastructure/account-seeder.js"
-import {AccountModule}                 from "@boundary/identity-and-access/modules/account/account.module.js"
-import {ProfileSeeder}                 from "@boundary/identity-and-access/modules/profile/infrastructure/profile-seeder.js"
 import {Logger}                        from "@nestjs/common"
 import {NestFactory}                   from "@nestjs/core"
 import delay                           from "delay"
@@ -13,9 +10,13 @@ import {DatabaseModule}                from "./common/infrastructure/storage/dat
 import {seeder}                        from "./common/libraries/seeder/seeder.js"
 import {ApplicationConfiguration}      from "./configs/application-configuration.js"
 import {env}                           from "./configs/env.js"
+import {StaticFeatureFlags}            from "./configs/static-feature-flags.js"
 import {Container}                     from "./container.js"
+import {AccountSeeder}                 from "./modules/account/persistence/account-seeder.js"
+import {AccountModule}                 from "./modules/account/account.module.js"
 import {CartSeeder}                    from "./modules/cart/cart-seeder.js"
 import {ProductSeeder}                 from "./modules/product/product-seeder.js"
+import {ProfileSeeder}                 from "./modules/profile/infrastructure/profile-seeder.js"
 import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
 
 
@@ -37,6 +38,15 @@ export async function bootstrap() {
 	// Build swagger documentation
 	await buildSwaggerDocumentation(app);
 	buildCompodocDocumentation()
+
+	//	app.connectMicroservice<MicroserviceOptions>({
+	//		transport: Transport.NATS,
+	//		options:   {
+	//			url: 'nats://localhost:4222',
+	//		},
+	//	});
+	//
+	//	await app.startAllMicroservices();
 
 	// Listen on selected application port (with grace)
 	let openPortForAllocation = await portAllocator(env.PORT as number);
@@ -63,7 +73,11 @@ export async function bootstrap() {
 				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
 				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
 				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + ApplicationConfiguration.healthCheckPath}`)
-				logger.debug(`🧩 Prisma Admin is running on: http://localhost:${ApplicationConfiguration.prismaAdminPort}`)
+
+				if (env.isDev && StaticFeatureFlags.shouldRunPrismaStudio) {
+					logger.debug(`🧩 Prisma Admin is running on: http://localhost:${ApplicationConfiguration.prismaAdminPort}`)
+				}
+
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
@@ -86,7 +100,7 @@ export async function bootstrap() {
 	}
 
 	// If application is running in development mode, try to seed the database
-	if (env.isDev) {
+	if (env.isDev && StaticFeatureFlags.shouldRunSeeder) {
 		try {
 			seeder({
 				imports:   [
@@ -106,4 +120,3 @@ export async function bootstrap() {
 
 	return app;
 }
-
