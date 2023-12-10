@@ -4,7 +4,6 @@ INSTALLATION_NAME="methylphenidate-runner-set"
 NAMESPACE="methylphenidate-runners"
 GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
 
-# TODO: Use Configu
 op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
 
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
