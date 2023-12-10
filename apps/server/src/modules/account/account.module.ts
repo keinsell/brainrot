@@ -1,6 +1,7 @@
 import {Module}                        from "@nestjs/common"
 import {EventBusModule}                from "../../common/infrastructure/messaging/event-bus-module.js"
 import {DatabaseModule}                from "../../common/infrastructure/storage/database/database.module.js"
+import {CacheManagerModule}            from "../../common/libraries/cache-manager/cache-manager-module.js"
 import {PwnprocModule}                 from "../../common/libraries/pwnproc/pwnproc-module.js"
 import {UnihashModule}                 from "../../common/libraries/unihash/index.js"
 import {AccountPolicy}                 from "./domain/policies/account-policy.js"
@@ -16,7 +17,7 @@ import {AccountController}             from "./presentation/account.controller.j
 
 @Module({
 	imports:     [
-		DatabaseModule, PwnprocModule, UnihashModule, EventBusModule,
+		DatabaseModule, PwnprocModule, UnihashModule, EventBusModule, CacheManagerModule,
 	],
 	controllers: [AccountController, AccountRecoveryController, AccountVerificationController],
 	providers:   [

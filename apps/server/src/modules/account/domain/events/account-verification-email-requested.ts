@@ -3,11 +3,11 @@ import {Account} from "../account.js"
 
 
 
-export class AccountVerificationEmailRequested extends Event<Account> {
+export class AccountVerificationEmailRequested extends Event<{ accountId: string }> {
 	constructor(account: Account) {
 		super({
 			namespace: "account.verification.requested",
-			body:      account,
+			body:      {accountId: account.id},
 		})
 	}
 }

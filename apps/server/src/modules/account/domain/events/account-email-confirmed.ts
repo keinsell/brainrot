@@ -1,10 +1,14 @@
-import {Event}   from "../../../../common/_unknown_lib/message/event.js"
-import {Account} from "../account.js"
+import {Event} from "../../../../common/_unknown_lib/message/event.js"
 
 
 
-export class AccountEmailConfirmed extends Event<Account> {
-	constructor(account: Account) {
+export interface AccountEmailConfirmedPayload {
+	accountId: string
+}
+
+
+export class AccountEmailConfirmed extends Event<AccountEmailConfirmedPayload> {
+	constructor(account: AccountEmailConfirmedPayload) {
 		super({
 			namespace: "account.verification.completed",
 			body:      account,
