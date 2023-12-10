@@ -1,0 +1,31 @@
+name: 💡 Pre-build
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    name: "lint"
+    runs-on: methylphenidate-runner-set
+    continue-on-error: true
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+
+  spellcheck:
+    name: "spellcheck"
+    runs-on: methylphenidate-runner-set
+    continue-on-error: true
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"

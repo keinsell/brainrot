@@ -17,24 +17,13 @@ on:
       - 'libs/shared/**'
 env:
   TF_WORKSPACE: keinsell-dev
-  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
-  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
 
 jobs:
   # Pre-build is a quality-control step, dedicated for checking code formatting,
   # catching linting issues and other common dev-level mistakes.
   pre-build:
     name: 💡 Pre-build
-    runs-on: methylphenidate-runner-set
-    continue-on-error: true
-    steps:
-      - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node"
+    uses: ./.github/workflows/pre-build.yml
 
 
   # Build is a step dedicated for building application.
