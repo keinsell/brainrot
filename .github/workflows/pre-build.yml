@@ -31,6 +31,6 @@ jobs:
         uses: "./.github/actions/setup-node"
 
   security_codeql:
-    name: codeql
-    uses: ./.github/workflows/codeql.yml
+    name: "codeql"
+    uses: ./.github/workflows/security-codeql.yml
     secrets: inherit
