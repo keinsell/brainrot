@@ -26,3 +26,11 @@ jobs:
         id: build-node-server
         run: pnpm run build
         shell: bash
+
+      - name: 📦 Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-build-artifacts
+          path: |
+            apps/server/dist
+            apps/server/public
