@@ -1,17 +1,10 @@
 name: CodeQL
 
-# Not available in private repositories
 on:
   workflow_dispatch:
   workflow_call:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-#   schedule:
-#     - cron: '31 7 * * 3'
+  schedule:
+    - cron: '31 7 * * 3'
 
 jobs:
   analyze:
