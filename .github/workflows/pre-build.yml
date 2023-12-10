@@ -29,3 +29,8 @@ jobs:
 
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
+
+  security_codeql:
+    name: codeql
+    uses: ./.github/workflows/security/codeql.yml
+    secrets: inherit

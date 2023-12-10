@@ -1,0 +1,11 @@
+name: 🌺 Setup Environment
+
+description: Sets up the project, installs dependencies, and links submodules
+
+runs:
+  using: composite
+  steps:
+    - name: 🐧 Setup Operating System
+      uses: "./.github/actions/setup-os"
+    - name: ✳️ Setup Node.js
+      uses: "./.github/actions/setup-node"

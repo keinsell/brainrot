@@ -1,0 +1,18 @@
+name: 🐧 Setup Operating System
+
+description: Setup operating system of runner
+
+runs:
+  using: composite
+  steps:
+    - name: ⚙️ Disable man-db update
+      shell: bash
+      run: sudo rm -f /var/lib/man-db/auto-update
+
+    - name: 🧩 Install System Packages
+      run: sudo apt update && sudo apt-get install -y curl
+      shell: bash
+
+    - name: ⚛️ Setup kernel for react native, increase watchers
+      shell: bash
+      run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
