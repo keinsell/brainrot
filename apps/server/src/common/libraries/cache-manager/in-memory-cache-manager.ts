@@ -5,16 +5,20 @@ import {CacheManager} from "./cache-manager.js"
 
 @Injectable()
 export class InMemoryCacheManager extends CacheManager {
-	private _cache: Map<string, unknown>      = new Map<string, unknown>();
-	private _ttl: Map<string, NodeJS.Timeout> = new Map<string, NodeJS.Timeout>();
+	//noinspection LocalVariableNamingConventionJS
+	private _cache: Map<string, unknown>                                   = new Map<string, unknown>();
+	//noinspection LocalVariableNamingConventionJS
+	private _ttl: Map<string, { expiry: number, timeout: NodeJS.Timeout }> = new Map<string, {
+		expiry: number, timeout: NodeJS.Timeout
+	}>();
 
 
 	public async delete(key: string): Promise<void> {
 		this._cache.delete(key)
-		const timeout = this._ttl.get(key)
+		const ttlObject = this._ttl.get(key)
 
-		if (timeout) {
-			clearTimeout(timeout)
+		if (ttlObject) {
+			clearTimeout(ttlObject.timeout)
 			this._ttl.delete(key)
 		}
 
@@ -27,6 +31,7 @@ export class InMemoryCacheManager extends CacheManager {
 	}
 
 
+	//noinspection LocalVariableNamingConventionJS
 	public async get<T = unknown>(key: string): Promise<T | null> {
 		const value = this._cache.get(key)
 
@@ -47,10 +52,44 @@ export class InMemoryCacheManager extends CacheManager {
 				this._ttl.delete(key)
 			}, ttl)
 
-			this._ttl.set(key, timeout)
+			this._ttl.set(key, {
+				expiry:  Date.now() + ttl,
+				timeout: timeout,
+			})
 		}
 
 		return Promise.resolve(undefined)
 	}
 
+
+	public async clear(): Promise<void> {
+		this._cache.clear();
+		this._ttl.forEach((value, key) => {
+			clearTimeout(value.timeout);
+		});
+
+		this._ttl.clear();
+		return Promise.resolve(undefined);
+	}
+
+
+	public async getAll<T = unknown>(): Promise<T[]> {
+		return Array.from(this._cache.values()) as T[];
+	}
+
+
+	public async keys(): Promise<string[]> {
+		return Array.from(this._cache.keys());
+	}
+
+
+	public async ttl(key: string): Promise<number> {
+		const cacheTtl = this._ttl.get(key);
+
+		if (!cacheTtl) {
+			return -1;
+		} else {
+			return Math.max(cacheTtl.expiry - Date.now(), 0);
+		}
+	}
 }
