@@ -34,6 +34,7 @@ jobs:
   # Build is a step dedicated for building application.
   build:
     runs-on: methylphenidate-runner-set
+    name: 🔨 Build
     steps:
       - uses: actions/checkout@v3
         with:
@@ -42,6 +43,7 @@ jobs:
   # Testing is a step dedicated for running all tests associated with given app.
   testing:
     runs-on: methylphenidate-runner-set
+    name: 🔬 Testing
     steps:
       - uses: actions/checkout@v3
         with:
