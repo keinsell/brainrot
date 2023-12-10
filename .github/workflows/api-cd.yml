@@ -1,0 +1,35 @@
+name: Continuous Delivery of "server"
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [ "Continuous Integration of \"server\"" ]
+    types:
+      - completed
+    branches:
+      - next
+      - main
+env:
+  TF_WORKSPACE: keinsell-dev
+  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
+  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
+
+jobs:
+  release:
+    runs-on: methylphenidate-runner-set
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  deploy:
+    runs-on: methylphenidate-runner-set
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  monitor:
+    runs-on: methylphenidate-runner-set
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
