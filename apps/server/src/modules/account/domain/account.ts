@@ -37,15 +37,19 @@ export class Account extends AggregateRoot implements IdentityProperties {
 
 
 	static RegisterAccount(payload: Omit<IdentityProperties, 'status'>) {
-		return new Account({
+		let account = new Account({
 			...payload,
 			status:   AccountStatus.INACTIVE,
 			password: payload.password,
-		}).register()
+		})
+
+		account = account.register()
+
+		return account
 	}
 
 
-	static CreateAccount(payload: IdentityProperties) {
+	static build(payload: IdentityProperties) {
 		return new Account(payload)
 	}
 

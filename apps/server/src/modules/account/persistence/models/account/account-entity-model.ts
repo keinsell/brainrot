@@ -1,8 +1,8 @@
 import {DbContextModel} from "../../../../../common/infrastructure/storage/database/db-context-model.js"
-import {PhcString}     from "../../../../../common/libraries/unihash/types/phc-string.js"
-import {Account}       from "../../../domain/account.js"
-import {AccountStatus} from "../../../domain/value-objects/account-status.js"
-import {Password}      from "../../../domain/value-objects/password.js"
+import {PhcString}      from "../../../../../common/libraries/unihash/types/phc-string.js"
+import {Account}        from "../../../domain/account.js"
+import {AccountStatus}  from "../../../domain/value-objects/account-status.js"
+import {Password}       from "../../../domain/value-objects/password.js"
 
 
 
@@ -28,7 +28,7 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 
 
 	toDomainModel(): Account {
-		return Account.CreateAccount({
+		return Account.build({
 			id:        this.id,
 			username:  this.username,
 			email:     {

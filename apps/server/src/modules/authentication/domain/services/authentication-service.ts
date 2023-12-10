@@ -15,7 +15,7 @@ import {AccessToken}                                       from "../value-object
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private credentialValidator: CredentialValidator, private tokenManagement: JwtService, private sessionRepository: SessionRepository) {}
+	constructor(private credentialValidator: CredentialValidator, private tokenManagement: JwtService, private sessionRepository: SessionRepository, private eventbus: EventBus) {}
 
 
 	/**
@@ -68,7 +68,7 @@ export class AuthenticationService {
 			id:        randomUUID(),
 		})
 
-		await new EventBus().publishAll(session.getUncommittedEvents() as any)
+		await this.eventbus.publishAll(session.getUncommittedEvents() as any)
 
 		try {
 			await this.sessionRepository.save(session)

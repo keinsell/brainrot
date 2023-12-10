@@ -13,7 +13,7 @@ import {AccountRepository}                                    from "../../domain
  */
 @Injectable()
 export class CredentialValidator {
-	constructor(private repository: AccountRepository, private hashingService: PasswordHashing) {}
+	constructor(private repository: AccountRepository, private hashingService: PasswordHashing, private eventBus: EventBus) {}
 
 
 	/**
@@ -41,7 +41,7 @@ export class CredentialValidator {
 
 		user.authenticate()
 
-		new EventBus().publishAll(user.getUncommittedEvents() as any)
+		await this.eventBus.publishAll(user.getUncommittedEvents() as any)
 
 		return ok(user)
 	}

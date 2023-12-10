@@ -3,8 +3,7 @@ import {Account}        from '../../../domain/account.js';
 
 
 
-export class AccountCreateModel
-	implements DbContextModel.Account.CreatePayload {
+export class AccountCreateModel implements DbContextModel.Account.CreatePayload {
 	public createdAt?: Date | string;
 	public email: string;
 	public emailVerificationStatus: DbContextModel.Enums.EmailVerificationStatus;
@@ -15,18 +14,13 @@ export class AccountCreateModel
 
 
 	constructor(properties: DbContextModel.Account.CreatePayload) {
-		this.createdAt               = properties.createdAt;
-		this.email                   = properties.email;
-		this.emailVerificationStatus = properties.emailVerificationStatus;
-		this.id                      = properties.id;
-		this.password                = properties.password;
-		this.updatedAt               = properties.updatedAt;
-		this.username                = properties.username;
+		Object.assign(this, properties)
 	}
 
 
 	static fromDomainModel(account: Account): AccountCreateModel {
 		return new AccountCreateModel({
+			id:                      account.id,
 			email:                   account.email.address,
 			emailVerificationStatus: account.email.isVerified ? 'VERIFIED' : 'UNVERIFIED',
 			password:                account.password.hash.serialize(),

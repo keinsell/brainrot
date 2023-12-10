@@ -25,7 +25,7 @@ runs:
         username: ${{ env.DOCKERHUB_USERNAME }}
         password: ${{ env.DOCKERHUB_TOKEN }}
 
-    - name: ⚙️ Restore Docker Cache
+    - name: 📥 Restore Docker Cache
       uses: ScribeMD/docker-cache@0.3.6
       with:
         key: docker-engine-${{ runner.os }}
@@ -38,11 +38,24 @@ runs:
     - uses: docker/setup-buildx-action@v2
 
     - uses: pnpm/action-setup@v2
+      name: ⚙️ Setup pnpm
 
     - uses: actions/setup-node@v3
-      name: ⚙️ Setup Node Version
+      name: ⚙️ Setup Node.js
       with:
         node-version: 'latest'
         cache: 'pnpm'
+
+    - name: 📥 Cache pnpm packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+
+    - name: 📥 Install Node.js Dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
 
     - uses: configu/setup-cli-action@v1

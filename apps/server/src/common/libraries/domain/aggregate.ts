@@ -28,7 +28,7 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 
 
 	constructor(aggregateBaseProperties: Partial<AggregateRootProperties>) {
-		this._id       = aggregateBaseProperties.id
+		this._id       = aggregateBaseProperties.id || randomUUID()
 		this.createdAt = new Date()
 		this.updatedAt = new Date()
 	}
@@ -40,10 +40,6 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 	//private _stateMachine: StateMachine<T>
 
 	get id(): any | undefined {
-		if (!this._id) {
-			return randomUUID()
-		}
-
 		return this._id
 	}
 

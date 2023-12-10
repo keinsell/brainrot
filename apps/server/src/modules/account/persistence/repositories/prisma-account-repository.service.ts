@@ -1,9 +1,8 @@
-import {Injectable, Logger, NotImplementedException} from "@nestjs/common"
-import {PrismaService}                               from "../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {Injectable, Logger} from "@nestjs/common"
+import {PrismaService}      from "../../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {DbContextModel}     from "../../../../common/infrastructure/storage/database/db-context-model.js"
 import {Account}            from "../../domain/account.js"
 import {AccountRepository}  from "../../domain/repositories/account-repository.js"
-import {Email}              from "../../domain/value-objects/email.js"
 import {Username}           from "../../domain/value-objects/username.js"
 import {AccountCreateModel} from "../models/account/account-create-model.js"
 import {AccountEntityModel} from "../models/account/account-entity-model.js"
@@ -11,7 +10,7 @@ import {AccountEntityModel} from "../models/account/account-entity-model.js"
 
 
 @Injectable()
-export class PrismaIdentityRepository extends AccountRepository {
+export class PrismaAccountRepository extends AccountRepository {
 	private logger: Logger = new Logger("domain:repository:prisma")
 
 
@@ -48,8 +47,7 @@ export class PrismaIdentityRepository extends AccountRepository {
 					username: username,
 				},
 			}) as DbContextModel.Account.Entity | null
-		}
-		catch (e) {
+		} catch (e) {
 			this.logger.error(e)
 		}
 
@@ -73,8 +71,7 @@ export class PrismaIdentityRepository extends AccountRepository {
 			maybeAccount = await this.prismaService.account.findFirst({
 				where: {OR: [{username: username}, {email: username}]},
 			}) as DbContextModel.Account.Entity | null
-		}
-		catch (e) {
+		} catch (e) {
 			this.logger.error(e)
 		}
 
@@ -96,9 +93,8 @@ export class PrismaIdentityRepository extends AccountRepository {
 		try {
 			entity = await this.prismaService.account.create({
 				data: AccountCreateModel.fromDomainModel(identity),
-			}) as DbContextModel.Account.Entity
-		}
-		catch (e) {
+			})
+		} catch (e) {
 			this.logger.error(e)
 			throw e
 		}
@@ -116,9 +112,7 @@ export class PrismaIdentityRepository extends AccountRepository {
 		const count = await this.prismaService.account.count({
 			where: {
 				OR: [
-					{email: entity.email.address},
-					{username: entity.username},
-					{id: entity.id},
+					{email: entity.email.address}, {username: entity.username}, {id: entity.id},
 				],
 			},
 		})
@@ -127,13 +121,18 @@ export class PrismaIdentityRepository extends AccountRepository {
 	}
 
 
-	public findById(id: string): Promise<Account | null> {
-		return Promise.resolve(undefined)
-	}
+	public async findById(id: string): Promise<Account | null> {
+		const entity = await this.prismaService.account.findFirst({
+			where: {
+				id: id,
+			},
+		})
 
-
-	public getById(id: string): Promise<Account> {
-		throw new NotImplementedException(id)
+		if (entity) {
+			return new AccountEntityModel(entity).toDomainModel()
+		} else {
+			return null;
+		}
 	}
 
 

@@ -17,7 +17,7 @@ export class AccountService extends ServiceAbstract<Account> {
 	private logger: Logger = new Logger("account::service")
 
 
-	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: PasswordHashing) {
+	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: PasswordHashing, private eventbus: EventBus) {
 		super(repository)
 	}
 
@@ -54,7 +54,7 @@ export class AccountService extends ServiceAbstract<Account> {
 
 		identity = await this.repository.save(identity)
 
-		await new EventBus().publishAll(events)
+		await this.eventbus.publishAll(events)
 
 		this.logger.log(`Account ${identity.id} was successfully registered.`)
 
