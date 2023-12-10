@@ -5,7 +5,7 @@ on:
 
 jobs:
   build_server:
-    name: "🔨 Build: server"
+    name: "build_server"
     runs-on: methylphenidate-runner-set
     timeout-minutes: 80
     permissions:
