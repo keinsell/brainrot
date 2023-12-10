@@ -45,8 +45,3 @@ jobs:
 
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
-
-  cleanup:
-    name: 🧼 Cleanup
-    uses: ./.github/workflows/cleanup.yml
-    secrets: inherit
