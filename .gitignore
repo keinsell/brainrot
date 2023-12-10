@@ -155,3 +155,5 @@ src/externals/compodoc
 .docker/flame/*.sqlite
 .docker/flame/db_backups
 .docker/flame/uploads
+
+.turbo

@@ -1,4 +1,4 @@
-name: Continuous Integration of "server"
+name: Continuous Integration
 
 on:
   pull_request:
@@ -26,25 +26,37 @@ jobs:
   pre-build:
     name: 💡 Pre-build
     runs-on: methylphenidate-runner-set
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node.yml"
+
+
   # Build is a step dedicated for building application.
   build:
-    runs-on: methylphenidate-runner-set
     name: 🔨 Build
+    runs-on: methylphenidate-runner-set
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node.yml"
 
   # Testing is a step dedicated for running all tests associated with given app.
   testing:
     runs-on: methylphenidate-runner-set
     name: 🔬 Testing
+    needs: [ "build" ]
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node.yml"
