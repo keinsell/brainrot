@@ -1,13 +1,13 @@
 # Preview workflow is dedicated for spinning off a development environments on terraform, for example for every PR opened to main there will be real-world environment setted up on infrastructure which will be destroyed after merge.
 
-name: 👨‍💻 Preview
+name: 👨‍💻 Deploy
 
 on:
   workflow_call:
 
 jobs:
-  spinoff_preivew_environment:
-    name: "spinoff_preivew_environment"
+  deploy:
+    name: "deploy"
     runs-on: methylphenidate-runner-set
     permissions:
       contents: read
