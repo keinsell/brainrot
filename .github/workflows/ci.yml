@@ -33,7 +33,7 @@ jobs:
           fetch-depth: 0
 
       - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node.yml"
+        uses: "./.github/actions/setup-node"
 
 
   # Build is a step dedicated for building application.
@@ -46,7 +46,7 @@ jobs:
           fetch-depth: 0
 
       - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node.yml"
+        uses: "./.github/actions/setup-node"
 
   # Testing is a step dedicated for running all tests associated with given app.
   testing:
@@ -59,4 +59,4 @@ jobs:
           fetch-depth: 0
 
       - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node.yml"
+        uses: "./.github/actions/setup-node"
