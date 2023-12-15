@@ -40,5 +40,4 @@ jobs:
     uses: ./.github/workflows/test.yml
     needs:
       - build
-      - pre-build
     secrets: inherit
