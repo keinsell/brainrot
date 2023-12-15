@@ -1,21 +1,16 @@
 name: CodeQL
 
-# Not available in private repositories
 on:
   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-#   schedule:
-#     - cron: '31 7 * * 3'
+  workflow_call:
+  schedule:
+    - cron: '31 7 * * 3'
 
 jobs:
   analyze:
-    name: Analyze
+    name: analyze
     runs-on: methylphenidate-runner-set
+    continue-on-error: true
 
     permissions:
       actions: read
@@ -39,7 +34,7 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-          source-root: src
+          source-root: .
 
       - name: Autobuild
         id: autobuild

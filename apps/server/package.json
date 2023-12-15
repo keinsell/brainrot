@@ -1,12 +1,13 @@
 {
-  "name": "application",
+  "name": "server",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build:nest": "nest build",
+    "build": "pnpm run build:tsc",
     "build:tsc": "tspc -p tsconfig.json && pnpm copy:markdown && pnpm copy:prisma",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

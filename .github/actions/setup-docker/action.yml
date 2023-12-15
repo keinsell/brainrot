@@ -1,0 +1,14 @@
+name: 🐳 Setup Docker
+
+description: Sets up the docker
+
+runs:
+  using: composite
+  steps:
+    - name: 📥 Restore Docker Cache
+      uses: ScribeMD/docker-cache@0.3.6
+      with:
+        key: docker-engine-${{ runner.os }}
+
+    - uses: docker/setup-qemu-action@v2
+    - uses: docker/setup-buildx-action@v2

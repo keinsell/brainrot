@@ -1,0 +1,28 @@
+name: 🌺 Setup Environment
+
+description: Sets up the project, installs dependencies, and links submodules
+
+inputs:
+  setup_os:
+    default: true
+  setup_node:
+    default: true
+
+runs:
+  using: composite
+  steps:
+    - name: 🐧 Setup Operating System
+      if: inputs.setup_os
+      uses: "./.github/actions/setup-os"
+    - name: ✳️ Setup Node.js
+      if: inputs.setup_node
+      uses: "./.github/actions/setup-node"
+    # TODO: Setup Go
+    # TODO: Setup Java
+    #    - name: ☕️ Setup Java
+    #      uses: "./.github/actions/setup-java"
+    #      if: inputs.setup_java
+    # TODO: Setup Rust
+    # TODO: Setup C/C++
+    # TODO: Setup WASM
+    # TODO: Setup Python

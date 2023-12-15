@@ -9,8 +9,9 @@
     "name": "Jakub Olan",
     "url": "https://keinsell.com"
   },
-  "scripts": {},
-  "dependencies": {
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.22",
@@ -38,6 +39,7 @@
     "regenerator-runtime": "^0.14.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "turbo": "^1.11.1",
     "typescript": "5.2.2"
   },
   "peerDependencies": {
