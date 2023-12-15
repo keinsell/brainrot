@@ -3,12 +3,10 @@ name: Continuous Delivery
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ "./.github/workflows/ci.yml" ]
+    workflows: [ "🔁 Continuous Integration" ]
+    branches: [ main ]
     types:
       - completed
-    branches:
-      - next
-      - main
 env:
   TF_WORKSPACE: keinsell-dev
   CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
