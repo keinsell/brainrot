@@ -32,7 +32,6 @@ jobs:
     needs:
       - pre-build
     uses: ./.github/workflows/build.yml
-    secrets: inherit
 
   # Testing is a step dedicated for running all tests associated with given app.
   test:
@@ -40,4 +39,3 @@ jobs:
     uses: ./.github/workflows/test.yml
     needs:
       - build
-    secrets: inherit
