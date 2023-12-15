@@ -10,6 +10,7 @@ jobs:
   analyze:
     name: analyze
     runs-on: methylphenidate-runner-set
+    continue-on-error: true
 
     permissions:
       actions: read

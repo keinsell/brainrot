@@ -3,6 +3,7 @@ name: 💡 Pre-build
 on:
   workflow_call:
 
+
 jobs:
   lint:
     name: "lint"
@@ -32,5 +33,4 @@ jobs:
 
   security_codeql:
     name: "codeql"
-    continue-on-error: true
     uses: ./.github/workflows/security-codeql.yml
