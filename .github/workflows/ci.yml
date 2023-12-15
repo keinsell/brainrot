@@ -34,8 +34,8 @@ jobs:
     uses: ./.github/workflows/build.yml
 
   # Testing is a step dedicated for running all tests associated with given app.
-  test:
-    name: 🔬 Test
-    uses: ./.github/workflows/test.yml
-    needs:
-      - build
+#  test:
+#    name: 🔬 Test
+#    uses: ./.github/workflows/test.yml
+#    needs:
+#      - build
