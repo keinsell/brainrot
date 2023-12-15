@@ -34,4 +34,3 @@ jobs:
     name: "codeql"
     continue-on-error: true
     uses: ./.github/workflows/security-codeql.yml
-    secrets: inherit
