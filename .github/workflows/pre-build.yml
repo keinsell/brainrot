@@ -7,7 +7,7 @@ jobs:
   lint:
     name: "lint"
     runs-on: methylphenidate-runner-set
-    continue-on-error: true
+    continue-on-error: false
     steps:
       - name: 📜 Checkout Repository
         uses: actions/checkout@v3
@@ -32,5 +32,6 @@ jobs:
 
   security_codeql:
     name: "codeql"
+    continue-on-error: true
     uses: ./.github/workflows/security-codeql.yml
     secrets: inherit

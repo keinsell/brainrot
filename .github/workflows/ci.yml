@@ -29,6 +29,8 @@ jobs:
   # Build is a step dedicated for building application.
   build:
     name: 🔨 Build
+    needs:
+      - pre-build
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
@@ -38,4 +40,5 @@ jobs:
     uses: ./.github/workflows/test.yml
     needs:
       - build
+      - pre-build
     secrets: inherit
