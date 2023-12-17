@@ -25,7 +25,7 @@ export class AccountService extends ServiceAbstract<Account> {
 	/**
 	 * # `register-account`
 	 *
-	 * Register account is operation dedicated for creating new accounts in codebase.
+	 * Register account is an operation dedicated to creating new accounts in codebase.
 	 *
 	 * @param {RegisterAccountDto} registerAccount
 	 * @returns {Promise<Account>}
