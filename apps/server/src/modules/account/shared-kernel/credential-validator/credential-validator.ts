@@ -2,8 +2,8 @@ import {Injectable, NotFoundException, UnauthorizedException} from "@nestjs/comm
 import {err, ok, Result}                                      from "neverthrow"
 import {EventBus}                                             from "../../../../common/infrastructure/messaging/event-bus.js"
 import {PasswordHashing}                                      from "../../../../common/libraries/unihash/password-hashing.service.js"
-import {Account}                                              from "../../domain/account.js"
-import {AccountRepository}                                    from "../../domain/repositories/account-repository.js"
+import {Account}                                              from "../../entities/account.js"
+import {AccountRepository}                                    from "../../repositories/account-repository.js"
 
 
 

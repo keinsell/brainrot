@@ -9,7 +9,8 @@ import {PostalCode}        from "./postal-code.js"
 
 export type AddressString = string
 
-export type Address = {
+
+export interface Address {
 	street1: AddressStreetLine
 	street2?: AddressStreetLine
 	city: AddressCity
@@ -17,6 +18,4 @@ export type Address = {
 	postalCode: PostalCode
 	country: CountryCode
 	coordinates?: Coordinates
-
-	stringify(): AddressString
 }

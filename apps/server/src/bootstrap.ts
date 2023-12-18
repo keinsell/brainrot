@@ -12,7 +12,7 @@ import {ApplicationConfiguration}      from "./configs/application-configuration
 import {env}                           from "./configs/env.js"
 import {StaticFeatureFlags}            from "./configs/static-feature-flags.js"
 import {Container}                     from "./container.js"
-import {AccountSeeder}                 from "./modules/account/persistence/account-seeder.js"
+import {AccountSeeder}                 from "./modules/account/repositories/account-seeder.js"
 import {AccountModule}                 from "./modules/account/account.module.js"
 import {CartSeeder}                    from "./modules/cart/cart-seeder.js"
 import {ProductSeeder}                 from "./modules/product/product-seeder.js"
@@ -53,8 +53,7 @@ export async function bootstrap() {
 
 	if (openPortForAllocation.wasReplaced) {
 		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPortForAllocation.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
-	}
-	else {
+	} else {
 		logger.log(`Port availability check succeeded and requested ::${env.PORT} is available`);
 	}
 
@@ -81,8 +80,7 @@ export async function bootstrap() {
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
-		}
-		catch (e) {
+		} catch (e) {
 			logger.error(`Error while trying to start application: ${(
 				e as unknown as any
 			).message}`);
@@ -110,8 +108,7 @@ export async function bootstrap() {
 					ProductSeeder, AccountSeeder, ProfileSeeder,
 				],
 			}).run([ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder]);
-		}
-		catch (e) {
+		} catch (e) {
 			logger.error(`Error while trying to seed database: ${(
 				e as unknown as any
 			).message}`);

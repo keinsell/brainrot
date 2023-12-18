@@ -1,4 +1,4 @@
-import {Account} from "../domain/account.js"
+import {Account} from "../entities/account.js"
 
 
 

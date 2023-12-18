@@ -1,5 +1,5 @@
 import {Event}   from "../../../common/_unknown_lib/message/event.js"
-import {Session} from "../session.js"
+import {Session} from "../entities/session.js"
 
 
 
