@@ -3,6 +3,7 @@ import {JwtModule}                  from "@nestjs/jwt"
 import {PassportModule}             from "@nestjs/passport"
 import {DatabaseModule}             from "../../common/infrastructure/storage/database/database.module.js"
 import {authorizationConfiguration} from "../../configs/authorization-configuration.js"
+import {AccountModule}              from "../account/account.module.js"
 import {CredentialValidatorModule}  from "../account/shared-kernel/credential-validator/credential-validator-module.js"
 import {AuthenticationController}   from "./controllers/authentication-controller.js"
 import {PrismaSessionRepository}    from "./repositories/prisma-session-repository.js"
@@ -15,11 +16,10 @@ import {LocalAuthorizationStrategy} from "./services/authorization-strategies/lo
 
 @Module({
 	imports:     [
-		CredentialValidatorModule, PassportModule.register({
+		CredentialValidatorModule, AccountModule, PassportModule.register({
 			session: false,
 		}), DatabaseModule, JwtModule.register({
-			secret:      authorizationConfiguration.jwtSecret,
-			signOptions: {expiresIn: '1h'},
+			secretOrPrivateKey: authorizationConfiguration.jwtSecret,
 		}),
 	],
 	controllers: [AuthenticationController],

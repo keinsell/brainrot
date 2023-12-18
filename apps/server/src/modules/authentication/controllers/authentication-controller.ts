@@ -1,13 +1,16 @@
-import {Body, Controller, Get, Logger, Post, Req, UseGuards}                                from "@nestjs/common"
-import {ApiBasicAuth, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOperation} from "@nestjs/swagger"
-import {Request}                                                                            from "express"
-import {Account}                                                                            from "../../account/entities/account.js"
-import {Authenticate}                                                                       from "../commands/authenticate.js"
-import {AuthenticationResponse}                                                             from "../dtos/authentication-response.js"
-import {JwtAuthorizationGuard}                                                              from "../guards/jwt-authorization-guard.js"
-import {LocalAuthorizationGuard}                                                            from "../guards/local-authorization-guard.js"
-import {AuthenticationService}                                                              from "../services/authentication-service.js"
-import {IpAddress}                                                                          from "../value-objects/ip-address.js"
+import {Body, Controller, Get, Logger, Post, Req, UseGuards} from "@nestjs/common"
+import {
+	ApiBasicAuth, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation,
+}                                                            from "@nestjs/swagger"
+import {Request}                                             from "express"
+import {AccountDto}                                          from "../../account/dtos/account.dto.js"
+import {Account}                                             from "../../account/entities/account.js"
+import {Authenticate}                                        from "../commands/authenticate.js"
+import {AuthenticationResponse}                              from "../dtos/authentication-response.js"
+import {JwtAuthorizationGuard}                               from "../guards/jwt-authorization-guard.js"
+import {LocalAuthorizationGuard}                             from "../guards/local-authorization-guard.js"
+import {AuthenticationService}                               from "../services/authentication-service.js"
+import {IpAddress}                                           from "../value-objects/ip-address.js"
 
 
 
@@ -57,16 +60,22 @@ export class AuthenticationController {
 
 	@UseGuards(JwtAuthorizationGuard) @Get() @ApiBearerAuth() @ApiOperation({
 		operationId: "whoami",
+		summary: "Who am I?",
 		description: "Returns the current user",
 		tags:        ['authentication'],
 	})
-	async whoami(@Req() request: Request): Promise<string> {
-		this.logger.verbose(request.user)
-		this.logger.verbose(request.headers.authorization)
-
-		// TODO: Validate token
-
-		return "whoami"
+	@ApiOkResponse({
+		type:        AccountDto,
+		description: "Account was found in system, and returned.",
+	})
+	async whoami(@Req() request: Request): Promise<AccountDto> {
+		const user: Account = request.user as unknown as Account
+		return {
+			id:            user.id,
+			username:      user.username,
+			email:         user.email.address,
+			emailVerified: user.email.isVerified
+		}
 	}
 
 

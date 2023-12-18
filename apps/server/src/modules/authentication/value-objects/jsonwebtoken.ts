@@ -16,8 +16,8 @@ export class JsonWebToken implements JwtPayload {
 	readonly metadata?: {
 		[key: string]: string | undefined;
 	};
-	readonly nbf?: number;
-	readonly sub?: string;
+	readonly nbf?: number | undefined;
+	readonly sub?: string | undefined;
 
 
 	constructor(payload: CreateJsonWebToken, duration: string = '1h') {
@@ -27,7 +27,6 @@ export class JsonWebToken implements JwtPayload {
 		this.metadata = payload.metadata;
 		this.jti      = randomUUID();
 		this.iat      = Date.now();
-		this.nbf      = this.iat;
 		this.exp      = this.iat + ms(duration);
 	}
 
@@ -40,7 +39,6 @@ export class JsonWebToken implements JwtPayload {
 			iss:      this.iss,
 			jti:      this.jti,
 			metadata: this.metadata,
-			nbf:      this.nbf,
 			sub:      this.sub,
 		};
 	}

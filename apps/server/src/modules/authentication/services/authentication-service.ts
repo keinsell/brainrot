@@ -45,7 +45,7 @@ export class AuthenticationService {
 
 		const jwtPayload = new AccessToken({
 			sub:      account.id,
-			aud:      "aud",
+			aud:      "http://localhost:1337",
 			metadata: {
 				email: account.email.address,
 			},
