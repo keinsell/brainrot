@@ -1,12 +1,13 @@
-import {Body, Controller, Post}      from "@nestjs/common"
-import {ApiOkResponse, ApiOperation} from "@nestjs/swagger"
-import {readFileSync}                from 'node:fs'
-import {dirname}                     from "path"
-import {fileURLToPath}               from "url"
-import {AccountService}              from "../services/account-service.js"
-import {AccountDto}                  from "../dtos/account.dto.js"
-import {CreateAccountDto}            from "../dtos/create-account-dto.js"
-import {RegisterAccountDto}          from "../dtos/register-account-dto.js"
+import {Body, Controller, Post, UseGuards} from "@nestjs/common"
+import {ApiOkResponse, ApiOperation}       from "@nestjs/swagger"
+import {readFileSync}                      from 'node:fs'
+import {dirname}                           from "path"
+import {fileURLToPath}                     from "url"
+import {JwtAuthorizationGuard}             from "../../authentication/guards/jwt-authorization-guard.js"
+import {AccountDto}                        from "../dtos/account.dto.js"
+import {CreateAccountDto}                  from "../dtos/create-account-dto.js"
+import {RegisterAccountDto}                from "../dtos/register-account-dto.js"
+import {AccountService}                    from "../services/account-service.js"
 
 
 
@@ -60,7 +61,7 @@ export class AccountController {
 		}
 	}
 
-
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
 		operationId: "change-password",
 		description: "Changes the user's password",
@@ -70,7 +71,7 @@ export class AccountController {
 		return "change-password"
 	}
 
-
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
 		operationId: "change-email",
 		description: "Changes the user's email",
@@ -80,7 +81,7 @@ export class AccountController {
 		return "change-email"
 	}
 
-
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
 		operationId: "change-username",
 		description: "Changes the user's username",
@@ -90,12 +91,12 @@ export class AccountController {
 		return "change-username"
 	}
 
-
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
-		operationId: "delete-domain",
-		description: "Deletes the user's domain",
+		operationId: "delete-account",
+		description: "Deletes the user's account.",
 		tags:        ['account'],
-	}) @Post('delete-domain')
+	}) @Post('delete-account')
 	async deleteAccount(): Promise<string> {
 		return "delete-domain"
 	}

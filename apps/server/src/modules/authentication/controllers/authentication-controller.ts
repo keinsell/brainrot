@@ -79,7 +79,7 @@ export class AuthenticationController {
 	}
 
 
-	@UseGuards(JwtAuthorizationGuard) @Post("refresh-token") @ApiOperation({
+ @Post("refresh-token") @ApiOperation({
 		operationId: "refresh-token",
 		description: "Use a refresh token to extend a session and generate another access token",
 		tags:        ['authentication'],

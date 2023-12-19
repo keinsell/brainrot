@@ -31,14 +31,61 @@ model Account {
   User                    User?
 }
 
+model AccountV2 {
+  id             String    @id @default(cuid())
+  // --------------------------------------------------
+  /// Custom fields that store info about a user that influences the user's access, such as support plan, security roles (if not using the Authorization Core feature set), or access control groups.
+  app_metadata   Json      @default("{}")
+  /// Indicates whether the user has been blocked.
+  blocked        Boolean   @default(false)
+  /// IP addresses that have been blocked under suspicion of a bruteforce attack.
+  blocked_for    String[]  @default([])
+  /// The user's email address. Must be unique.
+  email          String    @unique
+  /// Indicates whether the user has verified their email address.
+  email_verified Boolean   @default(false)
+  /// The user's family name.
+  family_name    String?
+  /// The user's given name.
+  given_name     String?
+  /// The user's locale.
+  locale         String?   @default("en")
+  /// The user's username. Must be unique.
+  username       String    @unique
+  /// URL pointing to the user's profile picture.
+  picture        String?
+  /// The user's full name
+  name           String?
+  /// The user's nickname.
+  nickname       String?
+  /// The user's phone number. Only valid for users with SMS connections.
+  phone_number   String?
+  /// Indicates whether the user has been verified their phone number. Only valid for users with SMS connections.
+  phone_verified Boolean   @default(false)
+  /// The user's password. Only valid for users with Database connections. (It's argon2 hashed)
+  password       String
+  /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
+  user_metadata  Json      @default("{}")
+  /// IP address associated with the user's last login.
+  last_ip        String?
+  /// Timestamp indicating when the user last logged in.
+  last_login     DateTime?
+  // --------------------------------------------------
+  createdAt      DateTime  @default(now())
+  /// Timestamp indicating when the user's profile was last updated/modified. Changes to last_login are considered updates, so most of the time, updated_at will match last_login.
+  updatedAt      DateTime  @updatedAt
+  // --------------------------------------------------
+}
+
 model Session {
-  id        String   @id @default(cuid())
+  id          String   @id @default(cuid())
   // --------------------------------------------------
-  accountId String
+  accountId   String
   // --------------------------------------------------
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
   // --------------------------------------------------
-  Account   Account  @relation(fields: [accountId], references: [id])
+  Account     Account  @relation(fields: [accountId], references: [id])
+  accountV2Id String?
 }
 
 // TODO: Maybe instead Token Auditing we should use Token Blacklisting?
@@ -62,17 +109,18 @@ model TokenRecord {
 }
 
 model VerificationRequest {
-  id        String   @id @default(cuid())
+  id          String   @id @default(cuid())
   // --------------------------------------------------
-  accountId String
-  email     String
-  token     String
-  issuedAt  DateTime @default(now())
-  expiresAt DateTime
+  accountId   String
+  email       String
+  token       String
+  issuedAt    DateTime @default(now())
+  expiresAt   DateTime
   // --------------------------------------------------
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
   // --------------------------------------------------
-  Account   Account  @relation(fields: [accountId], references: [id])
+  Account     Account  @relation(fields: [accountId], references: [id])
+  accountV2Id String?
 }
 
 model User {

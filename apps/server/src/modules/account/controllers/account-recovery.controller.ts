@@ -1,12 +1,14 @@
-import {Controller, Post} from "@nestjs/common"
-import {ApiOperation}     from "@nestjs/swagger"
-import {OpenapiTags}      from "../../../common/infrastructure/documentation/swagger/openapi-tags.js"
+import {Controller, Post, UseGuards} from "@nestjs/common"
+import {ApiOperation}                from "@nestjs/swagger"
+import {OpenapiTags}                 from "../../../common/infrastructure/documentation/swagger/openapi-tags.js"
+import {JwtAuthorizationGuard}       from "../../authentication/guards/jwt-authorization-guard.js"
 
 
 
 @Controller("/account/recovery")
 export class AccountRecoveryController {
 
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
 		operationId: "forgot-password",
 		summary:     "Request password reset",
@@ -21,7 +23,7 @@ export class AccountRecoveryController {
 		return "forgot-password"
 	}
 
-
+	@UseGuards(JwtAuthorizationGuard)
 	@ApiOperation({
 		operationId: "reset-password",
 		summary:     "Reset password",
@@ -31,5 +33,4 @@ export class AccountRecoveryController {
 	async resetPassword(): Promise<string> {
 		return "reset-password"
 	}
-
 }

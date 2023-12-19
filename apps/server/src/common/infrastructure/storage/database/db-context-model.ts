@@ -1,4 +1,4 @@
-import {$Enums, Account as PrismaAccount, Prisma} from '../../../../vendor/prisma/index.js'
+import {$Enums, Account as PrismaAccount, Prisma, Session as PrismaSession} from '../../../../vendor/prisma/index.js'
 
 
 
@@ -16,5 +16,13 @@ export namespace DbContextModel {
 		export type UpdatePayload = Prisma.AccountUpdateInput;
 		export type WhereUnique = Prisma.AccountWhereUniqueInput;
 		export type Where = Prisma.AccountWhereInput;
+	}
+
+	export namespace Session {
+		export type Entity = PrismaSession;
+		export type CreatePayload = Prisma.SessionCreateInput;
+		export type UpdatePayload = Prisma.SessionUpdateInput;
+		export type WhereUnique = Prisma.SessionWhereUniqueInput;
+		export type Where = Prisma.SessionWhereInput;
 	}
 }
