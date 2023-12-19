@@ -1,9 +1,8 @@
-import {Readable}         from "stream"
 import {UniqueIdentifier} from "../../../_unknown_lib/identification/index.js"
 
 
 
-export class Blob {
+export class BlobReference {
 	public id: UniqueIdentifier | undefined
 	public url?: string
 	public presignedUrl?: string
@@ -12,7 +11,6 @@ export class Blob {
 	public checksum?: string
 	public createdAt?: Date
 	public updatedAt?: Date
-	public source?: Readable | Buffer
 
 
 	constructor(
@@ -24,7 +22,6 @@ export class Blob {
 			size?: number,
 			createdAt?: Date,
 			updatedAt?: Date,
-			source?: Readable | Buffer
 		},
 	) {
 		this.id           = payload.id
@@ -34,13 +31,5 @@ export class Blob {
 		this.size         = payload.size
 		this.createdAt    = payload.createdAt
 		this.updatedAt    = payload.updatedAt
-		this.source       = payload.source
-	}
-
-
-	static fromStream(stream: Readable): Blob {
-		return new Blob({
-			source: stream,
-		})
 	}
 }
