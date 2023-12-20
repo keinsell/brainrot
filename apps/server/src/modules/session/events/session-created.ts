@@ -1,14 +1,14 @@
-import {Event}   from "../../../common/libraries/message/event.js"
-import {Session} from "../entities/session.js"
+import {Event}       from "../../../common/libraries/message/event.js"
+import {UserSession} from "../entities/user-session.js"
 
 
 
 export class SessionCreated extends Event {
 	public static readonly type = "SessionCreated"
-	public readonly payload: Session
+	public readonly payload: UserSession
 
 
-	constructor(session: Session) {
+	constructor(session: UserSession) {
 		super({
 			namespace: "session.created",
 			body:      session,

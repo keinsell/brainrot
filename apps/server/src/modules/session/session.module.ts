@@ -12,7 +12,7 @@ import {SessionService}                      from "./services/session-service.js
 @Module({
 	imports: [JwtModule.register({
 		secretOrPrivateKey: authorizationConfiguration.jwtSecret,
-	}),],
+	})],
 	controllers: [SessionController],
 	providers: [SessionService, {provide: SessionRepository, useClass: InMemorySessionRepository}, 	{provide: TokenManagement, useClass: JwtTokenManagement}],
 	exports: [SessionService],

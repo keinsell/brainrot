@@ -44,7 +44,7 @@ export interface SessionProperties {
 }
 
 
-export class Session extends AggregateRoot implements SessionProperties {
+export class UserSession extends AggregateRoot implements SessionProperties {
 
 	public device: string
 	public endTime: Date | null
@@ -74,32 +74,32 @@ export class Session extends AggregateRoot implements SessionProperties {
 	}
 
 
-	public static build(props: SessionProperties): Session {
-		return new Session({
+	public static build(props: SessionProperties): UserSession {
+		return new UserSession({
 			id:        randomUUID(), ...props,
 			startTime: new Date(),
 		})
 	}
 
 
-	public RestoreSession(props: SessionProperties): Session {
-		return new Session(props)
+	public RestoreSession(props: SessionProperties): UserSession {
+		return new UserSession(props)
 	}
 
 
-	public refreshSession(tokenId: string): Session {
+	public refreshSession(tokenId: string): UserSession {
 		this.logger.log(`Refreshed with token ${tokenId}`)
 		this.tokens.push(tokenId)
 		return this
 	}
 
 
-	public destroySession(): Session {
+	public destroySession(): UserSession {
 		return this
 	}
 
 
-	public startSession(): Session {
+	public startSession(): UserSession {
 		this.appendEvent(new SessionEvent.SessionCreated(this))
 		return this
 	}

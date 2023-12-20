@@ -1,6 +1,6 @@
 import {DbContextModel} from "../../../../common/modules/storage/database/db-context-model.js"
 import {Prisma}         from "../../../../vendor/prisma/index.js"
-import {Session}        from "../../entities/session.js"
+import {UserSession}    from "../../entities/user-session.js"
 
 
 
@@ -13,7 +13,7 @@ export class SessionCreateModel implements DbContextModel.Session.CreatePayload 
 		Object.assign(this, payload)
 	}
 
-	static fromDomainModel(session: Session): SessionCreateModel {
+	static fromDomainModel(session: UserSession): SessionCreateModel {
 		return new SessionCreateModel({
 			id: session.id,
 			Account: {

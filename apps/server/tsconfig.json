@@ -34,6 +34,7 @@
     "noFallthroughCasesInSwitch": false,
     "types": [
       "@types/node",
+      "./src/common/types/index.d.ts",
       "./src/vendor/prisma/index.d.ts"
     ],
     "paths": {

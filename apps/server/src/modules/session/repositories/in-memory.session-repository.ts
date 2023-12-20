@@ -1,31 +1,31 @@
 import {Injectable}        from "@nestjs/common"
-import {Session}           from "../entities/session.js"
+import {UserSession}       from "../entities/user-session.js"
 import {SessionRepository} from "./session-repository.js"
 
 
 
 @Injectable()
 export class InMemorySessionRepository extends SessionRepository {
-	private sessions: { [key: string]: Session } = {};
+	private sessions: { [key: string]: UserSession } = {};
 
-	public async create(entity: Session): Promise<Session> {
+	public async create(entity: UserSession): Promise<UserSession> {
 		this.sessions[entity.id] = entity;
 		return entity;
 	}
 
-	public async delete(entity: Session): Promise<void> {
+	public async delete(entity: UserSession): Promise<void> {
 		delete this.sessions[entity.id];
 	}
 
-	public async exists(entity: Session): Promise<boolean> {
+	public async exists(entity: UserSession): Promise<boolean> {
 		return this.sessions[entity.id] !== undefined;
 	}
 
-	public async findById(id: string): Promise<Session | null> {
+	public async findById(id: string): Promise<UserSession | null> {
 		return this.sessions[id] || null;
 	}
 
-	public async update(entity: Session): Promise<Session> {
+	public async update(entity: UserSession): Promise<UserSession> {
 		if (!this.sessions[entity.id]) {
 			throw new Error('Session not found');
 		}
@@ -34,7 +34,7 @@ export class InMemorySessionRepository extends SessionRepository {
 	}
 
 
-	public async getByJti(jti: string): Promise<Session> {
+	public async getByJti(jti: string): Promise<UserSession> {
 		const session = Object.values(this.sessions).find(session => session.tokenId === jti)
 
 		if (!session) {

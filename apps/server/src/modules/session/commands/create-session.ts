@@ -1,4 +1,4 @@
-import {SessionProperties} from "../entities/session.js"
+import {SessionProperties} from "../entities/user-session.js"
 
 
 

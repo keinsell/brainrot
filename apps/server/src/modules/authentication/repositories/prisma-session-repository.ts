@@ -1,6 +1,6 @@
 import {Injectable}        from "@nestjs/common"
 import {PrismaService}     from "../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
-import {Session}           from "../../session/entities/session.js"
+import {UserSession}       from "../../session/entities/user-session.js"
 import {SessionRepository} from "./session-repository.js"
 
 
@@ -10,17 +10,17 @@ export class PrismaSessionRepository extends SessionRepository {
 	constructor(private prisma: PrismaService) {super()}
 
 
-	public create(entity: Session): Promise<Session> {
+	public create(entity: UserSession): Promise<UserSession> {
 		throw new Error("Not implemented")
 	}
 
 
-	public delete(entity: Session): Promise<void> {
+	public delete(entity: UserSession): Promise<void> {
 		throw new Error("Not implemented")
 	}
 
 
-	public async exists(entity: Session): Promise<boolean> {
+	public async exists(entity: UserSession): Promise<boolean> {
 		const count = await this.prisma.session.count({
 			where: {
 				id: entity.id,
@@ -31,12 +31,12 @@ export class PrismaSessionRepository extends SessionRepository {
 	}
 
 
-	public async findById(id: string): Promise<Session | undefined> {
+	public async findById(id: string): Promise<UserSession | undefined> {
 		throw new Error("Not implemented")
 	}
 
 
-	public async update(entity: Session): Promise<Session> {
+	public async update(entity: UserSession): Promise<UserSession> {
 		throw new Error("Not implemented")
 	}
 }

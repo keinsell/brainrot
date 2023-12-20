@@ -19,7 +19,7 @@ import {JwtTokenManagement, TokenManagement} from "./services/token-management.j
 @Module({
 	imports:     [
 		CredentialValidatorModule, AccountModule, PassportModule.register({
-			session: false,
+			session: true,
 		}), DatabaseModule, JwtModule.register({
 			secretOrPrivateKey: authorizationConfiguration.jwtSecret,
 		}),

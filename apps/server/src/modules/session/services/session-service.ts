@@ -1,15 +1,15 @@
 import {Injectable, Logger} from "@nestjs/common"
 import {randomUUID}         from "node:crypto"
-import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
+import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {CreateSession}      from "../commands/create-session.js"
-import {Session}            from "../entities/session.js"
+import {UserSession}        from "../entities/user-session.js"
 import {SessionRepository}  from "../repositories/session-repository.js"
 
 
 
 @Injectable()
-export class SessionService extends ServiceAbstract<Session> {
+export class SessionService extends ServiceAbstract<UserSession> {
 	private logger: Logger = new Logger("session::service")
 
 	constructor(
@@ -19,8 +19,8 @@ export class SessionService extends ServiceAbstract<Session> {
 		sessionRepository,
 	)}
 
-	public async startSession(payload: CreateSession): Promise<Session> {
-		const session = Session.build({
+	public async startSession(payload: CreateSession): Promise<UserSession> {
+		const session = UserSession.build({
 			...payload,
 			id: randomUUID(),
 			startTime: new Date(),
@@ -35,7 +35,7 @@ export class SessionService extends ServiceAbstract<Session> {
 		return this.sessionRepository.create(session)
 	}
 
-	public async refreshSession(session: Session, accessTokenJti: string): Promise<Session> {
+	public async refreshSession(session: UserSession, accessTokenJti: string): Promise<UserSession> {
 		session.refreshSession(accessTokenJti)
 
 		const events = session.getUncommittedEvents()
@@ -45,7 +45,7 @@ export class SessionService extends ServiceAbstract<Session> {
 		return this.sessionRepository.update(session)
 	}
 
-	public async getByJti(jti: string): Promise<Session> {
+	public async getByJti(jti: string): Promise<UserSession> {
 		return this.sessionRepository.getByJti(jti)
 	}
 }
