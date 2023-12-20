@@ -2,10 +2,10 @@ import {randomUUID}            from "node:crypto"
 import {AggregateRoot}         from "../../../common/libraries/domain/aggregate.js"
 import {AccountId}             from "../../account/shared-kernel/account-id.js"
 import {IpAddress}             from "../../authentication/value-objects/ip-address.js"
-import {SessionExpirationDate} from "../../authentication/value-objects/session-expiration-date.js"
-import {SessionStatus}         from "../../authentication/value-objects/session-status.js"
-import {UserAgent}             from "../../authentication/value-objects/user-agent.js"
 import {SessionEvent}          from "../events/session-event.js"
+import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"
+import {SessionStatus}         from "../value-objects/session-status.js"
+import {UserAgent}             from "../value-objects/user-agent.js"
 
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or email address. This is crucial for associating user-specific data and permissions with the session.
 //
@@ -39,20 +39,24 @@ export interface SessionProperties {
 	location?: string;
 	device?: string;
 	status: SessionStatus
+	tokenId?: string
+	tokens?: string[]
 }
 
 
 export class Session extends AggregateRoot implements SessionProperties {
 
-	public expiresAt: Date
-	public ipAddress: IpAddress
-	public subject: AccountId
-	public userAgent: string
 	public device: string
 	public endTime: Date | null
+	public expiresAt: Date
+	public ipAddress: IpAddress
 	public location: string
 	public startTime: Date
 	public status: SessionStatus
+	public subject: AccountId
+	public tokenId: string
+	public tokens: string[]
+	public userAgent: string
 
 
 	constructor(props: SessionProperties) {
@@ -64,15 +68,17 @@ export class Session extends AggregateRoot implements SessionProperties {
 		this.endTime   = props.endTime;
 		this.location  = props.location;
 		this.device    = props.device;
+		this.status    = props.status;
+		this.tokenId   = props.tokenId;
+		this.tokens    = props.tokens;
 	}
 
 
-	public static CreateSession(props: SessionProperties): Session {
-		const session = new Session({
+	public static build(props: SessionProperties): Session {
+		return new Session({
 			id:        randomUUID(), ...props,
 			startTime: new Date(),
 		})
-		return session.startSession()
 	}
 
 
@@ -81,7 +87,9 @@ export class Session extends AggregateRoot implements SessionProperties {
 	}
 
 
-	public refreshSession(): Session {
+	public refreshSession(tokenId: string): Session {
+		this.logger.log(`Refreshed with token ${tokenId}`)
+		this.tokens.push(tokenId)
 		return this
 	}
 
@@ -91,7 +99,7 @@ export class Session extends AggregateRoot implements SessionProperties {
 	}
 
 
-	protected startSession(): Session {
+	public startSession(): Session {
 		this.appendEvent(new SessionEvent.SessionCreated(this))
 		return this
 	}

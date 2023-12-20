@@ -4,12 +4,9 @@ import {JwtPayload} from "./jwt-payload.js"
 
 
 
-export type CreateJsonWebToken = Omit<JwtPayload, 'jti' | 'exp' | 'iat' | 'nbf'>
-
-
-export class JsonWebToken implements JwtPayload {
-	readonly aud: string;
-	readonly exp: number;
+export class JsonWebToken {
+	readonly audience: string;
+	readonly expiresAt: number;
 	readonly iat: number;
 	readonly iss?: string;
 	readonly jti: string;
@@ -20,21 +17,22 @@ export class JsonWebToken implements JwtPayload {
 	readonly sub?: string | undefined;
 
 
-	constructor(payload: CreateJsonWebToken, duration: string = '1h') {
-		this.aud      = payload.aud;
+	constructor(payload: Omit<JwtPayload, "exp" | "iat" | "nbf" | "jti"> & {jti?: string, nbf?:number, iat?: number, exp?: number}, duration: string = '1h') {
+		this.audience = payload.aud;
 		this.iss      = payload.iss;
 		this.sub      = payload.sub;
 		this.metadata = payload.metadata;
-		this.jti      = randomUUID();
-		this.iat      = Date.now();
-		this.exp      = this.iat + ms(duration);
+		this.jti      = payload.jti ?? randomUUID();
+		this.nbf 	  = payload.nbf ?? Date.now() + ms("1s");
+		this.iat       = payload.iat ?? Date.now();
+		this.expiresAt = payload.exp ?? this.iat + ms(duration);
 	}
 
 
 	toPlainObject(): JwtPayload {
 		return {
-			aud:      this.aud,
-			exp:      this.exp,
+			aud:      this.audience,
+			exp:      this.expiresAt,
 			iat:      this.iat,
 			iss:      this.iss,
 			jti:      this.jti,
@@ -46,6 +44,6 @@ export class JsonWebToken implements JwtPayload {
 
 	isValid(): boolean {
 		const now = Date.now();
-		return now >= this.nbf && now <= this.exp;
+		return now >= this.nbf && now <= this.expiresAt;
 	}
 }

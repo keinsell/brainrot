@@ -1,21 +1,18 @@
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common"
-import {JwtService}                                        from "@nestjs/jwt"
 import {ok, Result}                                        from "neverthrow"
-import {randomUUID}                                        from "node:crypto"
-import {EventBus}                                          from "../../../common/infrastructure/messaging/event-bus.js"
 import {CredentialValidator}                               from "../../account/shared-kernel/credential-validator/credential-validator.js"
-import {Session}                                           from "../../session/entities/session.js"
-import {SessionRepository}                                 from "../repositories/session-repository.js"
-import {IpAddress}                                         from "../value-objects/ip-address.js"
-import {SessionStatus}                                     from "../value-objects/session-status.js"
+import {JwtPayload}                                        from "../value-objects/jwt-payload.js"
+import {SignedJsonwebtoken}                                from "../value-objects/signed-jsonwebtoken.js"
 import {AccessToken}                                       from "../value-objects/tokens/access-token.js"
+import {RefreshToken}                                      from "../value-objects/tokens/refresh-token.js"
+import {TokenManagement}                                   from "./token-management.js"
 
 
 
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private credentialValidator: CredentialValidator, private tokenManagement: JwtService, private sessionRepository: SessionRepository, private eventbus: EventBus) {}
+	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement) {}
 
 
 	/**
@@ -30,10 +27,8 @@ export class AuthenticationService {
 	 *   If successful, it contains the domain ID, access token, and refresh token.
 	 *   If unsuccessful, it contains the error.
 	 */
-	public async authenticate(username: string, password: string, metadata?: {
-		userAgent?: string, ipAddress?: string,
-	}): Promise<Result<{
-		accountId: string, accessToken: string, refreshToken: string,
+	public async authenticate(username: string, password: string): Promise<Result<{
+		accessToken: SignedJsonwebtoken, refreshToken: SignedJsonwebtoken, accountId: string
 	}, NotFoundException | ForbiddenException>> {
 		const isValid = await this.credentialValidator.validateCredentials(username, password)
 
@@ -43,43 +38,30 @@ export class AuthenticationService {
 
 		const account = isValid.value
 
-		const jwtPayload = new AccessToken({
+		const tokenPayload: Omit<JwtPayload, "exp" | "iat" | "nbf" | "jti"> & {jti?: string, nbf?:number, iat?: number, exp?: number} = {
 			sub:      account.id,
 			aud:      "http://localhost:1337",
 			metadata: {
+				username: account.username,
 				email: account.email.address,
 			},
-		})
-
-		const accessToken = new AccessToken(jwtPayload)
-
-		const signedAccessToken = await this.tokenManagement.signAsync(accessToken.toPlainObject())
-
-		const session = Session.CreateSession({
-			device:    "",
-			location:  "",
-			status:    SessionStatus.ACTIVE,
-			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-			ipAddress: metadata?.ipAddress as IpAddress,
-			userAgent: metadata?.userAgent,
-			subject:   account.id,
-			startTime: new Date(),
-			endTime:   null,
-			id:        randomUUID(),
-		})
-
-		await this.eventbus.publishAll(session.getUncommittedEvents() as any)
-
-		try {
-			await this.sessionRepository.save(session)
-		} catch (e) {
-			console.error(e)
 		}
+
+		const accessToken = new AccessToken({
+		...tokenPayload,
+		}, "1h")
+
+		const refreshToken = new AccessToken({
+			...tokenPayload,
+		}, "3w")
+
+		const signedAccessToken = await this.tokenManagement.sign(accessToken)
+		const signedRefreshToken = await this.tokenManagement.sign(refreshToken)
 
 		return ok({
 			accountId:    account.id,
 			accessToken:  signedAccessToken,
-			refreshToken: signedAccessToken,
+			refreshToken: signedRefreshToken,
 		})
 	}
 
@@ -89,7 +71,21 @@ export class AuthenticationService {
 	}
 
 
-	public async refreshToken(refreshToken: string): Promise<string> {
-		return "refreshToken"
+	public async refreshToken(refreshToken: string): Promise<{ refreshToken: RefreshToken, accessToken: SignedJsonwebtoken }> {
+		const decodedRefreshToken = await this.tokenManagement.decode(refreshToken)
+		const refreshTokenObject = new RefreshToken(decodedRefreshToken)
+
+		const accessTokn = new AccessToken({
+		...decodedRefreshToken,
+			iat: new Date().getTime(),
+			exp: new Date().getTime() + 1000 * 60 * 60,
+		}, "1h")
+
+		const signedAccessToken = await this.tokenManagement.sign(accessTokn)
+
+		return {
+			refreshToken: refreshTokenObject,
+			accessToken:  signedAccessToken,
+		}
 	}
 }

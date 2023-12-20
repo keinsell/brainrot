@@ -1,3 +1,4 @@
+import {Logger}     from "@nestjs/common"
 import {randomUUID} from "node:crypto"
 
 
@@ -12,7 +13,7 @@ export interface AggregateRootProperties {
 // TODO: https://linear.app/keinsell/issue/PROD-93/add-aggregate-root-base-class
 export class AggregateRoot<T extends Object = {}> implements AggregateRootProperties {
 	public readonly createdAt: Date
-	public updatedAt: Date
+	protected logger: Logger
 	/**
 	 * Array that holds events data.
 	 *
@@ -31,17 +32,22 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 		this._id       = aggregateBaseProperties.id || randomUUID()
 		this.createdAt = new Date()
 		this.updatedAt = new Date()
+		this.logger	= new Logger(this.constructor.name.toLowerCase() + `::${this.id}`)
 	}
 
 
 	private _id: any | undefined;
 
 
-	//private _stateMachine: StateMachine<T>
-
 	get id(): any | undefined {
 		return this._id
 	}
+
+
+	//private _stateMachine: StateMachine<T>
+
+
+	public updatedAt: Date
 
 
 	/**

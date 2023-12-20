@@ -5,6 +5,8 @@ import {
 import {Request}                                             from "express"
 import {AccountDto}                                          from "../../account/dtos/account.dto.js"
 import {Account}                                             from "../../account/entities/account.js"
+import {SessionService}                                      from "../../session/services/session-service.js"
+import {SessionStatus}                                       from "../../session/value-objects/session-status.js"
 import {Authenticate}                                        from "../commands/authenticate.js"
 import {AuthenticationResponse}                              from "../dtos/authentication-response.js"
 import {JwtAuthorizationGuard}                               from "../guards/jwt-authorization-guard.js"
@@ -19,12 +21,14 @@ export class AuthenticationController {
 	private logger: Logger = new Logger("authentication::controller")
 
 
-	constructor(private authenticationService: AuthenticationService) {}
+	constructor(private authenticationService: AuthenticationService, private sessionService: SessionService) {}
 
 
+	// TODO: This request is using doubled comparision of password which extends the time of the request.
 	@ApiBasicAuth() @UseGuards(LocalAuthorizationGuard) @Post() @ApiOperation({
 		operationId: "authenticate",
-		description: "Logs the user in",
+		summary: "Basic Authentication",
+		description: "Logs the user in with usage of a username and password.",
 		tags:        ['authentication'],
 	}) @ApiCreatedResponse({
 		description: "The user has been successfully authenticated and session was created.",
@@ -38,10 +42,7 @@ export class AuthenticationController {
 
 		const user: Account = request.user as unknown as Account
 
-		const maybeAuthenticated = await this.authenticationService.authenticate(user.username, body.password, {
-			userAgent: userAgent,
-			ipAddress: ipAddress,
-		})
+		const maybeAuthenticated = await this.authenticationService.authenticate(user.username, body.password)
 
 		if (maybeAuthenticated.isErr()) {
 			throw maybeAuthenticated.error
@@ -49,10 +50,24 @@ export class AuthenticationController {
 
 		const authenticationResult = maybeAuthenticated.value
 
+		const maybeSession = await this.sessionService.startSession({
+			subject:   authenticationResult.refreshToken.sub,
+			ipAddress,
+			userAgent,
+			tokenId:  authenticationResult.refreshToken.jti,
+			tokens:    [authenticationResult.accessToken.jti],
+			endTime:   undefined,
+			expiresAt: new Date(authenticationResult.refreshToken.expiresAt),
+			status:    SessionStatus.ACTIVE
+		})
+
+		this.logger.log(`Issued session ${maybeSession.id}`)
+		this.logger.verbose(JSON.stringify(maybeSession))
+
 		return {
 			id:           authenticationResult.accountId,
-			accessToken:  authenticationResult.accessToken,
-			refreshToken: authenticationResult.refreshToken,
+			accessToken:  authenticationResult.accessToken.signature,
+			refreshToken: authenticationResult.refreshToken.signature,
 			mfa:          false,
 		}
 	}
@@ -76,29 +91,5 @@ export class AuthenticationController {
 			email:         user.email.address,
 			emailVerified: user.email.isVerified
 		}
-	}
-
-
- @Post("refresh-token") @ApiOperation({
-		operationId: "refresh-token",
-		description: "Use a refresh token to extend a session and generate another access token",
-		tags:        ['authentication'],
-	})
-	async refreshToken(@Body() body: Authenticate): Promise<string> {
-		const {
-				  username,
-				  password,
-			  } = body
-
-		const isValid = await this.authenticationService.authenticate(username, password)
-
-		//if (isValid.isErr()) {
-		//	throw isValid.error
-		//}
-
-		// TODO: Generate JWT Tokens
-		// TODO: Return JWT
-
-		return "login"
 	}
 }

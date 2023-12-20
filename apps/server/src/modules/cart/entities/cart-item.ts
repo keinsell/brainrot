@@ -1,4 +1,4 @@
-import {CartProduct} from "./value-objects/cart-product.js"
+import {CartProduct} from "../value-objects/cart-product.js"
 
 
 

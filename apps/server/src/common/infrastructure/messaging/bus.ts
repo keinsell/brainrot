@@ -2,7 +2,7 @@ import {EventEmitter} from "events"
 import {Message}      from "../../_unknown_lib/message/message.js"
 
 
-
+// TODO: https://linear.app/keinsell/issue/PROD-108/add-outbox-support-for-message-bus
 /** Message Bus is abstraction that will use in-memory registrations based on the message type, serialization logic and decorators. This is one-stop place to publish events to other parts of application. */
 export abstract class Bus {
 	constructor() {}
