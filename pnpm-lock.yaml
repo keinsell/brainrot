@@ -290,6 +290,9 @@ importers:
       tildify:
         specifier: ^3.0.0
         version: 3.0.0
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
       untildify:
         specifier: ^5.0.0
         version: 5.0.0

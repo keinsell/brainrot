@@ -2,7 +2,7 @@ import {BadRequestException, Injectable, Logger, NotFoundException, Unauthorized
 import {OnEvent}                                                                           from "@nestjs/event-emitter"
 import ms                                                                                  from "ms"
 import {randomUUID}                                                                        from "node:crypto"
-import {EventBus}                                                                          from "../../../common/infrastructure/messaging/event-bus.js"
+import {EventBus}                                                                          from "../../../common/modules/messaging/event-bus.js"
 import {CacheManager}                                                                      from "../../../common/libraries/cache-manager/cache-manager.js"
 import {StaticFeatureFlags}                                                                from "../../../configs/static-feature-flags.js"
 import {AccountRegistered}                                                                 from "../events/account-registered.js"

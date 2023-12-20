@@ -1,5 +1,5 @@
 import {Injectable, Logger} from "@nestjs/common"
-import {EventBus}           from "../../../common/infrastructure/messaging/event-bus.js"
+import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
 import {PasswordHashing}    from "../../../common/libraries/unihash/index.js"
 import {KdfAlgorithm}       from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"

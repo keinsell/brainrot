@@ -1,11 +1,11 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
-import {PrismaService}      from "../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
+import {PrismaService}      from "../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
 import {AccountFixture}     from "../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../vendor/prisma/index.js"
-import {AccountService}     from "../services/account-service.js"
 import {RegisterAccountDto} from "../dtos/register-account-dto.js"
+import {AccountService}     from "../services/account-service.js"
 import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 

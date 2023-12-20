@@ -1,5 +1,5 @@
-import {DbContextModel} from "../../../../common/infrastructure/storage/database/db-context-model.js"
 import {PhcString}      from "../../../../common/libraries/unihash/types/phc-string.js"
+import {DbContextModel} from "../../../../common/modules/storage/database/db-context-model.js"
 import {Account}        from "../../entities/account.js"
 import {AccountStatus}  from "../../value-objects/account-status.js"
 import {Password}       from "../../value-objects/password.js"

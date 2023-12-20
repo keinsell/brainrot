@@ -1,6 +1,6 @@
 import {Body, Controller, Post} from "@nestjs/common"
 import {ApiOperation}           from "@nestjs/swagger"
-import {OpenapiTags}            from "../../../common/infrastructure/documentation/swagger/openapi-tags.js"
+import {OpenapiTags}            from "../../../common/modules/documentation/swagger/openapi-tags.js"
 import {TokenManagement}        from "../../authentication/services/token-management.js"
 import {AccessToken}            from "../../authentication/value-objects/tokens/access-token.js"
 import {RefreshSession}         from "../commands/refresh-session.js"

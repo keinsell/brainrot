@@ -1,7 +1,7 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
-import {PrismaService}      from "../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {SeederBase}         from "../../common/libraries/seeder/seeder-base.js"
+import {PrismaService}      from "../../common/modules/storage/database/adapters/prisma/prisma-service.js"
 import type {Prisma}        from "../../vendor/prisma/index.js"
 
 

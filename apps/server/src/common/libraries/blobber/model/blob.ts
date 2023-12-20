@@ -1,5 +1,5 @@
 import {Readable}         from "stream"
-import {UniqueIdentifier} from "../../../_unknown_lib/identification/index.js"
+import {UniqueIdentifier} from "../../identification/index.js"
 
 
 

@@ -1,5 +1,5 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
-import {EventBus}   from "../../../infrastructure/messaging/event-bus.js"
+import {EventBus}   from "../../../modules/messaging/event-bus.js"
 import {Repository} from "../../storr/repository/repository.js"
 
 

@@ -1,6 +1,6 @@
 import {Controller, Post, UseGuards} from "@nestjs/common"
 import {ApiOperation}                from "@nestjs/swagger"
-import {OpenapiTags}                 from "../../../common/infrastructure/documentation/swagger/openapi-tags.js"
+import {OpenapiTags}                 from "../../../common/modules/documentation/swagger/openapi-tags.js"
 import {JwtAuthorizationGuard}       from "../../authentication/guards/jwt-authorization-guard.js"
 
 

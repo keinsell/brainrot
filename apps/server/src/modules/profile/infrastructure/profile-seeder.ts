@@ -1,8 +1,8 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
-import {PrismaService}      from "../../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
 import {Address}            from "../../../common/libraries/address/address.js"
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
+import {PrismaService}      from "../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
 import {Prisma}             from "../../../vendor/prisma/index.js"
 import UserCreateInput = Prisma.UserCreateInput
 

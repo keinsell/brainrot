@@ -1,6 +1,6 @@
 import {Injectable, Logger} from "@nestjs/common"
 import {randomUUID}         from "node:crypto"
-import {EventBus}           from "../../../common/infrastructure/messaging/event-bus.js"
+import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
 import {CreateSession}      from "../commands/create-session.js"
 import {Session}            from "../entities/session.js"

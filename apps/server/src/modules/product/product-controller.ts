@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Get, Patch, Post} from "@nestjs/common"
 import {ApiOperation}                               from "@nestjs/swagger"
-import {PrismaService}                              from "../../common/infrastructure/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}                              from "../../common/modules/storage/database/adapters/prisma/prisma-service.js"
 import type {Prisma, Product}                       from "../../vendor/prisma/index.js"
 
 

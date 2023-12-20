@@ -1,4 +1,4 @@
-import {DbContextModel} from "../../../../common/infrastructure/storage/database/db-context-model.js"
+import {DbContextModel} from "../../../../common/modules/storage/database/db-context-model.js"
 import {Account}        from '../../entities/account.js';
 
 
