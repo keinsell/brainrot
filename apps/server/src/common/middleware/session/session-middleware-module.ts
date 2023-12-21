@@ -27,12 +27,17 @@ interface Options {
 	retriesStrategy?: Parameters<typeof createRetriesMiddleware>[2];
 }
 
+
 export type NestSessionOptions = SyncOptions<Options>;
 
 export type NestSessionAsyncOptions = AsyncOptions<Options>;
 
 export const SessionMiddlewareModule = createModule<Options>((options) => {
-	const { retries, session, retriesStrategy } = options;
+	const {
+			  retries,
+			  session,
+			  retriesStrategy,
+		  }        = options;
 	let middleware = expressSession(session);
 
 	if (retries !== undefined) {

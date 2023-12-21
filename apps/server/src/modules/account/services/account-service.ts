@@ -1,8 +1,8 @@
 import {Injectable, Logger} from "@nestjs/common"
-import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
 import {PasswordHashing}    from "../../../common/libraries/unihash/index.js"
 import {KdfAlgorithm}       from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
+import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
 import {RegisterAccountDto} from "../dtos/register-account-dto.js"
 import {Account}            from "../entities/account.js"
 import {AccountPolicy}      from "../policies/account-policy.js"
@@ -40,7 +40,7 @@ export class AccountService extends ServiceAbstract<Account> {
 
 		await this.policy.canRegisterAccount({
 			email:    email.address,
-			password: password.plain!,
+			password: password.plain,
 			username: registerAccount.username.toLowerCase(),
 		})
 

@@ -1,6 +1,7 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {Address}            from "../../../common/libraries/address/address.js"
+import {CountryCode}        from "../../../common/libraries/address/country-code.js"
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
 import {PrismaService}      from "../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
 import {Prisma}             from "../../../vendor/prisma/index.js"
@@ -13,12 +14,8 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 	private excludedAccountIds = new Array<string>()
 
 
-	constructor(
-		private prismaService: PrismaService,
-	) {
-		super(
-			new Logger("seeder:profile"),
-		)
+	constructor(private prismaService: PrismaService) {
+		super(new Logger("seeder:profile"))
 	}
 
 
@@ -60,7 +57,7 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 			city:       faker.location.city(),
 			postalCode: faker.location.zipCode(),
 			state:      faker.location.state(),
-			country:    faker.location.countryCode(),
+			country:    faker.location.countryCode() as CountryCode,
 		}
 
 		return {

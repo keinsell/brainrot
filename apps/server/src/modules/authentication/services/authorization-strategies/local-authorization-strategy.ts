@@ -3,7 +3,7 @@ import {PassportStrategy}       from '@nestjs/passport';
 import {Strategy}               from 'passport-local';
 import {censorString}           from "../../../../utilities/console-utils/censor-string.js"
 import {CredentialValidator}    from "../../../account/shared-kernel/credential-validator/credential-validator.js"
-import {AuthenticationStrategy} from "../authentication-strategy.js"
+import {AuthenticationStrategy} from "./authentication-strategy.js"
 
 
 

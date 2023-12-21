@@ -7,11 +7,9 @@ export class Event<BODY = unknown> extends Message<BODY> {
 
 
 	constructor(payload: Omit<Message<BODY>, "id" | "timestamp" | "type">) {
-		super(
-			{
-				...payload,
-			},
-		)
+		super({
+			...payload,
+		})
 		Object.assign(this, payload)
 		this.id = this.generateIdWithNamespace(this.type)
 	}

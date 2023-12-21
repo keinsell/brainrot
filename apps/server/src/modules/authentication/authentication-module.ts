@@ -22,16 +22,17 @@ import {JwtTokenManagement, TokenManagement} from "./services/token-management.j
 			session: true,
 		}), DatabaseModule, JwtModule.register({
 			secretOrPrivateKey: authorizationConfiguration.jwtSecret,
-		}),
-		SessionModule,
+		}), SessionModule,
 	],
 	controllers: [AuthenticationController],
 	providers:   [
 		AuthenticationService, LocalAuthorizationStrategy, JwtAuthorizationStrategy, {
 			provide:  SessionRepository,
 			useClass: PrismaSessionRepository,
+		}, {
+			provide:  TokenManagement,
+			useClass: JwtTokenManagement,
 		},
-		{provide: TokenManagement, useClass: JwtTokenManagement}
 	],
 	exports:     [AuthenticationService],
 })

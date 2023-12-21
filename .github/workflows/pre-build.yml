@@ -29,6 +29,10 @@ jobs:
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
 
+  code-quality:
+    name: "qodana"
+    uses: ./.github/workflows/code-quality.yml
+
   security_codeql:
     name: "codeql"
     uses: ./.github/workflows/security-codeql.yml

@@ -1,19 +1,19 @@
 version: "3.7"
 
 services:
-  #  traefik:
-  #    container_name: ${SERVICE_NAME}-traefik
-  #    image: traefik:v2.3
-  #    command:
-  #      - --api.insecure=true
-  #      - --providers.docker
-  #      - --providers.docker.exposedbydefault=false
-  #      - --entrypoints.web.address=:80
-  #    ports:
-  #      - "80:80"
-  #      - "8080:8080"
-  #    volumes:
-  #      - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+     container_name: ${SERVICE_NAME}-traefik
+     image: traefik:v2.3
+     command:
+       - --api.insecure=true
+       - --providers.docker
+       - --providers.docker.exposedbydefault=false
+       - --entrypoints.web.address=:80
+     ports:
+       - "80:80"
+       - "8080:8080"
+     volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
 
   jaeger:
     container_name: ${SERVICE_NAME}-jaeger
@@ -27,7 +27,6 @@ services:
       - "flame.name=jager"
       - "flame.url=http://localhost:16686/search"
       - "flame.public=true"
-    restart: unless-stopped
     ports:
       - "5775:5775/udp"
       - "6831:6831/udp"
@@ -44,7 +43,6 @@ services:
 
   postgres:
     container_name: ${SERVICE_NAME}-postgres
-    restart: unless-stopped
     image: postgres:latest
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
@@ -57,23 +55,12 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=${DATABASE_PORT}
       - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
-    mem_reservation: 256M
-    mem_swappiness: 50
+    mem_reservation: 126M
     cpu_count: 1
-    cpu_percent: 1
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 1024m
-        reservations:
-          cpus: "0.25"
-          memory: 512M
 
   redis:
     container_name: ${SERVICE_NAME}-redis
     image: redis:latest
-    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.redis.rule=Host(`redis.local`)"
@@ -81,18 +68,8 @@ services:
       - "6379:6379"
     volumes:
       - "${PWD}/.docker/redis:/var/lib/redis"
-    mem_reservation: 256M
-    mem_swappiness: 50
+    mem_reservation: 126M
     cpu_count: 1
-    cpu_percent: 1
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 1024m
-        reservations:
-          cpus: "0.25"
-          memory: 512M
 
   # Dashboard listing all services related to repository for easier navigation.
   # http://localhost:5005/
@@ -108,7 +85,6 @@ services:
   nats:
     container_name: ${SERVICE_NAME}-nats
     image: nats:latest
-    restart: unless-stopped
     ports:
       - "4222:4222" # Client connections
       - "6222:6222" # Route connections
@@ -122,10 +98,12 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.nats.rule=Host(`nats.local`)"
       - "traefik.http.services.nats.loadbalancer.server.port=8222"
-    mem_reservation: 256M
-    mem_swappiness: 50
+      - "flame.type=application"
+      - "flame.name=nats-management"
+      - "flame.url=http://localhost:8222"
+      - "flame.public=true"
+    mem_reservation: 126M
     cpu_count: 1
-    cpu_percent: 1
     deploy:
       resources:
         limits:

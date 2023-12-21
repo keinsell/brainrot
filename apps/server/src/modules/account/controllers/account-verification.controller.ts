@@ -1,7 +1,8 @@
-import {Controller, Post, Query} from "@nestjs/common"
-import {ApiOperation, ApiQuery}  from "@nestjs/swagger"
-import {AccountFixture}          from "../../../utilities/fixtures/account-fixture.js"
-import {AccountVerification}     from "../services/account-verification.js"
+import {Controller, Post, Query, UseGuards} from "@nestjs/common"
+import {ApiOperation, ApiQuery}             from "@nestjs/swagger"
+import {AccountFixture}                     from "../../../utilities/fixtures/account-fixture.js"
+import {JwtAuthorizationGuard}              from "../../authentication/guards/jwt-authorization-guard.js"
+import {AccountVerification}                from "../services/account-verification.js"
 
 
 
@@ -26,7 +27,7 @@ export class AccountVerificationController {
 	}
 
 
-	@ApiOperation({
+	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
 		operationId: "resend-verification-email",
 		summary:     "Re-send verification email",
 		description: "Resends the verification email",

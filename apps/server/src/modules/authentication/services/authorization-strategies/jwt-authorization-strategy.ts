@@ -7,7 +7,7 @@ import {authorizationConfiguration} from "../../../../configs/authorization-conf
 import {AccountService}             from "../../../account/services/account-service.js"
 import {AuthenticationStrategyType} from "../../utils/authentication-strategy-type.js"
 import {JwtPayload}                 from "../../value-objects/jwt-payload.js"
-import {AuthenticationStrategy}     from "../authentication-strategy.js"
+import {AuthenticationStrategy}     from "./authentication-strategy.js"
 
 
 
@@ -17,9 +17,7 @@ export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, Authent
 	private logger: Logger = new Logger("authorization::strategy::jwt")
 
 
-	constructor(
-		private accountService: AccountService,
-	) {
+	constructor(private accountService: AccountService) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey:    authorizationConfiguration.jwtSecret,
@@ -56,10 +54,8 @@ export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, Authent
 			throw new Error("Token not found");
 		}
 
-
 		// TODO: Get Secret Key
 		const secretKey = authorizationConfiguration.jwtSecret;
-
 
 		// TODO: Verify token
 
