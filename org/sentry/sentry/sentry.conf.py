@@ -257,6 +257,9 @@ SENTRY_OPTIONS["mail.from"] = f"sentry@{SENTRY_OPTIONS['mail.list-namespace']}"
 # Features #
 ############
 
+# Enables the Profiling feature
+SENTRY_FEATURES['organizations:profiling-view'] = True
+
 SENTRY_FEATURES["projects:sample-events"] = False
 SENTRY_FEATURES.update(
     {
@@ -316,7 +319,7 @@ GEOIP_PATH_MMDB = '/geoip/GeoLite2-City.mmdb'
 
 # Set the feature to be True if you'd like to enable Suggested Fix. You'll also need to
 # add your OPENAI_API_KEY to the docker-compose.yml file.
-SENTRY_FEATURES["organizations:open-ai-suggestion"] = False
+SENTRY_FEATURES["organizations:open-ai-suggestion"] = True
 
 ##############################################
 # Content Security Policy settings
