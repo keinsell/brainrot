@@ -16,6 +16,9 @@ jobs:
           fetch-depth: 0
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
+
 
   spellcheck:
     name: "spellcheck"
