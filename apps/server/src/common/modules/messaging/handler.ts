@@ -27,8 +27,7 @@ export abstract class HandlerBase<T extends Message> {
 		try {
 			const result = await this.execute(message)
 			await this.postHandle(message, result)
-		}
-		catch (error) {
+		} catch (error) {
 			this.logger.error(`Message ${message.constructor.name} with id ${message.id} has failed to be handled`)
 			this.logger.error(`Message payload: ${JSON.stringify(message)}`)
 			this.logger.error(`Error: ${JSON.stringify(error)}`)

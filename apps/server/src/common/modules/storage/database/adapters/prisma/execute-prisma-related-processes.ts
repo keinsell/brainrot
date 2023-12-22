@@ -35,8 +35,7 @@ export async function executePrismaRelatedProcesses() {
 
 		if (freePort.wasReplaced) {
 			logger.warn(`Prisma Admin port availability check failed and ::${ApplicationConfiguration.prismaAdminPort} is not available, found a new shiny ::${freePort.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
-		}
-		else {
+		} else {
 			logger.log(`Prisma Admin port availability check succeeded and requested ::${ApplicationConfiguration.prismaAdminPort} is available`);
 		}
 

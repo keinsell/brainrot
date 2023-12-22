@@ -27,22 +27,21 @@ endpoint that you want to obtain the secret for, then click the Click to reveal 
 import {StripeModule} from '@golevelup/nestjs-stripe';
 
 
-
 @Module({
-	imports: [
-		StripeModule.forRoot(StripeModule, {
-			apiKey:        '123',
-			webhookConfig: {
-				stripeSecrets: {
-					account: 'abc',
-					connect: 'cba',
-				},
-			},
-		}),
-	],
+    imports: [
+        StripeModule.forRoot(StripeModule, {
+            apiKey: '123',
+            webhookConfig: {
+                stripeSecrets: {
+                    account: 'abc',
+                    connect: 'cba',
+                },
+            },
+        }),
+    ],
 })
 export class AppModule {
-	// ...
+    // ...
 }
 ```
 
@@ -59,9 +58,10 @@ the constructors of controllers and other providers:
 ```typescript
  // injects the instantiated Stripe client which can be used to make API calls
 export class StripeService {
-	constructor(
-		@InjectStripeClient() stripeClient: Stripe
-	) {}
+    constructor(
+            @InjectStripeClient() stripeClient: Stripe
+    ) {
+    }
 }
 
 ```
@@ -105,11 +105,11 @@ You can then manually set up `bodyProperty` to use rawBody:
 
 ```typescript
 StripeModule.forRoot(StripeModule, {
-	apiKey:        '',
-	webhookConfig: {
-		stripeWebhookSecret: '',
-		requestBodyProperty: 'rawBody', // <-- Set to 'rawBody'
-	},
+    apiKey: '',
+    webhookConfig: {
+        stripeWebhookSecret: '',
+        requestBodyProperty: 'rawBody', // <-- Set to 'rawBody'
+    },
 });
 ```
 
@@ -124,10 +124,10 @@ events available.
 ```typescript
 @Injectable()
 class PaymentCreatedService {
-	@StripeWebhookHandler('payment_intent.created')
-	handlePaymentIntentCreated(evt: StripeEvent) {
-		// execute your custom business logic
-	}
+    @StripeWebhookHandler('payment_intent.created')
+    handlePaymentIntentCreated(evt: StripeEvent) {
+        // execute your custom business logic
+    }
 }
 ```
 
@@ -139,11 +139,11 @@ the `@SkipThrottle()` decorator, or when you have a global guard but need to ski
 
 ```typescript
 StripeModule.forRoot(StripeModule, {
-	apiKey:        '123',
-	webhookConfig: {
-		stripeWebhookSecret: 'super-secret',
-		decorators:          [SkipThrottle()],
-	},
+    apiKey: '123',
+    webhookConfig: {
+        stripeWebhookSecret: 'super-secret',
+        decorators: [SkipThrottle()],
+    },
 }),
 ```
 

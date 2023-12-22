@@ -48,8 +48,7 @@ export abstract class WriteRepository<T> {
 			this.after(this.update, entity);
 			this.after(this.save, updated);
 			return updated;
-		}
-		else {
+		} else {
 			this.beforeHook(this.create, entity)
 			const created = await this.create(entity);
 			this.after(this.create, created);

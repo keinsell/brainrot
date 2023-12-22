@@ -53,7 +53,7 @@ x-sentry-defaults: &sentry_defaults
     vroom:
       <<: *depends_on-default
   entrypoint: "/etc/sentry/entrypoint.sh"
-  command: ["run", "web"]
+  command: [ "run", "web" ]
   environment:
     PYTHONUSERBASE: "/data/custom-packages"
     SENTRY_CONF: "/etc/sentry"
@@ -111,7 +111,7 @@ services:
   memcached:
     <<: *restart_policy
     image: "memcached:1.6.21-alpine"
-    command: ["-I", "${SENTRY_MAX_EXTERNAL_SOURCEMAP_SIZE:-1M}"]
+    command: [ "-I", "${SENTRY_MAX_EXTERNAL_SOURCEMAP_SIZE:-1M}" ]
     healthcheck:
       <<: *healthcheck_defaults
       # From: https://stackoverflow.com/a/31877626/5155484
@@ -135,7 +135,7 @@ services:
     healthcheck:
       <<: *healthcheck_defaults
       # Using default user "postgres" from sentry/sentry.conf.example.py or value of POSTGRES_USER if provided
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}" ]
     command:
       [
         "postgres",
@@ -175,7 +175,7 @@ services:
     healthcheck:
       <<: *healthcheck_defaults
       test:
-        ["CMD-SHELL", 'echo "ruok" | nc -w 2 localhost 2181 | grep imok']
+        [ "CMD-SHELL", 'echo "ruok" | nc -w 2 localhost 2181 | grep imok' ]
   kafka:
     <<: *restart_policy
     depends_on:
@@ -204,7 +204,7 @@ services:
       - "sentry-secrets:/etc/kafka/secrets"
     healthcheck:
       <<: *healthcheck_defaults
-      test: ["CMD-SHELL", "/usr/bin/kafka-topics --bootstrap-server kafka:9092 --list"]
+      test: [ "CMD-SHELL", "/usr/bin/kafka-topics --bootstrap-server kafka:9092 --list" ]
       interval: 10s
       timeout: 10s
       retries: 30
@@ -212,7 +212,7 @@ services:
     <<: *restart_policy
     image: clickhouse-self-hosted-local
     build:
-      context: ./clickhouse
+      context: clickhouse
       args:
         BASE_IMAGE: "${CLICKHOUSE_IMAGE:-}"
     ulimits:
@@ -233,12 +233,12 @@ services:
       MAX_MEMORY_USAGE_RATIO: 0.3
     healthcheck:
       test: [
-          "CMD-SHELL",
-          # Manually override any http_proxy envvar that might be set, because
-          # this wget does not support no_proxy. See:
-          # https://github.com/getsentry/self-hosted/issues/1537
-          "http_proxy='' wget -nv -t1 --spider 'http://localhost:8123/' || exit 1",
-        ]
+        "CMD-SHELL",
+        # Manually override any http_proxy envvar that might be set, because
+        # this wget does not support no_proxy. See:
+        # https://github.com/getsentry/self-hosted/issues/1537
+        "http_proxy='' wget -nv -t1 --spider 'http://localhost:8123/' || exit 1",
+      ]
       interval: 10s
       timeout: 10s
       retries: 30
@@ -247,7 +247,7 @@ services:
     # Override the entrypoint in order to avoid using envvars for config.
     # Futz with settings so we can keep mmdb and conf in same dir on host
     # (image looks for them in separate dirs by default).
-    entrypoint: ["/usr/bin/geoipupdate", "-d", "/sentry", "-f", "/sentry/GeoIP.conf"]
+    entrypoint: [ "/usr/bin/geoipupdate", "-d", "/sentry", "-f", "/sentry/GeoIP.conf" ]
     volumes:
       - "./geoip:/sentry"
   snuba-api:
@@ -316,7 +316,7 @@ services:
     <<: *restart_policy
     image: symbolicator-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: "$SYMBOLICATOR_IMAGE"
     command: '"55 23 * * * gosu symbolicator symbolicator cleanup"'
@@ -394,7 +394,7 @@ services:
     <<: *sentry_defaults
     image: sentry-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: sentry-self-hosted-local
     entrypoint: "/entrypoint.sh"
@@ -449,7 +449,7 @@ services:
     <<: *restart_policy
     image: vroom-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: "$VROOM_IMAGE"
     entrypoint: "/entrypoint.sh"

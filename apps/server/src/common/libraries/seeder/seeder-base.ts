@@ -9,9 +9,7 @@ export abstract class SeederBase<INPUT = unknown> {
 	private limit: number         = 300
 
 
-	protected constructor(
-		logger: Logger,
-	) {
+	protected constructor(logger: Logger) {
 		this.logger = logger
 	}
 
@@ -50,12 +48,10 @@ export abstract class SeederBase<INPUT = unknown> {
 				try {
 					const created = await this.save(input)
 					this.postSaveHook(created)
-				}
-				catch (e) {
+				} catch (e) {
 					this.saveFailedHook(input, e)
 				}
-			}
-			else {
+			} else {
 				this.postExistsHook(input)
 			}
 		}

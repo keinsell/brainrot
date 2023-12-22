@@ -1,7 +1,10 @@
 # Cookie Session
+
 This module implements a session with storing data directly in `Cookie`.
 
-If you want to store data in one of [external stores](https://github.com/expressjs/session#compatible-session-stores) and passing ID of session to client via `Cookie`/`Set-Cookie` headers, you can look at [nestjs-session](https://github.com/iamolegga/nestjs-session).
+If you want to store data in one of [external stores](https://github.com/expressjs/session#compatible-session-stores)
+and passing ID of session to client via `Cookie`/`Set-Cookie` headers, you can look
+at [nestjs-session](https://github.com/iamolegga/nestjs-session).
 
 ## Example
 
@@ -99,15 +102,24 @@ Accept `NestCookieSessionAsyncOptions`. Returns NestJS `DynamicModule` for impor
 `NestCookieSessionOptions` is the interface of all options, has next properties:
 
 - `session` - **required** - [cookie-session options](https://github.com/expressjs/cookie-session#options).
-- `forRoutes` - **optional** - same as NestJS built-in `MiddlewareConfigProxy['forRoutes']` [See examples in official docs](https://docs.nestjs.com/middleware#applying-middleware). Specify routes, that should have access to session. If `forRoutes` and `exclude` will not be set, then sessions will be set to all routes.
-- `exclude` - **optional** - same as NestJS built-in `MiddlewareConfigProxy['exclude']` [See examples in official docs](https://docs.nestjs.com/middleware#applying-middleware). Specify routes, that should not have access to session. If `forRoutes` and `exclude` will not be set, then sessions will be set to all routes.
+- `forRoutes` - **optional** - same as NestJS
+  built-in `MiddlewareConfigProxy['forRoutes']` [See examples in official docs](https://docs.nestjs.com/middleware#applying-middleware).
+  Specify routes, that should have access to session. If `forRoutes` and `exclude` will not be set, then sessions will
+  be set to all routes.
+- `exclude` - **optional** - same as NestJS
+  built-in `MiddlewareConfigProxy['exclude']` [See examples in official docs](https://docs.nestjs.com/middleware#applying-middleware).
+  Specify routes, that should not have access to session. If `forRoutes` and `exclude` will not be set, then sessions
+  will be set to all routes.
 
 ### NestCookieSessionAsyncOptions
 
-`NestCookieSessionOptions` is the interface of options to create cookie session module, that depends on other modules, has next properties:
+`NestCookieSessionOptions` is the interface of options to create cookie session module, that depends on other modules,
+has next properties:
 
-- `imports` - **optional** - modules, that cookie session module depends on. See [official docs](https://docs.nestjs.com/modules).
-- `inject` - **optional** - providers from `imports`-property modules, that will be passed as arguments to `useFactory` method.
+- `imports` - **optional** - modules, that cookie session module depends on.
+  See [official docs](https://docs.nestjs.com/modules).
+- `inject` - **optional** - providers from `imports`-property modules, that will be passed as arguments to `useFactory`
+  method.
 - `useFactory` - **required** - method, that returns `NestCookieSessionOptions`.
 
 ## Migration

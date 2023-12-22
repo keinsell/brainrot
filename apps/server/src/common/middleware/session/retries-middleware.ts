@@ -5,13 +5,11 @@ import * as express                   from 'express';
 
 type WaitingStrategy = (attempt: number) => number;
 
-export function createRetriesMiddleware(
-	sessionMiddleware: express.RequestHandler,
-	retries: number,
-	retiesStrategy: WaitingStrategy = () => 0,
-): express.RequestHandler {
+
+export function createRetriesMiddleware(sessionMiddleware: express.RequestHandler, retries: number, retiesStrategy: WaitingStrategy = () => 0): express.RequestHandler {
 	return async (req, res, next) => {
 		let attempt = 0;
+
 
 		async function lookupSession(error?: unknown) {
 			if (error) {
@@ -34,6 +32,7 @@ export function createRetriesMiddleware(
 
 			sessionMiddleware(req, res, lookupSession);
 		}
+
 
 		await lookupSession();
 	};

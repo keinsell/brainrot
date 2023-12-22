@@ -62,7 +62,6 @@ export class ConsoleAppender extends LogAppender {
 
 export const experimentalLogger = new ExperimentalLogger({
 	appends: [
-		new ConsoleAppender(),
-		new FileAppender("logs/today.log"),
+		new ConsoleAppender(), new FileAppender("logs/today.log"),
 	],
 });

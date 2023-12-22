@@ -10,8 +10,7 @@ import {DiscoveryService} from "./discovery-service.js"
  * @export
  * @class DiscoveryModule
  */
-@Global()
-@Module({
+@Global() @Module({
 	providers: [DiscoveryService, MetadataScanner],
 	exports:   [DiscoveryService],
 })

@@ -1,4 +1,15 @@
-import {EvaluationContext, GenericEventEmitter, Hook, JsonValue, Logger, Paradigm, Provider, ProviderMetadata, ProviderStatus, ResolutionDetails} from "@openfeature/server-sdk"
+import {
+	EvaluationContext,
+	GenericEventEmitter,
+	Hook,
+	JsonValue,
+	Logger,
+	Paradigm,
+	Provider,
+	ProviderMetadata,
+	ProviderStatus,
+	ResolutionDetails,
+} from "@openfeature/server-sdk"
 
 
 

@@ -18,8 +18,7 @@ import {ClsModule}      from "nestjs-cls"
  *
  *   https://papooch.github.io/nestjs-cls/
  */
-@Global()
-@Module({
+@Global() @Module({
 	imports: [
 		ClsModule.forRoot({
 			global:      true,
@@ -31,7 +30,7 @@ import {ClsModule}      from "nestjs-cls"
 				saveReq:      true,
 				saveRes:      true,
 				useEnterWith: true,
-				idGenerator: () => Math.random().toString(36).slice(2),
+				idGenerator:  () => Math.random().toString(36).slice(2),
 			},
 		}),
 	],

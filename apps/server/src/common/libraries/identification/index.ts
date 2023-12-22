@@ -14,13 +14,5 @@ export type KSUID = string;
 
 export type UUID = UUIDV4 | UUIDV5 | UUIDV7 | typeof NIL_UUID
 
-export type UniqueIdentifier =
-	string
-	| number
-	| bigint
-	| TypeID
-	| CUID
-	| UUID
-	| ULID
-	| KSUID;
+export type UniqueIdentifier = string | number | bigint | TypeID | CUID | UUID | ULID | KSUID;
 

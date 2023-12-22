@@ -25,8 +25,7 @@ export class DataSynchronizationManager<T> extends EventEmitter {
 				const data = await dataSource.pull();
 				await Promise.all(this._dataDestinations.map(dest => dest.push(data)));
 				this.emit('pushed', data);
-			}
-			catch (error) {
+			} catch (error) {
 				this.emit('error', error);
 			}
 		}
@@ -39,8 +38,7 @@ export class DataSynchronizationManager<T> extends EventEmitter {
 				const data = await dataSource.pull();
 				await Promise.all(this._dataDestinations.map(dest => dest.push(data)));
 				this.emit('pulled', data);
-			}
-			catch (error) {
+			} catch (error) {
 				this.emit('error', error);
 			}
 		}

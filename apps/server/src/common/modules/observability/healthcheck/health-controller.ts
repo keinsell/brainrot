@@ -1,8 +1,15 @@
-import {Controller, Get}                                                                                                               from "@nestjs/common";
-import {ApiOperation}                                                                                                                  from "@nestjs/swagger"
-import {HealthCheck, HealthCheckService, HealthIndicatorFunction, HealthIndicatorResult, MemoryHealthIndicator, PrismaHealthIndicator} from "@nestjs/terminus";
-import {HealthCheckResult}                                                                                                             from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
-import {PrismaService}                                                                                                                 from "../../storage/database/adapters/prisma/prisma-service.js"
+import {Controller, Get}   from "@nestjs/common";
+import {ApiOperation}      from "@nestjs/swagger"
+import {
+	HealthCheck,
+	HealthCheckService,
+	HealthIndicatorFunction,
+	HealthIndicatorResult,
+	MemoryHealthIndicator,
+	PrismaHealthIndicator,
+}                          from "@nestjs/terminus";
+import {HealthCheckResult} from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
+import {PrismaService}     from "../../storage/database/adapters/prisma/prisma-service.js"
 
 
 
@@ -30,8 +37,7 @@ export class HealthController {
 	@ApiOperation({
 		summary:     "Health check endpoint",
 		operationId: "healthcheck",
-	})
-	@Get() @HealthCheck() check(): Promise<HealthCheckResult> {
+	}) @Get() @HealthCheck() check(): Promise<HealthCheckResult> {
 		const healthIndicators: HealthIndicatorFunction[] = []
 
 		healthIndicators.push(this.checkMemory.bind(this))

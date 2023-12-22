@@ -8,6 +8,7 @@ import {OPEN_TELEMETRY_SDK}                            from "../constants/OPEN_T
 export class OpenTelemetryService implements BeforeApplicationShutdown {
 	constructor(@Inject(OPEN_TELEMETRY_SDK) private readonly sdk: NodeSDK) {}
 
+
 	async beforeApplicationShutdown() {
 		await this.sdk?.shutdown();
 	}

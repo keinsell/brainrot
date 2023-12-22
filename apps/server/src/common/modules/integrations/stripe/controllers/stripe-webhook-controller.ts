@@ -12,22 +12,13 @@ export class StripeWebhookController {
 	private readonly requestBodyProperty: string;
 
 
-	constructor(
-		@InjectStripeModuleConfig()
-		private readonly config: StripeModuleConfig,
-		private readonly stripePayloadService: StripePayloadService,
-		private readonly stripeWebhookService: StripeWebhookService,
-	) {
-		this.requestBodyProperty =
-			config.webhookConfig?.requestBodyProperty || 'body';
+	constructor(@InjectStripeModuleConfig() private readonly config: StripeModuleConfig, private readonly stripePayloadService: StripePayloadService, private readonly stripeWebhookService: StripeWebhookService) {
+		this.requestBodyProperty = config.webhookConfig?.requestBodyProperty || 'body';
 	}
 
 
 	@Post('/webhook')
-	async handleWebhook(
-		@Headers('stripe-signature') sig: string,
-		@Req() request: Request,
-	) {
+	async handleWebhook(@Headers('stripe-signature') sig: string, @Req() request: Request) {
 		if (!sig) {
 			throw new Error('Missing stripe-signature header');
 		}

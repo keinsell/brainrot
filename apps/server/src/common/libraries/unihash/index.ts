@@ -3,7 +3,7 @@ import {UnihashAlgorithm} from "./unihash-algorithm.js"
 
 
 
-export {PasswordHashing}       from "./password-hashing.service.js"
-export {UnihashModule} from "./unihash-module.js"
+export {PasswordHashing} from "./password-hashing.service.js"
+export {UnihashModule}   from "./unihash-module.js"
 
 export {Argon2Kdf, UnihashAlgorithm}

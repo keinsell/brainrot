@@ -5,9 +5,7 @@ import {prettyPrintServiceInformation, printSystemInfo} from "./utilities/consol
 
 
 
-if (env.TRACING || true) {
-	experimentalOpenTelemetryTracker()
-}
+experimentalOpenTelemetryTracker()
 
 if (env.isProduction) {
 	printSystemInfo()

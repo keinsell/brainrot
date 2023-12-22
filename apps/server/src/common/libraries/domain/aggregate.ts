@@ -32,12 +32,11 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 		this._id       = aggregateBaseProperties.id || randomUUID()
 		this.createdAt = new Date()
 		this.updatedAt = new Date()
-		this.logger	= new Logger(this.constructor.name.toLowerCase() + `::${this.id}`)
+		this.logger    = new Logger(this.constructor.name.toLowerCase() + `::${this.id}`)
 	}
 
 
 	private _id: any | undefined;
-
 
 	get id(): any | undefined {
 		return this._id
@@ -45,7 +44,6 @@ export class AggregateRoot<T extends Object = {}> implements AggregateRootProper
 
 
 	//private _stateMachine: StateMachine<T>
-
 
 	public updatedAt: Date
 

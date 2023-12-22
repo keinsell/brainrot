@@ -7,5 +7,4 @@ import {OPEN_TELEMETRY_TRACE_METADATA} from "../constrants/OPEN_TELEMETRY_TRACE_
  * A decorator to mark a method as a span
  * @param name The name of the span
  */
-export const Span = (name?: string) =>
-	SetMetadata(OPEN_TELEMETRY_TRACE_METADATA, name);
+export const Span = (name?: string) => SetMetadata(OPEN_TELEMETRY_TRACE_METADATA, name);

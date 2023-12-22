@@ -47,9 +47,7 @@ export class UnihashAlgorithm {
 
 
 	private postVerify(hash: string, plain: string, result: boolean): void {
-		this.logger.debug(`verify(${this.maskPassword(plain)},${this.formatHash(hash)}) => ${result ?
-			"OK" :
-			"FAIL"}`)
+		this.logger.debug(`verify(${this.maskPassword(plain)},${this.formatHash(hash)}) => ${result ? "OK" : "FAIL"}`)
 	}
 
 

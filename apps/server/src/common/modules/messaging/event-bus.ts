@@ -1,7 +1,7 @@
 import {Injectable, Logger} from "@nestjs/common"
-import {EventEmitter2} from "@nestjs/event-emitter"
-import {Event}         from "../../libraries/message/event.js"
-import {Message}       from "../../libraries/message/message.js"
+import {EventEmitter2}      from "@nestjs/event-emitter"
+import {Event}              from "../../libraries/message/event.js"
+import {Message}            from "../../libraries/message/message.js"
 
 
 

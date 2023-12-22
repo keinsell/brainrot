@@ -14,6 +14,19 @@ export class InMemoryCacheManager extends CacheManager {
 	}>();
 
 
+	public async clear(): Promise<void> {
+		this.logger.debug(`Clearing cache`);
+		this._cache.clear();
+		this._ttl.forEach((value, key) => {
+			clearTimeout(value.timeout);
+		});
+
+		this._ttl.clear();
+		this.logger.verbose(`Cache cleared.`);
+		return Promise.resolve(undefined);
+	}
+
+
 	public async delete(key: string): Promise<void> {
 		this.logger.debug(`Deleting key "${key}"`);
 		this._cache.delete(key)
@@ -51,6 +64,16 @@ export class InMemoryCacheManager extends CacheManager {
 	}
 
 
+	public async getAll<T = unknown>(): Promise<T[]> {
+		return Array.from(this._cache.values()) as T[];
+	}
+
+
+	public async keys(): Promise<string[]> {
+		return Array.from(this._cache.keys());
+	}
+
+
 	public set(key: string, value: unknown, ttl?: number): Promise<void> {
 		this.logger.debug(`Setting value for key: ${key} with TTL: ${ttl}`);
 		this._cache.set(key, value)
@@ -69,29 +92,6 @@ export class InMemoryCacheManager extends CacheManager {
 		}
 
 		return Promise.resolve(undefined)
-	}
-
-
-	public async clear(): Promise<void> {
-		this.logger.debug(`Clearing cache`);
-		this._cache.clear();
-		this._ttl.forEach((value, key) => {
-			clearTimeout(value.timeout);
-		});
-
-		this._ttl.clear();
-		this.logger.verbose(`Cache cleared.`);
-		return Promise.resolve(undefined);
-	}
-
-
-	public async getAll<T = unknown>(): Promise<T[]> {
-		return Array.from(this._cache.values()) as T[];
-	}
-
-
-	public async keys(): Promise<string[]> {
-		return Array.from(this._cache.keys());
 	}
 
 

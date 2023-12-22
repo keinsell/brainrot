@@ -10,3 +10,6 @@ in some cases this would be a `infrastructure` repository with terraform.
 - [ ] Novu
 - [ ] Grafana
 - [ ] Prometheus
+- [ ] https://github.com/SigNoz/signoz
+    - [ ] https://uptrace.dev/
+    - [ ] https://pirsch.io/for-developers

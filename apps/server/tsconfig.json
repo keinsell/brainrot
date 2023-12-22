@@ -35,7 +35,7 @@
     "types": [
       "@types/node",
       "@types/express-session",
-      "./src/types/*.d.ts",
+      //      "./src/types/**/*.d.ts",
       "./src/vendor/prisma/index.d.ts"
     ],
     "paths": {

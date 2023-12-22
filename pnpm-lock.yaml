@@ -94,7 +94,7 @@ importers:
     dependencies:
       '@amplication/opentelemetry-nestjs':
         specifier: ^4.4.0
-        version: 4.4.0(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(@nestjs/event-emitter@2.0.3)(@nestjs/graphql@12.0.9)(@nestjs/microservices@10.2.10)(@opentelemetry/api@1.7.0)(@opentelemetry/auto-instrumentations-node@0.39.4)(@opentelemetry/context-async-hooks@1.18.1)(@opentelemetry/exporter-metrics-otlp-grpc@0.41.2)(@opentelemetry/exporter-metrics-otlp-proto@0.41.2)(@opentelemetry/exporter-trace-otlp-grpc@0.41.2)(@opentelemetry/exporter-trace-otlp-http@0.41.2)(@opentelemetry/exporter-trace-otlp-proto@0.41.2)(@opentelemetry/propagator-b3@1.18.1)(@opentelemetry/propagator-jaeger@1.18.1)(@opentelemetry/resource-detector-container@0.3.2)(@opentelemetry/sdk-node@0.45.1)(@opentelemetry/sdk-trace-base@1.18.1)
+        version: 4.4.0(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(@nestjs/event-emitter@2.0.3)(@nestjs/graphql@12.0.11)(@nestjs/microservices@10.2.10)(@opentelemetry/api@1.7.0)(@opentelemetry/auto-instrumentations-node@0.39.4)(@opentelemetry/context-async-hooks@1.18.1)(@opentelemetry/exporter-metrics-otlp-grpc@0.41.2)(@opentelemetry/exporter-metrics-otlp-proto@0.41.2)(@opentelemetry/exporter-trace-otlp-grpc@0.41.2)(@opentelemetry/exporter-trace-otlp-http@0.41.2)(@opentelemetry/exporter-trace-otlp-proto@0.41.2)(@opentelemetry/propagator-b3@1.18.1)(@opentelemetry/propagator-jaeger@1.18.1)(@opentelemetry/resource-detector-container@0.3.2)(@opentelemetry/sdk-node@0.45.1)(@opentelemetry/sdk-trace-base@1.18.1)
       '@automapper/classes':
         specifier: ^8.7.7
         version: 8.7.7(@automapper/core@8.7.7)(reflect-metadata@0.1.13)
@@ -122,6 +122,9 @@ importers:
       '@nestjs/event-emitter':
         specifier: ^2.0.3
         version: 2.0.3(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(reflect-metadata@0.1.13)
+      '@nestjs/graphql':
+        specifier: ^12.0.11
+        version: 12.0.11(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(graphql@16.8.1)(reflect-metadata@0.1.13)
       '@nestjs/jwt':
         specifier: ^10.2.0
         version: 10.2.0(@nestjs/common@10.2.8)
@@ -197,6 +200,18 @@ importers:
       '@scalar/express-api-reference':
         specifier: ^0.1.5
         version: 0.1.5(express@4.18.2)(nanoid@5.0.4)(postcss@8.4.32)(unified@11.0.4)(vue@3.3.10)(y-codemirror.next@0.3.2)(y-protocols@1.0.6)(yjs@13.6.10)
+      '@sentry/hub':
+        specifier: ^7.90.0
+        version: 7.90.0
+      '@sentry/node':
+        specifier: ^7.90.0
+        version: 7.90.0
+      '@sentry/opentelemetry':
+        specifier: ^7.90.0
+        version: 7.90.0(@opentelemetry/api@1.7.0)(@opentelemetry/core@1.18.1)(@opentelemetry/sdk-trace-base@1.18.1)(@opentelemetry/semantic-conventions@1.18.1)
+      '@sentry/types':
+        specifier: ^7.90.0
+        version: 7.90.0
       argon2:
         specifier: ^0.31.2
         version: 0.31.2
@@ -452,7 +467,7 @@ packages:
     resolution: {integrity: sha512-KI2nVf9JdwWCXqK6RVf+9/096G7VWN4Z84mnynlyZKao2xQENW8WNEjLmvdlxS5X8PNWXFC1zqwm7tveOXw/4A==}
     dev: true
 
-  /@amplication/opentelemetry-nestjs@4.4.0(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(@nestjs/event-emitter@2.0.3)(@nestjs/graphql@12.0.9)(@nestjs/microservices@10.2.10)(@opentelemetry/api@1.7.0)(@opentelemetry/auto-instrumentations-node@0.39.4)(@opentelemetry/context-async-hooks@1.18.1)(@opentelemetry/exporter-metrics-otlp-grpc@0.41.2)(@opentelemetry/exporter-metrics-otlp-proto@0.41.2)(@opentelemetry/exporter-trace-otlp-grpc@0.41.2)(@opentelemetry/exporter-trace-otlp-http@0.41.2)(@opentelemetry/exporter-trace-otlp-proto@0.41.2)(@opentelemetry/propagator-b3@1.18.1)(@opentelemetry/propagator-jaeger@1.18.1)(@opentelemetry/resource-detector-container@0.3.2)(@opentelemetry/sdk-node@0.45.1)(@opentelemetry/sdk-trace-base@1.18.1):
+  /@amplication/opentelemetry-nestjs@4.4.0(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(@nestjs/event-emitter@2.0.3)(@nestjs/graphql@12.0.11)(@nestjs/microservices@10.2.10)(@opentelemetry/api@1.7.0)(@opentelemetry/auto-instrumentations-node@0.39.4)(@opentelemetry/context-async-hooks@1.18.1)(@opentelemetry/exporter-metrics-otlp-grpc@0.41.2)(@opentelemetry/exporter-metrics-otlp-proto@0.41.2)(@opentelemetry/exporter-trace-otlp-grpc@0.41.2)(@opentelemetry/exporter-trace-otlp-http@0.41.2)(@opentelemetry/exporter-trace-otlp-proto@0.41.2)(@opentelemetry/propagator-b3@1.18.1)(@opentelemetry/propagator-jaeger@1.18.1)(@opentelemetry/resource-detector-container@0.3.2)(@opentelemetry/sdk-node@0.45.1)(@opentelemetry/sdk-trace-base@1.18.1):
     resolution: {integrity: sha512-lJaEOCEVOI7geIxq0oydM89JoC2WqcvXB5qarRQ2vW2nimTIGO9MZKqEvZolLBudmvTNIR9gNH76DI8sJhw4Tg==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -477,7 +492,7 @@ packages:
       '@nestjs/common': 10.2.8(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.8(@nestjs/common@10.2.8)(@nestjs/microservices@10.2.10)(@nestjs/platform-express@10.2.8)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/event-emitter': 2.0.3(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(reflect-metadata@0.1.13)
-      '@nestjs/graphql': 12.0.9(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(graphql@16.8.1)(reflect-metadata@0.1.13)
+      '@nestjs/graphql': 12.0.11(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(graphql@16.8.1)(reflect-metadata@0.1.13)
       '@nestjs/microservices': 10.2.10(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(nats@2.18.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@opentelemetry/api': 1.7.0
       '@opentelemetry/auto-instrumentations-node': 0.39.4(@opentelemetry/api@1.7.0)
@@ -2479,7 +2494,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.0.6(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.8(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
     dev: false
@@ -2491,19 +2506,20 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/merge': 9.0.0(graphql@16.8.1)
-      '@graphql-tools/utils': 10.0.6(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.8(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/utils@10.0.6(graphql@16.8.1):
-    resolution: {integrity: sha512-hZMjl/BbX10iagovakgf3IiqArx8TPsotq5pwBld37uIX1JiZoSbgbCIFol7u55bh32o6cfDEiiJgfAD5fbeyQ==}
+  /@graphql-tools/utils@10.0.8(graphql@16.8.1):
+    resolution: {integrity: sha512-yjyA8ycSa1WRlJqyX/aLqXeE5DvF/H02+zXMUFnCzIDrj0UvLMUrxhmVFnMK0Q2n3bh4uuTeY3621m5za9ovXw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
+      cross-inspect: 1.0.0
       dset: 3.1.2
       graphql: 16.8.1
       tslib: 2.6.2
@@ -3235,8 +3251,8 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/graphql@12.0.9(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(graphql@16.8.1)(reflect-metadata@0.1.13):
-    resolution: {integrity: sha512-A5oRD5GMwzaNZum06KSxKtqhC7LvS4p7v0hLGzvNWPuLrBjAjAnm/2NV8IV8lYiJXpPHNtSnnekZH9uvy/hZlw==}
+  /@nestjs/graphql@12.0.11(@nestjs/common@10.2.8)(@nestjs/core@10.2.8)(graphql@16.8.1)(reflect-metadata@0.1.13):
+    resolution: {integrity: sha512-iCyVs9+utCQt9ehMhUjQcEdjRN/MrcTBINd7P44O1fzGENuWMbt1Z8RCoZbeGi5iVPBY63HgYik+BnnICqmxZw==}
     peerDependencies:
       '@apollo/subgraph': ^2.0.0
       '@nestjs/common': ^9.3.8 || ^10.0.0
@@ -3245,7 +3261,7 @@ packages:
       class-validator: '*'
       graphql: ^16.6.0
       reflect-metadata: ^0.1.13
-      ts-morph: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      ts-morph: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0
     peerDependenciesMeta:
       '@apollo/subgraph':
         optional: true
@@ -3258,22 +3274,22 @@ packages:
     dependencies:
       '@graphql-tools/merge': 9.0.0(graphql@16.8.1)
       '@graphql-tools/schema': 10.0.0(graphql@16.8.1)
-      '@graphql-tools/utils': 10.0.6(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.8(graphql@16.8.1)
       '@nestjs/common': 10.2.8(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.8(@nestjs/common@10.2.8)(@nestjs/microservices@10.2.10)(@nestjs/platform-express@10.2.8)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/mapped-types': 2.0.2(@nestjs/common@10.2.8)(reflect-metadata@0.1.13)
       chokidar: 3.5.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       graphql: 16.8.1
       graphql-tag: 2.12.6(graphql@16.8.1)
-      graphql-ws: 5.14.0(graphql@16.8.1)
+      graphql-ws: 5.14.2(graphql@16.8.1)
       lodash: 4.17.21
       normalize-path: 3.0.0
       reflect-metadata: 0.1.13
       subscriptions-transport-ws: 0.11.0(graphql@16.8.1)
       tslib: 2.6.2
-      uuid: 9.0.0
-      ws: 8.13.0
+      uuid: 9.0.1
+      ws: 8.14.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -5230,7 +5246,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dependencies:
       cross-spawn: 7.0.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       is-glob: 4.0.3
       open: 9.1.0
       picocolors: 1.0.0
@@ -5545,6 +5561,75 @@ packages:
       vue: 3.3.10(typescript@5.2.2)
     dev: false
 
+  /@sentry-internal/tracing@7.90.0:
+    resolution: {integrity: sha512-74jEtpdio9aRkiVBcrY1ZJXek0oFMqxDJK6BkJNCA+aUK1z96V9viehANRk3Nbxm01rWjmH1U4e1siuo9FhjuQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/core@7.90.0:
+    resolution: {integrity: sha512-HolpdHjULCwehKPWHR6IPQM0NBjmORhlBU7FtCh/e8TtSkZ9ztPsuofNBomMS1+mdbL+yxOIc9KUYEl0zRfeAQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/hub@7.90.0:
+    resolution: {integrity: sha512-PNRb/g+AvtcSy7DZz8qCX3GuTjJ2b6yU8hGvddrH1eY8YMeCyzmkL08frT8/rxRsxpr/exFqlvNdsYfmWsbUdQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/node@7.90.0:
+    resolution: {integrity: sha512-VjDI2MCkidoFEzrMa1gqmwYt1sUhYnu+zoFF5P5jgapTVVJ5xc2b7k/lS62U6IsfxHNrIdTtQHsrbCS5+s0GvQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.90.0
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+      https-proxy-agent: 5.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@sentry/opentelemetry@7.90.0(@opentelemetry/api@1.7.0)(@opentelemetry/core@1.18.1)(@opentelemetry/sdk-trace-base@1.18.1)(@opentelemetry/semantic-conventions@1.18.1):
+    resolution: {integrity: sha512-8wGbXv3tEWJlbkSm4/wqeSLIuaUV2j/uZ4kSKxYN7RpjudC3g9ODPJajYTKJtLD8oLfFfOB3e66uFXh5sUO2IQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.0.0
+      '@opentelemetry/core': ^1.0.0
+      '@opentelemetry/sdk-trace-base': ^1.0.0
+      '@opentelemetry/semantic-conventions': ^1.0.0
+    dependencies:
+      '@opentelemetry/api': 1.7.0
+      '@opentelemetry/core': 1.18.1(@opentelemetry/api@1.7.0)
+      '@opentelemetry/sdk-trace-base': 1.18.1(@opentelemetry/api@1.7.0)
+      '@opentelemetry/semantic-conventions': 1.18.1
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/types@7.90.0:
+    resolution: {integrity: sha512-dA0Mtba5jYlcQ6xBsGILZuFq4NGrWLfr2ys036z2JE4H1+3PxOVERlD3Di7p+WKYM5gjFw10Hn3EgUV979E3dA==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /@sentry/utils@7.90.0:
+    resolution: {integrity: sha512-6BpqAzONm/HQbdlL4TY2W2vBSmaG/eVvwUaHoz0wB49EkWwpF6j/SO9Kb/XkiA/qp9GoJVXpnGBFQLPx7kv/Yw==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.90.0
+    dev: false
+
   /@sideway/address@4.1.4:
     resolution: {integrity: sha512-7vwq+rOHVWjyXxVlR76Agnvhy8I9rpzjosTESvmhNeXOXdZZB15Fl+TI9x1SiHZH5Jv2wTGduSxFDIaq0m3DUw==}
     dependencies:
@@ -5854,7 +5939,7 @@ packages:
   /@ts-morph/common@0.21.0:
     resolution: {integrity: sha512-ES110Mmne5Vi4ypUKrtVQfXFDtCsDXiUiGxF6ILVlE90dDD4fdpC1LSjydl/ml7xJWKSDZwUYD2zkOePMSrPBA==}
     dependencies:
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       minimatch: 7.4.6
       mkdirp: 2.1.6
       path-browserify: 1.0.1
@@ -8627,6 +8712,13 @@ packages:
     resolution: {integrity: sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==}
     dev: false
 
+  /cross-inspect@1.0.0:
+    resolution: {integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /cross-spawn@5.1.0:
     resolution: {integrity: sha512-pTgQJ5KC0d2hcY8eyL1IzlBPYjTkyH72XRZPnLyKus2mBfNjQs3klqbJU2VILqZryAZUt9JOb3h/mWMy23/f5A==}
     dependencies:
@@ -9858,6 +9950,17 @@ packages:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.5
+    dev: true
+
+  /fast-glob@3.3.2:
+    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
+    engines: {node: '>=8.6.0'}
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      '@nodelib/fs.walk': 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.5
 
   /fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
@@ -10538,7 +10641,7 @@ packages:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
@@ -10583,8 +10686,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /graphql-ws@5.14.0(graphql@16.8.1):
-    resolution: {integrity: sha512-itrUTQZP/TgswR4GSSYuwWUzrE/w5GhbwM2GX3ic2U7aw33jgEsayfIlvaj7/GcIvZgNMzsPTrE5hqPuFUiE5g==}
+  /graphql-ws@5.14.2(graphql@16.8.1):
+    resolution: {integrity: sha512-LycmCwhZ+Op2GlHz4BZDsUYHKRiiUz+3r9wbhBATMETNlORQJAaFlAgTFoeRh6xQoQegwYwIylVD1Qns9/DA3w==}
     engines: {node: '>=10'}
     peerDependencies:
       graphql: '>=0.11 <=16'
@@ -16901,7 +17004,6 @@ packages:
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
-    dev: true
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -17407,19 +17509,6 @@ packages:
     peerDependencies:
       bufferutil: ^4.0.1
       utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
-  /ws@8.13.0:
-    resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
     peerDependenciesMeta:
       bufferutil:
         optional: true

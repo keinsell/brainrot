@@ -13,17 +13,10 @@ export class BlobReference {
 	public updatedAt?: Date
 
 
-	constructor(
-		payload: {
-			id?: UniqueIdentifier,
-			url?: string,
-			presignedUrl?: string,
-			mimeType?: string,
-			size?: number,
-			createdAt?: Date,
-			updatedAt?: Date,
-		},
-	) {
+	constructor(payload: {
+		id?: UniqueIdentifier, url?: string, presignedUrl?: string, mimeType?: string, size?: number, createdAt?: Date,
+		updatedAt?: Date,
+	}) {
 		this.id           = payload.id
 		this.url          = payload.url
 		this.presignedUrl = payload.presignedUrl

@@ -15,18 +15,10 @@ export class Blob {
 	public source?: Readable | Buffer
 
 
-	constructor(
-		payload: {
-			id?: UniqueIdentifier,
-			url?: string,
-			presignedUrl?: string,
-			mimeType?: string,
-			size?: number,
-			createdAt?: Date,
-			updatedAt?: Date,
-			source?: Readable | Buffer
-		},
-	) {
+	constructor(payload: {
+		id?: UniqueIdentifier, url?: string, presignedUrl?: string, mimeType?: string, size?: number, createdAt?: Date,
+		updatedAt?: Date, source?: Readable | Buffer
+	}) {
 		this.id           = payload.id
 		this.url          = payload.url
 		this.presignedUrl = payload.presignedUrl

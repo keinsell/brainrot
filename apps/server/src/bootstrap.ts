@@ -35,6 +35,9 @@ export async function bootstrap() {
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
 
+	// TEMPORARY: Inject SentryService logger to automatically absorb logs to sentry
+	//app.useLogger(SentryService.SentryServiceInstance())
+
 	// Build swagger documentation
 	await buildSwaggerDocumentation(app);
 	buildCompodocDocumentation()

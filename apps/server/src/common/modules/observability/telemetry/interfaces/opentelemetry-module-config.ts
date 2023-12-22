@@ -4,7 +4,6 @@ import {NodeSDKConfiguration} from "@opentelemetry/sdk-node"
 
 
 
-export interface OpenTelemetryModuleConfig
-	extends Partial<NodeSDKConfiguration> {
+export interface OpenTelemetryModuleConfig extends Partial<NodeSDKConfiguration> {
 	traceAutoInjectors?: Provider<Injector>[];
 }

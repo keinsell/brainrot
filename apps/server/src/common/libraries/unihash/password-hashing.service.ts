@@ -1,8 +1,8 @@
 import {Inject, Injectable, Logger}          from "@nestjs/common"
 import {KDF_PROVIDER_TOKEN}                  from "./constraints/KDF_PROVIDER_TOKEN.js"
 import {KdfAlgorithm, KeyDerivationFunction} from "./key-derivation-functions/key-derivation-function.js"
-import {UnihashAlgorithm}                    from "./unihash-algorithm.js"
 import {PhcString, SerializedPhcString}      from "./types/phc-string.js"
+import {UnihashAlgorithm}                    from "./unihash-algorithm.js"
 
 
 
@@ -56,7 +56,7 @@ export class PasswordHashing {
 		const phcString = PhcString.deserialize(hash as unknown as SerializedPhcString)
 
 		const algorithm = Object.values(KdfAlgorithm)
-		                        .find((value) => value === phcString.id)
+		.find((value) => value === phcString.id)
 
 		if (!algorithm) {
 			throw new Error(`Unknown algorithm: ${phcString.id}`)

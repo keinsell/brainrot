@@ -12,14 +12,13 @@ import {AsyncLocalStorage} from "async_hooks"
  *
  * Alternatively, we can use ALS to propagate context for only a part of the system (for example the transaction object) without passing it around explicitly across services, which can increase isolation and encapsulation.
  */
-@Global()
-@Module({
+@Global() @Module({
 	providers: [
 		{
-			provide: AsyncLocalStorage,
+			provide:  AsyncLocalStorage,
 			useValue: new AsyncLocalStorage(),
 		},
 	],
-	exports: [AsyncLocalStorage],
+	exports:   [AsyncLocalStorage],
 })
 export class AsyncLocalStorageModule {}

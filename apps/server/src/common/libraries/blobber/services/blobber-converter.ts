@@ -4,9 +4,7 @@ import {Blob}                    from "../model/blob.js"
 
 
 export class BlobberConverter {
-	constructor(
-		blob: Blob,
-	) {}
+	constructor(blob: Blob) {}
 
 
 	toBase64(): Promise<string> {

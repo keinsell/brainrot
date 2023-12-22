@@ -13,7 +13,7 @@ export const env = cleanEnv(process.env, {
 		desc:    "Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'.",
 	}),
 	HOST:                host({
-		default: "localhost",
+		default:    "localhost",
 		devDefault: "localhost",
 		desc:       "Defines the host on which the application runs. Default for development is 'localhost'.",
 	}),
@@ -38,10 +38,16 @@ export const env = cleanEnv(process.env, {
 	}),
 	TRACING:             bool({
 		default:    true,
-		devDefault: false,
+		devDefault: true,
 		desc:       "Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.",
 	}),
+	SENTRY_DSN:          str({
+		default:    null,
+		devDefault: "https://e1b2f55e80f584c0a872df89735d270b@o1122681.ingest.sentry.io/4506434737012736",
+		desc:       "Defines the Sentry DSN. Default is empty.",
+	}),
 });
+
 
 export function getApplicationUrl() {
 	return `${env.PROTOCOL}://${env.HOST}:${env.PORT}`;

@@ -19,8 +19,6 @@ export class FactoryMetadataStorageHost {
 
 
 const globalRef                                                 = global as any;
-export const FactoryMetadataStorage: FactoryMetadataStorageHost =
-	             globalRef.FactoryMetadataStorage ||
-	             (
-		             globalRef.FactoryMetadataStorage = new FactoryMetadataStorageHost()
-	             );
+export const FactoryMetadataStorage: FactoryMetadataStorageHost = globalRef.FactoryMetadataStorage || (
+	globalRef.FactoryMetadataStorage = new FactoryMetadataStorageHost()
+);

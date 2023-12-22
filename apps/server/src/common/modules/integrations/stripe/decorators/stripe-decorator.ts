@@ -10,9 +10,7 @@ import {makeInjectableDecorator} from "./make-injectable-decorator.js"
 /**
  * Injects the Stripe Module config
  */
-export const InjectStripeModuleConfig = makeInjectableDecorator(
-	STRIPE_MODULE_CONFIG_TOKEN,
-);
+export const InjectStripeModuleConfig = makeInjectableDecorator(STRIPE_MODULE_CONFIG_TOKEN);
 
 /**
  * Injects the Stripe Client instance
@@ -24,6 +22,4 @@ export const InjectStripeClient = makeInjectableDecorator(STRIPE_CLIENT_TOKEN);
  * Events will be automatically routed here based on their event type property
  * @param eventType
  */
-export const StripeWebhookHandler = (
-	eventType: Stripe.WebhookEndpointCreateParams.EnabledEvent,
-) => SetMetadata(STRIPE_WEBHOOK_HANDLER, eventType);
+export const StripeWebhookHandler = (eventType: Stripe.WebhookEndpointCreateParams.EnabledEvent) => SetMetadata(STRIPE_WEBHOOK_HANDLER, eventType);

@@ -7,9 +7,7 @@ import {SeederService}                                           from "./service
 
 export interface SeederModuleOptions {
 	seeders: Provider<Seeder>[];
-	imports?: Array<
-		Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
-	>;
+	imports?: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
 	providers?: Provider[];
 }
 
@@ -23,9 +21,7 @@ export class SeederModule {
 			providers: [
 				...(
 					options.providers || []
-				),
-				...options.seeders,
-				{
+				), ...options.seeders, {
 					provide:    SeederService,
 					useFactory: (...seeders: SeederBase<any>[]): SeederService => {
 						return new SeederService(seeders);

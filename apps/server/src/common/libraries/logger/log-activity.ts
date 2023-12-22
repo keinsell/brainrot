@@ -10,8 +10,7 @@ export function LogActivity() {
 				const result = await originalMethod.apply(this, args);
 				console.log(`[${className}] Success - ${propertyName}:`, result);
 				return result;
-			}
-			catch (error) {
+			} catch (error) {
 				console.error(`[${className}] Error - ${propertyName}:`, error);
 				throw error;
 			}

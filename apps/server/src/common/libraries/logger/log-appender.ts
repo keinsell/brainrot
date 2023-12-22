@@ -9,9 +9,7 @@ export class LogAppender {
 
 
 export class FileAppender extends LogAppender {
-	constructor(
-		private readonly path: string,
-	) {super()}
+	constructor(private readonly path: string) {super()}
 
 
 	append(log: Log) {
