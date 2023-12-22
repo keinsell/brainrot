@@ -1,5 +1,5 @@
 import {Injectable}              from "@nestjs/common"
-import {PrismaService}           from "../../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}           from "../../../../common/modules/storage/prisma/services/prisma-service.js"
 import {Prisma, User}            from "../../../../vendor/prisma/index.js"
 import {CustomerSynchronization} from "./customer-data-synchronization.js"
 import UserCreateInput = Prisma.UserCreateInput
@@ -8,10 +8,7 @@ import UserCreateInput = Prisma.UserCreateInput
 
 @Injectable()
 export class ProfileService {
-	constructor(
-		private readonly prismaService: PrismaService,
-		private readonly customerSynchronization: CustomerSynchronization,
-	) {}
+	constructor(private readonly prismaService: PrismaService, private readonly customerSynchronization: CustomerSynchronization) {}
 
 
 	public async createProfile(profile: UserCreateInput): Promise<User> {

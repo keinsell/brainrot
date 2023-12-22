@@ -1,7 +1,7 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
-import {PrismaService}      from "../../../common/modules/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {AccountFixture}     from "../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../vendor/prisma/index.js"
 import {RegisterAccountDto} from "../dtos/register-account-dto.js"

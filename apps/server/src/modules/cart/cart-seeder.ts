@@ -1,6 +1,6 @@
 import {Injectable, Logger} from "@nestjs/common"
 import {SeederBase}         from "../../common/libraries/seeder/seeder-base.js"
-import {PrismaService}      from "../../common/modules/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}      from "../../common/modules/storage/prisma/services/prisma-service.js"
 import {Prisma}             from "../../vendor/prisma/index.js"
 
 

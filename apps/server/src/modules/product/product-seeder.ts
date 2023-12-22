@@ -1,7 +1,7 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {SeederBase}         from "../../common/libraries/seeder/seeder-base.js"
-import {PrismaService}      from "../../common/modules/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}      from "../../common/modules/storage/prisma/services/prisma-service.js"
 import type {Prisma}        from "../../vendor/prisma/index.js"
 
 
@@ -9,9 +9,7 @@ import type {Prisma}        from "../../vendor/prisma/index.js"
 @Injectable()
 export class ProductSeeder extends SeederBase<Prisma.ProductCreateInput> {
 
-	constructor(
-		private prismaService: PrismaService,
-	) {
+	constructor(private prismaService: PrismaService) {
 		super(new Logger("seeder:product"))
 	}
 

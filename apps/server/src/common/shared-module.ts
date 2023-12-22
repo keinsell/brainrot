@@ -11,7 +11,7 @@ import {DatabaseModule}                 from "./modules/storage/database/databas
 
 
 @Module({
-	imports: [
+	imports:   [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule,
 		HealthModule, DeveloperToolsModule, SessionMiddlewareModule.forRoot({
 			session: {
@@ -27,7 +27,8 @@ import {DatabaseModule}                 from "./modules/storage/database/databas
 		//	}
 		//})
 	],
-	exports: [
+	providers: [],
+	exports:   [
 		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule,
 		HealthModule, DeveloperToolsModule,
 	],

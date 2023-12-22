@@ -1,19 +1,16 @@
 import {Body, Controller, Delete, Get, Patch, Post} from "@nestjs/common"
 import {ApiOperation}                               from "@nestjs/swagger"
-import {PrismaService}                              from "../../common/modules/storage/database/adapters/prisma/prisma-service.js"
+import {PrismaService}                              from "../../common/modules/storage/prisma/services/prisma-service.js"
 import type {Prisma, Product}                       from "../../vendor/prisma/index.js"
 
 
 
 @Controller("product")
 export class ProductController {
-	constructor(
-		private prismaService: PrismaService,
-	) {}
+	constructor(private prismaService: PrismaService) {}
 
 
-	@Post()
-	@ApiOperation({
+	@Post() @ApiOperation({
 		tags:        ["product"],
 		summary:     "Create product",
 		operationId: "create-product",
@@ -27,8 +24,7 @@ export class ProductController {
 	}
 
 
-	@Get()
-	@ApiOperation({
+	@Get() @ApiOperation({
 		tags:        ["product"],
 		summary:     "List products",
 		operationId: "list-products",
@@ -38,8 +34,7 @@ export class ProductController {
 	}
 
 
-	@Get(":id")
-	@ApiOperation({
+	@Get(":id") @ApiOperation({
 		tags:        ["product"],
 		summary:     "Get product",
 		operationId: "get-product",

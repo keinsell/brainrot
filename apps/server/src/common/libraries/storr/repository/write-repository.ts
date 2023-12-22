@@ -73,11 +73,11 @@ export abstract class WriteRepository<T> {
 
 
 	beforeHook(func: Function, payload?: unknown) {
-		this._hookLogger.verbose(`${this.constructor.name}.${func.name}(${JSON.stringify(payload)})`)
+		this._hookLogger.debug(`${this.constructor.name}.${func.name}(${JSON.stringify(payload)})`)
 	}
 
 
 	after(func: Function, result?: unknown) {
-		this._hookLogger.debug(`${this.constructor.name}.${func.name}(...) => ${JSON.stringify(result)}`)
+		this._hookLogger.verbose(`${this.constructor.name}.${func.name}(...) => ${JSON.stringify(result)}`)
 	}
 }

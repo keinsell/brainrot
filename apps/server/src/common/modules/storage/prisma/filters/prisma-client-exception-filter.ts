@@ -1,7 +1,7 @@
 import {ArgumentsHost, Catch, HttpException, HttpServer, HttpStatus} from "@nestjs/common"
 import {BaseExceptionFilter}                                         from "@nestjs/core"
 import {GqlContextType}                                              from "@nestjs/graphql"
-import {Prisma}                                                      from "../../../../../../../vendor/prisma/index.js"
+import {Prisma}                                                      from "../../../../../vendor/prisma/index.js"
 import {PrismaErrorCodesStatusMapping}                               from "../structures/prisma-error-codes-status-mapping.js"
 
 
