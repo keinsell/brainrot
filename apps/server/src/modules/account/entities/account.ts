@@ -1,12 +1,12 @@
-import {BadRequestException}                    from "@nestjs/common"
-import {AggregateRoot, AggregateRootProperties} from "../../../common/libraries/domain/aggregate.js"
-import {AccountEmailConfirmed}                  from "../events/account-email-confirmed.js"
-import {AccountEvent}                           from "../events/account-event.js"
-import {AccountVerificationEmailRequested}      from "../events/account-verification-email-requested.js"
-import {AccountStatus}                          from "../value-objects/account-status.js"
-import {Email}                                  from "../value-objects/email.js"
-import {Password}                               from "../value-objects/password.js"
-import {Username}                               from "../value-objects/username.js"
+import {BadRequestException}                        from "@nestjs/common"
+import {AggregateRootProperties, BaseAggregateRoot} from "../../../common/libraries/domain/aggregate.js"
+import {AccountEmailConfirmed}                      from "../events/account-email-confirmed.js"
+import {AccountEvent}                               from "../events/account-event.js"
+import {AccountVerificationEmailRequested}          from "../events/account-verification-email-requested.js"
+import {AccountStatus}                              from "../value-objects/account-status.js"
+import {Email}                                      from "../value-objects/email.js"
+import {Password}                                   from "../value-objects/password.js"
+import {Username}                                   from "../value-objects/username.js"
 
 
 
@@ -18,7 +18,7 @@ export interface IdentityProperties extends AggregateRootProperties {
 }
 
 
-export class Account extends AggregateRoot implements IdentityProperties {
+export class Account extends BaseAggregateRoot implements IdentityProperties {
 	public email: Email
 	public password: Password
 	public status: AccountStatus

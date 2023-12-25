@@ -1,5 +1,5 @@
 import {randomUUID}            from "node:crypto"
-import {AggregateRoot}         from "../../../common/libraries/domain/aggregate.js"
+import {BaseAggregateRoot}     from "../../../common/libraries/domain/aggregate.js"
 import {AccountId}             from "../../account/shared-kernel/account-id.js"
 import {IpAddress}             from "../../authentication/value-objects/ip-address.js"
 import {SessionEvent}          from "../events/session-event.js"
@@ -44,7 +44,7 @@ export interface SessionProperties {
 }
 
 
-export class UserSession extends AggregateRoot implements SessionProperties {
+export class UserSession extends BaseAggregateRoot implements SessionProperties {
 
 	public device: string
 	public endTime: Date | null

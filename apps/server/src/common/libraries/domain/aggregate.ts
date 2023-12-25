@@ -11,7 +11,7 @@ export interface AggregateRootProperties {
 
 
 // TODO: https://linear.app/keinsell/issue/PROD-93/add-aggregate-root-base-class
-export class AggregateRoot<T extends Object = {}> implements AggregateRootProperties {
+export class BaseAggregateRoot<T extends Object = {}> implements AggregateRootProperties {
 	public readonly createdAt: Date
 	protected logger: Logger
 	/**

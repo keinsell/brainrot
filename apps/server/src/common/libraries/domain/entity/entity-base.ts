@@ -1,10 +1,15 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
+import {Logger}     from "@nestjs/common"
+import {randomUUID} from "node:crypto"
 import {EventBus}   from "../../../modules/messaging/event-bus.js"
-import {Repository} from "../../storr/repository/repository.js"
+import {UUID}       from "../../identification/index.js"
+import {Repository} from "../../storage/repository/repository.js"
 
 
 
 export class EntityBase {
+	private _logger: Logger
+	private _id: UUID        = randomUUID()
 	private _updatedAt: Date
 	private _createdAt: Date
 	private _version: number = 1
@@ -18,6 +23,11 @@ export class EntityBase {
 	 * @type {Array<any>}
 	 */
 	private _events: Array<any> = []
+
+
+	constructor() {
+		this._logger = new Logger(this._singularName?.toLowerCase() ?? this.constructor.name.toLowerCase() + this._id)
+	}
 
 
 	/** Commits changes done on specific entity to the repository and publishes changes to other modules. */

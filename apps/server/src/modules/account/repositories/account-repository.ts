@@ -1,4 +1,4 @@
-import {Repository} from "../../../common/libraries/storr/index.js"
+import {Repository} from "../../../common/libraries/storage/index.js"
 import {Account}    from "../entities/account.js"
 
 

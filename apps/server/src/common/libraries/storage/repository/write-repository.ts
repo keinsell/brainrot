@@ -1,4 +1,5 @@
 import {Logger, NotFoundException} from "@nestjs/common"
+import {isNil}                     from "../../../../utilities/type-utils/index.js"
 
 // WriteRepository can:
 // - Fetch an entity by unique identifier
@@ -64,7 +65,7 @@ export abstract class WriteRepository<T> {
 	async getById(id: string): Promise<T> {
 		const entity = await this.findById(id);
 
-		if (!entity) {
+		if (isNil(entity)) {
 			throw new NotFoundException(`Entity with id ${id} not found`);
 		}
 

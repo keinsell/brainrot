@@ -2,6 +2,7 @@ import {PhcString}      from "../../../../common/libraries/unihash/types/phc-str
 import {DbContextModel} from "../../../../common/modules/storage/database/db-context-model.js"
 import {Account}        from "../../entities/account.js"
 import {AccountStatus}  from "../../value-objects/account-status.js"
+import {Email}          from "../../value-objects/email.js"
 import {Password}       from "../../value-objects/password.js"
 
 
@@ -31,10 +32,10 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 		return Account.build({
 			id:        this.id,
 			username:  this.username,
-			email:     {
-				address:    this.email,
+			email:     Email.create({
 				isVerified: this.emailVerificationStatus === "VERIFIED",
-			},
+				address:    this.email,
+			}),
 			password:  Password.fromHash(PhcString.deserialize(this.password as any)),
 			status:    AccountStatus.ACTIVE,
 			updatedAt: this.updatedAt,

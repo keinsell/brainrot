@@ -1,4 +1,3 @@
-import {BillingModule}                      from "@boundary/billing/billing.module.js"
 import {IdentityAndAccessModule}            from "@boundary/identity-and-access/identity-and-access.module.js"
 import {Module}                             from '@nestjs/common';
 import {EventEmitterModule}                 from "@nestjs/event-emitter"
@@ -12,7 +11,7 @@ import {ProductModule}                      from "./modules/product/product-modu
 
 @Module({
 	imports:     [
-		IdentityAndAccessModule, SharedModule, ProductModule, CartModule, BillingModule, EventEmitterModule.forRoot(),
+		IdentityAndAccessModule, SharedModule, ProductModule, CartModule, EventEmitterModule.forRoot(),
 		SessionMiddlewareModule.forRoot({
 			session: {secret: "qwerty"},
 		}),

@@ -4,7 +4,7 @@ INSTALLATION_NAME="methylphenidate-runner-set"
 NAMESPACE="methylphenidate-runners"
 GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
 
-op read "op://personal/gh-pat-arc-runner/token" > /tmp/gh-pat-arc-runner.token
+op read "op://dev/arc_4b7a43a2/token" > /tmp/gh-pat-arc-runner.token
 
 GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
 
@@ -34,6 +34,6 @@ helm upgrade "${INSTALLATION_NAME}" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
     --set containerMode.type=dind \
-    --set minRunners=1 \
-    --set maxRunners=30 \
+    --set minRunners=0 \
+    --set maxRunners=10 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set

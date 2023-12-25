@@ -31,10 +31,10 @@ export class AccountService extends ServiceAbstract<Account> {
 	 * @returns {Promise<Account>}
 	 */
 	public async register(registerAccount: RegisterAccountDto): Promise<Account> {
-		const email = {
+		const email = Email.create({
 			isVerified: false,
 			address:    registerAccount.email.toLowerCase(),
-		} as Email;
+		})
 
 		const password = await Password.fromPlain(registerAccount.password, this.hashing.use(KdfAlgorithm.Argon2id));
 
