@@ -6,12 +6,13 @@ import {providePrismaClientExceptionFilter} from "./common/modules/storage/prism
 import {SharedModule}                       from "./common/shared-module.js"
 import {CartModule}                         from "./modules/cart/cart-module.js"
 import {ProductModule}                      from "./modules/product/product-module.js"
+import {RegionModule}                       from "./modules/regions/region-module.js"
 
 
 
 @Module({
 	imports:     [
-		IdentityAndAccessModule, SharedModule, ProductModule, CartModule, EventEmitterModule.forRoot(),
+		IdentityAndAccessModule, SharedModule, ProductModule, CartModule, EventEmitterModule.forRoot(), RegionModule,
 		SessionMiddlewareModule.forRoot({
 			session: {secret: "qwerty"},
 		}),

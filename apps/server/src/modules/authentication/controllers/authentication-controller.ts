@@ -3,8 +3,8 @@ import {
 	ApiBasicAuth, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation,
 }                                                            from "@nestjs/swagger"
 import {Request}                                             from "express"
-import {AccountDto}                                          from "../../account/dtos/account.dto.js"
 import {Account}                                             from "../../account/entities/account.js"
+import {AccountViewModel}                                    from "../../account/view-model/account-view-model.js"
 import {SessionService}                                      from "../../session/services/session-service.js"
 import {SessionStatus}                                       from "../../session/value-objects/session-status.js"
 import {Authenticate}                                        from "../commands/authenticate.js"
@@ -84,10 +84,10 @@ export class AuthenticationController {
 		description: "Returns the current user",
 		tags:        ['authentication'],
 	}) @ApiOkResponse({
-		type:        AccountDto,
+		type:        AccountViewModel,
 		description: "Account was found in system, and returned.",
 	})
-	async whoami(@Req() request: Request): Promise<AccountDto> {
+	async whoami(@Req() request: Request): Promise<AccountViewModel> {
 		const user: Account = request.user as unknown as Account
 		return {
 			id:            user.id,

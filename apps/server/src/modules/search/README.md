@@ -1,5 +1,5 @@
 # Search Module
 
-Search is cross-application module which introduces a real-time search feature based on data indexing.
+Search is a cross-application module that introduces a real-time search feature based on data indexing.
 
 - https://www.meilisearch.com/

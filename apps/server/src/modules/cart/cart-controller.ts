@@ -1,12 +1,17 @@
-import {Controller, Delete, Get, Post, Put} from "@nestjs/common"
+import {Controller, Delete, Get, Param, Post, Put} from "@nestjs/common"
+import {ApiOperation}                              from "@nestjs/swagger"
 
 
 
 @Controller('cart')
 export class CartController {
 
-	@Get()
-	async getCart(): Promise<string> {
+	@ApiOperation({
+		description: "Retrieve a Cart's details. This includes recalculating its totals.",
+		summary:     "Get a Cart",
+		operationId: "get-cart",
+	}) @Get(":id")
+	async getCart(@Param("id") cartId: string): Promise<string> {
 		return 'get-cart'
 	}
 

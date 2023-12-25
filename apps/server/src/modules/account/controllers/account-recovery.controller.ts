@@ -8,8 +8,7 @@ import {JwtAuthorizationGuard}       from "../../authentication/guards/jwt-autho
 @Controller("/account/recovery")
 export class AccountRecoveryController {
 
-	@UseGuards(JwtAuthorizationGuard)
-	@ApiOperation({
+	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
 		operationId: "forgot-password",
 		summary:     "Request password reset",
 		description: "Sends a password reset email",
@@ -23,14 +22,19 @@ export class AccountRecoveryController {
 		return "forgot-password"
 	}
 
-	@UseGuards(JwtAuthorizationGuard)
-	@ApiOperation({
+
+	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
 		operationId: "reset-password",
 		summary:     "Reset password",
 		description: "Resets the user's password",
 		tags:        [OpenapiTags.ACCOUNT_RECOVERY],
 	}) @Post('reset-password')
 	async resetPassword(): Promise<string> {
+		// TODO: Check if given parameter is correct password request in cache
+		// TODO: Find a related account to secret
+		// TODO: Change password of account
+		// TODO: Publish event of password changed
+		// TODO: Return
 		return "reset-password"
 	}
 }

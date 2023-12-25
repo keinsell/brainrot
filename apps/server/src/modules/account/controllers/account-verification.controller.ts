@@ -1,8 +1,8 @@
-import {Controller, Post, Query, UseGuards} from "@nestjs/common"
-import {ApiOperation, ApiQuery}             from "@nestjs/swagger"
-import {AccountFixture}                     from "../../../utilities/fixtures/account-fixture.js"
-import {JwtAuthorizationGuard}              from "../../authentication/guards/jwt-authorization-guard.js"
-import {AccountVerification}                from "../services/account-verification.js"
+import {BadRequestException, Controller, Post, Query, UseGuards} from "@nestjs/common"
+import {ApiOperation, ApiQuery}                                  from "@nestjs/swagger"
+import {AccountFixture}                                          from "../../../utilities/fixtures/account-fixture.js"
+import {JwtAuthorizationGuard}                                   from "../../authentication/guards/jwt-authorization-guard.js"
+import {AccountVerification}                                     from "../services/account-verification.js"
 
 
 
@@ -22,8 +22,13 @@ export class AccountVerificationController {
 		example: "verification_code",
 	})
 	async verifyEmail(@Query('verification_code') verificationCode: string): Promise<string> {
-		await this.accountVerification.verifyEmail(verificationCode)
-		return "ok"
+		const emailVerificationResult = await this.accountVerification.verifyEmail(verificationCode)
+
+		if (emailVerificationResult.isErr()) {
+			throw new BadRequestException("Something gone wrong")
+		} else {
+			return "ok"
+		}
 	}
 
 

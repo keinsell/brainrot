@@ -1,8 +1,7 @@
 import {Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit, Optional} from "@nestjs/common"
 import delay                                                                 from "delay"
 import ms                                                                    from "ms"
-import {GenericContainer, StartedTestContainer, TestContainer}               from "testcontainers"
-import {env}                                                                 from "../../../../../configs/env.js"
+import {StartedTestContainer}                                                from "testcontainers"
 import {
 	Prisma, PrismaClient,
 }                                                                            from "../../../../../vendor/prisma/index.js"
@@ -22,12 +21,13 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
 	constructor(@Optional() @Inject(PRISMA_SERVICE_OPTIONS) private readonly prismaServiceOptions: PrismaServiceOptions = {}) {
 		super({
 			...prismaServiceOptions.prismaOptions,
-			log: [
+			log:         [
 				{
 					emit:  'event',
 					level: 'query',
 				},
 			],
+			errorFormat: 'minimal',
 		});
 
 		if (this.prismaServiceOptions.middlewares) {
@@ -114,42 +114,42 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
 
 	private async startTestContainer() {
 		// If connection wasn't created after 10s in development mode start test container
-		if (env.isDev) {
-			this.logger.debug("Application could not find a running database, however as application is working" + " in development mode, application will start a docker container with postgres.")
 
-			// Instantiate a generic container with PostgreSQL latest version
-			const postgres: TestContainer = new GenericContainer("postgres:latest")
-			postgres.withEnvironment({
-				"POSTGRES_USER":     "test_user",
-				"POSTGRES_PASSWORD": "test_password",
-				"POSTGRES_DB":       "test_db",
-			}).withExposedPorts(5432)
+		//this.logger.debug("Application could not find a running database, however as application is working" + " in development mode, application will start a docker container with postgres.")
+		//
+		//// Instantiate a generic container with PostgreSQL latest version
+		//const postgres: TestContainer = new GenericContainer("postgres:latest")
+		//postgres.withEnvironment({
+		//	"POSTGRES_USER":     "test_user",
+		//	"POSTGRES_PASSWORD": "test_password",
+		//	"POSTGRES_DB":       "test_db",
+		//}).withExposedPorts(5432)
+		//
+		//this.logger.verbose(`Created Testcontainer, ${JSON.stringify(postgres)}`)
+		//
+		//this._testcontainer = await postgres.start()
+		//const logStream     = await this._testcontainer.logs()
+		//
+		//const containerLogger = new Logger(`postgres:${this._testcontainer.getId()}`)
+		//
+		//containerLogger.verbose(`Container started...`)
+		//logStream.on("data", (data) => {
+		//	const logLine = data.toString()
+		//	// Remove \n from lines
+		//	logLine.replace(/[\r\n]+/g, '');
+		//
+		//	if (logLine === "") {
+		//	} else {
+		//		containerLogger.verbose(logLine);
+		//	}
+		//});
+		//
+		//// Get the docker container port
+		//const port  = this._testcontainer.getMappedPort(5432)
+		//const host  = this._testcontainer.getHost()
+		//const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`
+		//
+		//this.logger.verbose(`Postgres container is available at: ${dbUri}`)
 
-			this.logger.verbose(`Created Testcontainer, ${JSON.stringify(postgres)}`)
-
-			this._testcontainer = await postgres.start()
-			const logStream     = await this._testcontainer.logs()
-
-			const containerLogger = new Logger(`postgres:${this._testcontainer.getId()}`)
-
-			containerLogger.verbose(`Container started...`)
-			logStream.on("data", (data) => {
-				const logLine = data.toString()
-				// Remove \n from lines
-				logLine.replace(/[\r\n]+/g, '');
-
-				if (logLine === "") {
-				} else {
-					containerLogger.verbose(logLine);
-				}
-			});
-
-			// Get the docker container port
-			const port  = this._testcontainer.getMappedPort(5432)
-			const host  = this._testcontainer.getHost()
-			const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`
-
-			this.logger.verbose(`Postgres container is available at: ${dbUri}`)
-		}
 	}
 }

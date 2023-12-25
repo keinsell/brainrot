@@ -1,9 +1,10 @@
 import {BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException} from "@nestjs/common"
 import {OnEvent}                                                                           from "@nestjs/event-emitter"
 import ms                                                                                  from "ms"
+import {ok, Result}                                                                        from "neverthrow"
 import {randomUUID}                                                                        from "node:crypto"
-import {EventBus}                                                                          from "../../../common/modules/messaging/event-bus.js"
 import {CacheManager}                                                                      from "../../../common/libraries/cache-manager/cache-manager.js"
+import {EventBus}                                                                          from "../../../common/modules/messaging/event-bus.js"
 import {StaticFeatureFlags}                                                                from "../../../configs/static-feature-flags.js"
 import {AccountRegistered}                                                                 from "../events/account-registered.js"
 import {AccountVerificationEmailSent}                                                      from "../events/account-verification-email-sent.js"
@@ -67,7 +68,7 @@ export class AccountVerification {
 	}
 
 
-	public async verifyEmail(code: string): Promise<void> {
+	public async verifyEmail(code: string): Promise<Result<true, false>> {
 		const accountId = await this.cacheManager.get<string>(`verification_${code}`);
 
 		if (!accountId) {
@@ -91,6 +92,8 @@ export class AccountVerification {
 		// Emit Account Verified Event
 		const events = account.getUncommittedEvents()
 		await this.publisher.publishAll(events)
+
+		return ok(true)
 	}
 
 

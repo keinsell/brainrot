@@ -1,5 +1,6 @@
+import {Opaque}  from "type-fest"
 import {Account} from "../entities/account.js"
 
 
 
-export type AccountId = Account['id'] & { readonly __brand: unique symbol };
+export type AccountId = Opaque<Account["id"]>
