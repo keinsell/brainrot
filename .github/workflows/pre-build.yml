@@ -20,16 +20,16 @@ jobs:
         uses: "./.github/actions/setup-docker"
 
 
-  spellcheck:
-    name: "spellcheck"
-    runs-on: methylphenidate-runner-set
-    continue-on-error: true
-    steps:
-      - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: errata-ai/vale-action@reviewdog
+  #  spellcheck:
+  #    name: "spellcheck"
+  #    runs-on: methylphenidate-runner-set
+  #    continue-on-error: true
+  #    steps:
+  #      - name: 📜 Checkout Repository
+  #        uses: actions/checkout@v3
+  #        with:
+  #          fetch-depth: 0
+  #      - uses: errata-ai/vale-action@reviewdog
 
   #  code-quality:
   #    name: "qodana"
