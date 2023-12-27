@@ -30,6 +30,7 @@ model Account {
   Sessions                Session[]
   VerificationRequests    VerificationRequest[]
   User                    User?
+  TokenAudit              TokenAudit[]
 }
 
 model AccountV2 {
@@ -90,8 +91,7 @@ model Session {
   accountV2Id String?
 }
 
-// TODO: Maybe instead Token Auditing we should use Token Blacklisting?
-model TokenRecord {
+model TokenAudit {
   id         String   @id @default(cuid())
   // --------------------------------------------------
   /// ID of the user to whom the token belongs
@@ -108,6 +108,8 @@ model TokenRecord {
   isRevoked  Boolean
   /// The last time the token was used
   lastUsedAt DateTime
+  // --------------------------------------------------
+  Account    Account  @relation(fields: [accountId], references: [id])
 }
 
 model VerificationRequest {
@@ -147,6 +149,16 @@ model User {
   Order           Order[]
   Metadata        UserMetadata[]
   Cart            Cart?
+}
+
+model BillingAddress {
+  id String @id @default(cuid())
+  // --------------------------------------------------
+}
+
+model ShippingAddress {
+  id String @id @default(cuid())
+  // --------------------------------------------------
 }
 
 model UserMetadata {
@@ -247,11 +259,25 @@ model Checkout {
   User      User     @relation(fields: [userId], references: [id])
 }
 
-model Blob {
-  id       String @id @default(cuid())
+model CheckoutItem {
+  id         String @id @default(cuid())
   // --------------------------------------------------
-  checksum String
+  checkoutId String
+  /// Total discount amount applied. If no discounts were applied, defaults to 0.
+  discount   Int    @default(0)
+  /// Total before any discounts or taxes are applied.
+  subtotal   Int
+  /// Total tax amount applied. If no tax was applied, defaults to 0.
+  tax        Int    @default(0)
+  /// Total after discounts and taxes.
+  total      Int
+  // --------------------------------------------------
+}
 
+model Blob {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  checksum  String
   type      String
   size      Int
   url       String

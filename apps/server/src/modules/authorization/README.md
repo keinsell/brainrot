@@ -9,3 +9,9 @@ access a sensitive resource.
 - Action: what are they trying to do? "push"
 
 - Resource: what are they doing it to? Repository("Acme App")
+
+https://medium.com/@dev.muhammet.ozen/role-based-access-control-in-nestjs-15c15090e47d
+https://www.permit.io/blog/how-to-protect-a-url-inside-a-nestjs-app-using-rbac-authorization
+https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
+https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
+https://github.com/nestjsx/nest-access-control/blob/master/README.md
