@@ -3,21 +3,23 @@ import {CartItem} from "./cart-item.js"
 
 
 export class Cart {
-	id: string
-	cartItems: CartItem[]
+	id : string
+	cartItems : CartItem[]
+	total : number
+	currency : string
 
 
-	constructor(payload: Omit<Cart, "">) {
+	constructor(payload : Omit<Cart, "">) {
 		Object.assign(this, payload)
 	}
 
 
-	subtotal(): number {
+	subtotal() : number {
 		return this.cartItems.reduce((sum, item) => sum + item.subtotal, 0)
 	}
 
 
-	addItem(item: CartItem) {
+	addItem(item : CartItem) {
 		this.cartItems.push(item)
 	}
 }
