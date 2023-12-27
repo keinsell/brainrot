@@ -27,6 +27,7 @@ tests:
             email: ${{env.email}}
 
       - name: Authenticate Account
+        delay: "10s"
         http:
           url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
           method: POST
@@ -45,6 +46,7 @@ tests:
   account-verification:
     steps:
       - name: Authenticate Account
+        delay: "10s"
         http:
           url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
           method: POST
@@ -61,6 +63,7 @@ tests:
               jsonpath: $.accessToken
 
       - name: Verify Account
+        delay: "10s"
         http:
           url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
           method: POST
