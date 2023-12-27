@@ -1,6 +1,10 @@
 import {Injectable, Logger} from "@nestjs/common"
-import {DbContextModel}     from "../../../common/modules/storage/database/db-context-model.js"
-import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
+import {
+	DbContextModel
+}                           from "../../../common/modules/storage/database/db-context-model.js"
+import {
+	PrismaService
+}                           from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {Account}            from "../entities/account.js"
 import {AccountCreateModel} from "../models/account/account-create-model.js"
 import {AccountEntityModel} from "../models/account/account-entity-model.js"
@@ -10,132 +14,148 @@ import {AccountRepository}  from "./account-repository.js"
 
 
 @Injectable()
-export class PrismaAccountRepository extends AccountRepository {
+export class PrismaAccountRepository
+	extends AccountRepository {
 	private logger: Logger = new Logger("domain:repository:prisma")
-
-
+	
+	
 	constructor(private prismaService: PrismaService) {
 		super()
 	}
-
-
+	
+	
 	public async findByEmail(email: string): Promise<Account | undefined> {
 		const maybeAccount = await this.prismaService.account.findFirst({
 			where: {
 				email: email,
 			},
 		})
-
-		this.logger.verbose(`findByEmail(${email}) => ${JSON.stringify(maybeAccount)}`)
-
+		
+		this.logger.verbose(`findByEmail(${email}) => ${JSON.stringify(
+			maybeAccount)}`)
+		
 		if (!maybeAccount) {
 			return undefined
 		}
-
+		
 		const account = maybeAccount as DbContextModel.Account.Entity
-
+		
 		return new AccountEntityModel(account).toDomainModel()
 	}
-
-
+	
+	
 	public async findByUsername(username: Username): Promise<Account | undefined> {
 		let maybeAccount: DbContextModel.Account.Entity | null = null
-
+		
 		try {
 			maybeAccount = await this.prismaService.account.findFirst({
 				where: {
 					username: username,
 				},
 			}) as DbContextModel.Account.Entity | null
-		} catch (e) {
+		}
+		catch (e) {
 			this.logger.error(e)
 		}
-
-		this.logger.verbose(`findByUsername(${username}) => ${JSON.stringify(maybeAccount)}`)
-
+		
+		this.logger.verbose(`findByUsername(${username}) => ${JSON.stringify(
+			maybeAccount)}`)
+		
 		if (!maybeAccount) {
 			return undefined
 		}
-
+		
 		const account = maybeAccount
-
+		
 		return new AccountEntityModel(account).toDomainModel()
 	}
-
-
+	
+	
 	public async findByUsernameFields(username: string): Promise<Account | undefined> {
-		// Find domain by provided username, try to fit it into the username and email fields
+		// Find domain by provided username, try to fit it into the username
+		// and email fields
 		let maybeAccount: DbContextModel.Account.Entity | null = null
-
+		
 		try {
 			maybeAccount = await this.prismaService.account.findFirst({
-				where: {OR: [{username: username}, {email: username}]},
+				where: {
+					OR: [
+						{username: username},
+						{email: username}
+					]
+				},
 			}) as DbContextModel.Account.Entity | null
-		} catch (e) {
+		}
+		catch (e) {
 			this.logger.error(e)
 		}
-
-		this.logger.verbose(`findByUsernameFields(${username}) => ${JSON.stringify(maybeAccount)}`)
-
+		
+		this.logger.verbose(`findByUsernameFields(${username}) => ${JSON.stringify(
+			maybeAccount)}`)
+		
 		if (!maybeAccount) {
 			return undefined
 		}
-
+		
 		const account = maybeAccount
-
+		
 		return new AccountEntityModel(account).toDomainModel()
 	}
-
-
+	
+	
 	public async create(identity: Account): Promise<Account> {
 		let entity: DbContextModel.Account.Entity
-
+		
 		try {
 			entity = await this.prismaService.account.create({
 				data: AccountCreateModel.fromDomainModel(identity),
 			})
-		} catch (e) {
+		}
+		catch (e) {
 			this.logger.error(e)
 			throw e
 		}
-
+		
 		return new AccountEntityModel(entity).toDomainModel()
 	}
-
-
+	
+	
 	public delete(entity: Account): Promise<void> {
 		return Promise.resolve(undefined)
 	}
-
-
+	
+	
 	async exists(entity: Account): Promise<boolean> {
 		const count = await this.prismaService.account.count({
 			where: {
 				OR: [
-					{email: entity.email.address}, {username: entity.username}, {id: entity.id},
+					{email: entity.email.address},
+					{username: entity.username},
+					{id: entity.id},
 				],
 			},
 		})
-
+		
 		return count > 0
 	}
-
-
+	
+	
 	public async findById(id: string): Promise<Account | null> {
 		const entity = await this.prismaService.account.findFirst({
 			where: {
 				id: id,
 			},
 		})
-
+		
 		if (entity) {
 			return new AccountEntityModel(entity).toDomainModel()
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
-
-
+	
+	
 	public update(entity: Account): Promise<Account> {
 		return Promise.resolve(undefined)
 	}

@@ -23,8 +23,4 @@
  *
  */
 
-export interface AuditResource {
-	type : string // Ex. Product
-	id : string
-	changes : { name : string, old : any, new : any }[]
-}
+export const Auditable = () => {}

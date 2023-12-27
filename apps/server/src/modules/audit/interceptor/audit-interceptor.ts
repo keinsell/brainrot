@@ -23,8 +23,28 @@
  *
  */
 
-export interface AuditResource {
-	type : string // Ex. Product
-	id : string
-	changes : { name : string, old : any, new : any }[]
+import {CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor} from "@nestjs/common";
+import {Observable}                                                         from "rxjs";
+import {Reflector}                                                          from "@nestjs/core";
+import {
+	PrismaService,
+}                                                                           from "../../../common/modules/storage/prisma/services/prisma-service.js";
+
+
+
+@Injectable()
+export class AuditInterceptor
+	implements NestInterceptor {
+	private logger = new Logger("interceptor:audit")
+
+	constructor(
+		private readonly reflector : Reflector,
+		private prisma : PrismaService,
+	)
+	{}
+
+	intercept(context : ExecutionContext, next : CallHandler<any>) : Observable<any> | Promise<Observable<any>> {
+		// const auditLog = this.reflector.get<string>("XYZ", context.getHandler())
+		return next.handle()
+	}
 }

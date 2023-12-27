@@ -23,8 +23,19 @@
  *
  */
 
-export interface AuditResource {
-	type : string // Ex. Product
-	id : string
-	changes : { name : string, old : any, new : any }[]
+import {GroupMember} from "../value-object/group-member.js";
+import {Group}       from "../entities/group.js";
+
+
+
+export abstract class GroupService {
+	abstract addGroupMember(member : GroupMember, group : Group)
+
+	abstract removeGroupMember(member : GroupMember, group : Group)
+
+	abstract createGroup(group : any)
+
+	abstract updateGroup(group : any)
+
+	abstract deleteGroup(group : any)
 }

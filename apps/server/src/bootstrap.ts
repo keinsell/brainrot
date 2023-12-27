@@ -15,9 +15,9 @@ import {StaticFeatureFlags}            from "./configs/static-feature-flags.js"
 import {Container}                     from "./container.js"
 import {AccountModule}                 from "./modules/account/account.module.js"
 import {AccountSeeder}                 from "./modules/account/repositories/account-seeder.js"
-import {CartSeeder}                    from "./modules/cart/cart-seeder.js"
-import {ProductSeeder}                 from "./modules/product/product-seeder.js"
-import {ProfileSeeder}                 from "./modules/profile/infrastructure/profile-seeder.js"
+import {CartSeeder}                    from "./modules/todo_cart/cart-seeder.js"
+import {ProductSeeder}                 from "./modules/todo_product/product-seeder.js"
+import {ProfileSeeder}                 from "./modules/todo_profile/infrastructure/profile-seeder.js"
 import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
 
 
@@ -25,7 +25,7 @@ import {portAllocator}                 from "./utilities/network-utils/port-allo
 export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
 		abortOnError: false,
-		snapshot:     !!env.isDev,
+		snapshot    : !!env.isDev,
 	});
 
 	// Enable Prisma Exception Filter for Http Service
@@ -52,13 +52,14 @@ export async function bootstrap() {
 
 	if (openPort.wasReplaced) {
 		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPort.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
-	} else {
+	}
+	else {
 		logger.log(`Port availability check succeeded and requested ::${env.PORT} is available`);
 	}
 
 	let isApplicationListening = false;
-	let retryDelay             = ms("5s");
-	let retryCount             = 3
+	let retryDelay = ms("5s");
+	let retryCount = 3
 
 	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPort.port}`
 
@@ -79,12 +80,13 @@ export async function bootstrap() {
 				logger.debug(`${"-".repeat(54)}`)
 			});
 			isApplicationListening = true;
-		} catch (e) {
+		}
+		catch (e) {
 			logger.error(`Error while trying to start application: ${(
 				e as unknown as any
 			).message}`);
 			await delay(retryDelay);
-			openPort   = await portAllocator(env.PORT as number);
+			openPort = await portAllocator(env.PORT as number);
 			retryDelay = retryDelay * 2;
 		}
 
@@ -100,14 +102,24 @@ export async function bootstrap() {
 	if (env.isDev && StaticFeatureFlags.shouldRunSeeder) {
 		try {
 			seeder({
-				imports:   [
-					DatabaseModule, AccountModule,
+				imports  : [
+					DatabaseModule,
+					AccountModule,
 				],
 				providers: [
-					ProductSeeder, AccountSeeder, ProfileSeeder,
+					ProductSeeder,
+					AccountSeeder,
+					ProfileSeeder,
 				],
-			}).run([ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder]);
-		} catch (e) {
+			})
+			.run([
+				ProductSeeder,
+				AccountSeeder,
+				ProfileSeeder,
+				CartSeeder,
+			]);
+		}
+		catch (e) {
 			logger.error(`Error while trying to seed database: ${(
 				e as unknown as any
 			).message}`);

@@ -6,10 +6,10 @@ import {AuditResource}  from "../value-object/audit-resource.js"
 
 
 export interface AuditLog {
-	id: UUID
+	id : UUID
 	/* "Who?" | The actor who performed the action. See below for the description of its type. */
-	actor: AuditActor
-	operation: AuditOperation
-	resource: AuditResource
-	date: Date
+	actor : AuditActor
+	operation : AuditOperation
+	resource : AuditResource
+	date : Date
 }

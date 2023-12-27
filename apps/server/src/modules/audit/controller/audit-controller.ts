@@ -23,20 +23,9 @@
  *
  */
 
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	Post,
-	Put
-} from "@nestjs/common"
-import {
-	ApiOperation,
-	ApiParam,
-	ApiResponse
-} from "@nestjs/swagger"
+import {Body, Controller, Delete, Get, Param, Post, Put} from "@nestjs/common"
+import {ApiOperation, ApiParam, ApiResponse}             from "@nestjs/swagger"
+
 
 
 @Controller("audit-trail")
@@ -52,14 +41,14 @@ export class AuditController {
 		name: 'id', required: true, description: 'Id of audit record',
 	}) @ApiResponse({
 		status: 200, description: 'Audit record detail',
-	}) @Get(":id") getRecord(@Param("id") recordId: string) {
+	}) @Get(":id") getRecord(@Param("id") recordId : string) {
 		// Implement Logic
 	}
 
 
 	@ApiOperation({summary: 'Create a new audit record'}) @ApiResponse({
 		status: 201, description: 'Created new audit record',
-	}) @Post() createRecord(@Body() record: any) {
+	}) @Post() createRecord(@Body() record : any) {
 		// Implement logic
 	}
 
@@ -68,8 +57,11 @@ export class AuditController {
 		name: 'id', required: true, description: 'Id of audit record',
 	}) @ApiResponse({
 		status: 200, description: 'Updated an audit record',
-	}) @Put(":id") updateRecord(@Param("id") recordId: string,
-	                            @Body() record: any) {
+	}) @Put(":id") updateRecord(
+		@Param("id") recordId : string,
+		@Body() record : any,
+	)
+	{
 		// Implement logic
 	}
 
@@ -78,7 +70,7 @@ export class AuditController {
 		name: 'id', required: true, description: 'Id of audit record',
 	}) @ApiResponse({
 		status: 200, description: 'Deleted the audit record',
-	}) @Delete(":id") deleteRecord(@Param("id") recordId: string) {
+	}) @Delete(":id") deleteRecord(@Param("id") recordId : string) {
 		// Implement logic
 	}
 }

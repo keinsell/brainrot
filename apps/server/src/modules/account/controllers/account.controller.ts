@@ -11,94 +11,90 @@ import {AccountViewModel}                         from "../view-model/account-vi
 
 
 
-function getOperationDocumentation(operation: string): string {
-	const __filename         = fileURLToPath(import.meta.url);
-	const __dirname          = dirname(__filename);
-	const docsDirectory      = `${__dirname}/../10-application/docs`
+function getOperationDocumentation(operation : string) : string {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+	const docsDirectory = `${__dirname}/../10-application/docs`
 	const operationDirectory = `${docsDirectory}/operations`
 
 	try {
 		return readFileSync(`${operationDirectory}/${operation}.md`, "utf8")
 		//return import(`${operationDirectory}/${operation}.md`) as string
-	} catch (e) {
+	}
+	catch (e) {
 		return ''
 	}
-
 }
 
 
 @Controller("account")
 export class AccountController {
-	constructor(private service: AccountService) {}
+	constructor(private service : AccountService) {
+	}
 
 
 	@ApiOperation({
-		operationId: "register",
-		summary:     "Register account",
-		description: getOperationDocumentation("register"),
-		tags:        ['account'],
+		operationId: "register", summary: "Register account",
+		description: getOperationDocumentation("register"), tags: ['account'],
 	}) @ApiOkResponse({
-		type:        AccountViewModel,
+		type       : AccountViewModel,
 		description: "Account was successfully registered in system.",
 	}) @Post()
-	async register(@Body() registerAccountBody: RegisterAccount): Promise<AccountViewModel> {
+	async register(@Body() registerAccountBody : RegisterAccount) : Promise<AccountViewModel> {
 		const body = registerAccountBody as CreateAccountDto
 
 		// TODO: Normalize Email
 		// TODO: Normalize Username
 
 		const result = await this.service.register({
-			username: body.username,
-			email:    body.email,
-			password: body.password,
+			username: body.username, email: body.email, password: body.password,
 		})
 
 		return {
-			id:            result.id,
-			email:         result.email.address,
-			emailVerified: result.email.isVerified,
-			username:      result.username,
+			id           : result.id, email: result.email.address,
+			emailVerified: result.email.isVerified, username: result.username,
 		}
 	}
 
 
-	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
+	@UseGuards(JwtAuthorizationGuard)
+	@ApiOperation({
 		operationId: "update-account",
-		description: "Update details of account.",
-		tags:        ['account'],
-	}) @Patch()
-	async changePassword(): Promise<string> {
+		description: "Update details of account.", tags: ['account'],
+	})
+	@Patch()
+	async changePassword() : Promise<string> {
 		// Find a account that needs to be updated
 		return "change-password"
 	}
 
-
-	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
-		operationId: "change-email",
-		description: "Changes the user's email",
-		tags:        ['account'],
-	}) @Post('change-email')
-	async changeEmail(): Promise<string> {
+	@UseGuards(JwtAuthorizationGuard)
+	@ApiOperation({
+		operationId: "change-email", description: "Changes the user's email",
+		tags       : ['account'],
+	})
+	@Post('change-email')
+	async changeEmail() : Promise<string> {
 		return "change-email"
 	}
 
 
-	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
+	@UseGuards(JwtAuthorizationGuard)
+	@ApiOperation({
 		operationId: "change-username",
-		description: "Changes the user's username",
-		tags:        ['account'],
-	}) @Post('change-username')
-	async changeUsername(): Promise<string> {
+		description: "Changes the user's username", tags: ['account'],
+	})
+	@Post('change-username')
+	async changeUsername() : Promise<string> {
 		return "change-username"
 	}
 
 
 	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
 		operationId: "delete-account",
-		description: "Deletes the user's account.",
-		tags:        ['account'],
+		description: "Deletes the user's account.", tags: ['account'],
 	}) @Post('delete-account')
-	async deleteAccount(): Promise<string> {
+	async deleteAccount() : Promise<string> {
 		return "delete-domain"
 	}
 }
