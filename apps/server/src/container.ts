@@ -6,7 +6,7 @@ import {providePrismaClientExceptionFilter} from "./common/modules/storage/prism
 import {SharedModule}                       from "./common/shared-module.js"
 import {CartModule}                         from "./modules/cart/cart-module.js"
 import {ProductModule}                      from "./modules/product/product-module.js"
-import {RegionModule}                       from "./modules/regions/region-module.js"
+import {RegionModule}                       from "./modules/todo_regions/region-module.js"
 
 
 

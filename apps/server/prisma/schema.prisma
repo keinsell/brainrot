@@ -25,6 +25,7 @@ model Account {
   // --------------------------------------------------
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
+  version                 Int                     @default(1)
   // --------------------------------------------------
   Sessions                Session[]
   VerificationRequests    VerificationRequest[]
@@ -74,6 +75,7 @@ model AccountV2 {
   createdAt      DateTime  @default(now())
   /// Timestamp indicating when the user's profile was last updated/modified. Changes to last_login are considered updates, so most of the time, updated_at will match last_login.
   updatedAt      DateTime  @updatedAt
+  version        Int       @default(1)
   // --------------------------------------------------
 }
 

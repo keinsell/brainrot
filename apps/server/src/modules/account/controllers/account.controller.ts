@@ -4,8 +4,8 @@ import {readFileSync}                             from 'node:fs'
 import {dirname}                                  from "path"
 import {fileURLToPath}                            from "url"
 import {JwtAuthorizationGuard}                    from "../../authentication/guards/jwt-authorization-guard.js"
+import {RegisterAccount}                          from "../commands/register-account.js"
 import {CreateAccountDto}                         from "../dtos/create-account-dto.js"
-import {RegisterAccountDto}                       from "../dtos/register-account-dto.js"
 import {AccountService}                           from "../services/account-service.js"
 import {AccountViewModel}                         from "../view-model/account-view-model.js"
 
@@ -41,7 +41,7 @@ export class AccountController {
 		type:        AccountViewModel,
 		description: "Account was successfully registered in system.",
 	}) @Post()
-	async register(@Body() registerAccountBody: RegisterAccountDto): Promise<AccountViewModel> {
+	async register(@Body() registerAccountBody: RegisterAccount): Promise<AccountViewModel> {
 		const body = registerAccountBody as CreateAccountDto
 
 		// TODO: Normalize Email
