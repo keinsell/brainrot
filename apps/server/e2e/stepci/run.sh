@@ -1,4 +1,4 @@
-rtx x nodejs@20 -- node -v && stepci run ./account.workflow.yml
+npx stepci run ./*.yml
 #docker run \
 #       -v "$(pwd)"/.:/tests \
 #       ghcr.io/stepci/stepci \

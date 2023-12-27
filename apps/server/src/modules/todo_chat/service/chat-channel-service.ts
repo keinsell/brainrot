@@ -23,15 +23,22 @@
  *
  */
 
-import {PickType}         from "@nestjs/swagger"
-import {ApiModel}         from "../../../utilities/docs-utils/swagger-api-model.js"
-import {CreateAccountDto} from "../dtos/create-account-dto.js"
+export class ChatChannelService {
+	public async createChannel(data : any) : Promise<any> {}
 
+	public async archiveChannel(data : any) : Promise<any> {}
 
+	public async deleteChannel(data : any) : Promise<any> {}
 
-@ApiModel({
-	name: "RegisterAccount",
-})
-export class RegisterAccount extends PickType(CreateAccountDto, [
-	"email", "password", "username",
-] as const) {}
+	public async getChannels() : Promise<any> {}
+
+	public async getChannelById(id : string) : Promise<any> {}
+
+	public async getChannelsByUser(userId : string) : Promise<any> {}
+
+	public async updateChannel(data : any) : Promise<any> {}
+
+	public async addUserToChannel(userId : string, channelId : string) : Promise<any> {}
+
+	public async removeUserFromChannel(userId : string, channelId : string) : Promise<any> {}
+}

@@ -33,10 +33,10 @@ export class AccountVerification {
 
 
 	constructor(accountRepository : AccountRepository, eventBus : EventBus, cacheManager : CacheManager) {
-		this.logger = new Logger("account::verification::service")
+		this.logger            = new Logger("account::verification::service")
 		this.accountRepository = accountRepository
-		this.publisher = eventBus
-		this.cacheManager = cacheManager
+		this.publisher         = eventBus
+		this.cacheManager      = cacheManager
 	}
 
 
@@ -112,7 +112,7 @@ export class AccountVerification {
 	@OnEvent("account.registered")
 	private async onAccountRegistered(event : AccountRegistered) : Promise<void> {
 		this.logger.verbose(`Handling ${event.id} with "onAccountRegistered": ${JSON.stringify(event)}`)
-		await this.sendVerificationEmail(event.body.accountId)
+		await this.sendVerificationEmail(event.body!.accountId)
 		this.logger.debug(`Handled ${event.id} with "onAccountRegistered"`)
 	}
 

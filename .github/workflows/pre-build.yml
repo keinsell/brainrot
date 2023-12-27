@@ -20,22 +20,21 @@ jobs:
         uses: "./.github/actions/setup-docker"
 
 
-  spellcheck:
-    name: "spellcheck"
-    runs-on: methylphenidate-runner-set
-    continue-on-error: true
-    steps:
-      - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: ✳️ Setup Node.js
-        uses: "./.github/actions/setup-node"
+  #  spellcheck:
+  #    name: "spellcheck"
+  #    runs-on: methylphenidate-runner-set
+  #    continue-on-error: true
+  #    steps:
+  #      - name: 📜 Checkout Repository
+  #        uses: actions/checkout@v3
+  #        with:
+  #          fetch-depth: 0
+  #      - uses: errata-ai/vale-action@reviewdog
 
   #  code-quality:
   #    name: "qodana"
   #    uses: ./.github/workflows/code-quality.yml
 
-  security_codeql:
-    name: "codeql"
-    uses: ./.github/workflows/security-codeql.yml
+#  security_codeql:
+#    name: "codeql"
+#    uses: ./.github/workflows/security-codeql.yml

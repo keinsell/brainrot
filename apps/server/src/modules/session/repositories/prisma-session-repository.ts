@@ -57,7 +57,7 @@ export class PrismaSessionRepository
 	}
 
 
-	public async findById(id : string) : Promise<UserSession | undefined> {
+	public async findById(id : string) : Promise<UserSession | null> {
 		throw new Error("Not implemented")
 	}
 

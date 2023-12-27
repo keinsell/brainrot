@@ -4,7 +4,7 @@ import {isConstructor, isFunction, isNil} from '@nestjs/common/utils/shared.util
 
 
 export class MetadataScanner {
-	private readonly cachedScannedPrototypes: Map<object, string[]> = new Map();
+	private readonly cachedScannedPrototypes : Map<object, string[]> = new Map();
 
 
 	/**
@@ -12,13 +12,17 @@ export class MetadataScanner {
 	 * @see {@link getAllMethodNames}
 	 * @see getAllMethodNames
 	 */
-	public scanFromPrototype<T extends Injectable, R = any>(instance: T, prototype: object, callback: (name: string) => R): R[] {
+	public scanFromPrototype<T extends Injectable, R = any>(
+		instance : T,
+		prototype : object,
+		callback : (name : string) => R,
+	) : R[] {
 		if (!prototype) {
 			return [];
 		}
 
 		const visitedNames = new Map<string, boolean>();
-		const result: R[]  = [];
+		const result : R[] = [];
 
 		do {
 			for (const property of Object.getOwnPropertyNames(prototype)) {
@@ -29,7 +33,7 @@ export class MetadataScanner {
 				visitedNames.set(property, true);
 
 				// reason: https://github.com/nestjs/nest/pull/10821#issuecomment-1411916533
-				const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
+				const descriptor = Object.getOwnPropertyDescriptor(prototype, property) as any;
 
 				if (descriptor.set || descriptor.get || isConstructor(property) || !isFunction(prototype[property])) {
 					continue;
@@ -45,8 +49,8 @@ export class MetadataScanner {
 			}
 		}
 		while ((
-			prototype = Reflect.getPrototypeOf(prototype)
-		) && prototype !== Object.prototype);
+			       prototype = Reflect.getPrototypeOf(prototype) as any
+		       ) && prototype !== Object.prototype);
 
 		return result;
 	}
@@ -57,22 +61,22 @@ export class MetadataScanner {
 	 * @see {@link getAllMethodNames}
 	 * @see getAllMethodNames
 	 */
-	public* getAllFilteredMethodNames(prototype: object): IterableIterator<string> {
+	public* getAllFilteredMethodNames(prototype : object) : IterableIterator<string> {
 		yield* this.getAllMethodNames(prototype);
 	}
 
 
-	public getAllMethodNames(prototype: object | null): string[] {
+	public getAllMethodNames(prototype : object | null) : string[] {
 		if (!prototype) {
 			return [];
 		}
 
 		if (this.cachedScannedPrototypes.has(prototype)) {
-			return this.cachedScannedPrototypes.get(prototype);
+			return this.cachedScannedPrototypes.get(prototype) as any;
 		}
 
-		const visitedNames     = new Map<string, boolean>();
-		const result: string[] = [];
+		const visitedNames      = new Map<string, boolean>();
+		const result : string[] = [];
 
 		this.cachedScannedPrototypes.set(prototype, result);
 
@@ -85,7 +89,7 @@ export class MetadataScanner {
 				visitedNames.set(property, true);
 
 				// reason: https://github.com/nestjs/nest/pull/10821#issuecomment-1411916533
-				const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
+				const descriptor = Object.getOwnPropertyDescriptor(prototype, property) as any;
 
 				if (descriptor.set || descriptor.get || isConstructor(property) || !isFunction(prototype[property])) {
 					continue;
@@ -95,8 +99,8 @@ export class MetadataScanner {
 			}
 		}
 		while ((
-			prototype = Reflect.getPrototypeOf(prototype)
-		) && prototype !== Object.prototype);
+			       prototype = Reflect.getPrototypeOf(prototype)
+		       ) && prototype !== Object.prototype);
 
 		return result;
 	}

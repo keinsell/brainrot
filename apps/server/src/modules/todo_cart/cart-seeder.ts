@@ -6,24 +6,25 @@ import {Prisma}             from "../../vendor/prisma/index.js"
 
 
 @Injectable()
-export class CartSeeder extends SeederBase<Prisma.CartCreateInput> {
+export class CartSeeder
+	extends SeederBase<Prisma.CartCreateInput> {
 	private excludedUserIds = new Array<string>()
 
 
-	constructor(private prismaService: PrismaService) {
+	constructor(private prismaService : PrismaService) {
 		super(new Logger("seeder:cart"))
 	}
 
 
-	public async count(): Promise<number> {
+	public async count() : Promise<number> {
 		return this.prismaService.cart.count()
 	}
 
 
-	public async exists(input: Prisma.CartCreateInput): Promise<boolean> {
+	public async exists(input : Prisma.CartCreateInput) : Promise<boolean> {
 		const exists = await this.prismaService.cart.findUnique({
 			where: {
-				profileId: input.User.connect.id,
+				profileId: input.User!.connect!.id,
 			},
 		})
 
@@ -31,7 +32,7 @@ export class CartSeeder extends SeederBase<Prisma.CartCreateInput> {
 	}
 
 
-	public async fabricate(): Promise<Prisma.CartCreateInput> {
+	public async fabricate() : Promise<Prisma.CartCreateInput> {
 		const user = await this.prismaService.user.findFirst({
 			where: {
 				id: {notIn: this.excludedUserIds},
@@ -56,7 +57,7 @@ export class CartSeeder extends SeederBase<Prisma.CartCreateInput> {
 	}
 
 
-	public save(input: Prisma.CartCreateInput): Promise<unknown> {
+	public save(input : Prisma.CartCreateInput) : Promise<unknown> {
 		return this.prismaService.cart.create({data: input})
 	}
 }

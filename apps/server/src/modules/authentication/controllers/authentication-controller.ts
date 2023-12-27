@@ -84,7 +84,7 @@ export class AuthenticationController {
 			userAgent,
 			tokenId  : authenticationResult.refreshToken.jti,
 			tokens   : [authenticationResult.accessToken.jti],
-			endTime  : undefined,
+			endTime  : null,
 			expiresAt: new Date(authenticationResult.refreshToken.expiresAt),
 			status   : SessionStatus.ACTIVE,
 		})

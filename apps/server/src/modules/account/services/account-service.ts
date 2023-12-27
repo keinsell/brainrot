@@ -3,7 +3,7 @@ import {ServiceAbstract}    from "../../../common/libraries/services/service-abs
 import {PasswordHashing}    from "../../../common/libraries/unihash/index.js"
 import {KdfAlgorithm}       from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
 import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
-import {RegisterAccount}    from "../commands/register-account.js"
+import {RegisterAccountDtp} from "../commands/register-account-dtp.js"
 import {Account}            from "../entities/account.js"
 import {AccountPolicy}      from "../policies/account-policy.js"
 import {AccountRepository}  from "../repositories/account-repository.js"
@@ -34,10 +34,10 @@ export class AccountService
 	 *
 	 * Register account is an operation dedicated to creating new accounts in codebase.
 	 *
-	 * @param {RegisterAccount} registerAccount
+	 * @param {RegisterAccountDtp} registerAccount
 	 * @returns {Promise<Account>}
 	 */
-	public async register(registerAccount : RegisterAccount) : Promise<Account> {
+	public async register(registerAccount : RegisterAccountDtp) : Promise<Account> {
 		const email = Email.create({
 			isVerified: false,
 			address   : registerAccount.email.toLowerCase(),
@@ -47,7 +47,7 @@ export class AccountService
 
 		await this.policy.canRegisterAccount({
 			email   : email.address,
-			password: password.plain,
+			password: registerAccount.password,
 			username: registerAccount.username.toLowerCase(),
 		})
 
