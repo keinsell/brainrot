@@ -1,3 +1,8 @@
+import {Injectable} from "@nestjs/common";
+
+
+
+@Injectable()
 export class AccountRecovery {
 	public async startPasswordRecovery(accountId : string) {
 		// TODO: Generate Password Reset Request

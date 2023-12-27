@@ -13,8 +13,49 @@ jobs:
       packages: write
       deployments: write
       id-token: write
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: keinsell
+          POSTGRES_PASSWORD: keinsell
+          POSTGRES_ROOT_PASSWORD: keinsell
+          POSTGRES_DB: methylophenidate
+        ports:
+          - 5432:5432
+      nats:
+        image: nats
+        ports:
+          - 4222:4222
     steps:
       - name: 📜 Checkout Repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: 🐧 Setup Operating System
+        uses: "./.github/actions/setup-os"
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
+      - name: Build API
+        run: cd apps/server && CI='' pnpm build:tsc
+      - shell: bash
+        run: cp example.env apps/server/.env
+      - shell: bash
+        run: cd apps/server && pnpm db:push
+      - name: Start API
+        shell: bash
+        run: cd apps/server && nohup pnpm dev &
+      - name: Wait on API
+        shell: bash
+        run: wait-on --timeout=180000 http://localhost:1337/health
+      - name: Run E2E tests
+        run: |
+          cd apps/server && pnpm test:e2e
+      - name: Kill port for server 1337 for unit tests
+        run: sudo kill -9 $(sudo lsof -t -i:1337)

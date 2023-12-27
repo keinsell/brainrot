@@ -1,0 +1,68 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 2023-12-27T21:34:26.112525937+01:00
+        host: ""
+    resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:26 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2023-12-27T21:34:28.124883596+01:00
+    objects: []
+    assertions:
+        noise:
+            header.Cache-Control: []
+            header.Date: []
+            header.Last-Modified: []
+    created: 1703709268
+curl: |
+    curl --request GET \
+      --url http://localhost:1337/api/openapi3.json \
+      --header 'Connection: keep-alive' \
+      --header 'Sec-Fetch-Dest: empty' \
+      --header 'Referer: http://localhost:1337/api/' \
+      --header 'Accept: */*' \
+      --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0' \
+      --header 'If-None-Match: W/"280f-18cacfc2f96"' \
+      --header 'Host: localhost:1337' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT' \
+      --header 'Sec-Fetch-Site: same-origin' \
+      --header 'Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244' \
+      --header 'Accept-Language: pl,en-US;q=0.7,en;q=0.3' \
+      --header 'Sec-Fetch-Mode: cors' \

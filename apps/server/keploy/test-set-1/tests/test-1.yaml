@@ -1,0 +1,93 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/
+        header:
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3AMkC6bR7FX6Vk-ma_6EVS6ZjbXyOhgyUd.m0mRsIA7MqY%2FN%2F%2FlsjDnbdyO0c5iDQtgTODJgarFLVE; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Sec-Fetch-Dest: document
+            Sec-Fetch-Mode: navigate
+            Sec-Fetch-Site: none
+            Sec-Fetch-User: ?1
+            Upgrade-Insecure-Requests: "1"
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 2023-12-27T21:29:52.010779642+01:00
+        host: ""
+    resp:
+        status_code: 200
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Content-Length: "662"
+            Content-Type: text/html; charset=UTF-8
+            Date: Wed, 27 Dec 2023 20:29:52 GMT
+            Etag: W/"296-18c52245f52"
+            Keep-Alive: timeout=5
+            Last-Modified: Sun, 10 Dec 2023 05:12:44 GMT
+            Set-Cookie: connect.sid=s%3ARhYoj1ps9KRZk8zy1dIZ6d4RyGLZkZMx.fD2clbLRZSTUU%2BRk62p%2BCv5qYBmIrW8e3etEy238tUw; Path=/; HttpOnly
+            X-Powered-By: Express
+        body: |-
+            <!doctype html>
+            <html>
+            <head>
+                <title>API Reference</title>
+                <meta charset="utf-8"/>
+                <meta
+                        content="width=device-width, initial-scale=1"
+                        name="viewport"/>
+                <style>
+                    body {
+                        margin: 0;
+                    }
+                </style>
+            </head>
+            <body>
+            <!-- Add your own OpenAPI/Swagger spec file URL here: -->
+            <!-- Note: this includes our proxy, you can remove the following line if you do not need it -->
+            <!-- data-proxy-url="https://api.scalar.com/request-proxy" -->
+            <script
+                    data-url="openapi3.json"
+                    id="api-reference"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+            </body>
+            </html>
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2023-12-27T21:29:52.180114645+01:00
+    objects: []
+    assertions:
+        noise:
+            header.Cache-Control: []
+            header.Date: []
+            header.Last-Modified: []
+    created: 1703708992
+curl: |
+    curl --request GET \
+      --url http://localhost:1337/api/ \
+      --header 'Host: localhost:1337' \
+      --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0' \
+      --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' \
+      --header 'Upgrade-Insecure-Requests: 1' \
+      --header 'Sec-Fetch-Mode: navigate' \
+      --header 'Sec-Fetch-Dest: document' \
+      --header 'Connection: keep-alive' \
+      --header 'Sec-Fetch-Site: none' \
+      --header 'Sec-Fetch-User: ?1' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3AMkC6bR7FX6Vk-ma_6EVS6ZjbXyOhgyUd.m0mRsIA7MqY%2FN%2F%2FlsjDnbdyO0c5iDQtgTODJgarFLVE; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244' \
+      --header 'Accept-Language: pl,en-US;q=0.7,en;q=0.3' \

@@ -1,0 +1,63 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-19
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/authenticate
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDM3MTI4ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiYWJjZTVhYWUtMDdiOC00MDA4LWI3Y2UtNjhkZDA0OTVjZTBiIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.d7Z4ccmD1t4bbOMJz2rUXtkyGXelQYsjP3TZ6ef4F2E
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 2023-12-27T21:35:19.128937874+01:00
+        host: ""
+    resp:
+        status_code: 200
+        header:
+            Connection: keep-alive
+            Content-Length: "127"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:35:19 GMT
+            Etag: W/"7f-oxCWt6FxlbuaDWpGhTcUtp6mHdQ"
+            Keep-Alive: timeout=5
+            X-Powered-By: Express
+        body: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","username":"angie_wisoky65","email":"cleveland49@yahoo.com","emailVerified":false}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2023-12-27T21:35:21.137067912+01:00
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1703709321
+curl: |
+    curl --request GET \
+      --url http://localhost:1337/authenticate \
+      --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Connection: keep-alive' \
+      --header 'Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244' \
+      --header 'Referer: http://localhost:1337/api/' \
+      --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDM3MTI4ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiYWJjZTVhYWUtMDdiOC00MDA4LWI3Y2UtNjhkZDA0OTVjZTBiIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.d7Z4ccmD1t4bbOMJz2rUXtkyGXelQYsjP3TZ6ef4F2E' \
+      --header 'Sec-Fetch-Dest: empty' \
+      --header 'Accept-Language: pl,en-US;q=0.7,en;q=0.3' \
+      --header 'Host: localhost:1337' \
+      --header 'Sec-Fetch-Site: same-origin' \
+      --header 'Sec-Fetch-Mode: cors' \
+      --header 'Accept: application/json, text/plain, */*' \

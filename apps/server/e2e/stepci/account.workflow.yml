@@ -1,9 +1,15 @@
 version: "1.1"
+$schema: https://raw.githubusercontent.com/stepci/stepci/main/schema.json
 name: Methylphenidate
 env:
   protocol: http
   host: localhost
-  port: 1337
+  port: "1337"
+  username: testuser
+  password: sampletestpassword123
+  email: testuser@gmail.com
+config:
+  continueOnFail: true
 tests:
   account-registration:
     steps:
@@ -12,13 +18,56 @@ tests:
           url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account
           method: POST
           check:
+            status: "/^20/"
+          headers:
+            Content-Type: application/json
+          json:
+            username: ${{env.username}}
+            password: ${{env.password}}
+            email: ${{env.email}}
+
+      - name: Authenticate Account
+        http:
+          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
+          method: POST
+          check:
             status: /^20/
           headers:
             Content-Type: application/json
           json:
-            username: ${{ internet.userName | fake }}
-            password: ${{ internet.password | fake }}
-            email: ${{ internet.email | fake }}
+            username: ${{env.username}}
+            password: ${{env.password}}
+            email: ${{env.email}}
           captures:
             email:
               jsonpath: $.email
+
+  account-verification:
+    steps:
+      - name: Authenticate Account
+        http:
+          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
+          method: POST
+          check:
+            status: /^20/
+          headers:
+            Content-Type: application/json
+          json:
+            username: ${{env.username}}
+            password: ${{env.password}}
+            email: ${{env.email}}
+          captures:
+            accessToken:
+              jsonpath: $.accessToken
+
+      - name: Verify Account
+        http:
+          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
+          method: POST
+          auth:
+            bearer:
+              token: ${{captures.accessToken}}
+          check:
+            status: /^20/
+          headers:
+            Content-Type: application/json

@@ -1,0 +1,2489 @@
+version: api.keploy.io/v1beta1
+name: report-3
+status: FAILED
+success: 0
+failure: 19
+total: 19
+tests:
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/account
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Content-Length: "95"
+            Content-Type: application/json
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3ARhYoj1ps9KRZk8zy1dIZ6d4RyGLZkZMx.fD2clbLRZSTUU%2BRk62p%2BCv5qYBmIrW8e3etEy238tUw; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Origin: http://localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: '{"email":"Roxanne51@yahoo.com","password":"SuperSecretPassword123!","username":"Timmy_Witting"}'
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 409
+        header:
+            Connection: keep-alive
+            Content-Length: "111"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:34:22 GMT
+            Etag: W/"6f-gnvka2+pFqqnWT3gC3DoqMGuxps"
+            Keep-Alive: timeout=5
+            Set-Cookie: connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; Path=/; HttpOnly
+            X-Powered-By: Express
+        body: '{"message":"Username is already in use in system, try logging in instead.","error":"Conflict","statusCode":409}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.statusCode: []
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 409
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Set-Cookie
+                value:
+                    - connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; Path=/; HttpOnly
+              actual:
+                key: Set-Cookie
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "111"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:22 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"6f-gnvka2+pFqqnWT3gC3DoqMGuxps"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"message":"Username is already in use in system, try logging in instead.","error":"Conflict","statusCode":409}'
+              actual: 'Post "http://localhost:1337/account": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:29:48 GMT
+            If-None-Match: W/"2805-18cacf812d9"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Content-Length: "10255"
+            Content-Type: application/json; charset=UTF-8
+            Date: Wed, 27 Dec 2023 20:34:23 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: '{"openapi":"3.0.0","paths":{"/account":{"post":{"operationId":"register","summary":"Register account","description":"","tags":["account"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RegisterAccount"}}}},"responses":{"200":{"description":"Account was successfully registered in system.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Account"}}}}}},"patch":{"operationId":"update-account","summary":"","description":"Update details of account.","tags":["account"],"parameters":[],"responses":{"200":{"description":""}}}},"/account/delete-account":{"post":{"operationId":"delete-account","summary":"","description":"Deletes the user''s account.","tags":["account"],"parameters":[],"responses":{"201":{"description":""}}}},"/account/recovery/forgot-password":{"post":{"operationId":"forgot-password","summary":"Request password reset","description":"Sends a password reset email","tags":["account-recovery"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecoverAccount"}}}},"responses":{"201":{"description":""}}}},"/account/recovery/reset-password":{"post":{"operationId":"reset-password","summary":"Reset password","description":"Resets the user''s password","tags":["account-recovery"],"parameters":[{"name":"code","required":true,"in":"query","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/account/verification/verify-email":{"post":{"operationId":"verify-email","summary":"Verify Email","description":"Verifies the user’s email","tags":["account"],"parameters":[{"name":"verification_code","required":true,"in":"query","example":"verification_code","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/account/verification/resend-verification-email":{"post":{"operationId":"resend-verification-email","summary":"Re-send verification email","description":"Resends the verification email","tags":["account"],"parameters":[{"name":"email","required":true,"in":"query","description":"Email of created account to which verification email should be sent","example":"Cleveland49@yahoo.com","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/authenticate":{"post":{"operationId":"authenticate","summary":"Basic Authentication","description":"Logs the user in with usage of a username and password.","tags":["authentication"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Auhenticate"}}}},"responses":{"201":{"description":"The user has been successfully authenticated and session was created.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthenticationResponse"}}}},"404":{"description":"The user could not be found."}},"security":[{"basic":[]}]},"get":{"operationId":"whoami","summary":"Who am I?","description":"Returns the current user","tags":["authentication"],"parameters":[],"responses":{"200":{"description":"Account was found in system, and returned.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Account"}}}}},"security":[{"bearer":[]}]}},"/session/refresh-session":{"post":{"operationId":"refresh-session","summary":"","description":"Use a refresh token to extend a session and generate another access token","tags":["session"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RefreshSession"}}}},"responses":{"201":{"description":""}}}},"/health":{"get":{"operationId":"healthcheck","summary":"Health check endpoint","parameters":[],"responses":{"200":{"description":"The Health Check is successful","content":{"application/json":{"schema":{"type":"object","properties":{"status":{"type":"string","example":"ok"},"info":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"error":{"type":"object","example":{},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"details":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}}}}}}}},"503":{"description":"The Health Check is not successful","content":{"application/json":{"schema":{"type":"object","properties":{"status":{"type":"string","example":"error"},"info":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"error":{"type":"object","example":{"redis":{"status":"down","message":"Could not connect"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"details":{"type":"object","example":{"database":{"status":"up"},"redis":{"status":"down","message":"Could not connect"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}}}}}}}}}}},"/product":{"post":{"operationId":"create-product","summary":"Create product","tags":["product"],"parameters":[],"responses":{"201":{"description":""}}},"get":{"operationId":"list-products","summary":"List products","tags":["product"],"parameters":[],"responses":{"200":{"description":""}}}},"/product/{id}":{"get":{"operationId":"get-product","summary":"Get product","tags":["product"],"parameters":[],"responses":{"200":{"description":""}}},"patch":{"operationId":"ProductController_updateProduct","parameters":[],"responses":{"200":{"description":""}}},"delete":{"operationId":"ProductController_deleteProduct","parameters":[],"responses":{"200":{"description":""}}}},"/cart/{id}":{"get":{"operationId":"get-cart","summary":"Get a Cart","description":"Retrieve a Cart''s details. This includes recalculating its totals.","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}}},"put":{"operationId":"CartController_updateCart","parameters":[],"responses":{"200":{"description":""}}},"post":{"operationId":"CartController_deleteCart","parameters":[],"responses":{"201":{"description":""}}}},"/cart/{id}/checkout":{"post":{"operationId":"CartController_checkoutCart","parameters":[],"responses":{"201":{"description":""}}},"delete":{"operationId":"CartController_cancelCheckoutCart","parameters":[],"responses":{"200":{"description":""}}}},"/region/{id}":{"get":{"operationId":"get-region","summary":"Get a Region","description":"Retrieve a Region''s details.","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}}}}},"info":{"title":"methylophenidate","description":"Methylophenidate is a boilerplate for Nest.js applications with batteries included.","version":"1.0","contact":{}},"tags":[{"name":"api","description":""}],"servers":[],"components":{"schemas":{"RecoverAccount":{"type":"object","properties":{"username":{"type":"string","description":"Username of account","example":""},"method":{"type":"string","description":"Recovery Method","example":""}}},"AuthenticationResponse":{"type":"object","properties":{"id":{"type":"string","description":"ID of authenticated domain."},"mfa":{"type":"boolean","description":"Indicates if domain uses MFA. In case of true, additional steps are supposed to be made to activate access token."},"accessToken":{"type":"string","description":"Access token."},"refreshToken":{"type":"string","description":"Refresh token."}},"required":["id","mfa","accessToken","refreshToken"]},"RefreshSession":{"type":"object","properties":{"refreshToken":{"type":"string","description":"...","example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","examples":["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA"]}},"required":["refreshToken"]},"RegisterAccount":{"type":"object","properties":{"email":{"type":"string","description":"The domain''s email address","example":"Cleveland49@yahoo.com","examples":["Raul_Marks@gmail.com","Buddy.Schulist@gmail.com","Anibal_Pouros@hotmail.com"]},"password":{"type":"string","description":"The domain''s password","example":"SuperSecretPassword123!","examples":["LaW1KVuo69FG5Pf","9srQfkporSDhU76","74ETrfy3OQCdUzs"]},"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Raul_Marks","Buddy.Schulist","Anibal_Pouros"]}},"required":["email","password","username"]},"Account":{"type":"object","properties":{"id":{"type":"string","description":"The domain''s unique identifier","example":"cjld2cjxh0000qzrmn831i7rn"},"email":{"type":"string","description":"The domain''s email address","example":"Cleveland49@yahoo.com","examples":["Raul_Marks@gmail.com","Buddy.Schulist@gmail.com","Anibal_Pouros@hotmail.com"]},"emailVerified":{"type":"boolean","description":"Indicates whether the email associated with a user domain has been verified","example":true},"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Raul_Marks","Buddy.Schulist","Anibal_Pouros"]}},"required":["id","email","emailVerified","username"],"description":"asdasd"},"Auhenticate":{"type":"object","properties":{"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Diana.Mraz41","Graham0","Warren.Connelly"]},"password":{"type":"string","description":"The domain''s password","example":"SuperSecretPassword123!","examples":["b63uMsfdiD7d2TK","80BjzpP5SbnW6ox","N3y0iAB6sCI3knz"]}},"required":["username","password"],"description":"asdasd"}}}}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.components.schemas.Account.properties.username.examples: []
+        body.components.schemas.Auhenticate.properties.password.examples: []
+        body.components.schemas.Auhenticate.required: []
+        body.components.schemas.RegisterAccount.properties.password.examples: []
+        body.components.schemas.RegisterAccount.properties.username.examples: []
+        body.components.schemas.RegisterAccount.required: []
+        body.paths./authenticate.get.responses.200.description: []
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=UTF-8
+              actual:
+                key: Content-Type
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "10255"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:23 GMT
+              actual:
+                key: Date
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"openapi":"3.0.0","paths":{"/account":{"post":{"operationId":"register","summary":"Register account","description":"","tags":["account"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RegisterAccount"}}}},"responses":{"200":{"description":"Account was successfully registered in system.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Account"}}}}}},"patch":{"operationId":"update-account","summary":"","description":"Update details of account.","tags":["account"],"parameters":[],"responses":{"200":{"description":""}}}},"/account/delete-account":{"post":{"operationId":"delete-account","summary":"","description":"Deletes the user''s account.","tags":["account"],"parameters":[],"responses":{"201":{"description":""}}}},"/account/recovery/forgot-password":{"post":{"operationId":"forgot-password","summary":"Request password reset","description":"Sends a password reset email","tags":["account-recovery"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecoverAccount"}}}},"responses":{"201":{"description":""}}}},"/account/recovery/reset-password":{"post":{"operationId":"reset-password","summary":"Reset password","description":"Resets the user''s password","tags":["account-recovery"],"parameters":[{"name":"code","required":true,"in":"query","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/account/verification/verify-email":{"post":{"operationId":"verify-email","summary":"Verify Email","description":"Verifies the user’s email","tags":["account"],"parameters":[{"name":"verification_code","required":true,"in":"query","example":"verification_code","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/account/verification/resend-verification-email":{"post":{"operationId":"resend-verification-email","summary":"Re-send verification email","description":"Resends the verification email","tags":["account"],"parameters":[{"name":"email","required":true,"in":"query","description":"Email of created account to which verification email should be sent","example":"Cleveland49@yahoo.com","schema":{"type":"string"}}],"responses":{"201":{"description":""}}}},"/authenticate":{"post":{"operationId":"authenticate","summary":"Basic Authentication","description":"Logs the user in with usage of a username and password.","tags":["authentication"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Auhenticate"}}}},"responses":{"201":{"description":"The user has been successfully authenticated and session was created.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthenticationResponse"}}}},"404":{"description":"The user could not be found."}},"security":[{"basic":[]}]},"get":{"operationId":"whoami","summary":"Who am I?","description":"Returns the current user","tags":["authentication"],"parameters":[],"responses":{"200":{"description":"Account was found in system, and returned.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Account"}}}}},"security":[{"bearer":[]}]}},"/session/refresh-session":{"post":{"operationId":"refresh-session","summary":"","description":"Use a refresh token to extend a session and generate another access token","tags":["session"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RefreshSession"}}}},"responses":{"201":{"description":""}}}},"/health":{"get":{"operationId":"healthcheck","summary":"Health check endpoint","parameters":[],"responses":{"200":{"description":"The Health Check is successful","content":{"application/json":{"schema":{"type":"object","properties":{"status":{"type":"string","example":"ok"},"info":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"error":{"type":"object","example":{},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"details":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}}}}}}}},"503":{"description":"The Health Check is not successful","content":{"application/json":{"schema":{"type":"object","properties":{"status":{"type":"string","example":"error"},"info":{"type":"object","example":{"database":{"status":"up"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"error":{"type":"object","example":{"redis":{"status":"down","message":"Could not connect"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}},"nullable":true},"details":{"type":"object","example":{"database":{"status":"up"},"redis":{"status":"down","message":"Could not connect"}},"additionalProperties":{"type":"object","properties":{"status":{"type":"string"}},"additionalProperties":{"type":"string"}}}}}}}}}}},"/product":{"post":{"operationId":"create-product","summary":"Create product","tags":["product"],"parameters":[],"responses":{"201":{"description":""}}},"get":{"operationId":"list-products","summary":"List products","tags":["product"],"parameters":[],"responses":{"200":{"description":""}}}},"/product/{id}":{"get":{"operationId":"get-product","summary":"Get product","tags":["product"],"parameters":[],"responses":{"200":{"description":""}}},"patch":{"operationId":"ProductController_updateProduct","parameters":[],"responses":{"200":{"description":""}}},"delete":{"operationId":"ProductController_deleteProduct","parameters":[],"responses":{"200":{"description":""}}}},"/cart/{id}":{"get":{"operationId":"get-cart","summary":"Get a Cart","description":"Retrieve a Cart''s details. This includes recalculating its totals.","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}}},"put":{"operationId":"CartController_updateCart","parameters":[],"responses":{"200":{"description":""}}},"post":{"operationId":"CartController_deleteCart","parameters":[],"responses":{"201":{"description":""}}}},"/cart/{id}/checkout":{"post":{"operationId":"CartController_checkoutCart","parameters":[],"responses":{"201":{"description":""}}},"delete":{"operationId":"CartController_cancelCheckoutCart","parameters":[],"responses":{"200":{"description":""}}}},"/region/{id}":{"get":{"operationId":"get-region","summary":"Get a Region","description":"Retrieve a Region''s details.","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}}}}},"info":{"title":"methylophenidate","description":"Methylophenidate is a boilerplate for Nest.js applications with batteries included.","version":"1.0","contact":{}},"tags":[{"name":"api","description":""}],"servers":[],"components":{"schemas":{"RecoverAccount":{"type":"object","properties":{"username":{"type":"string","description":"Username of account","example":""},"method":{"type":"string","description":"Recovery Method","example":""}}},"AuthenticationResponse":{"type":"object","properties":{"id":{"type":"string","description":"ID of authenticated domain."},"mfa":{"type":"boolean","description":"Indicates if domain uses MFA. In case of true, additional steps are supposed to be made to activate access token."},"accessToken":{"type":"string","description":"Access token."},"refreshToken":{"type":"string","description":"Refresh token."}},"required":["id","mfa","accessToken","refreshToken"]},"RefreshSession":{"type":"object","properties":{"refreshToken":{"type":"string","description":"...","example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","examples":["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzAzNzA5MjU2fQ.-eGMhkYgRlGPmU6PWjlzoTNuCaosQCCWb9Mu8J918iA"]}},"required":["refreshToken"]},"RegisterAccount":{"type":"object","properties":{"email":{"type":"string","description":"The domain''s email address","example":"Cleveland49@yahoo.com","examples":["Raul_Marks@gmail.com","Buddy.Schulist@gmail.com","Anibal_Pouros@hotmail.com"]},"password":{"type":"string","description":"The domain''s password","example":"SuperSecretPassword123!","examples":["LaW1KVuo69FG5Pf","9srQfkporSDhU76","74ETrfy3OQCdUzs"]},"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Raul_Marks","Buddy.Schulist","Anibal_Pouros"]}},"required":["email","password","username"]},"Account":{"type":"object","properties":{"id":{"type":"string","description":"The domain''s unique identifier","example":"cjld2cjxh0000qzrmn831i7rn"},"email":{"type":"string","description":"The domain''s email address","example":"Cleveland49@yahoo.com","examples":["Raul_Marks@gmail.com","Buddy.Schulist@gmail.com","Anibal_Pouros@hotmail.com"]},"emailVerified":{"type":"boolean","description":"Indicates whether the email associated with a user domain has been verified","example":true},"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Raul_Marks","Buddy.Schulist","Anibal_Pouros"]}},"required":["id","email","emailVerified","username"],"description":"asdasd"},"Auhenticate":{"type":"object","properties":{"username":{"type":"string","description":"The domain''s username","example":"Angie_Wisoky65","examples":["Diana.Mraz41","Graham0","Warren.Connelly"]},"password":{"type":"string","description":"The domain''s password","example":"SuperSecretPassword123!","examples":["b63uMsfdiD7d2TK","80BjzpP5SbnW6ox","N3y0iAB6sCI3knz"]}},"required":["username","password"],"description":"asdasd"}}}}'
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-3
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:25 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:25 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-4
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:26 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:26 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-5
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:29 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:29 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-6
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/authenticate
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Content-Length: "66"
+            Content-Type: application/json
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Origin: http://localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: '{"username":"Angie_Wisoky65","password":"SuperSecretPassword123!"}'
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 404
+        header:
+            Connection: keep-alive
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:34:32 GMT
+            Etag: W/"41-7dsO5LJbH+bIfRGvh2fjufiOW7s"
+            Keep-Alive: timeout=5
+            X-Powered-By: Express
+        body: '{"message":"User not found","error":"Not Found","statusCode":404}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.statusCode: []
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 404
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:32 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"41-7dsO5LJbH+bIfRGvh2fjufiOW7s"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"message":"User not found","error":"Not Found","statusCode":404}'
+              actual: 'Post "http://localhost:1337/authenticate": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-7
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/
+        header:
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Sec-Fetch-Dest: document
+            Sec-Fetch-Mode: navigate
+            Sec-Fetch-Site: none
+            Sec-Fetch-User: ?1
+            Upgrade-Insecure-Requests: "1"
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Content-Length: "662"
+            Content-Type: text/html; charset=UTF-8
+            Date: Wed, 27 Dec 2023 20:34:36 GMT
+            Etag: W/"296-18c52245f52"
+            Keep-Alive: timeout=5
+            Last-Modified: Sun, 10 Dec 2023 05:12:44 GMT
+            X-Powered-By: Express
+        body: |-
+            <!doctype html>
+            <html>
+            <head>
+                <title>API Reference</title>
+                <meta charset="utf-8"/>
+                <meta
+                        content="width=device-width, initial-scale=1"
+                        name="viewport"/>
+                <style>
+                    body {
+                        margin: 0;
+                    }
+                </style>
+            </head>
+            <body>
+            <!-- Add your own OpenAPI/Swagger spec file URL here: -->
+            <!-- Note: this includes our proxy, you can remove the following line if you do not need it -->
+            <!-- data-proxy-url="https://api.scalar.com/request-proxy" -->
+            <script
+                    data-url="openapi3.json"
+                    id="api-reference"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+            </body>
+            </html>
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "662"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:36 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"296-18c52245f52"
+              actual:
+                key: Etag
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Sun, 10 Dec 2023 05:12:44 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - text/html; charset=UTF-8
+              actual:
+                key: Content-Type
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: |-
+                <!doctype html>
+                <html>
+                <head>
+                    <title>API Reference</title>
+                    <meta charset="utf-8"/>
+                    <meta
+                            content="width=device-width, initial-scale=1"
+                            name="viewport"/>
+                    <style>
+                        body {
+                            margin: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                <!-- Add your own OpenAPI/Swagger spec file URL here: -->
+                <!-- Note: this includes our proxy, you can remove the following line if you do not need it -->
+                <!-- data-proxy-url="https://api.scalar.com/request-proxy" -->
+                <script
+                        data-url="openapi3.json"
+                        id="api-reference"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+                </body>
+                </html>
+              actual: 'Get "http://localhost:1337/api/": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-8
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:36 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:36 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-9
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:37 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:37 GMT
+              actual:
+                key: Date
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-10
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:38 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:38 GMT
+              actual:
+                key: Date
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-11
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:39 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:39 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-12
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:40 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:40 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-13
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/account
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Content-Length: "98"
+            Content-Type: application/json
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Origin: http://localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: '{"email":"Cleveland49@yahoo.com","password":"SuperSecretPassword123!","username":"Angie_Wisoky65"}'
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 201
+        header:
+            Connection: keep-alive
+            Content-Length: "127"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:34:42 GMT
+            Etag: W/"7f-mxLSq/tboUw+F2yMiY0aArQk4OU"
+            Keep-Alive: timeout=5
+            X-Powered-By: Express
+        body: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","email":"cleveland49@yahoo.com","emailVerified":false,"username":"angie_wisoky65"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 201
+            actual: 0
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:42 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"7f-mxLSq/tboUw+F2yMiY0aArQk4OU"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "127"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","email":"cleveland49@yahoo.com","emailVerified":false,"username":"angie_wisoky65"}'
+              actual: 'Post "http://localhost:1337/account": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-14
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:45 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:45 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-15
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:34:46 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:46 GMT
+              actual:
+                key: Date
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-16
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/authenticate
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Content-Length: "66"
+            Content-Type: application/json
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Origin: http://localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: '{"username":"Angie_Wisoky65","password":"SuperSecretPassword123!"}'
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 201
+        header:
+            Connection: keep-alive
+            Content-Length: "878"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:34:48 GMT
+            Etag: W/"36e-hTaUBD7vrdCljyYuAyEp7Cwk8Lo"
+            Keep-Alive: timeout=5
+            X-Powered-By: Express
+        body: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDM3MTI4ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiYWJjZTVhYWUtMDdiOC00MDA4LWI3Y2UtNjhkZDA0OTVjZTBiIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.d7Z4ccmD1t4bbOMJz2rUXtkyGXelQYsjP3TZ6ef4F2E","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDU1MjM2ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiOGFmZjBlNTktOWMzZC00NjJjLWFlZTItZmE1OTJhOTM4N2NmIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.ZGuYLUlZ8crvgiOJRyzDCXr62jI9N8jtw-iv7n5HwIw","mfa":false}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 201
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"36e-hTaUBD7vrdCljyYuAyEp7Cwk8Lo"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "878"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:34:48 GMT
+              actual:
+                key: Date
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDM3MTI4ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiYWJjZTVhYWUtMDdiOC00MDA4LWI3Y2UtNjhkZDA0OTVjZTBiIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.d7Z4ccmD1t4bbOMJz2rUXtkyGXelQYsjP3TZ6ef4F2E","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDU1MjM2ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiOGFmZjBlNTktOWMzZC00NjJjLWFlZTItZmE1OTJhOTM4N2NmIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.ZGuYLUlZ8crvgiOJRyzDCXr62jI9N8jtw-iv7n5HwIw","mfa":false}'
+              actual: 'Post "http://localhost:1337/authenticate": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-17
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:35:02 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:35:02 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709455
+      completed: 1703709455
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-18
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/api/openapi3.json
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            If-Modified-Since: Wed, 27 Dec 2023 20:34:17 GMT
+            If-None-Match: W/"280f-18cacfc2f96"
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 304
+        header:
+            Accept-Ranges: bytes
+            Cache-Control: public, max-age=0
+            Connection: keep-alive
+            Date: Wed, 27 Dec 2023 20:35:03 GMT
+            Etag: W/"280f-18cacfc2f96"
+            Keep-Alive: timeout=5
+            Last-Modified: Wed, 27 Dec 2023 20:34:17 GMT
+            X-Powered-By: Express
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Cache-Control: []
+        header.Date: []
+        header.Last-Modified: []
+      result:
+        status_code:
+            normal: false
+            expected: 304
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: true
+              expected:
+                key: Last-Modified
+                value:
+                    - Wed, 27 Dec 2023 20:34:17 GMT
+              actual:
+                key: Last-Modified
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Accept-Ranges
+                value:
+                    - bytes
+              actual:
+                key: Accept-Ranges
+                value: []
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - public, max-age=0
+              actual:
+                key: Cache-Control
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:35:03 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"280f-18cacfc2f96"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: ""
+              actual: 'Get "http://localhost:1337/api/openapi3.json": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+    - kind: Http
+      name: report-3
+      status: FAILED
+      started: 1703709456
+      completed: 1703709456
+      test_case_path: /home/keinsell/Dokumenty/Documents/methylphenidate/apps/server/keploy/test-set-2
+      mock_path: ""
+      test_case_id: test-19
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:1337/authenticate
+        header:
+            Accept: application/json, text/plain, */*
+            Accept-Encoding: gzip, deflate, br
+            Accept-Language: pl,en-US;q=0.7,en;q=0.3
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjEzMzciLCJleHAiOjE3MDM3MTI4ODg0OTUsImlhdCI6MTcwMzcwOTI4ODQ5NSwianRpIjoiYWJjZTVhYWUtMDdiOC00MDA4LWI3Y2UtNjhkZDA0OTVjZTBiIiwibWV0YWRhdGEiOnsidXNlcm5hbWUiOiJhbmdpZV93aXNva3k2NSIsImVtYWlsIjoiY2xldmVsYW5kNDlAeWFob28uY29tIn0sInN1YiI6IjZmNTRjZTY5LTI1ZjItNDhhOC1iOGViLWMyNWE0MDRkNmNjMSJ9.d7Z4ccmD1t4bbOMJz2rUXtkyGXelQYsjP3TZ6ef4F2E
+            Connection: keep-alive
+            Cookie: firstVisit=1703111356608; sentrysid=.eJxVkM1OwzAQhN_FZxTZdWJ7c6NSEVx65MAlWjs2iRKSkrWBquq7Y0sFqbfVN_szsxdGtHbUCtZeWCTWCs2lUKA0ryRI2eyuD6zDFIcukd-6sWctE-yOWXSTX4pAfonbuUpxnKkqDdXhA8f5MVf7W9Pd5IA05DFQSqpgGy41Sht0H1wNiMZ5bQQ4gcHW6FXwAHanLYBDo6GujWhQBCh2KPVr3nSUJ_mmlm1p6KWcolRy-Z9TcV2SmZprnpWxn_-Q5saYjOI6ZZRej9P5_Pn9fICnDNMtcP4Cujh--XV7_w_Krr8U5WEU:1rGKJg:fFtNJoaXukUIrpJ8MMVJjKiUxp6qDaBC0sziormtSrk; sc=V2Jsj4RDn0Ptav0PxW8Q063ybqHS8BQhLo7Hq460fhAyMr41dUvzs6I22d6F001o; cockpit=deleted; connect.sid=s%3A1Y9ILm1kC4GYbbrspeNaZNkms1XLbGKA.badt8vRn22t7q6HSgmU1vVYFDesE0yBHaeKgv%2BwVBOk; CSRF-Token-2ZQT3IJ=2DU3CuND3CRSwmg54Xg5LfncXhaUCy2w; su=uVNkyyqwHE9F:1rGKJg:zxSn65on1CiK_NmitJejzFRb_CUtwEGWFeiZFJt2244
+            Host: localhost:1337
+            Referer: http://localhost:1337/api/
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Connection: keep-alive
+            Content-Length: "127"
+            Content-Type: application/json; charset=utf-8
+            Date: Wed, 27 Dec 2023 20:35:19 GMT
+            Etag: W/"7f-oxCWt6FxlbuaDWpGhTcUtp6mHdQ"
+            Keep-Alive: timeout=5
+            X-Powered-By: Express
+        body: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","username":"angie_wisoky65","email":"cleveland49@yahoo.com","emailVerified":false}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 0
+        headers_result:
+            - normal: false
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=5
+              actual:
+                key: Keep-Alive
+                value: []
+            - normal: false
+              expected:
+                key: X-Powered-By
+                value:
+                    - Express
+              actual:
+                key: X-Powered-By
+                value: []
+            - normal: false
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value: []
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "127"
+              actual:
+                key: Content-Length
+                value: []
+            - normal: false
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value: []
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Wed, 27 Dec 2023 20:35:19 GMT
+              actual:
+                key: Date
+                value: []
+            - normal: false
+              expected:
+                key: Etag
+                value:
+                    - W/"7f-oxCWt6FxlbuaDWpGhTcUtp6mHdQ"
+              actual:
+                key: Etag
+                value: []
+        body_result:
+            - normal: false
+              type: PLAIN
+              expected: '{"id":"6f54ce69-25f2-48a8-b8eb-c25a404d6cc1","username":"angie_wisoky65","email":"cleveland49@yahoo.com","emailVerified":false}'
+              actual: 'Get "http://localhost:1337/authenticate": dial tcp [::1]:1337: connect: connection refused'
+        dep_result: []
+test_set: test-set-2
