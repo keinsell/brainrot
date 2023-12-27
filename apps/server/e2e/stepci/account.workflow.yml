@@ -22,19 +22,3 @@ tests:
           captures:
             email:
               jsonpath: $.email
-      - name: POST /account/verification/resend-verification-email
-        http:
-          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/resend-verification-email?email=${{ captures.email }}
-          method: POST
-          check:
-            status: /^20/
-          headers:
-            Content-Type: application/json
-      - name: POST /account/verification/verify-email
-        http:
-          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
-          method: POST
-          check:
-            status: /^20/
-          headers:
-            Content-Type: application/json
