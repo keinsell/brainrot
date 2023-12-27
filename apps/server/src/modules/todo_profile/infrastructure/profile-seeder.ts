@@ -5,26 +5,27 @@ import {CountryCode}        from "../../../common/libraries/address/country-code
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
 import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {Prisma}             from "../../../vendor/prisma/index.js"
-import UserCreateInput = Prisma.UserCreateInput
+import UserCreateInput = Prisma.UserCreateInput;
 
 
 
 @Injectable()
-export class ProfileSeeder extends SeederBase<UserCreateInput> {
+export class ProfileSeeder
+	extends SeederBase<UserCreateInput> {
 	private excludedAccountIds = new Array<string>()
 
 
-	constructor(private prismaService: PrismaService) {
+	constructor(private prismaService : PrismaService) {
 		super(new Logger("seeder:profile"))
 	}
 
 
-	public async count(): Promise<number> {
+	public async count() : Promise<number> {
 		return this.prismaService.user.count()
 	}
 
 
-	public async exists(input: Prisma.UserCreateInput): Promise<boolean> {
+	public async exists(input : Prisma.UserCreateInput) : Promise<boolean> {
 		const exists = await this.prismaService.user.findUnique({
 			where: {
 				accountId: input.Account.connect.id,
@@ -35,7 +36,7 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 	}
 
 
-	public async fabricate(): Promise<Prisma.UserCreateInput> {
+	public async fabricate() : Promise<Prisma.UserCreateInput> {
 		// Find domain entity without a profile entity to gain domain ID
 		const account = await this.prismaService.account.findFirst({
 			where: {
@@ -51,34 +52,34 @@ export class ProfileSeeder extends SeederBase<UserCreateInput> {
 
 		this.excludedAccountIds.push(account.id)
 
-		const address: Omit<Address, "stringify" | "coordinates"> = {
-			street1:    faker.location.streetAddress(),
-			street2:    undefined,
-			city:       faker.location.city(),
+		const address : Omit<Address, "stringify" | "coordinates"> = {
+			street1   : faker.location.streetAddress(),
+			street2   : undefined,
+			city      : faker.location.city(),
 			postalCode: faker.location.zipCode(),
-			state:      faker.location.state(),
-			country:    faker.location.countryCode() as CountryCode,
+			state     : faker.location.state(),
+			country   : faker.location.countryCode() as CountryCode,
 		}
 
 		return {
-			Account:         {
+			Account        : {
 				connect: {
 					id: account.id,
 				},
 			},
-			firstName:       faker.person.firstName(),
-			lastName:        faker.person.lastName(),
-			about:           faker.person.bio(),
+			firstName      : faker.person.firstName(),
+			lastName       : faker.person.lastName(),
+			about          : faker.person.bio(),
 			shippingAddress: address,
-			billingAddress:  address,
-			avatar:          faker.image.avatar(),
-			email:           faker.internet.email(),
-			createdAt:       faker.date.past(),
+			billingAddress : address,
+			avatar         : faker.image.avatar(),
+			email          : faker.internet.email(),
+			createdAt      : faker.date.past(),
 		}
 	}
 
 
-	public async save(input: Prisma.UserCreateInput): Promise<unknown> {
+	public async save(input : Prisma.UserCreateInput) : Promise<unknown> {
 		return this.prismaService.user.create({
 			data: input,
 		})

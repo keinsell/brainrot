@@ -23,13 +23,8 @@
  *
  */
 
-import {GroupMember} from "../value-object/group-member.js"
+import {Group} from "../../group/entities/group.js";
 
 
 
-export class Group {
-	id: string
-	name: string
-	members: GroupMember[]
-	roles: string[]
-}
+export type AccountGroup = Group['id']

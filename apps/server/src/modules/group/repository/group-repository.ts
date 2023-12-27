@@ -23,14 +23,10 @@
  *
  */
 
-import {AuditLog} from "../entities/audit-log.js";
+import {Repository} from "../../../common/libraries/storage/index.js";
+import {Group}      from "../entities/group.js";
 
 
 
-export abstract class AuditManager {
-	abstract createLog() : Promise<AuditLog>
-
-	abstract deleteAuditLog(auditLog : AuditLog) : Promise<void>
-
-	abstract updateAuditLog(auditLog : AuditLog) : Promise<AuditLog>
-}
+export abstract class GroupRepository
+	extends Repository<Group> {}

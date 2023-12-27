@@ -7,42 +7,51 @@ import {AccountStatus}                              from "../value-objects/accou
 import {Email}                                      from "../value-objects/email.js"
 import {Password}                                   from "../value-objects/password.js"
 import {Username}                                   from "../value-objects/username.js"
+import {AccountGroup}                               from "../value-objects/account-group.js";
 
 
 
-export interface IdentityProperties extends AggregateRootProperties {
-	email: Email
-	password: Password
-	username: Username
-	status: AccountStatus
+export interface IdentityProperties
+	extends AggregateRootProperties {
+	email : Email
+	password : Password
+	username : Username
+	status : AccountStatus
+	groups : AccountGroup[]
 }
 
 
-export class Account extends BaseAggregateRoot implements IdentityProperties {
-	public email: Email
-	public password: Password
-	public status: AccountStatus
-	public username: Username
+export class Account
+	extends BaseAggregateRoot
+	implements IdentityProperties {
+	public email : Email
+	public password : Password
+	public status : AccountStatus
+	public username : Username
+	public groups : AccountGroup[]
 
-	public readonly usernameFields: any = ["username", "email"]
+	public readonly usernameFields : any = [
+		"username",
+		"email",
+	]
 
 
-	private constructor(payload: IdentityProperties) {
+	private constructor(payload : IdentityProperties) {
 		super({
 			...payload,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		})
-		this.email    = payload.email
+		this.email = payload.email
 		this.username = payload.username
 		this.password = payload.password
 	}
 
 
-	static RegisterAccount(payload: Omit<IdentityProperties, 'status'>) {
+	static RegisterAccount(payload : Omit<IdentityProperties, 'status'>) {
 		let account = new Account({
 			...payload,
-			status:   AccountStatus.INACTIVE,
+			status  : AccountStatus.INACTIVE,
 			password: payload.password,
 		})
 
@@ -52,12 +61,12 @@ export class Account extends BaseAggregateRoot implements IdentityProperties {
 	}
 
 
-	static build(payload: IdentityProperties) {
+	static build(payload : IdentityProperties) {
 		return new Account(payload)
 	}
 
 
-	public changeUsername(username: Username) {
+	public changeUsername(username : Username) {
 		this.username = username
 		// TODO: Add UsernameChangedEvent
 		return this
@@ -77,7 +86,7 @@ export class Account extends BaseAggregateRoot implements IdentityProperties {
 	public resetPassword() {}
 
 
-	public changeEmail(email: Email) {
+	public changeEmail(email : Email) {
 		this.email = email
 		return this
 	}
@@ -103,7 +112,7 @@ export class Account extends BaseAggregateRoot implements IdentityProperties {
 	}
 
 
-	public register(): Account {
+	public register() : Account {
 		this.appendEvent(new AccountEvent.Registred({
 			accountId: this.id,
 		}))
@@ -111,7 +120,7 @@ export class Account extends BaseAggregateRoot implements IdentityProperties {
 	}
 
 
-	public authenticate(): Account {
+	public authenticate() : Account {
 		return this
 	}
 }

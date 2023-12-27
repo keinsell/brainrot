@@ -6,7 +6,7 @@ import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js"
 
 
 @ApiModel({
-	name:        "CreateAccount",
+	name       : "CreateAccount",
 	description: "asdasd",
 })
 export class CreateAccountDto {
@@ -16,22 +16,22 @@ export class CreateAccountDto {
 	 * @typedef {string} Id
 	 */
 	@ApiProperty({
-		name:        "id",
+		name       : "id",
 		description: "The domain's unique identifier",
-		example:     "",
-		required:    false,
-	}) id?: string;
+		example    : "",
+		required   : false,
+	}) id? : string;
 
 	/**
 	 * Represents an email address.
 	 * @typedef {string} email
 	 */
 	@ApiProperty({
-		name:        "email",
+		name       : "email",
 		description: "The domain's email address",
-		example:     AccountFixture.email,
-		examples:    AccountFixture._examples.emails,
-	}) email: string;
+		example    : AccountFixture.email,
+		examples   : AccountFixture._examples.emails,
+	}) email : string;
 
 	/**
 	 * Indicates whether the email associated with a user domain has been verified.
@@ -39,10 +39,10 @@ export class CreateAccountDto {
 	 * @type {boolean}
 	 */
 	@ApiProperty({
-		name:        "emailVerified",
+		name       : "emailVerified",
 		description: "Indicates whether the email associated with a user domain has been verified",
-		example:     faker.datatype.boolean(),
-	}) emailVerified: boolean;
+		example    : faker.datatype.boolean(),
+	}) emailVerified : boolean;
 
 	/**
 	 * The password variable is a string that represents a user's password.
@@ -50,20 +50,20 @@ export class CreateAccountDto {
 	 * @type {string}
 	 */
 	@ApiProperty({
-		name:        "password",
+		name       : "password",
 		description: "The domain's password",
-		example:     AccountFixture.password,
-		examples:    AccountFixture._examples.passwords,
-	}) password: string;
+		example    : AccountFixture.password,
+		examples   : AccountFixture._examples.passwords,
+	}) password : string;
 
 	/**
 	 * Represents a username.
 	 * @typedef {string} username
 	 */
 	@ApiProperty({
-		name:        "username",
+		name       : "username",
 		description: "The domain's username",
-		example:     AccountFixture.username,
-		examples:    AccountFixture._examples.usernames,
-	}) username: string;
+		example    : AccountFixture.username,
+		examples   : AccountFixture._examples.usernames,
+	}) username : string;
 }

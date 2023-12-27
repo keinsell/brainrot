@@ -7,18 +7,19 @@ import {Password}       from "../../value-objects/password.js"
 
 
 
-export class AccountEntityModel implements DbContextModel.Account.Entity {
-	public createdAt: Date
-	public email: string
-	public emailVerificationStatus: DbContextModel.Enums.EmailVerificationStatus
-	public id: string
-	public password: string
-	public updatedAt: Date
-	public username: string
-	public version: number
+export class AccountEntityModel
+	implements DbContextModel.Account.Entity {
+	public createdAt : Date
+	public email : string
+	public emailVerificationStatus : DbContextModel.Enums.EmailVerificationStatus
+	public id : string
+	public password : string
+	public updatedAt : Date
+	public username : string
+	public version : number
 
 
-	constructor(properties: DbContextModel.Account.Entity) {
+	constructor(properties : DbContextModel.Account.Entity) {
 		this.createdAt               = properties.createdAt
 		this.email                   = properties.email
 		this.emailVerificationStatus = properties.emailVerificationStatus
@@ -30,18 +31,19 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 	}
 
 
-	toDomainModel(): Account {
+	toDomainModel() : Account {
 		return Account.build({
-			id:        this.id,
-			username:  this.username,
-			email:     Email.create({
+			id       : this.id,
+			username : this.username,
+			email    : Email.create({
 				isVerified: this.emailVerificationStatus === "VERIFIED",
-				address:    this.email,
+				address   : this.email,
 			}),
-			password:  Password.fromHash(PhcString.deserialize(this.password as any)),
-			status:    AccountStatus.ACTIVE,
+			password : Password.fromHash(PhcString.deserialize(this.password as any)),
+			status   : AccountStatus.ACTIVE,
 			updatedAt: this.updatedAt,
 			createdAt: this.createdAt,
+			groups   : [],
 		})
 	}
 }

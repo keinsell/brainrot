@@ -3,21 +3,23 @@ import {PassportStrategy}       from '@nestjs/passport';
 import {Strategy}               from 'passport-local';
 import {censorString}           from "../../../../utilities/console-utils/censor-string.js"
 import {CredentialValidator}    from "../../../account/shared-kernel/credential-validator/credential-validator.js"
-import {AuthenticationStrategy} from "./authentication-strategy.js"
+import {AuthenticationStrategy} from "../api/authentication-strategy.js"
 
 
 
 @Injectable()
-export class LocalAuthorizationStrategy extends PassportStrategy(Strategy) implements AuthenticationStrategy {
-	private logger: Logger = new Logger("authorization::strategy::local")
+export class LocalAuthorizationStrategy
+	extends PassportStrategy(Strategy)
+	implements AuthenticationStrategy {
+	private logger : Logger = new Logger("authorization::strategy::local")
 
 
-	constructor(private credentialValidation: CredentialValidator) {
+	constructor(private credentialValidation : CredentialValidator) {
 		super();
 	}
 
 
-	async validate(username: string, password: string): Promise<any> {
+	async validate(username : string, password : string) : Promise<any> {
 		this.logger.verbose(`User "${username}" is trying to authenticate with "${censorString(password)}"`)
 
 		const user = await this.credentialValidation.validateCredentials(username.toLowerCase(), password);
@@ -25,7 +27,8 @@ export class LocalAuthorizationStrategy extends PassportStrategy(Strategy) imple
 		if (user.isErr()) {
 			this.logger.debug(`Authorization failed: ${JSON.stringify(user.error)}`)
 			throw user.error
-		} else {
+		}
+		else {
 			this.logger.debug(`Authenticated user ${user.value.id}`)
 			return user.value
 		}

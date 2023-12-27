@@ -3,36 +3,48 @@ import {OnEvent}                                                                
 import ms                                                                                  from "ms"
 import {ok, Result}                                                                        from "neverthrow"
 import {randomUUID}                                                                        from "node:crypto"
-import {CacheManager}                                                                      from "../../../common/libraries/cache-manager/cache-manager.js"
-import {EventBus}                                                                          from "../../../common/modules/messaging/event-bus.js"
-import {StaticFeatureFlags}                                                                from "../../../configs/static-feature-flags.js"
-import {AccountRegistered}                                                                 from "../events/account-registered.js"
-import {AccountVerificationEmailSent}                                                      from "../events/account-verification-email-sent.js"
-import {AccountRepository}                                                                 from "../repositories/account-repository.js"
+import {
+	CacheManager,
+}                                                                                          from "../../../common/libraries/cache-manager/cache-manager.js"
+import {
+	EventBus,
+}                                                                                          from "../../../common/modules/messaging/event-bus.js"
+import {
+	StaticFeatureFlags,
+}                                                                                          from "../../../configs/static-feature-flags.js"
+import {
+	AccountRegistered,
+}                                                                                          from "../events/account-registered.js"
+import {
+	AccountVerificationEmailSent,
+}                                                                                          from "../events/account-verification-email-sent.js"
+import {
+	AccountRepository,
+}                                                                                          from "../repositories/account-repository.js"
 
 
 
 @Injectable()
 export class AccountVerification {
-	private logger: Logger
-	private accountRepository: AccountRepository
-	private publisher: EventBus
-	private cacheManager: CacheManager
+	private logger : Logger
+	private accountRepository : AccountRepository
+	private publisher : EventBus
+	private cacheManager : CacheManager
 
 
-	constructor(accountRepository: AccountRepository, eventBus: EventBus, cacheManager: CacheManager) {
-		this.logger            = new Logger("account::verification::service")
+	constructor(accountRepository : AccountRepository, eventBus : EventBus, cacheManager : CacheManager) {
+		this.logger = new Logger("account::verification::service")
 		this.accountRepository = accountRepository
-		this.publisher         = eventBus
-		this.cacheManager      = cacheManager
+		this.publisher = eventBus
+		this.cacheManager = cacheManager
 	}
 
 
-	public async sendVerificationEmail(accountId: string): Promise<void> {
+	public async sendVerificationEmail(accountId : string) : Promise<void> {
 		const account = await this.accountRepository.getById(accountId)
 
 		// Create secret code for email
-		let verificationSecret: string = this.createVerificationSecret()
+		let verificationSecret : string = this.createVerificationSecret()
 
 		// Save verificationSecret
 		await this.cacheManager.set(`verification_${verificationSecret}`, accountId, ms("15m"))
@@ -46,7 +58,7 @@ export class AccountVerification {
 	}
 
 
-	public async resendVerificationEmail(accountEmail: string): Promise<void> {
+	public async resendVerificationEmail(accountEmail : string) : Promise<void> {
 		const account = await this.accountRepository.findByEmail(accountEmail);
 
 		if (!account) {
@@ -68,7 +80,7 @@ export class AccountVerification {
 	}
 
 
-	public async verifyEmail(code: string): Promise<Result<true, false>> {
+	public async verifyEmail(code : string) : Promise<Result<true, false>> {
 		const accountId = await this.cacheManager.get<string>(`verification_${code}`);
 
 		if (!accountId) {
@@ -98,19 +110,20 @@ export class AccountVerification {
 
 
 	@OnEvent("account.registered")
-	private async onAccountRegistered(event: AccountRegistered): Promise<void> {
+	private async onAccountRegistered(event : AccountRegistered) : Promise<void> {
 		this.logger.verbose(`Handling ${event.id} with "onAccountRegistered": ${JSON.stringify(event)}`)
 		await this.sendVerificationEmail(event.body.accountId)
 		this.logger.debug(`Handled ${event.id} with "onAccountRegistered"`)
 	}
 
 
-	private createVerificationSecret(): string {
-		let verificationSecret: string
+	private createVerificationSecret() : string {
+		let verificationSecret : string
 
 		if (StaticFeatureFlags.shouldUseTestingVerificationCode) {
 			verificationSecret = "verification_code"
-		} else {
+		}
+		else {
 			verificationSecret = randomUUID()
 		}
 

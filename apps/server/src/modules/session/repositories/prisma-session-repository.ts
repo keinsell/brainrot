@@ -23,19 +23,50 @@
  *
  */
 
-import {GroupMember} from "../value-object/group-member.js";
-import {Group}       from "../entities/group.js";
+import {Injectable}        from "@nestjs/common"
+import {PrismaService}     from "../../../common/modules/storage/prisma/services/prisma-service.js"
+import {UserSession}       from "../entities/user-session.js"
+import {SessionRepository} from "./session-repository.js";
 
 
 
-export abstract class GroupService {
-	abstract addGroupMember(member : GroupMember, group : Group)
+@Injectable()
+export class PrismaSessionRepository
+	extends SessionRepository {
+	constructor(private prisma : PrismaService) {super()}
 
-	abstract removeGroupMember(member : GroupMember, group : Group)
 
-	abstract createGroup(group : any)
+	public create(entity : UserSession) : Promise<UserSession> {
+		throw new Error("Not implemented")
+	}
 
-	abstract updateGroup(group : any)
 
-	abstract deleteGroup(group : any)
+	public delete(entity : UserSession) : Promise<void> {
+		throw new Error("Not implemented")
+	}
+
+
+	public async exists(entity : UserSession) : Promise<boolean> {
+		const count = await this.prisma.session.count({
+			where: {
+				id: entity.id,
+			},
+		})
+
+		return count > 0
+	}
+
+
+	public async findById(id : string) : Promise<UserSession | undefined> {
+		throw new Error("Not implemented")
+	}
+
+
+	public async update(entity : UserSession) : Promise<UserSession> {
+		throw new Error("Not implemented")
+	}
+
+	getByJti(jti : string) : Promise<UserSession> {
+		throw new Error("Not implemented")
+	}
 }

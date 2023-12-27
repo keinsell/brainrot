@@ -7,18 +7,18 @@ import {SeederService}                                   from "./services/seeder
 
 
 export interface SeederOptions {
-	imports?: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
-	providers?: Provider[];
+	imports? : Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
+	providers? : Provider[];
 }
 
 
 export interface SeederRunner {
-	run(seeders: Provider<SeederBase<unknown>>[]): void;
+	run(seeders : Provider<SeederBase<unknown>>[]) : void;
 }
 
 
-async function bootstrap(options: SeederModuleOptions) {
-	const app            = await NestFactory.createApplicationContext(SeederModule.register(options));
+async function bootstrap(options : SeederModuleOptions) {
+	const app = await NestFactory.createApplicationContext(SeederModule.register(options));
 	const seedersService = app.get(SeederService);
 	await seedersService.run();
 
@@ -26,9 +26,9 @@ async function bootstrap(options: SeederModuleOptions) {
 }
 
 
-export const seeder = (options: SeederOptions): SeederRunner => {
+export const seeder = (options : SeederOptions) : SeederRunner => {
 	return {
-		run(seeders: Provider<SeederBase>[]): void {
+		run(seeders : Provider<SeederBase>[]) : void {
 			bootstrap({
 				...options,
 				seeders,

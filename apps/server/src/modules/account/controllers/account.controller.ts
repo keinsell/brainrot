@@ -12,9 +12,9 @@ import {AccountViewModel}                         from "../view-model/account-vi
 
 
 function getOperationDocumentation(operation : string) : string {
-	const __filename = fileURLToPath(import.meta.url);
-	const __dirname = dirname(__filename);
-	const docsDirectory = `${__dirname}/../10-application/docs`
+	const __filename         = fileURLToPath(import.meta.url);
+	const __dirname          = dirname(__filename);
+	const docsDirectory      = `${__dirname}/../10-application/docs`
 	const operationDirectory = `${docsDirectory}/operations`
 
 	try {
@@ -36,10 +36,12 @@ export class AccountController {
 	@ApiOperation({
 		operationId: "register", summary: "Register account",
 		description: getOperationDocumentation("register"), tags: ['account'],
-	}) @ApiOkResponse({
+	})
+	@ApiOkResponse({
 		type       : AccountViewModel,
 		description: "Account was successfully registered in system.",
-	}) @Post()
+	})
+	@Post()
 	async register(@Body() registerAccountBody : RegisterAccount) : Promise<AccountViewModel> {
 		const body = registerAccountBody as CreateAccountDto
 
@@ -63,37 +65,16 @@ export class AccountController {
 		description: "Update details of account.", tags: ['account'],
 	})
 	@Patch()
-	async changePassword() : Promise<string> {
+	async updateAccount() : Promise<string> {
 		// Find a account that needs to be updated
 		return "change-password"
 	}
 
-	@UseGuards(JwtAuthorizationGuard)
-	@ApiOperation({
-		operationId: "change-email", description: "Changes the user's email",
-		tags       : ['account'],
-	})
-	@Post('change-email')
-	async changeEmail() : Promise<string> {
-		return "change-email"
-	}
-
-
-	@UseGuards(JwtAuthorizationGuard)
-	@ApiOperation({
-		operationId: "change-username",
-		description: "Changes the user's username", tags: ['account'],
-	})
-	@Post('change-username')
-	async changeUsername() : Promise<string> {
-		return "change-username"
-	}
-
-
 	@UseGuards(JwtAuthorizationGuard) @ApiOperation({
 		operationId: "delete-account",
 		description: "Deletes the user's account.", tags: ['account'],
-	}) @Post('delete-account')
+	})
+	@Post('delete-account')
 	async deleteAccount() : Promise<string> {
 		return "delete-domain"
 	}

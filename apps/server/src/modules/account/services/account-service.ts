@@ -13,11 +13,18 @@ import {Password}           from "../value-objects/password.js"
 
 
 @Injectable()
-export class AccountService extends ServiceAbstract<Account> {
-	private logger: Logger = new Logger("account::service")
+export class AccountService
+	extends ServiceAbstract<Account> {
+	private logger : Logger = new Logger("account::service")
 
 
-	constructor(private policy: AccountPolicy, private repository: AccountRepository, private hashing: PasswordHashing, private eventbus: EventBus) {
+	constructor(
+		private policy : AccountPolicy,
+		private repository : AccountRepository,
+		private hashing : PasswordHashing,
+		private eventbus : EventBus,
+	)
+	{
 		super(repository)
 	}
 
@@ -30,24 +37,25 @@ export class AccountService extends ServiceAbstract<Account> {
 	 * @param {RegisterAccount} registerAccount
 	 * @returns {Promise<Account>}
 	 */
-	public async register(registerAccount: RegisterAccount): Promise<Account> {
+	public async register(registerAccount : RegisterAccount) : Promise<Account> {
 		const email = Email.create({
 			isVerified: false,
-			address:    registerAccount.email.toLowerCase(),
+			address   : registerAccount.email.toLowerCase(),
 		})
 
 		const password = await Password.fromPlain(registerAccount.password, this.hashing.use(KdfAlgorithm.Argon2id));
 
 		await this.policy.canRegisterAccount({
-			email:    email.address,
+			email   : email.address,
 			password: password.plain,
 			username: registerAccount.username.toLowerCase(),
 		})
 
 		let identity = Account.RegisterAccount({
 			username: registerAccount.username.toLowerCase(),
-			email:    email,
+			email   : email,
 			password: password,
+			groups  : [],
 		});
 
 		const events = identity.getUncommittedEvents()

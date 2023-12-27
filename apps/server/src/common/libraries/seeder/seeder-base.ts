@@ -4,17 +4,17 @@ import {ApplicationState} from "../../state.js"
 
 
 export abstract class SeederBase<INPUT = unknown> {
-	private logger: Logger        = new Logger("seeder")
-	private inputStorage: INPUT[] = []
-	private limit: number         = 300
+	private logger : Logger = new Logger("seeder")
+	private inputStorage : INPUT[] = []
+	private limit : number = 300
 
 
-	protected constructor(logger: Logger) {
+	protected constructor(logger : Logger) {
 		this.logger = logger
 	}
 
 
-	async seed(): Promise<void> {
+	async seed() : Promise<void> {
 
 		let retryTime = 1000
 
@@ -48,67 +48,68 @@ export abstract class SeederBase<INPUT = unknown> {
 				try {
 					const created = await this.save(input)
 					this.postSaveHook(created)
-				} catch (e) {
+				}
+				catch (e) {
 					this.saveFailedHook(input, e)
 				}
-			} else {
+			}
+			else {
 				this.postExistsHook(input)
 			}
 		}
 	}
 
 
-	public provideDataset(dataset: INPUT[]): void {
+	public provideDataset(dataset : INPUT[]) : void {
 		this.inputStorage = dataset
 	}
 
 
-	abstract fabricate(): Promise<INPUT>
+	abstract fabricate() : Promise<INPUT>
 
 
-	public setCustomLimit(limit: number): void {
+	public setCustomLimit(limit : number) : void {
 		this.limit = limit
 	}
 
 
-	abstract exists(input: INPUT): Promise<boolean>
+	abstract exists(input : INPUT) : Promise<boolean>
 
 
-	abstract save(input: INPUT): Promise<unknown>
+	abstract save(input : INPUT) : Promise<unknown>
 
 
-	abstract count(): Promise<number>
+	abstract count() : Promise<number>
 
 
-	private postSaveHook(entity: unknown): void {
+	private postSaveHook(entity : unknown) : void {
 		this.logger.verbose(`🌱 Successfully created a new seedling in database: ${JSON.stringify(entity)}`)
 	}
 
 
-	private preSaveHook(input: INPUT): void {
+	private preSaveHook(input : INPUT) : void {
 		this.logger.verbose(`🌱 Creating a new seedling in database: ${JSON.stringify(input)}`)
 	}
 
 
-	private saveFailedHook(input: INPUT, e: unknown): void {
+	private saveFailedHook(input : INPUT, e : unknown) : void {
 		this.logger.verbose(`❌ Failed to create a new seedling in database.`)
 		this.logger.verbose(`❌ Input: ${JSON.stringify(input)}`)
 		this.logger.verbose(`❌ Error: ${JSON.stringify(e)}`)
 	}
 
 
-	private postExistsHook(input: INPUT): void {
+	private postExistsHook(input : INPUT) : void {
 		this.logger.verbose(`🌱 Seedling already exists in database: ${JSON.stringify(input)}. Skipping.`)
 	}
 
 
-	private async isEnough(): Promise<boolean> {
+	private async isEnough() : Promise<boolean> {
 		const count = await this.count()
-
-		const isEnoughFabricated = this.inputStorage.length >= this.limit
-		const isCustomDataset    = this.inputStorage.length > 0
+		
+		const isCustomDataset = this.inputStorage.length > 0
 
 		// Should run if there's a custom dataset or if fabricated entities are not enough
-		return isCustomDataset || count >= this.limit
+		return !isCustomDataset && count >= this.limit
 	}
 }

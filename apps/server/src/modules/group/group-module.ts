@@ -23,14 +23,23 @@
  *
  */
 
-import {AuditLog} from "../entities/audit-log.js";
+import {Module}                from "@nestjs/common";
+import {GroupController}       from "./controller/group-controller.js";
+import {GroupRepository}       from "./repository/group-repository.js";
+import {PrismaGroupRepository} from "./repository/prisma-group-repository.js";
+import {GroupService}          from "./service/group-service.js";
 
 
 
-export abstract class AuditManager {
-	abstract createLog() : Promise<AuditLog>
-
-	abstract deleteAuditLog(auditLog : AuditLog) : Promise<void>
-
-	abstract updateAuditLog(auditLog : AuditLog) : Promise<AuditLog>
-}
+@Module({
+	controllers: [GroupController],
+	providers  : [
+		{
+			provide : GroupRepository,
+			useClass: PrismaGroupRepository,
+		},
+		GroupService,
+	],
+	exports    : [GroupService],
+})
+export class GroupModule {}

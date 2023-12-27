@@ -7,25 +7,26 @@ import {authorizationConfiguration} from "../../../../configs/authorization-conf
 import {AccountService}             from "../../../account/services/account-service.js"
 import {AuthenticationStrategyType} from "../../utils/authentication-strategy-type.js"
 import {JwtPayload}                 from "../../value-objects/jwt-payload.js"
-import {AuthenticationStrategy}     from "./authentication-strategy.js"
+import {AuthenticationStrategy}     from "../api/authentication-strategy.js"
 
 
 
 @Injectable()
-export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, AuthenticationStrategyType.JWT)
+export class JwtAuthorizationStrategy
+	extends PassportStrategy(Strategy, AuthenticationStrategyType.JWT)
 	implements AuthenticationStrategy {
-	private logger: Logger = new Logger("authorization::strategy::jwt")
+	private logger : Logger = new Logger("authorization::strategy::jwt")
 
 
-	constructor(private accountService: AccountService) {
+	constructor(private accountService : AccountService) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-			secretOrKey:    authorizationConfiguration.jwtSecret,
+			secretOrKey   : authorizationConfiguration.jwtSecret,
 		});
 	}
 
 
-	async validate(payload: JwtPayload): Promise<any> {
+	async validate(payload : JwtPayload) : Promise<any> {
 		this.logger.verbose(`Request performed using jwt_${payload.jti} for user ${payload.sub}`)
 
 		// Fetch profile associated with token
@@ -39,7 +40,7 @@ export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, Authent
 	}
 
 
-	public _authenticate(req: e.Request, options?: any): void {
+	public _authenticate(req : e.Request, options? : any) : void {
 		this.logger.log(req.headers.authorization)
 
 		// TODO: Get token from request
@@ -60,7 +61,7 @@ export class JwtAuthorizationStrategy extends PassportStrategy(Strategy, Authent
 		// TODO: Verify token
 
 		// Verify token
-		jwt.verify(token, secretKey, (err: unknown, decoded: unknown) => {
+		jwt.verify(token, secretKey, (err : unknown, decoded : unknown) => {
 			if (err) {
 				this.logger.error(err);
 				throw new Error("Invalid token");

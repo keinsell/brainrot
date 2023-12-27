@@ -3,15 +3,16 @@ import {Event} from "../../../common/libraries/message/event.js"
 
 
 interface AccountRegisteredPayload {
-	accountId: string
+	accountId : string
 }
 
 
-export class AccountRegistered extends Event<AccountRegisteredPayload> {
-	constructor(payload: AccountRegisteredPayload) {
+export class AccountRegistered
+	extends Event<AccountRegisteredPayload> {
+	constructor(payload : AccountRegisteredPayload) {
 		super({
 			namespace: "account.registered",
-			body:      payload,
+			body     : payload,
 		})
 	}
 }

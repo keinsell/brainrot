@@ -23,14 +23,16 @@
  *
  */
 
-import {AuditLog} from "../entities/audit-log.js";
+import {GroupMember} from "../value-object/group-member.js"
+import {EntityBase}  from "../../../common/libraries/domain/entity/entity-base.js";
 
 
 
-export abstract class AuditManager {
-	abstract createLog() : Promise<AuditLog>
-
-	abstract deleteAuditLog(auditLog : AuditLog) : Promise<void>
-
-	abstract updateAuditLog(auditLog : AuditLog) : Promise<AuditLog>
+/** A group can consist of multiple users that all need similar levels of access to specific resources. By putting these users into a group, you can manage their access controls collectively rather than individually. This can significantly streamline the process of assigning and managing access permissions, especially in larger organizations. */
+export class Group
+	extends EntityBase {
+	id : string
+	name : string
+	members : GroupMember[]
+	roles : string[]
 }

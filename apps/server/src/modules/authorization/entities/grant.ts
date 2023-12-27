@@ -23,14 +23,9 @@
  *
  */
 
-import {AuditLog} from "../entities/audit-log.js";
-
-
-
-export abstract class AuditManager {
-	abstract createLog() : Promise<AuditLog>
-
-	abstract deleteAuditLog(auditLog : AuditLog) : Promise<void>
-
-	abstract updateAuditLog(auditLog : AuditLog) : Promise<AuditLog>
+export interface Grant {
+	id : string
+	resourceGroup : string
+	resource : string
+	action : string
 }

@@ -9,12 +9,12 @@ import {
 }                                            from "../account/shared-kernel/credential-validator/credential-validator-module.js"
 import {SessionModule}                       from "../session/session.module.js"
 import {AuthenticationController}            from "./controllers/authentication-controller.js"
-import {PrismaSessionRepository}             from "./repositories/prisma-session-repository.js"
-import {SessionRepository}                   from "./repositories/session-repository.js"
-import {AuthenticationService}               from "./services/authentication-service.js"
+import {PrismaSessionRepository}             from "../session/repositories/prisma-session-repository.js"
+import {LocalAuthenticationService}          from "./services/local-authentication-service.js"
 import {JwtAuthorizationStrategy}            from "./services/authorization-strategies/jwt-authorization-strategy.js"
 import {LocalAuthorizationStrategy}          from "./services/authorization-strategies/local-authorization-strategy.js"
 import {JwtTokenManagement, TokenManagement} from "./services/token-management.js"
+import {SessionRepository}                   from "../session/repositories/session-repository.js";
 
 
 
@@ -31,7 +31,7 @@ import {JwtTokenManagement, TokenManagement} from "./services/token-management.j
 		}),
 		SessionModule,
 	], controllers: [AuthenticationController], providers: [
-		AuthenticationService,
+		LocalAuthenticationService,
 		LocalAuthorizationStrategy,
 		JwtAuthorizationStrategy,
 		{
@@ -41,7 +41,7 @@ import {JwtTokenManagement, TokenManagement} from "./services/token-management.j
 			provide: TokenManagement, useClass: JwtTokenManagement,
 		},
 
-	], exports    : [AuthenticationService],
+	], exports    : [LocalAuthenticationService],
 })
 export class AuthenticationModule {
 }

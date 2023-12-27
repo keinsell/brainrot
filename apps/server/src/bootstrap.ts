@@ -19,6 +19,7 @@ import {CartSeeder}                    from "./modules/todo_cart/cart-seeder.js"
 import {ProductSeeder}                 from "./modules/todo_product/product-seeder.js"
 import {ProfileSeeder}                 from "./modules/todo_profile/infrastructure/profile-seeder.js"
 import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
+import {RoleSeeder}                    from "./modules/role/seeder/role-seeder.js";
 
 
 
@@ -110,6 +111,7 @@ export async function bootstrap() {
 					ProductSeeder,
 					AccountSeeder,
 					ProfileSeeder,
+					RoleSeeder,
 				],
 			})
 			.run([
@@ -117,6 +119,7 @@ export async function bootstrap() {
 				AccountSeeder,
 				ProfileSeeder,
 				CartSeeder,
+				RoleSeeder,
 			]);
 		}
 		catch (e) {

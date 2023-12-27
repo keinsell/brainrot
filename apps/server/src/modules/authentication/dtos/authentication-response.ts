@@ -4,26 +4,26 @@ import {ApiProperty} from "@nestjs/swagger"
 
 export class AuthenticationResponse {
 	@ApiProperty({
-		name:        "id",
+		name       : "id",
 		description: "ID of authenticated domain.",
 	})
-	id: string
+	id : string
 
 	@ApiProperty({
-		name:        "mfa",
+		name       : "mfa",
 		description: "Indicates if domain uses MFA. In case of true, additional steps are supposed to be made to activate access token.",
 	})
-	mfa: boolean
+	mfa : boolean
 
 	@ApiProperty({
-		name:        "accessToken",
+		name       : "accessToken",
 		description: "Access token.",
 	})
-	accessToken: string
+	accessToken : string
 
 	@ApiProperty({
-		name:        "refreshToken",
+		name       : "refreshToken",
 		description: "Refresh token.",
 	})
-	refreshToken: string
+	refreshToken : string
 }

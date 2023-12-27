@@ -6,27 +6,29 @@ import {SeederService}                                           from "./service
 
 
 export interface SeederModuleOptions {
-	seeders: Provider<Seeder>[];
-	imports?: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
-	providers?: Provider[];
+	seeders : Provider<Seeder>[];
+	imports? : Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
+	providers? : Provider[];
 }
 
 
 @Module({})
 export class SeederModule {
-	static register(options: SeederModuleOptions): DynamicModule {
+	static register(options : SeederModuleOptions) : DynamicModule {
 		return {
-			module:    SeederModule,
-			imports:   options.imports || [],
+			module   : SeederModule,
+			imports  : options.imports || [],
 			providers: [
 				...(
 					options.providers || []
-				), ...options.seeders, {
-					provide:    SeederService,
-					useFactory: (...seeders: SeederBase<any>[]): SeederService => {
+				),
+				...options.seeders,
+				{
+					provide   : SeederService,
+					useFactory: (...seeders : SeederBase<any>[]) : SeederService => {
 						return new SeederService(seeders);
 					},
-					inject:     options.seeders as Type<any>[],
+					inject    : options.seeders as Type<any>[],
 				},
 			],
 		};

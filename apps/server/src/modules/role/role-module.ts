@@ -23,7 +23,9 @@
  *
  */
 
-export interface Role {
-	id : string
-	name : string
-}
+import {Module} from "@nestjs/common";
+
+
+
+@Module({})
+export class RoleModule {}

@@ -23,14 +23,32 @@
  *
  */
 
-import {AuditLog} from "../entities/audit-log.js";
+import {GroupRepository} from "./group-repository.js";
+import {Group}           from "../entities/group.js";
+import {Injectable}      from "@nestjs/common";
 
 
 
-export abstract class AuditManager {
-	abstract createLog() : Promise<AuditLog>
+@Injectable()
+export class PrismaGroupRepository
+	extends GroupRepository {
+	create(entity : Group) : Promise<Group> {
+		return Promise.resolve(undefined);
+	}
 
-	abstract deleteAuditLog(auditLog : AuditLog) : Promise<void>
+	delete(entity : Group) : Promise<void> {
+		return Promise.resolve(undefined);
+	}
 
-	abstract updateAuditLog(auditLog : AuditLog) : Promise<AuditLog>
+	exists(entity : Group) : Promise<boolean> {
+		return Promise.resolve(false);
+	}
+
+	findById(id : string) : Promise<Group | null> {
+		return Promise.resolve(undefined);
+	}
+
+	update(entity : Group) : Promise<Group> {
+		return Promise.resolve(undefined);
+	}
 }
