@@ -15,6 +15,7 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 	public password: string
 	public updatedAt: Date
 	public username: string
+	public version: number
 
 
 	constructor(properties: DbContextModel.Account.Entity) {
@@ -25,6 +26,7 @@ export class AccountEntityModel implements DbContextModel.Account.Entity {
 		this.password                = properties.password
 		this.updatedAt               = properties.updatedAt
 		this.username                = properties.username
+		this.version                 = properties.version
 	}
 
 
