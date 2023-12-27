@@ -28,13 +28,14 @@ import {Observable}                    from "rxjs"
 
 
 
-export class AuthorizationGuard implements CanActivate {
-	public canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+export class AuthorizationGuard
+	implements CanActivate {
+	public canActivate(context : ExecutionContext) : boolean | Promise<boolean> | Observable<boolean> {
 		// 1. Extract User
 		// 2. Fetch User groups and permissions
 		// 3. Define to which resource user is trying to get
 		// 4. Check if a user has access to such resource
 		// 5. Pass or Fail
-		return undefined
+		return true
 	}
 }

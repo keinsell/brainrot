@@ -28,7 +28,7 @@ export class ProfileSeeder
 	public async exists(input : Prisma.UserCreateInput) : Promise<boolean> {
 		const exists = await this.prismaService.user.findUnique({
 			where: {
-				accountId: input.Account.connect.id,
+				accountId: input.Account.connect!.id,
 			},
 		})
 

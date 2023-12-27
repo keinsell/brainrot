@@ -33,22 +33,22 @@ import {Injectable}      from "@nestjs/common";
 export class PrismaGroupRepository
 	extends GroupRepository {
 	create(entity : Group) : Promise<Group> {
-		return Promise.resolve(undefined);
+		throw Error("Not implemented")
 	}
 
 	delete(entity : Group) : Promise<void> {
-		return Promise.resolve(undefined);
+		throw Error("Not implemented")
 	}
 
 	exists(entity : Group) : Promise<boolean> {
-		return Promise.resolve(false);
+		throw Error("Not implemented")
 	}
 
 	findById(id : string) : Promise<Group | null> {
-		return Promise.resolve(undefined);
+		throw Error("Not implemented")
 	}
 
 	update(entity : Group) : Promise<Group> {
-		return Promise.resolve(undefined);
+		throw Error("Not implemented")
 	}
 }

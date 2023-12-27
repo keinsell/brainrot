@@ -7,44 +7,52 @@ import process                           from 'node:process'
 dotenv.config();
 
 export const env = cleanEnv(process.env, {
-	PROTOCOL:            str({
+	PROTOCOL           : str({
 		default: "http",
-		choices: ["http", "https"],
-		desc:    "Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'.",
+		choices: [
+			"http",
+			"https",
+		],
+		desc   : "Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'.",
 	}),
-	HOST:                host({
-		default:    "localhost",
+	HOST               : host({
+		default   : "localhost",
 		devDefault: "localhost",
-		desc:       "Defines the host on which the application runs. Default for development is 'localhost'.",
+		desc      : "Defines the host on which the application runs. Default for development is 'localhost'.",
 	}),
-	PORT:                port({
+	PORT               : port({
 		devDefault: 1337,
-		default:    80,
-		desc:       "Defines the port on which the application listens. Default for development is 1337, otherwise it's 80.",
+		default   : 80,
+		desc      : "Defines the port on which the application listens. Default for development is 1337, otherwise it's 80.",
 	}),
-	SERVICE_NAME:        str({
+	SERVICE_NAME       : str({
 		default: "methylphenidate",
-		desc:    "Defines the name of the service. Default is 'methylphenidate'.",
+		desc   : "Defines the name of the service. Default is 'methylphenidate'.",
 	}),
 	SERVICE_DESCRIPTION: str({
 		default: "Methylphenidate is a boilerplate for Nest.js applications with batteries included.",
-		desc:    "Provides a brief description of the service. Default description is set.",
+		desc   : "Provides a brief description of the service. Default description is set.",
 	}),
-	NODE_ENV:            str({
-		choices:    ['development', 'test', 'production', 'staging'],
-		default:    'development',
+	NODE_ENV           : str({
+		choices   : [
+			'development',
+			'test',
+			'production',
+			'staging',
+		],
+		default   : 'development',
 		devDefault: 'development',
-		desc:       "Sets the application environment. Can be one of 'development', 'test', 'production', or 'staging'. Default is 'development'.",
+		desc      : "Sets the application environment. Can be one of 'development', 'test', 'production', or 'staging'. Default is 'development'.",
 	}),
-	TRACING:             bool({
-		default:    true,
+	TRACING            : bool({
+		default   : true,
 		devDefault: true,
-		desc:       "Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.",
+		desc      : "Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.",
 	}),
-	SENTRY_DSN:          str({
-		default:    null,
+	SENTRY_DSN         : str({
+		default   : null as any,
 		devDefault: "https://e1b2f55e80f584c0a872df89735d270b@o1122681.ingest.sentry.io/4506434737012736",
-		desc:       "Defines the Sentry DSN. Default is empty.",
+		desc      : "Defines the Sentry DSN. Default is empty.",
 	}),
 });
 

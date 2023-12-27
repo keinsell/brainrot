@@ -1,11 +1,11 @@
 type ValuesType = {
-	[key: string]: any;
+	[key : string] : any;
 };
 
 let O = Object;
 
 
-function produce(proto: object, base: object, values: ValuesType): object {
+function produce(proto : object, base : object, values : ValuesType) : object {
 	return O.freeze(O.assign(O.seal(O.assign(O.create(proto), base)), values))
 }
 
@@ -28,29 +28,30 @@ function produce(proto: object, base: object, values: ValuesType): object {
  * @see [Scala `case class`](https://docs.scala-lang.org/tour/case-classes.html)
  */
 export class ImmutableClass {
-	static create<Type extends ImmutableClass>(this: {
-		new(): Type
-	}, values?: Omit<Partial<Type>, keyof ImmutableClass>): Type {
-		return produce(this.prototype, new this(), values) as Type;
+	static create<Type extends ImmutableClass>(this : {
+		new() : Type
+	}, values? : Omit<Partial<Type>, keyof ImmutableClass>) : Type {
+		return produce(this.prototype, new this(), values as any) as Type;
 	}
 
 
-	copy(values?: Omit<Partial<this>, keyof this>): this {
-		return produce(O.getPrototypeOf(this), this, values) as this;
+	copy(values? : Omit<Partial<this>, keyof this>) : this {
+		return produce(O.getPrototypeOf(this), this, values as any) as this;
 	}
 
 
-	equals(other: this): boolean {
+	equals(other : this) : boolean {
 		for (let key in this) {
 			let a = this[key];
 			let b = other[key];
 			if (a !== b && (
 				a == null || b == null || (
 					a instanceof ImmutableClass && b instanceof ImmutableClass ?
-						!a.equals(b) :
-						a.valueOf() !== b.valueOf()
+					!a.equals(b) :
+					a.valueOf() !== b.valueOf()
 				)
-			)) {
+			))
+			{
 				return false;
 			}
 		}

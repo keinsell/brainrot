@@ -47,7 +47,7 @@ export class AccountService
 
 		await this.policy.canRegisterAccount({
 			email   : email.address,
-			password: password.plain,
+			password: registerAccount.password,
 			username: registerAccount.username.toLowerCase(),
 		})
 

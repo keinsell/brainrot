@@ -8,6 +8,7 @@ import {RegisterAccount}                          from "../commands/register-acc
 import {CreateAccountDto}                         from "../dtos/create-account-dto.js"
 import {AccountService}                           from "../services/account-service.js"
 import {AccountViewModel}                         from "../view-model/account-view-model.js"
+import {TypedRoute}                               from "@nestia/core";
 
 
 
@@ -41,7 +42,7 @@ export class AccountController {
 		type       : AccountViewModel,
 		description: "Account was successfully registered in system.",
 	})
-	@Post()
+	@TypedRoute.Post()
 	async register(@Body() registerAccountBody : RegisterAccount) : Promise<AccountViewModel> {
 		const body = registerAccountBody as CreateAccountDto
 

@@ -33,7 +33,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Define the ports you're interested in as an array
-PORTS=("$DATABASE_PORT" 5678 9012) # Add your ports here
+PORTS=("$DATABASE_PORT" "$REDIS_PORT") # Add your ports here
 
 # Loop through each port and stop containers using it
 for port in "${PORTS[@]}"

@@ -15,3 +15,8 @@ https://www.permit.io/blog/how-to-protect-a-url-inside-a-nestjs-app-using-rbac-a
 https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
 https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
 https://github.com/nestjsx/nest-access-control/blob/master/README.md
+https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
+https://www.npmjs.com/package/nest-casl
+https://github.com/getjerry/nest-casl/tree/master
+https://medium.com/yavar/casl-roles-with-persisted-permissions-in-nestjs-152129f4a6fb
+https://pop-code.github.io/nestjs-acl/
