@@ -1,43 +1,45 @@
-import {FileAppender, LogAppender} from "./log-appender.js"
-import {LogLevel}                  from "./log-level.js"
-import {Log}                       from "./log.js"
+import {LogAppender}  from "./log-appender.js"
+import {LogLevel}     from "./log-level.js"
+import {Log}          from "./log.js"
+import {FileAppender} from "./services/appenders/file-appender.js";
 
 
 // Disquisition Async Logger with Sync Loggers
 
 export class ExperimentalLogger {
 	private _appenders: LogAppender[] = [];
-
-
+	
+	
 	constructor(config: {
 		appends: LogAppender[]
-	}) {
+	})
+	{
 		for (const appender of config.appends) {
 			this.registerAppender(appender);
 		}
 	}
-
-
+	
+	
 	log(message?: any) {
 		this.distributeLog(new Log({
-			level:   LogLevel.INFO,
-			message: message,
-		}));
+			                           level: LogLevel.INFO, message: message,
+		                           }));
 	}
-
-
+	
+	
 	protected distributeLog(log: Log) {
 		this._appenders.forEach(appender => appender.append(log));
 	}
-
-
+	
+	
 	protected registerAppender(appender: LogAppender) {
 		this._appenders.push(appender);
 	}
 }
 
 
-export class ConsoleAppender extends LogAppender {
+export class ConsoleAppender
+	extends LogAppender {
 	append(log: Log) {
 		switch (log.level) {
 			case LogLevel.INFO:
@@ -61,7 +63,9 @@ export class ConsoleAppender extends LogAppender {
 
 
 export const experimentalLogger = new ExperimentalLogger({
-	appends: [
-		new ConsoleAppender(), new FileAppender("logs/today.log"),
-	],
-});
+	                                                         appends: [
+		                                                         new ConsoleAppender(),
+		                                                         new FileAppender(
+			                                                         "logs/today.log"),
+	                                                         ],
+                                                         });
