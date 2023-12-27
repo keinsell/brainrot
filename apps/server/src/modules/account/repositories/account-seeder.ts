@@ -4,7 +4,7 @@ import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.j
 import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {AccountFixture}     from "../../../utilities/fixtures/account-fixture.js"
 import {$Enums}             from "../../../vendor/prisma/index.js"
-import {RegisterAccount}    from "../commands/register-account.js"
+import {RegisterAccountDtp} from "../commands/register-account-dtp.js"
 import {AccountService}     from "../services/account-service.js"
 import EmailVerificationStatus = $Enums.EmailVerificationStatus;
 
@@ -12,7 +12,7 @@ import EmailVerificationStatus = $Enums.EmailVerificationStatus;
 
 @Injectable()
 export class AccountSeeder
-	extends SeederBase<RegisterAccount> {
+	extends SeederBase<RegisterAccountDtp> {
 
 	constructor(private prismaService : PrismaService, private accountService : AccountService) {
 		super(new Logger("seeder:domain"))
@@ -24,7 +24,7 @@ export class AccountSeeder
 	}
 
 
-	public async exists(input : RegisterAccount) : Promise<boolean> {
+	public async exists(input : RegisterAccountDtp) : Promise<boolean> {
 		const exists = await this.prismaService.account.findUnique({
 			where: {
 				email: input.email,
@@ -35,7 +35,7 @@ export class AccountSeeder
 	}
 
 
-	public async fabricate() : Promise<RegisterAccount> {
+	public async fabricate() : Promise<RegisterAccountDtp> {
 		return {
 			email   : faker.internet.email(),
 			password: AccountFixture.password,
@@ -44,7 +44,7 @@ export class AccountSeeder
 	}
 
 
-	public async save(input : RegisterAccount) : Promise<unknown> {
+	public async save(input : RegisterAccountDtp) : Promise<unknown> {
 		const account = await this.accountService.register(input)
 
 		await this.prismaService.account.update({

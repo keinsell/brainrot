@@ -31,7 +31,9 @@ export class ImmutableClass {
 	static create<Type extends ImmutableClass>(this : {
 		new() : Type
 	}, values? : Omit<Partial<Type>, keyof ImmutableClass>) : Type {
-		return produce(this.prototype, new this(), values as any) as Type;
+		return (
+			produce(this.prototype, new this(), values as any) as Type
+		).validate()
 	}
 
 
@@ -56,5 +58,9 @@ export class ImmutableClass {
 			}
 		}
 		return true;
+	}
+
+	validate() : this {
+		return this
 	}
 }

@@ -23,15 +23,28 @@
  *
  */
 
-import {PickType}         from "@nestjs/swagger"
-import {ApiModel}         from "../../../utilities/docs-utils/swagger-api-model.js"
-import {CreateAccountDto} from "../dtos/create-account-dto.js"
+import {tags}             from "typia";
+import {CreateAccountDto} from "../dtos/create-account-dto.js";
+import {PickType}         from "@nestjs/swagger";
+import {ApiModel}         from "../../../utilities/docs-utils/swagger-api-model.js";
 
+
+
+export interface RegisterAccount2 {
+	email : string & tags.Format<"email">
+	username : string & tags.Pattern<string>
+	password : string & tags.Pattern<string>
+}
 
 
 @ApiModel({
 	name: "RegisterAccount",
 })
-export class RegisterAccount extends PickType(CreateAccountDto, [
-	"email", "password", "username",
-] as const) {}
+export class RegisterAccountDtp
+	extends PickType(CreateAccountDto, [
+		"email",
+		"password",
+		"username",
+	] as const)
+{}
+

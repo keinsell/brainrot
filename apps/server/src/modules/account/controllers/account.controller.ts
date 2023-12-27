@@ -4,11 +4,11 @@ import {readFileSync}                             from 'node:fs'
 import {dirname}                                  from "path"
 import {fileURLToPath}                            from "url"
 import {JwtAuthorizationGuard}                    from "../../authentication/guards/jwt-authorization-guard.js"
-import {RegisterAccount}                          from "../commands/register-account.js"
-import {CreateAccountDto}                         from "../dtos/create-account-dto.js"
+import {RegisterAccount2, RegisterAccountDtp}     from "../commands/register-account-dtp.js"
 import {AccountService}                           from "../services/account-service.js"
 import {AccountViewModel}                         from "../view-model/account-view-model.js"
 import {TypedRoute}                               from "@nestia/core";
+import typia                                      from "typia";
 
 
 
@@ -43,8 +43,8 @@ export class AccountController {
 		description: "Account was successfully registered in system.",
 	})
 	@TypedRoute.Post()
-	async register(@Body() registerAccountBody : RegisterAccount) : Promise<AccountViewModel> {
-		const body = registerAccountBody as CreateAccountDto
+	async register(@Body() registerAccountBody : RegisterAccountDtp) : Promise<AccountViewModel> {
+		const body = typia.assert<RegisterAccount2>(registerAccountBody)
 
 		// TODO: Normalize Email
 		// TODO: Normalize Username
