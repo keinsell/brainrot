@@ -7,7 +7,6 @@ import {JwtAuthorizationGuard}                    from "../../authentication/gua
 import {RegisterAccount2, RegisterAccountDtp}     from "../commands/register-account-dtp.js"
 import {AccountService}                           from "../services/account-service.js"
 import {AccountViewModel}                         from "../view-model/account-view-model.js"
-import {TypedRoute}                               from "@nestia/core";
 import typia                                      from "typia";
 
 
@@ -42,7 +41,7 @@ export class AccountController {
 		type       : AccountViewModel,
 		description: "Account was successfully registered in system.",
 	})
-	@TypedRoute.Post()
+	@Post()
 	async register(@Body() registerAccountBody : RegisterAccountDtp) : Promise<AccountViewModel> {
 		const body = typia.assert<RegisterAccount2>(registerAccountBody)
 

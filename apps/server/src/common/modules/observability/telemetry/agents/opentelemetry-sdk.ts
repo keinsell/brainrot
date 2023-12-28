@@ -37,12 +37,12 @@ import {
 }                                                           from "../../../../../configs/env.js"
 import {
 	NestjsDiagnosticLogger,
-}                                                           from "../services/nestjs-diagnostic-logger.js";
+}                                                           from "../../../opentelemetry/service/nestjs-diagnostic-logger.js";
 
 
 
 export function experimentalOpenTelemetryTracker() {
-	if (env.isDev && false) {
+	if (env.isDev) {
 		diag.setLogger(new NestjsDiagnosticLogger(), DiagLogLevel.DEBUG);
 	}
 
