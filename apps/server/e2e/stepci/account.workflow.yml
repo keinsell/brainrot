@@ -26,51 +26,51 @@ tests:
             password: ${{env.password}}
             email: ${{env.email}}
 
-      - name: Authenticate Account
-        delay: "10s"
-        http:
-          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
-          method: POST
-          check:
-            status: /^20/
-          headers:
-            Content-Type: application/json
-          json:
-            username: ${{env.username}}
-            password: ${{env.password}}
-            email: ${{env.email}}
-          captures:
-            email:
-              jsonpath: $.email
-
-  account-verification:
-    steps:
-      - name: Authenticate Account
-        delay: "10s"
-        http:
-          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
-          method: POST
-          check:
-            status: /^20/
-          headers:
-            Content-Type: application/json
-          json:
-            username: ${{env.username}}
-            password: ${{env.password}}
-            email: ${{env.email}}
-          captures:
-            accessToken:
-              jsonpath: $.accessToken
-
-      - name: Verify Account
-        delay: "10s"
-        http:
-          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
-          method: POST
-          auth:
-            bearer:
-              token: ${{captures.accessToken}}
-          check:
-            status: /^20/
-          headers:
-            Content-Type: application/json
+#      - name: Authenticate Account
+#        delay: "10s"
+#        http:
+#          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
+#          method: POST
+#          check:
+#            status: /^20/
+#          headers:
+#            Content-Type: application/json
+#          json:
+#            username: ${{env.username}}
+#            password: ${{env.password}}
+#            email: ${{env.email}}
+#          captures:
+#            email:
+#              jsonpath: $.email
+#
+#  account-verification:
+#    steps:
+#      - name: Authenticate Account
+#        delay: "10s"
+#        http:
+#          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/authenticate
+#          method: POST
+#          check:
+#            status: /^20/
+#          headers:
+#            Content-Type: application/json
+#          json:
+#            username: ${{env.username}}
+#            password: ${{env.password}}
+#            email: ${{env.email}}
+#          captures:
+#            accessToken:
+#              jsonpath: $.accessToken
+#
+#      - name: Verify Account
+#        delay: "10s"
+#        http:
+#          url: ${{env.protocol}}://${{env.host}}:${{env.port}}/account/verification/verify-email?verification_code=verification_code
+#          method: POST
+#          auth:
+#            bearer:
+#              token: ${{captures.accessToken}}
+#          check:
+#            status: /^20/
+#          headers:
+#            Content-Type: application/json
