@@ -33,6 +33,7 @@
     "@types/uuid": "^9.0.5",
     "bun-types": "1.0.6",
     "ezno": "^0.0.14",
+    "fta-cli": "^1.0.0",
     "oxidation-compiler": "^0.2.3",
     "oxlint": "^0.0.13",
     "prisma": "^5.4.2",

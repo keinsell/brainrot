@@ -11,13 +11,19 @@ import {DatabaseModule}                 from "./modules/storage/database/databas
 
 
 @Module({
-	imports:   [
-		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule,
-		HealthModule, DeveloperToolsModule, SessionMiddlewareModule.forRoot({
+	imports  : [
+		TelemetryModule,
+		DatabaseModule,
+		ContinuationLocalStorageModule,
+		AsyncLocalStorageModule,
+		DocumentaitonModule,
+		HealthModule,
+		DeveloperToolsModule,
+		SessionMiddlewareModule.forRoot({
 			session: {
-				secret:            "secretomitted",
-				rolling:           false,
-				resave:            false,
+				secret           : "secretomitted",
+				rolling          : false,
+				resave           : false,
 				saveUninitialized: false,
 			},
 		}), // https://stackoverflow.com/questions/56046527/express-session-req-session-touch-not-a-function
@@ -28,9 +34,14 @@ import {DatabaseModule}                 from "./modules/storage/database/databas
 		//})
 	],
 	providers: [],
-	exports:   [
-		TelemetryModule, DatabaseModule, ContinuationLocalStorageModule, AsyncLocalStorageModule, DocumentaitonModule,
-		HealthModule, DeveloperToolsModule,
+	exports  : [
+		TelemetryModule,
+		DatabaseModule,
+		ContinuationLocalStorageModule,
+		AsyncLocalStorageModule,
+		DocumentaitonModule,
+		HealthModule,
+		DeveloperToolsModule,
 	],
 })
 export class SharedModule {

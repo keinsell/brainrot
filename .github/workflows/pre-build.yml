@@ -18,7 +18,7 @@ jobs:
         uses: "./.github/actions/setup-node"
       - name: 🐳 Setup Docker
         uses: "./.github/actions/setup-docker"
-
+      - run: cd apps/server && pnpm lint:fta
 
   #  spellcheck:
   #    name: "spellcheck"

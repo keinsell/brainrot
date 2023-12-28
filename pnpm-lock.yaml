@@ -65,6 +65,9 @@ importers:
       ezno:
         specifier: ^0.0.14
         version: 0.0.14
+      fta-cli:
+        specifier: ^1.0.0
+        version: 1.0.0
       oxidation-compiler:
         specifier: ^0.2.3
         version: 0.2.3
@@ -414,6 +417,9 @@ importers:
       eslint-plugin-prettier:
         specifier: ^5.0.1
         version: 5.0.1(eslint-config-prettier@9.0.0)(eslint@8.53.0)(prettier@3.0.3)
+      fta-cli:
+        specifier: ^1.0.0
+        version: 1.0.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.9.0)(ts-node@10.9.2)
@@ -473,6 +479,8 @@ importers:
         version: 4.4.2
 
   infrastructure: {}
+
+  packages/tsconfig: {}
 
 packages:
 
@@ -10931,6 +10939,11 @@ packages:
     os: [darwin]
     requiresBuild: true
     optional: true
+
+  /fta-cli@1.0.0:
+    resolution: {integrity: sha512-fkCj2jftr2tn0GJFz5Gb0q+rHvcZUCpYu+IrdP84tRLKGfEFIyFRHXNTBqt1IwsTtJZlCKRkkGFz0arunaryXQ==}
+    hasBin: true
+    dev: true
 
   /function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
