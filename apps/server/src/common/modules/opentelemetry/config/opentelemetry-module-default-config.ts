@@ -38,15 +38,16 @@ import {LoggerInjector}                  from "../injector/logger-injector.js";
 import {GuardInjector}                   from "../injector/guard-injector.js";
 import {GraphQLResolverInjector}         from "../injector/graphql-resolver-injector.js";
 import {W3CTraceContextPropagator}       from "@opentelemetry/core";
-import {PrismaInstrumentation}           from "@prisma/instrumentation";
 import {NestLoggerSpanExporter}          from "../service/nest-logger-span-exporter.js";
 import {SimpleSpanProcessor}             from "@opentelemetry/sdk-trace-base";
+import {PrismaInstrumentation}           from "@prisma/instrumentation";
 
 
 
 export interface OpenTelemetryModuleConfig
 	extends Partial<NodeSDKConfiguration> {
 	traceAutoInjectors? : Provider<AutoTraceInjector>[];
+	useSentry? : boolean;
 }
 
 
@@ -75,7 +76,7 @@ export const OpenTelemetryModuleDefaultConfig = {
 	}),
 	instrumentations   : [
 		getNodeAutoInstrumentations(),
-		new PrismaInstrumentation() as any,
+		new PrismaInstrumentation(),
 	],
 	traceExporter      : new NestLoggerSpanExporter(),
 	spanProcessor      : new SimpleSpanProcessor(new NestLoggerSpanExporter()),

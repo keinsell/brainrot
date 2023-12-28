@@ -40,6 +40,7 @@ import {OPEN_TELEMETRY_SDK_INJECTORS}     from "./constant/OPEN_TELEMETRY_SDK_IN
 
 
 
+// @InitializeModuleAfter(SentryModule)
 /**
  * forRoot()
  *

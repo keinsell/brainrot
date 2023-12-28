@@ -1,5 +1,6 @@
 import {ConsoleLogger, Inject, Injectable, OnApplicationShutdown} from '@nestjs/common';
 import * as Sentry                                                from '@sentry/node';
+import {SeverityLevel}                                            from '@sentry/node';
 import {Client, ClientOptions}                                    from '@sentry/types';
 import {SENTRY_MODULE_OPTIONS}                                    from "../constant/SENTRY_MODULE_OPTIONS.js"
 import {SentryModuleOptions}                                      from "../interface/sentry-module-options.js"
@@ -8,22 +9,25 @@ import {Severity}                                                 from "../struc
 
 
 @Injectable()
-export class SentryService extends ConsoleLogger implements OnApplicationShutdown {
-	private static serviceInstance: SentryService;
+export class SentryService
+	extends ConsoleLogger
+	implements OnApplicationShutdown {
+	private static serviceInstance : SentryService;
 	app = 'sentry-service: ';
 
 
-	constructor(@Inject(SENTRY_MODULE_OPTIONS) readonly opts?: SentryModuleOptions) {
+	constructor(@Inject(SENTRY_MODULE_OPTIONS) readonly opts? : SentryModuleOptions) {
 		super();
 		if (!(
 			opts && opts.dsn
-		)) {
+		))
+		{
 			return;
 		}
 		const {
-				  integrations = [],
-				  ...sentryOptions
-			  } = opts;
+			      integrations = [],
+			      ...sentryOptions
+		      } = opts;
 		Sentry.init({
 			...sentryOptions,
 			integrations: [
@@ -31,18 +35,21 @@ export class SentryService extends ConsoleLogger implements OnApplicationShutdow
 					onFatalError: async (err) => {
 						if (err.name === 'SentryError') {
 							console.log(err);
-						} else {
+						}
+						else {
 							Sentry.getCurrentHub().getClient<Client<ClientOptions>>()?.captureException(err);
 							process.exit(1);
 						}
 					},
-				}), new Sentry.Integrations.OnUnhandledRejection({mode: 'warn'}), ...integrations,
+				}),
+				new Sentry.Integrations.OnUnhandledRejection({mode: 'warn'}),
+				...integrations,
 			],
 		});
 	}
 
 
-	public static SentryServiceInstance(): SentryService {
+	public static SentryServiceInstance() : SentryService {
 		if (!SentryService.serviceInstance) {
 			SentryService.serviceInstance = new SentryService();
 		}
@@ -62,72 +69,58 @@ export class SentryService extends ConsoleLogger implements OnApplicationShutdow
 	}
 
 
-	log(message: string, context?: string, asBreadcrumb?: boolean) {
-		message = `${this.app} ${message}`;
-		try {
-			super.log(message, context);
-			asBreadcrumb ? Sentry.addBreadcrumb({
-				message,
-				level: Severity.Log,
-				data:  {
-					context,
-				},
-			}) : Sentry.captureMessage(message, Severity.Log);
-		} catch (err) {}
+	log(message : string, context? : string, asBreadcrumb? : boolean) {
+		this.handleLog(super.log, Severity.Log, message, context, asBreadcrumb);
 	}
 
 
-	error(message: string, trace?: string, context?: string) {
-		message = `${this.app} ${message}`;
-		try {
-			super.error(message, trace, context);
-			Sentry.captureMessage(message, Severity.Error);
-		} catch (err) {}
+	error(message : string, trace? : string, context? : string) {
+		this.handleLog(
+			super.error,
+			Severity.Error,
+			message + (
+				        trace ? `\n${trace}` : ""
+			        ),
+			context,
+		);
 	}
 
 
-	warn(message: string, context?: string, asBreadcrumb?: boolean) {
-		message = `${this.app} ${message}`;
-		try {
-			super.warn(message, context);
-			asBreadcrumb ? Sentry.addBreadcrumb({
-				message,
-				level: Severity.Warning,
-				data:  {
-					context,
-				},
-			}) : Sentry.captureMessage(message, Severity.Warning);
-		} catch (err) {}
+	warn(message : string, context? : string, asBreadcrumb? : boolean) {
+		this.handleLog(super.warn, Severity.Warning, message, context, asBreadcrumb);
 	}
 
-
-	debug(message: string, context?: string, asBreadcrumb?: boolean) {
-		message = `${this.app} ${message}`;
-		try {
-			super.debug(message, context);
-			asBreadcrumb ? Sentry.addBreadcrumb({
-				message,
-				level: Severity.Debug,
-				data:  {
-					context,
-				},
-			}) : Sentry.captureMessage(message, Severity.Debug);
-		} catch (err) {}
+	debug(message : string, context? : string, asBreadcrumb? : boolean) {
+		this.handleLog(super.debug, Severity.Debug, message, context, asBreadcrumb);
 	}
 
+	verbose(message : string, context? : string, asBreadcrumb? : boolean) {
+		this.handleLog(super.verbose, Severity.Info, message, context, asBreadcrumb);
+	}
 
-	verbose(message: string, context?: string, asBreadcrumb?: boolean) {
-		message = `${this.app} ${message}`;
+	private handleLog(
+		logFunction : (msg : string, context : string) => void,
+		severity : SeverityLevel,
+		message : string,
+		context? : string,
+		asBreadcrumb? : boolean,
+	)
+	{
+		const logMessage = `${this.app} ${message}`;
 		try {
-			super.verbose(message, context);
-			asBreadcrumb ? Sentry.addBreadcrumb({
-				message,
-				level: Severity.Info,
-				data:  {
-					context,
-				},
-			}) : Sentry.captureMessage(message, Severity.Info);
-		} catch (err) {}
+			logFunction.call(this, logMessage, context);
+			if (asBreadcrumb) {
+				Sentry.addBreadcrumb({
+					message: logMessage,
+					level  : severity,
+					data   : {context},
+				});
+			}
+			else {
+				Sentry.captureMessage(logMessage, severity);
+			}
+		}
+		catch (err) {}
 	}
 
 }

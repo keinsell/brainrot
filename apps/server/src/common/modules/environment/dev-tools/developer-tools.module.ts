@@ -6,14 +6,14 @@ import {portAllocator}  from "../../../../utilities/network-utils/port-allocator
 
 
 @Module({
-	imports:     [
+	imports    : [
 		DevtoolsModule.register({
 			http: env.isDevelopment,
 			port: await portAllocator().then((port) => port.port),
 		}),
 	],
-	providers:   [],
+	providers  : [],
 	controllers: [],
-	exports:     [DevtoolsModule],
+	exports    : [DevtoolsModule],
 })
 export class DeveloperToolsModule {}
