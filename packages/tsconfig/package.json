@@ -1,0 +1,17 @@
+{
+  "name": "@mph/tsconfig",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "base.json",
+  "files": [
+    "base.json",
+    "vite.json",
+    "node12.json",
+    "node14.json",
+    "nextjs.json",
+    "react-library.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
