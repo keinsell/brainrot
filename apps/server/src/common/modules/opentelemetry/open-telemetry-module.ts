@@ -40,7 +40,77 @@ import {OPEN_TELEMETRY_SDK_INJECTORS}     from "./constant/OPEN_TELEMETRY_SDK_IN
 
 
 
+/**
+ * forRoot()
+ *
+ * Configures the OpenTelemetryModule asynchronously.
+ *
+ * @param configuration - Configuration options for the module. See OpenTelemetryModuleConfig.
+ * @returns A dynamic NestJS module with OpenTelemetry configured.
+ *
+ * - Imports EventEmitterModule
+ * - Provides TraceService, OpenTelemetryService, DecoratorInjector
+ * - Builds provider, injectors, and tracer based on configuration
+ * - Exports TraceService and Tracer
+ *
+ * forRootAsync()
+ *
+ * Configures the OpenTelemetryModule asynchronously.
+ *
+ * @param configuration - Async configuration options. See OpentelemetryModuleAsyncOptions.
+ * @returns A dynamic NestJS module with OpenTelemetry configured.
+ *
+ * - Imports EventEmitterModule and optionally other modules
+ * - Provides TraceService, OpenTelemetryService
+ * - Builds async provider, injectors, and tracer based on configuration
+ * - Exports TraceService and Tracer
+ *
+ * buildProvider()
+ *
+ * Builds the OpenTelemetry SDK provider.
+ *
+ * @param configuration - The module configuration.
+ * @returns A provider for the SDK.
+ *
+ * buildInjectors()
+ *
+ * Builds the injectors provider.
+ *
+ * @param configuration - The module configuration.
+ * @returns A provider that runs the injectors.
+ *
+ * buildAsyncProvider()
+ *
+ * Builds the async OpenTelemetry SDK provider.
+ *
+ * @returns An async provider for the SDK.
+ *
+ * buildAsyncInjectors()
+ *
+ * Builds the async injectors provider.
+ *
+ * @param config - The module config
+ * @param moduleRef - A reference to the module
+ * @returns An async provider that runs the injectors.
+ *
+ * buildTracer()
+ *
+ * Builds a provider for the Tracer service.
+ *
+ * @returns A tracer provider.
+ *
+ */
+
 export class OpenTelemetryModule {
+	/**
+	 * Initializes the OpenTelemetry module with the given configuration.
+	 *
+	 * @param {Partial<OpenTelemetryModuleConfig>} configuration - The configuration for the OpenTelemetry module.
+	 *     (optional)
+	 *
+	 * @return {Promise<DynamicModule>} A Promise that resolves to a DynamicModule object representing the
+	 *     OpenTelemetry module.
+	 */
 	static async forRoot(
 		configuration : Partial<OpenTelemetryModuleConfig> = {},
 	) : Promise<DynamicModule> {
@@ -70,6 +140,13 @@ export class OpenTelemetryModule {
 		};
 	}
 
+	/**
+	 * Initialize the OpenTelemetry module asynchronously.
+	 *
+	 * @param {OpentelemetryModuleAsyncOptions} configuration - The configuration options for the module. Default is an
+	 *     empty object.
+	 * @returns {Promise<DynamicModule>} - A Promise that resolves to a DynamicModule object.
+	 */
 	static async forRootAsync(
 		configuration : OpentelemetryModuleAsyncOptions = {},
 	) : Promise<DynamicModule> {
@@ -99,6 +176,12 @@ export class OpenTelemetryModule {
 		};
 	}
 
+	/**
+	 * Builds a factory provider for the OpenTelemetry SDK.
+	 *
+	 * @param {Partial<OpenTelemetryModuleConfig>} configuration - The optional configuration for the SDK.
+	 * @return {FactoryProvider} - The factory provider object.
+	 */
 	private static buildProvider(
 		configuration? : Partial<OpenTelemetryModuleConfig>,
 	) : FactoryProvider {
@@ -112,24 +195,25 @@ export class OpenTelemetryModule {
 		};
 	}
 
-	private static buildInjectors(
-		configuration? : Partial<OpenTelemetryModuleConfig>,
-	) : FactoryProvider {
-		const injectors = configuration?.traceAutoInjectors ?? [];
+	private static async executeInjectorMethods(...injectors) : Promise<void> {
+		for await (const injector of injectors) {
+			if (injector['inject']) await injector.inject();
+		}
+	}
+
+	private static buildInjectors(config? : Partial<OpenTelemetryModuleConfig>) : FactoryProvider {
+		const injectors    = config?.traceAutoInjectors ?? [];
+		const dependencies = [
+			DecoratorInjector,
+			...(
+				injectors as []
+			),
+		];
+
 		return {
 			provide   : OPEN_TELEMETRY_SDK_INJECTORS,
-			useFactory: async (...injectors) => {
-				for await (const injector of injectors) {
-					if (injector['inject']) await injector.inject();
-				}
-			},
-			inject    : [
-				DecoratorInjector,
-				// eslint-disable-next-line @typescript-eslint/ban-types
-				...(
-					injectors as Function[]
-				),
-			],
+			useFactory: this.executeInjectorMethods,
+			inject    : dependencies,
 		};
 	}
 

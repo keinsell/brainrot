@@ -28,6 +28,12 @@ import {context, Span, trace} from "@opentelemetry/api";
 
 
 
+/**
+ * The TraceService class provides methods to interact with tracing functionality.
+ * @class
+ * @public
+ * @Injectable()
+ */
 @Injectable()
 export class TraceService {
 	public getTracer() {

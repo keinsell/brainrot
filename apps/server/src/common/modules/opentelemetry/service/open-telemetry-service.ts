@@ -31,6 +31,9 @@ import {NodeSDK}                                       from "@opentelemetry/sdk-
 
 
 
+/**
+ * @description An OpenTelemetry service that implements the BeforeApplicationShutdown interface.
+ */
 @Injectable()
 export class OpenTelemetryService
 	implements BeforeApplicationShutdown {

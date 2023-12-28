@@ -23,6 +23,6 @@
  *
  */
 
-export interface Injector {
-	inject();
+export interface AutoTraceInjector {
+	inject() : void;
 }

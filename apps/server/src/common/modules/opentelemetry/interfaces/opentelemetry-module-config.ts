@@ -1,9 +1,10 @@
 import {Provider}             from "@nestjs/common"
-import {Injector}             from "@nestjs/core/injector/injector.js"
 import {NodeSDKConfiguration} from "@opentelemetry/sdk-node"
+import {AutoTraceInjector}    from "../injector/auto-trace-injector.js";
 
 
 
-export interface OpenTelemetryModuleConfig extends Partial<NodeSDKConfiguration> {
-	traceAutoInjectors?: Provider<Injector>[];
+export interface OpenTelemetryModuleConfig
+	extends Partial<NodeSDKConfiguration> {
+	traceAutoInjectors? : Provider<AutoTraceInjector>[];
 }

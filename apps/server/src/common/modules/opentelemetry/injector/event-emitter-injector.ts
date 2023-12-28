@@ -26,14 +26,14 @@
 import {Injectable, Logger} from "@nestjs/common";
 import {BaseTraceInjector}  from "./base-trace-injector.js";
 import {ModulesContainer}   from "@nestjs/core";
-import {Injector}           from "./injector.js";
+import {AutoTraceInjector}  from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class EventEmitterInjector
 	extends BaseTraceInjector
-	implements Injector
+	implements AutoTraceInjector
 {
 	private static EVENT_LISTENER_METADATA = 'EVENT_LISTENER_METADATA';
 

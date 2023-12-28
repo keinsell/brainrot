@@ -28,14 +28,14 @@ import {BaseTraceInjector}                 from "./base-trace-injector.js";
 import {APP_PIPE, ModulesContainer}        from "@nestjs/core";
 import {PIPES_METADATA}                    from "@nestjs/common/constants.js";
 import {InstanceWrapper}                   from "@nestjs/core/injector/instance-wrapper.js";
-import {Injector}                          from "./injector.js";
+import {AutoTraceInjector}                 from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class PipeInjector
 	extends BaseTraceInjector
-	implements Injector {
+	implements AutoTraceInjector {
 	private readonly loggerService = new Logger();
 
 	constructor(protected readonly modulesContainer : ModulesContainer) {

@@ -26,14 +26,14 @@
 import {Injectable, Logger} from "@nestjs/common";
 import {BaseTraceInjector}  from "./base-trace-injector.js";
 import {ModulesContainer}   from "@nestjs/core";
-import {Injector}           from "./injector.js";
+import {AutoTraceInjector}  from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class ScheduleInjector
 	extends BaseTraceInjector
-	implements Injector {
+	implements AutoTraceInjector {
 	private static SCHEDULE_CRON_OPTIONS     = 'SCHEDULE_CRON_OPTIONS';
 	private static SCHEDULE_INTERVAL_OPTIONS = 'SCHEDULE_INTERVAL_OPTIONS';
 	private static SCHEDULE_TIMEOUT_OPTIONS  = 'SCHEDULE_TIMEOUT_OPTIONS';

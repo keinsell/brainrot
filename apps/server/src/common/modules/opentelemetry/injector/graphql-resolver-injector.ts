@@ -27,14 +27,14 @@ import {Injectable, Logger}                             from "@nestjs/common";
 import {BaseTraceInjector}                              from "./base-trace-injector.js";
 import {ModulesContainer}                               from "@nestjs/core";
 import {RESOLVER_NAME_METADATA, RESOLVER_TYPE_METADATA} from "@nestjs/graphql";
-import {Injector}                                       from "./injector.js";
+import {AutoTraceInjector}                              from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class GraphQLResolverInjector
 	extends BaseTraceInjector
-	implements Injector
+	implements AutoTraceInjector
 {
 	private readonly loggerService = new Logger();
 

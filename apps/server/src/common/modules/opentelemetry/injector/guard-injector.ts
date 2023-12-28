@@ -27,14 +27,14 @@ import {CanActivate, Injectable, Logger} from "@nestjs/common";
 import {BaseTraceInjector}               from "./base-trace-injector.js";
 import {APP_GUARD, ModulesContainer}     from "@nestjs/core";
 import {GUARDS_METADATA}                 from "@nestjs/common/constants.js";
-import {Injector}                        from "./injector.js";
+import {AutoTraceInjector}               from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class GuardInjector
 	extends BaseTraceInjector
-	implements Injector {
+	implements AutoTraceInjector {
 	private readonly loggerService = new Logger();
 
 	constructor(protected readonly modulesContainer : ModulesContainer) {

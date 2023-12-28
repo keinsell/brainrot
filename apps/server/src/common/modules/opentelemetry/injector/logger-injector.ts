@@ -25,13 +25,13 @@
 
 import {ConsoleLogger, Injectable} from "@nestjs/common";
 import {context, trace}            from "@opentelemetry/api";
-import {Injector}                  from "./injector.js";
+import {AutoTraceInjector}         from "./auto-trace-injector.js";
 
 
 
 @Injectable()
 export class LoggerInjector
-	implements Injector {
+	implements AutoTraceInjector {
 	private static getMessage(message : string) {
 		const currentSpan = trace.getSpan(context.active());
 		if (!currentSpan) return message;
