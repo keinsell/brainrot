@@ -8,12 +8,11 @@
 > ~ @keinsell
 
 
-Methylophenidate is caffeinated language-agnostic repository boilerplate for "modern software" (after month of building I would like to say this repository is more like organization bootstrap instead a single project) built around
+Methylophenidate is caffeinated language-agnostic repository boilerplate for "modern software" (after month of building
+I would like to say this repository is more like organization bootstrap instead a single project) built around
 open-source technologies (nothing feels that great as vendor-locked cloud-native). Featuring release management, CI/CD,
 Deployment, Infrastructure Management, Application Observability and bunch of other famous buzzwords minus the
 blockchain and AI (however, it's on the roadmap).
-
-
 
 ## Table of Contents
 
@@ -82,7 +81,9 @@ http://localhost:5005/
 ## Features
 
 - **🔑 Identity and Access Management (IAM)**, repository is providing basic Identity and Access Management (IAM)
-  features, such as user management, role management, permission management and audit logging. These features are written from scratch, however there will be also integration with 3rd-party services such as "Keycloak", "Auth0" or "Okta".
+  features, such as user management, role management, permission management and audit logging. These features are
+  written from scratch, however there will be also integration with 3rd-party services such as "Keycloak", "Auth0" or "
+  Okta".
 - **E-Commerce**
 - **Warehouse Management**
 - **Order Management**
@@ -115,20 +116,29 @@ http://localhost:5005/
 
 ### Common Takes
 
-- **Clean Code Principles**, every person who is taking clean code literally should leave the industry, Uncle Bob had good ideas however they aren't always right (like the world is...) - it's good to know and eventually if something looks good in your eyes go for it, take shrooms once per week and then read your code again - write down pitfalls and then fix them.
-- **Unbreakability Theory**, every software is breakable - the thing is how much it can break, none of 3rd-party integrations should bring your whole application down, use limited trust for supply chain and integrations even between your own code. One trust between dots is limited and link is breakable, software will be able to recovery itself from such breakage.
+- **Clean Code Principles**, every person who is taking clean code literally should leave the industry, Uncle Bob had
+  good ideas however they aren't always right (like the world is...) - it's good to know and eventually if something
+  looks good in your eyes go for it, take shrooms once per week and then read your code again - write down pitfalls and
+  then fix them.
+- **Unbreakability Theory**, every software is breakable - the thing is how much it can break, none of 3rd-party
+  integrations should bring your whole application down, use limited trust for supply chain and integrations even
+  between your own code. One trust between dots is limited and link is breakable, software will be able to recovery
+  itself from such breakage.
 
 ## Contributing
 
-[This kingdom is mine, and mine alone](https://www.youtube.com/shorts/OzUmOqzaeeE). I do not want to see any pull requests, issues or any other form of
+[This kingdom is mine and mine alone](https://www.youtube.com/shorts/OzUmOqzaeeE). I do not want to see any pull
+requests, issues or any other form of
 contribution. If you want to contribute to this repository, fork it and do whatever you want with it.
 
 ```
 You do not.
 ```
 
+Please note that this project is released with a [Contributor Code of Conduct](CODE-OF-CONDUCT.md). By participating in
+this project, you agree to abide by its terms.
 
 <br />
 <center>
-Made with ❤️ for building products and 😡 to the industry by @keinsell
+Made with ❤️ for building products and learning and 😡 to the industry overfilled with frameworkers by @keinsell
 </center>
