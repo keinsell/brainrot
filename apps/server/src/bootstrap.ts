@@ -1,26 +1,30 @@
-import {Logger}                        from "@nestjs/common"
-import {HttpAdapterHost, NestFactory}  from "@nestjs/core"
-import delay                           from "delay"
-import ms                              from "ms"
-import process                         from "node:process"
-import {seeder}                        from "./common/libraries/seeder/seeder.js"
-import {buildCompodocDocumentation}    from "./common/modules/documentation/compodoc/compodoc.js"
-import {buildSwaggerDocumentation}     from "./common/modules/documentation/swagger/swagger.js"
-import {DatabaseModule}                from "./common/modules/database/database.module.js"
-import {PrismaClientExceptionFilter}   from "./common/modules/storage/prisma/filters/prisma-client-exception-filter.js"
-import {executePrismaRelatedProcesses} from "./common/modules/storage/prisma/utils/execute-prisma-related-processes.js"
-import {ApplicationConfiguration}      from "./configs/application-configuration.js"
-import {env}                           from "./configs/env.js"
-import {StaticFeatureFlags}            from "./configs/static-feature-flags.js"
-import {Container}                     from "./container.js"
-import {AccountModule}                 from "./modules/account/account.module.js"
-import {AccountSeeder}                 from "./modules/account/repositories/account-seeder.js"
-import {CartSeeder}                    from "./modules/todo_cart/cart-seeder.js"
-import {ProductSeeder}                 from "./modules/todo_product/product-seeder.js"
-import {ProfileSeeder}                 from "./modules/todo_profile/infrastructure/profile-seeder.js"
-import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
-import {RoleSeeder}                    from "./modules/role/seeder/role-seeder.js";
-import Sentry                          from "@sentry/node";
+import {Logger}                       from "@nestjs/common"
+import {HttpAdapterHost, NestFactory} from "@nestjs/core"
+import delay                          from "delay"
+import ms                             from "ms"
+import process                        from "node:process"
+import {seeder}                       from "./common/libraries/seeder/seeder.js"
+import {buildCompodocDocumentation}   from "./common/modules/documentation/compodoc/compodoc.js"
+import {buildSwaggerDocumentation}    from "./common/modules/documentation/swagger/swagger.js"
+import {DatabaseModule}               from "./common/modules/database/database.module.js"
+import {ApplicationConfiguration}     from "./configs/application-configuration.js"
+import {env}                          from "./configs/env.js"
+import {StaticFeatureFlags}           from "./configs/static-feature-flags.js"
+import {Container}                    from "./container.js"
+import {AccountModule}                from "./modules/account/account.module.js"
+import {AccountSeeder}                from "./modules/account/repositories/account-seeder.js"
+import {CartSeeder}                   from "./modules/todo_cart/cart-seeder.js"
+import {ProductSeeder}                from "./modules/todo_product/product-seeder.js"
+import {ProfileSeeder}                from "./modules/todo_profile/infrastructure/profile-seeder.js"
+import {portAllocator}                from "./utilities/network-utils/port-allocator.js"
+import {RoleSeeder}                   from "./modules/role/seeder/role-seeder.js";
+import Sentry                         from "@sentry/node";
+import {
+	PrismaClientExceptionFilter
+} from "./common/modules/resources/prisma/filters/prisma-client-exception-filter.js";
+import {
+	executePrismaRelatedProcesses
+} from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
 
 
 

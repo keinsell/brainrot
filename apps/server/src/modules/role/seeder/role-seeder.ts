@@ -26,8 +26,8 @@
 import {Injectable, Logger} from "@nestjs/common";
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js";
 import type {Prisma}        from "../../../vendor/prisma/index.js";
-import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js";
 import {faker}              from "@faker-js/faker";
+import {PrismaService}      from "../../../common/modules/resources/prisma/services/prisma-service.js";
 
 
 

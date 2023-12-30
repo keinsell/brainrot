@@ -50,7 +50,7 @@ export const env = cleanEnv(process.env, {
 		desc      : "Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.",
 	}),
 	SENTRY_DSN         : str({
-		default   : null as any,
+		default   : "https://722df91ab634a7aa99ac7381acd8cf92@o1122681.ingest.sentry.io/4506475919310848",
 		devDefault: "https://722df91ab634a7aa99ac7381acd8cf92@o1122681.ingest.sentry.io/4506475919310848",
 		desc      : "Defines the Sentry DSN. Default is empty.",
 	}),

@@ -25,14 +25,17 @@
 
 
 
-import * as Sentry from "@sentry/node";
-import {env}       from "../../configs/env.js";
+import Sentry   from "@sentry/node";
+import {env}    from "../../configs/env.js";
+import {Logger} from "@nestjs/common";
 
 
 
 export function initializeSentry() : void {
+	new Logger().log(`Initializing Sentry... ${env.SENTRY_DSN}`);
+
 	Sentry.init({
-		dsn                : env.SENTRY_DSN,
+		dsn                : "https://722df91ab634a7aa99ac7381acd8cf92@o1122681.ingest.sentry.io/4506475919310848",
 		autoSessionTracking: true,
 		tracesSampleRate   : 1.0,
 		profilesSampleRate : 1.0,
@@ -40,13 +43,15 @@ export function initializeSentry() : void {
 		sampleRate         : 1.0,
 		enabled            : true,
 		debug              : true,
-		instrumenter       : "otel",
-		integrations       : [
-			// new Sentry.Integrations.Console(),
-			// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
-			// new Sentry.Integrations.Context(),
-			// new Sentry.Integrations.Prisma(),
-			// new ProfilingIntegration(),
-		],
+		// instrumenter       : "otel",
+		// integrations       : [
+		// 	// new Sentry.Integrations.Console(),
+		// 	// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
+		// 	// new Sentry.Integrations.Context(),
+		// 	// new Sentry.Integrations.Prisma(),
+		// 	// new ProfilingIntegration(),
+		// ],
 	})
+
+	new Logger().log(`Sentry initialized!`);
 }

@@ -1,9 +1,10 @@
-import {Logger}                   from "@nestjs/common"
-import {exec}                     from "node:child_process"
-import {ApplicationConfiguration} from "../../../../../configs/application-configuration"
-import {env}                      from "../../../../../configs/env"
-import {StaticFeatureFlags}       from "../../../../../configs/static-feature-flags"
-import {portAllocator}            from "../../../../../utilities/network-utils/port-allocator"
+import {Logger} from "@nestjs/common"
+import {exec}   from "node:child_process"
+import {env}    from "../../../../../configs/env.js";
+import {StaticFeatureFlags} from "../../../../../configs/static-feature-flags.js";
+import {portAllocator} from "../../../../../utilities/network-utils/port-allocator.js";
+import {ApplicationConfiguration} from "../../../../../configs/application-configuration.js";
+
 
 
 // TODO: This may spamming a lot in process, needs to be fixed.

@@ -13,6 +13,8 @@ import {
 import {
 	PrismaServiceOptions,
 }                                                                            from "../structures/prisma-service-options.js"
+import {env}                                                                 from "../../../../../configs/env.js";
+import Sentry                                                                from "@sentry/node";
 
 
 
@@ -29,7 +31,7 @@ export class PrismaService
 			...prismaServiceOptions.prismaOptions,
 			log        : [
 				{
-					emit: 'event',
+					emit : 'event',
 					level: 'query',
 				},
 			],
@@ -96,6 +98,10 @@ export class PrismaService
 				console.error(error)
 				await delay(connectionRetryDelay);
 				connectionRetryDelay = connectionRetryDelay * 2;
+
+				if (env.isProduction) {
+					Sentry.captureException(error);
+				}
 			}
 		}
 	}
@@ -132,7 +138,9 @@ export class PrismaService
 		// Logger(`postgres:${this._testcontainer.getId()}`)  containerLogger.verbose(`Container started...`)
 		// logStream.on("data", (data) => { const logLine = data.toString() // Remove \n from lines
 		// logLine.replace(/[\r\n]+/g, '');  if (logLine === "") { } else { containerLogger.verbose(logLine); } });  //
-		// Get the docker container port const port  = this._testcontainer.getMappedPort(5432) const host  = this._testcontainer.getHost() const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`  this.logger.verbose(`Postgres container is available at: ${dbUri}`)
+		// Get the docker container port const port  = this._testcontainer.getMappedPort(5432) const host  =
+		// this._testcontainer.getHost() const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`
+		// this.logger.verbose(`Postgres container is available at: ${dbUri}`)
 
 	}
 }

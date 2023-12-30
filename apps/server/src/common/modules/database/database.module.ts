@@ -1,11 +1,11 @@
-import {Module}                  from "@nestjs/common"
-import {prismaLoggingMiddleware} from "../prisma/middleware/prisma-logging-middleware.js"
-import {PrismaModule}            from "../prisma/prisma-module.js"
+import {Module} from "@nestjs/common"
+import {PrismaModule} from "../resources/prisma/prisma-module.js";
+import {prismaLoggingMiddleware} from "../resources/prisma/middleware/prisma-logging-middleware.js";
 
 
 
 @Module({
-	imports:     [
+	imports    : [
 		PrismaModule.forRoot({
 			prismaServiceOptions: {
 				middlewares: [prismaLoggingMiddleware()],
@@ -13,7 +13,7 @@ import {PrismaModule}            from "../prisma/prisma-module.js"
 		}),
 	],
 	controllers: [],
-	providers:   [],
-	exports:     [PrismaModule],
+	providers  : [],
+	exports    : [PrismaModule],
 })
 export class DatabaseModule {}

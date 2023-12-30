@@ -1,11 +1,11 @@
 import {Injectable, Logger} from "@nestjs/common"
 import {DbContextModel}     from "../../../common/modules/database/db-context-model.js"
-import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {Account}            from "../entities/account.js"
 import {AccountCreateModel} from "../models/account/account-create-model.js"
 import {AccountEntityModel} from "../models/account/account-entity-model.js"
 import {Username}           from "../value-objects/username.js"
 import {AccountRepository}  from "./account-repository.js"
+import {PrismaService}      from "../../../common/modules/resources/prisma/services/prisma-service.js";
 
 
 

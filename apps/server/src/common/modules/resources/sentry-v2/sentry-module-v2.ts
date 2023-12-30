@@ -23,50 +23,37 @@
  *
  */
 
-import {Injectable}        from "@nestjs/common"
-import {UserSession}       from "../entities/user-session.js"
-import {SessionRepository} from "./session-repository.js";
-import {PrismaService}     from "../../../common/modules/resources/prisma/services/prisma-service.js";
+import Sentry                  from "@sentry/node";
+import {APP_INTERCEPTOR}       from "@nestjs/core";
+import {SENTRY_MODULE_OPTIONS} from "../sentry=v1/constant/SENTRY_MODULE_OPTIONS.js";
+import {SentryInterceptorV2}   from "./sentry-interceptor-v2.js";
+import {Module}                from "@nestjs/common";
+import {SentryServiceV2}       from "./sentry-service-v2.js";
 
 
 
-@Injectable()
-export class PrismaSessionRepository
-	extends SessionRepository {
-	constructor(private prisma : PrismaService) {super()}
+@Module({
+	providers: [SentryServiceV2],
+})
+export class SentryModuleV2 {
+	static forRoot(options : Sentry.NodeOptions) {
+		// initialization of Sentry, this is where Sentry will create a Hub
+		Sentry.init(options);
 
-
-	public create(entity : UserSession) : Promise<UserSession> {
-		throw new Error("Not implemented")
-	}
-
-
-	public delete(entity : UserSession) : Promise<void> {
-		throw new Error("Not implemented")
-	}
-
-
-	public async exists(entity : UserSession) : Promise<boolean> {
-		const count = await this.prisma.session.count({
-			where: {
-				id: entity.id,
-			},
-		})
-
-		return count > 0
-	}
-
-
-	public async findById(id : string) : Promise<UserSession | null> {
-		throw new Error("Not implemented")
-	}
-
-
-	public async update(entity : UserSession) : Promise<UserSession> {
-		throw new Error("Not implemented")
-	}
-
-	getByJti(jti : string) : Promise<UserSession> {
-		throw new Error("Not implemented")
+		return {
+			module   : SentryModuleV2,
+			providers: [
+				{
+					provide : SENTRY_MODULE_OPTIONS,
+					useValue: options,
+				},
+				SentryServiceV2,
+				{
+					provide : APP_INTERCEPTOR,
+					useClass: SentryInterceptorV2,
+				},
+			],
+			exports  : [SentryServiceV2],
+		};
 	}
 }

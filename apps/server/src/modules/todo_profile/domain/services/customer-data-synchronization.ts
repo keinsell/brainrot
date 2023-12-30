@@ -4,9 +4,9 @@ import {DataSource}      from "../../../../common/libraries/data-synchronization
 import {
 	DataSynchronizationManager,
 }                        from "../../../../common/libraries/data-synchronization/data-synchronization-manager.js"
-import {PrismaService}   from "../../../../common/modules/storage/prisma/services/prisma-service.js"
 import {User}            from "../../../../vendor/prisma/index.js"
 import {isNil}           from "../../../../utilities/type-utils/index.js";
+import {PrismaService}   from "../../../../common/modules/resources/prisma/services/prisma-service.js";
 
 
 
