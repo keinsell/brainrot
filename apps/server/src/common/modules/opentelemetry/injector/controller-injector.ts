@@ -55,7 +55,7 @@ export class ControllerInjector
 					this.isPath(controller.metatype.prototype[key])
 				)
 				{
-					const traceName = `Controller->${controller.name}.${controller.metatype.prototype[key].name}`;
+					const traceName = `Controller::${controller.name}::${controller.metatype.prototype[key].name}`;
 					const method    = this.wrap(
 						controller.metatype.prototype[key],
 						traceName,
@@ -67,8 +67,8 @@ export class ControllerInjector
 					this.reDecorate(controller.metatype.prototype[key], method);
 
 					controller.metatype.prototype[key] = method;
-					this.loggerService.log(
-						`Mapped ${controller.name}.${key}`,
+					this.loggerService.verbose(
+						`Injected into... ${controller.name}.${key}`,
 						this.constructor.name,
 					);
 				}

@@ -68,15 +68,13 @@ export function initializeSentry() : void {
 		enableTracing      : true,
 		sampleRate         : 1.0,
 		enabled            : true,
-		debug              : true,
+		debug              : env.isDev,
+		profilesSampler    : () => 1.0,
 		instrumenter       : "otel",
 		integrations       : [
-			new Sentry.Integrations.Console(),
-			new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
-			new Sentry.Integrations.Context(),
-			new Sentry.Integrations.Prisma(),
 			new ProfilingIntegration(),
 		],
+		attachStacktrace   : true,
 	})
 
 	new Logger().log(`Sentry initialized!`);

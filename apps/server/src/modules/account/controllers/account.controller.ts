@@ -1,13 +1,15 @@
-import {Body, Controller, Patch, Post, UseGuards} from "@nestjs/common"
-import {ApiOkResponse, ApiOperation}              from "@nestjs/swagger"
-import {readFileSync}                             from 'node:fs'
-import {dirname}                                  from "path"
-import {fileURLToPath}                            from "url"
-import {JwtAuthorizationGuard}                    from "../../authentication/guards/jwt-authorization-guard.js"
-import {RegisterAccount2, RegisterAccountDtp}     from "../commands/register-account-dtp.js"
-import {AccountService}                           from "../services/account-service.js"
-import {AccountViewModel}                         from "../view-model/account-view-model.js"
-import typia                                      from "typia";
+import {Body, Controller, Patch, Post, Req, UseGuards} from "@nestjs/common"
+import {ApiOkResponse, ApiOperation}                   from "@nestjs/swagger"
+import {readFileSync}                                  from 'node:fs'
+import {dirname}                                       from "path"
+import {fileURLToPath}                                 from "url"
+import {JwtAuthorizationGuard}                         from "../../authentication/guards/jwt-authorization-guard.js"
+import {RegisterAccount2, RegisterAccountDtp}          from "../commands/register-account-dtp.js"
+import {AccountService}                                from "../services/account-service.js"
+import {AccountViewModel}                              from "../view-model/account-view-model.js"
+import typia                                           from "typia";
+import Sentry                                          from "@sentry/node";
+import {Request}                                       from "express";
 
 
 
@@ -42,14 +44,27 @@ export class AccountController {
 		description: "Account was successfully registered in system.",
 	})
 	@Post()
-	async register(@Body() registerAccountBody : RegisterAccountDtp) : Promise<AccountViewModel> {
+	async register(
+		@Req() request : Request,
+		@Body() registerAccountBody : RegisterAccountDtp,
+	) : Promise<AccountViewModel> {
 		const body = typia.assert<RegisterAccount2>(registerAccountBody)
+
+		Sentry.setUser({
+			ip_address: request.ip,
+		})
 
 		// TODO: Normalize Email
 		// TODO: Normalize Username
 
 		const result = await this.service.register({
 			username: body.username, email: body.email, password: body.password,
+		})
+
+		Sentry.setUser({
+			username  : result.username,
+			email     : result.email.address,
+			ip_address: request.ip,
 		})
 
 		return {

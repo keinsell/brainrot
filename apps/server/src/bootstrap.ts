@@ -20,11 +20,11 @@ import {portAllocator}                from "./utilities/network-utils/port-alloc
 import {RoleSeeder}                   from "./modules/role/seeder/role-seeder.js";
 import Sentry                         from "@sentry/node";
 import {
-	PrismaClientExceptionFilter
-} from "./common/modules/resources/prisma/filters/prisma-client-exception-filter.js";
+	PrismaClientExceptionFilter,
+}                                     from "./common/modules/resources/prisma/filters/prisma-client-exception-filter.js";
 import {
-	executePrismaRelatedProcesses
-} from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
+	executePrismaRelatedProcesses,
+}                                     from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
 
 
 
@@ -46,11 +46,6 @@ export async function bootstrap() {
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
 
-	app.use(Sentry.Handlers.requestHandler());
-
-	// TEMPORARY: Inject SentryService logger to automatically absorb logs to sentry
-	//app.useLogger(SentryService.SentryServiceInstance())
-
 	// Build swagger documentation
 	await buildSwaggerDocumentation(app);
 	buildCompodocDocumentation()
@@ -60,27 +55,9 @@ export async function bootstrap() {
 
 	// Optional fallthrough error handler
 	app.use(function onError(err, req, res, next) {
-		// The error id is attached to `res.sentry` to be returned
-		// and optionally displayed to the user for support.
 		res.statusCode = 500;
 		res.end(res.sentry + "\n");
 	});
-
-	const transaction = Sentry.startTransaction({
-		op  : "test",
-		name: "My First Test Transaction",
-	});
-	setTimeout(() => {
-		try {
-			throw new Error("My first Sentry error!");
-		}
-		catch (e) {
-			Sentry.captureException(e);
-		}
-		finally {
-			transaction.finish();
-		}
-	}, 99);
 
 	// Listen on selected application port (with grace)
 	let openPort = await portAllocator(env.PORT);
