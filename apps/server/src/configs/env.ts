@@ -60,3 +60,5 @@ export const env = cleanEnv(process.env, {
 export function getApplicationUrl() {
 	return `${env.PROTOCOL}://${env.HOST}:${env.PORT}`;
 }
+
+export const SENTRY_DSN = "https://1b5a721ecbc90107e5f5cf5b9ff439f4@o1122681.ingest.sentry.io/4506485930917888"

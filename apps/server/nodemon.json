@@ -9,5 +9,5 @@
   "ignore": [
     "src/externals/compodoc"
   ],
-  "exec": "pnpm build:tsc && node --enable-source-maps dist/main.js"
+  "exec": "clear && pnpm build:tsc && node --enable-source-maps dist/main.js"
 }

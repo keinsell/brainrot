@@ -74,7 +74,12 @@ export const OpenTelemetryModuleDefaultConfig = {
 		lib: '@mph/opentelemetry',
 	}),
 	instrumentations   : [
-		getNodeAutoInstrumentations(),
+		getNodeAutoInstrumentations({
+			// Disable fs instrumentation
+			"@opentelemetry/instrumentation-fs": {
+				enabled: false,
+			},
+		}),
 		new PrismaInstrumentation(),
 	],
 	traceExporter      : new NestLoggerSpanExporter(),

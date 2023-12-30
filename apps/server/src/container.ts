@@ -12,20 +12,16 @@ import Sentry                                                    from "@sentry/n
 import {
 	providePrismaClientExceptionFilter,
 }                                                                from "./common/modules/resources/prisma/filters/provide-prisma-client-exception-filter.js";
-import {
-	SentryModuleV2,
-}                                                                from "./common/modules/resources/sentry-v2/sentry-module-v2.js";
-import {env}                                                     from "./configs/env.js";
 
 
 
 @Module({
 	imports    : [
-		SentryModuleV2.forRoot({
-			dsn             : env.SENTRY_DSN,
-			tracesSampleRate: 1.0,
-			debug           : false,
-		}),
+		// SentryModuleV2.forRoot({
+		// 	dsn             : SENTRY_DSN,
+		// 	tracesSampleRate: 1.0,
+		// 	debug           : false,
+		// }),
 		IdentityAndAccessModule,
 		SharedModule,
 		ProductModule,
