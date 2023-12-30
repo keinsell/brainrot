@@ -9,17 +9,19 @@ import {SentryInterceptor} from "./sentry-interceptor.js"
 
 
 @Injectable()
-export class GraphqlInterceptor extends SentryInterceptor {
-	protected captureException(context: ExecutionContext, scope: Scope, exception: unknown) {
+export class GraphqlInterceptor
+	extends SentryInterceptor {
+	protected captureException(context : ExecutionContext, scope : Scope, exception : unknown) {
 		if (context.getType<GqlContextType>() === 'graphql') {
 			this.captureGraphqlException(scope, GqlExecutionContext.create(context), exception);
-		} else {
+		}
+		else {
 			super.captureException(context, scope, exception);
 		}
 	}
 
 
-	private captureGraphqlException(scope: Scope, gqlContext: GqlExecutionContext, exception: unknown): void {
+	private captureGraphqlException(scope : Scope, gqlContext : GqlExecutionContext, exception : unknown) : void {
 		const info    = gqlContext.getInfo();
 		const context = gqlContext.getContext();
 

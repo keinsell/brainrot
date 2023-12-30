@@ -77,7 +77,7 @@ export class SentryModule {
 		const inject = [
 			options.useClass || options.useExisting,
 		] as any;
-		
+
 		return {
 			provide   : SENTRY_MODULE_OPTIONS,
 			useFactory: async (optionsFactory : SentryOptionsFactory) => await optionsFactory.createSentryModuleOptions(),
