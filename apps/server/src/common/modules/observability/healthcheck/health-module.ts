@@ -1,18 +1,19 @@
 import {Module}           from "@nestjs/common"
 import {TerminusModule}   from "@nestjs/terminus"
-import {DatabaseModule}   from "../../storage/database/database.module.js"
+import {DatabaseModule}   from "../../database/database.module.js"
 import {HealthController} from "./health-controller.js"
 
 
 
 @Module({
-	imports:     [
-		DatabaseModule, TerminusModule.forRoot({
+	imports    : [
+		DatabaseModule,
+		TerminusModule.forRoot({
 			errorLogStyle: 'pretty',
-			logger:        false,
+			logger       : false,
 		}),
 	],
 	controllers: [HealthController],
-	exports:     [TerminusModule],
+	exports    : [TerminusModule],
 })
 export class HealthModule {}

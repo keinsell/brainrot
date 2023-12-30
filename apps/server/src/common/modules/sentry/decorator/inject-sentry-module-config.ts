@@ -1,4 +1,4 @@
-import {makeInjectableDecorator} from "../../integrations/stripe/decorators/make-injectable-decorator.js"
+import {makeInjectableDecorator} from "../../resources/stripe/decorators/make-injectable-decorator.js"
 import {SENTRY_MODULE_OPTIONS}   from "../constant/SENTRY_MODULE_OPTIONS.js"
 
 

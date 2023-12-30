@@ -37,6 +37,20 @@ import {OpenTelemetryModuleDefaultConfig} from "./config/opentelemetry-module-de
 import {DecoratorInjector}                from "./injector/decorator-injector.js";
 import {TraceService}                     from "./service/trace-service.js";
 import {OPEN_TELEMETRY_SDK_INJECTORS}     from "./constant/OPEN_TELEMETRY_SDK_INJECTORS.js";
+import {
+	getClient,
+	SentryPropagator,
+	SentrySampler,
+	SentrySpanProcessor,
+	setOpenTelemetryContextAsyncContextStrategy,
+	setupEventContextTrace,
+	setupGlobalHub,
+	wrapContextManagerClass,
+}                                         from "@sentry/opentelemetry";
+import {AsyncLocalStorageContextManager}  from "@opentelemetry/context-async-hooks";
+import otelApi                            from "@opentelemetry/api";
+import Sentry                             from "@sentry/node";
+import {env}                              from "../../../configs/env.js";
 
 
 
@@ -189,8 +203,58 @@ export class OpenTelemetryModule {
 		return {
 			provide   : OPEN_TELEMETRY_SDK,
 			useFactory: async () => {
+
+				setupGlobalHub();
+
+				Sentry.init({
+					dsn                : env.SENTRY_DSN,
+					autoSessionTracking: true,
+					tracesSampleRate   : 1.0,
+					profilesSampleRate : 1.0,
+					enableTracing      : true,
+					sampleRate         : 1.0,
+					enabled            : true,
+					debug              : true,
+					instrumenter       : "otel",
+					integrations       : [
+						// new Sentry.Integrations.Console(),
+						// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
+						// new Sentry.Integrations.Context(),
+						// new Sentry.Integrations.Prisma(),
+						// new ProfilingIntegration(),
+					],
+				})
+
+				const sentryClient = getClient();
+				setupEventContextTrace(sentryClient!);
+
+
+				const SentryContextManager = wrapContextManagerClass(
+					AsyncLocalStorageContextManager,
+				);
+
+
+
+				configuration = {
+					...configuration,
+					// traceExporter    : new OTLPTraceExporter(),
+					spanProcessor    : new SentrySpanProcessor(),
+					contextManager   : new SentryContextManager(),
+					textMapPropagator: new SentryPropagator(),
+					sampler          : new SentrySampler(sentryClient!),
+				}
+
+
 				const sdk = new NodeSDK(configuration);
-				await sdk.start();
+
+				// Ensure OpenTelemetry Context & Sentry Hub/Scope is synced
+				setOpenTelemetryContextAsyncContextStrategy();
+
+
+				otelApi.propagation.setGlobalPropagator(new SentryPropagator());
+
+				sdk.start();
+
 				return sdk;
 			},
 		};

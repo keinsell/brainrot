@@ -3,7 +3,7 @@ import {EventBusModule}                from "../../common/modules/messaging/even
 import {CacheManagerModule}            from "../../common/libraries/cache-manager/cache-manager-module.js"
 import {PwnprocModule}                 from "../../common/libraries/pwnproc/pwnproc-module.js"
 import {UnihashModule}                 from "../../common/libraries/unihash/index.js"
-import {DatabaseModule}                from "../../common/modules/storage/database/database.module.js"
+import {DatabaseModule}                from "../../common/modules/database/database.module.js"
 import {AccountRecoveryController}     from "./controllers/account-recovery.controller.js"
 import {AccountVerificationController} from "./controllers/account-verification.controller.js"
 import {AccountController}             from "./controllers/account.controller.js"

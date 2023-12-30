@@ -146,7 +146,8 @@ export class StripeModule
 			}) => (
 				{
 					key    : eventType,
-					handler: this.externalContextCreator.create(discoveredMethod.parentClass.instance,
+					handler: this.externalContextCreator.create(
+						discoveredMethod.parentClass.instance,
 						discoveredMethod.handler,
 						discoveredMethod.methodName,
 						undefined, // metadataKey

@@ -5,6 +5,7 @@ import {Client, ClientOptions}                                    from '@sentry/
 import {SENTRY_MODULE_OPTIONS}                                    from "../constant/SENTRY_MODULE_OPTIONS.js"
 import {SentryModuleOptions}                                      from "../interface/sentry-module-options.js"
 import {Severity}                                                 from "../structure/severity.js"
+import {getClient, setupEventContextTrace, setupGlobalHub}        from "@sentry/opentelemetry";
 
 
 
@@ -28,6 +29,9 @@ export class SentryService
 			      integrations = [],
 			      ...sentryOptions
 		      } = opts;
+
+		setupGlobalHub();
+
 		Sentry.init({
 			...sentryOptions,
 			integrations: [
@@ -46,6 +50,9 @@ export class SentryService
 				...integrations,
 			],
 		});
+
+		const sentryClient = getClient();
+		setupEventContextTrace(sentryClient!);
 	}
 
 

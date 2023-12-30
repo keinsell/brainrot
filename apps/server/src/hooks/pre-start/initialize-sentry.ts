@@ -26,9 +26,27 @@
 
 
 import * as Sentry from "@sentry/node";
+import {env}       from "../../configs/env.js";
 
 
 
 export function initializeSentry() : void {
-	Sentry.init({})
+	Sentry.init({
+		dsn                : env.SENTRY_DSN,
+		autoSessionTracking: true,
+		tracesSampleRate   : 1.0,
+		profilesSampleRate : 1.0,
+		enableTracing      : true,
+		sampleRate         : 1.0,
+		enabled            : true,
+		debug              : true,
+		instrumenter       : "otel",
+		integrations       : [
+			// new Sentry.Integrations.Console(),
+			// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
+			// new Sentry.Integrations.Context(),
+			// new Sentry.Integrations.Prisma(),
+			// new ProfilingIntegration(),
+		],
+	})
 }

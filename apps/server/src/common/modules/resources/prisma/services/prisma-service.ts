@@ -3,27 +3,33 @@ import delay                                                                 fro
 import ms                                                                    from "ms"
 import {StartedTestContainer}                                                from "testcontainers"
 import {
-	Prisma, PrismaClient,
+	Prisma,
+	PrismaClient,
 }                                                                            from "../../../../../vendor/prisma/index.js"
 import {ApplicationState}                                                    from "../../../../state.js"
-import {PRISMA_SERVICE_OPTIONS}                                              from "../constants/PRISMA_SERVICE_OPTIONS.js"
-import {PrismaServiceOptions}                                                from "../structures/prisma-service-options.js"
+import {
+	PRISMA_SERVICE_OPTIONS,
+}                                                                            from "../constants/PRISMA_SERVICE_OPTIONS.js"
+import {
+	PrismaServiceOptions,
+}                                                                            from "../structures/prisma-service-options.js"
 
 
 
 @Injectable()
-export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'query' | 'info' | 'warn' | 'error'>
+export class PrismaService
+	extends PrismaClient<Prisma.PrismaClientOptions, 'query' | 'info' | 'warn' | 'error'>
 	implements OnModuleInit, OnModuleDestroy {
-	private logger: Logger = new Logger("prisma")
-	private _testcontainer: StartedTestContainer | undefined
+	private logger : Logger = new Logger("prisma")
+	private _testcontainer : StartedTestContainer | undefined
 
 
-	constructor(@Optional() @Inject(PRISMA_SERVICE_OPTIONS) private readonly prismaServiceOptions: PrismaServiceOptions = {}) {
+	constructor(@Optional() @Inject(PRISMA_SERVICE_OPTIONS) private readonly prismaServiceOptions : PrismaServiceOptions = {}) {
 		super({
 			...prismaServiceOptions.prismaOptions,
-			log:         [
+			log        : [
 				{
-					emit:  'event',
+					emit: 'event',
 					level: 'query',
 				},
 			],
@@ -83,7 +89,8 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
 				await this.$connect();
 				this.logger.log("Connection with a database established.");
 				ApplicationState.isDatabaseConnected = true;
-			} catch (error) {
+			}
+			catch (error) {
 				this.logger.error(`Server failed to connect to database, retrying in ${ms(connectionRetryDelay)}...`)
 				this.logger.error(`${JSON.stringify(error)}`);
 				console.error(error)
@@ -115,41 +122,17 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
 	private async startTestContainer() {
 		// If connection wasn't created after 10s in development mode start test container
 
-		//this.logger.debug("Application could not find a running database, however as application is working" + " in development mode, application will start a docker container with postgres.")
-		//
-		//// Instantiate a generic container with PostgreSQL latest version
-		//const postgres: TestContainer = new GenericContainer("postgres:latest")
-		//postgres.withEnvironment({
-		//	"POSTGRES_USER":     "test_user",
-		//	"POSTGRES_PASSWORD": "test_password",
-		//	"POSTGRES_DB":       "test_db",
-		//}).withExposedPorts(5432)
-		//
-		//this.logger.verbose(`Created Testcontainer, ${JSON.stringify(postgres)}`)
-		//
-		//this._testcontainer = await postgres.start()
-		//const logStream     = await this._testcontainer.logs()
-		//
-		//const containerLogger = new Logger(`postgres:${this._testcontainer.getId()}`)
-		//
-		//containerLogger.verbose(`Container started...`)
-		//logStream.on("data", (data) => {
-		//	const logLine = data.toString()
-		//	// Remove \n from lines
-		//	logLine.replace(/[\r\n]+/g, '');
-		//
-		//	if (logLine === "") {
-		//	} else {
-		//		containerLogger.verbose(logLine);
-		//	}
-		//});
-		//
-		//// Get the docker container port
-		//const port  = this._testcontainer.getMappedPort(5432)
-		//const host  = this._testcontainer.getHost()
-		//const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`
-		//
-		//this.logger.verbose(`Postgres container is available at: ${dbUri}`)
+		//this.logger.debug("Application could not find a running database, however as application is working" + " in
+		// development mode, application will start a docker container with postgres.")  // Instantiate a generic
+		// container with PostgreSQL latest version const postgres: TestContainer = new
+		// GenericContainer("postgres:latest") postgres.withEnvironment({ "POSTGRES_USER":     "test_user",
+		// "POSTGRES_PASSWORD": "test_password", "POSTGRES_DB":       "test_db", }).withExposedPorts(5432)
+		// this.logger.verbose(`Created Testcontainer, ${JSON.stringify(postgres)}`)  this._testcontainer = await
+		// postgres.start() const logStream     = await this._testcontainer.logs()  const containerLogger = new
+		// Logger(`postgres:${this._testcontainer.getId()}`)  containerLogger.verbose(`Container started...`)
+		// logStream.on("data", (data) => { const logLine = data.toString() // Remove \n from lines
+		// logLine.replace(/[\r\n]+/g, '');  if (logLine === "") { } else { containerLogger.verbose(logLine); } });  //
+		// Get the docker container port const port  = this._testcontainer.getMappedPort(5432) const host  = this._testcontainer.getHost() const dbUri = `postgresql://test_user:test_password@${host}:${port}/test_db`  this.logger.verbose(`Postgres container is available at: ${dbUri}`)
 
 	}
 }

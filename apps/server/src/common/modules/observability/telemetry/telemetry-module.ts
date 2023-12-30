@@ -8,25 +8,33 @@ import {PipeInjector}                     from "../../opentelemetry/injector/pip
 import {OpenTelemetryModuleDefaultConfig} from "../../opentelemetry/config/opentelemetry-module-default-config.js"
 import {LoggerInjector}                   from "../../opentelemetry/injector/logger-injector.js";
 import {GraphQLResolverInjector}          from "../../opentelemetry/injector/graphql-resolver-injector.js";
+import {SentryModule}                     from "../../sentry/sentry-module.js";
+import {env}                              from "../../../../configs/env.js";
+import Sentry                             from "@sentry/node";
+import {ProfilingIntegration}             from "@sentry/profiling-node";
 
 
 
 @Module({
 	imports: [
-		// SentryModule.forRoot({
-		// 	dsn                : env.SENTRY_DSN,
-		// 	autoSessionTracking: true,
-		// 	tracesSampleRate   : 1.0,
-		// 	profilesSampleRate : 1.0,
-		// 	enableTracing      : true,
-		// 	enabled            : true,
-		// 	instrumenter       : "sentry",
-		// 	integrations       : [
-		// 		new Sentry.Integrations.Console(),
-		// 		new Sentry.Integrations.Http({tracing: true}),
-		// 		new ProfilingIntegration(),
-		// 	],
-		// } as any),
+		SentryModule.forRoot({
+			dsn                : env.SENTRY_DSN,
+			autoSessionTracking: true,
+			tracesSampleRate   : 1.0,
+			profilesSampleRate : 1.0,
+			enableTracing      : true,
+			sampleRate         : 1.0,
+			enabled            : true,
+			debug              : true,
+			instrumenter       : "otel",
+			integrations       : [
+				new Sentry.Integrations.Console(),
+				new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
+				new Sentry.Integrations.Context(),
+				new Sentry.Integrations.Prisma(),
+				new ProfilingIntegration(),
+			],
+		}),
 		OpenTelemetryModule.forRoot({
 			traceAutoInjectors : [
 				ControllerInjector,

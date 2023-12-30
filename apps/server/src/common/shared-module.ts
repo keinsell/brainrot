@@ -6,7 +6,7 @@ import {AsyncLocalStorageModule}        from "./modules/environment/local-storag
 import {ContinuationLocalStorageModule} from "./modules/environment/local-storage/continuation-local-storage-module.js"
 import {HealthModule}                   from "./modules/observability/healthcheck/health-module.js"
 import {TelemetryModule}                from "./modules/observability/telemetry/telemetry-module.js"
-import {DatabaseModule}                 from "./modules/storage/database/database.module.js"
+import {DatabaseModule}                 from "./modules/database/database.module.js"
 
 
 

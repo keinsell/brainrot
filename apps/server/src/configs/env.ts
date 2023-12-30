@@ -51,7 +51,7 @@ export const env = cleanEnv(process.env, {
 	}),
 	SENTRY_DSN         : str({
 		default   : null as any,
-		devDefault: "https://e1b2f55e80f584c0a872df89735d270b@o1122681.ingest.sentry.io/4506434737012736",
+		devDefault: "https://722df91ab634a7aa99ac7381acd8cf92@o1122681.ingest.sentry.io/4506475919310848",
 		desc      : "Defines the Sentry DSN. Default is empty.",
 	}),
 });

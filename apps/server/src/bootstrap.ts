@@ -6,7 +6,7 @@ import process                         from "node:process"
 import {seeder}                        from "./common/libraries/seeder/seeder.js"
 import {buildCompodocDocumentation}    from "./common/modules/documentation/compodoc/compodoc.js"
 import {buildSwaggerDocumentation}     from "./common/modules/documentation/swagger/swagger.js"
-import {DatabaseModule}                from "./common/modules/storage/database/database.module.js"
+import {DatabaseModule}                from "./common/modules/database/database.module.js"
 import {PrismaClientExceptionFilter}   from "./common/modules/storage/prisma/filters/prisma-client-exception-filter.js"
 import {executePrismaRelatedProcesses} from "./common/modules/storage/prisma/utils/execute-prisma-related-processes.js"
 import {ApplicationConfiguration}      from "./configs/application-configuration.js"
@@ -20,6 +20,7 @@ import {ProductSeeder}                 from "./modules/todo_product/product-seed
 import {ProfileSeeder}                 from "./modules/todo_profile/infrastructure/profile-seeder.js"
 import {portAllocator}                 from "./utilities/network-utils/port-allocator.js"
 import {RoleSeeder}                    from "./modules/role/seeder/role-seeder.js";
+import Sentry                          from "@sentry/node";
 
 
 
@@ -41,12 +42,41 @@ export async function bootstrap() {
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
 
+	app.use(Sentry.Handlers.requestHandler());
+
 	// TEMPORARY: Inject SentryService logger to automatically absorb logs to sentry
 	//app.useLogger(SentryService.SentryServiceInstance())
 
 	// Build swagger documentation
 	await buildSwaggerDocumentation(app);
 	buildCompodocDocumentation()
+
+	// The error handler must be before any other error middleware and after all controllers
+	app.use(Sentry.Handlers.errorHandler());
+
+	// Optional fallthrough error handler
+	app.use(function onError(err, req, res, next) {
+		// The error id is attached to `res.sentry` to be returned
+		// and optionally displayed to the user for support.
+		res.statusCode = 500;
+		res.end(res.sentry + "\n");
+	});
+
+	const transaction = Sentry.startTransaction({
+		op  : "test",
+		name: "My First Test Transaction",
+	});
+	setTimeout(() => {
+		try {
+			throw new Error("My first Sentry error!");
+		}
+		catch (e) {
+			Sentry.captureException(e);
+		}
+		finally {
+			transaction.finish();
+		}
+	}, 99);
 
 	// Listen on selected application port (with grace)
 	let openPort = await portAllocator(env.PORT);
@@ -59,8 +89,8 @@ export async function bootstrap() {
 	}
 
 	let isApplicationListening = false;
-	let retryDelay = ms("5s");
-	let retryCount = 3
+	let retryDelay             = ms("5s");
+	let retryCount             = 3
 
 	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPort.port}`
 
@@ -87,7 +117,7 @@ export async function bootstrap() {
 				e as unknown as any
 			).message}`);
 			await delay(retryDelay);
-			openPort = await portAllocator(env.PORT as number);
+			openPort   = await portAllocator(env.PORT as number);
 			retryDelay = retryDelay * 2;
 		}
 
@@ -98,6 +128,8 @@ export async function bootstrap() {
 
 		retryCount--;
 	}
+
+
 
 	// If application is running in development mode, try to seed the database
 	if (env.isDev && StaticFeatureFlags.shouldRunSeeder) {

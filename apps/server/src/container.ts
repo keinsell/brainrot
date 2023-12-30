@@ -25,6 +25,8 @@ import {RegionModule}            from "./modules/todo_regions/region-module.js"
 		}),
 	],
 	controllers: [],
-	providers  : [providePrismaClientExceptionFilter()],
+	providers  : [
+		providePrismaClientExceptionFilter(),
+	],
 })
 export class Container {}

@@ -1,7 +1,7 @@
 import {Module}                              from "@nestjs/common"
 import {JwtModule}                           from "@nestjs/jwt"
 import {PassportModule}                      from "@nestjs/passport"
-import {DatabaseModule}                      from "../../common/modules/storage/database/database.module.js"
+import {DatabaseModule}                      from "../../common/modules/database/database.module.js"
 import {authorizationConfiguration}          from "../../configs/authorization-configuration.js"
 import {AccountModule}                       from "../account/account.module.js"
 import {

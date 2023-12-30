@@ -47,7 +47,6 @@ import {PrismaInstrumentation}           from "@prisma/instrumentation";
 export interface OpenTelemetryModuleConfig
 	extends Partial<NodeSDKConfiguration> {
 	traceAutoInjectors? : Provider<AutoTraceInjector>[];
-	useSentry? : boolean;
 }
 
 
