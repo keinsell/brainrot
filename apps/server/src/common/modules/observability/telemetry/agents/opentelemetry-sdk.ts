@@ -3,9 +3,6 @@ import {
 	getNodeAutoInstrumentations,
 }                                                           from "@opentelemetry/auto-instrumentations-node"
 import {
-	AsyncLocalStorageContextManager,
-}                                                           from "@opentelemetry/context-async-hooks"
-import {
 	JaegerExporter,
 }                                                           from "@opentelemetry/exporter-jaeger"
 import {envDetector, osDetector, processDetector, Resource} from "@opentelemetry/resources"
@@ -19,17 +16,6 @@ import {
 	SemanticResourceAttributes,
 }                                                           from "@opentelemetry/semantic-conventions"
 import {PrismaInstrumentation}                              from "@prisma/instrumentation"
-import Sentry                                               from "@sentry/node"
-import {
-	getClient,
-	SentryPropagator,
-	SentrySampler,
-	SentrySpanProcessor,
-	setOpenTelemetryContextAsyncContextStrategy,
-	setupEventContextTrace,
-	setupGlobalHub,
-	wrapContextManagerClass,
-}                                                           from "@sentry/opentelemetry"
 import process                                              from "node:process"
 import signale                                              from "signale"
 import {
@@ -50,19 +36,10 @@ export function experimentalOpenTelemetryTracker() {
 		endpoint: "http://localhost:14268/api/traces",
 	});
 
-	setupGlobalHub();
+	// const client = getClient();
+	// setupEventContextTrace(client as any);
 
-	// Make sure to call `Sentry.init` BEFORE initializing the OpenTelemetry SDK
-	Sentry.init({
-		dsn             : "https://e1b2f55e80f584c0a872df89735d270b@o1122681.ingest.sentry.io/4506434737012736",
-		tracesSampleRate: 1.0, // set the instrumenter to use OpenTelemetry instead of Sentry
-		instrumenter    : "otel", // ...
-	});
-
-	const client = getClient();
-	setupEventContextTrace(client as any);
-
-	const SentryContextManager = wrapContextManagerClass(AsyncLocalStorageContextManager);
+	// const SentryContextManager = wrapContextManagerClass(AsyncLocalStorageContextManager);
 
 	const OpenTelemetrySDK = new NodeSDK({
 		resourceDetectors: [
@@ -81,14 +58,14 @@ export function experimentalOpenTelemetryTracker() {
 			new PrismaInstrumentation() as any,
 		],
 		traceExporter    : jaegerExporter as any,
-		spanProcessor    : new SentrySpanProcessor(),
-		textMapPropagator: new SentryPropagator(),
-		contextManager   : new SentryContextManager(),
-		sampler          : new SentrySampler(client as any),
+		// spanProcessor    : new SentrySpanProcessor(),
+		// textMapPropagator: new SentryPropagator(),
+		// contextManager   : new SentryContextManager(),
+		// sampler          : new SentrySampler(client as any),
 
 	});
 
-	setOpenTelemetryContextAsyncContextStrategy();
+	// setOpenTelemetryContextAsyncContextStrategy();
 
 	OpenTelemetrySDK.start();
 

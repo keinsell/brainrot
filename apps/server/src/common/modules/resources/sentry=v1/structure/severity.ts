@@ -10,11 +10,11 @@ type LegacySeverityLevels = 'Debug' | 'Error' | 'Fatal' | 'Info' | 'Log' | 'Warn
  * and to avoid dealing with string constants everywhere, this emulates the enum but
  * in a way that is compatible with Sentry 7 without requiring a cast.
  */
-export const Severity: Record<LegacySeverityLevels, SeverityLevel> = {
-	Fatal:   'fatal',
-	Error:   'error',
+export const Severity : Record<LegacySeverityLevels, SeverityLevel> = {
+	Fatal  : 'fatal',
+	Error  : 'error',
 	Warning: 'warning',
-	Log:     'log',
-	Info:    'info',
-	Debug:   'debug',
+	Log    : 'log',
+	Info   : 'info',
+	Debug  : 'debug',
 };

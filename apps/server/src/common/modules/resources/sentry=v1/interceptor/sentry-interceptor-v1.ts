@@ -23,50 +23,23 @@
  *
  */
 
-import {Injectable}        from "@nestjs/common"
-import {UserSession}       from "../entities/user-session.js"
-import {SessionRepository} from "./session-repository.js";
-import {PrismaService}     from "../../../common/modules/resources/prisma/services/prisma-service.js";
+import {CallHandler, ExecutionContext, Injectable, NestInterceptor} from '@nestjs/common';
+import * as Sentry                                                  from '@sentry/node';
+import {Observable}                                                 from 'rxjs';
+import {tap}                                                        from 'rxjs/operators';
 
 
 
 @Injectable()
-export class PrismaSessionRepository
-	extends SessionRepository {
-	constructor(private prisma : PrismaService) {super()}
-
-
-	public create(entity : UserSession) : Promise<UserSession> {
-		throw new Error("Not implemented")
-	}
-
-
-	public delete(entity : UserSession) : Promise<void> {
-		throw new Error("Not implemented")
-	}
-
-
-	public async exists(entity : UserSession) : Promise<boolean> {
-		const count = await this.prisma.session.count({
-			where: {
-				id: entity.id,
-			},
-		})
-
-		return count > 0
-	}
-
-
-	public async findById(id : string) : Promise<UserSession | null> {
-		throw new Error("Not implemented")
-	}
-
-
-	public async update(entity : UserSession) : Promise<UserSession> {
-		throw new Error("Not implemented")
-	}
-
-	getByJti(jti : string) : Promise<UserSession> {
-		throw new Error("Not implemented")
+export class SentryInterceptor
+	implements NestInterceptor {
+	intercept(context : ExecutionContext, next : CallHandler) : Observable<any> {
+		return next.handle().pipe(
+			tap({
+				error: (exception) => {
+					Sentry.captureException(exception);
+				},
+			}),
+		);
 	}
 }

@@ -5,9 +5,9 @@ import {SentryService}       from "../service/sentry-service.js"
 
 
 
-export function createSentryProviders(options: SentryModuleOptions): Provider {
+export function createSentryProviders(options : SentryModuleOptions) : Provider {
 	return {
-		provide:  SENTRY_TOKEN,
+		provide : SENTRY_TOKEN,
 		useValue: new SentryService(options),
 	};
 }

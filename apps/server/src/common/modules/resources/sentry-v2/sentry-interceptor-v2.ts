@@ -23,28 +23,37 @@
  *
  */
 
-import {CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor} from "@nestjs/common";
-import {Observable}                                                         from "rxjs";
-import {Reflector}                                                          from "@nestjs/core";
-import {
-	PrismaService
-}                                                                           from "../../../common/modules/resources/prisma/services/prisma-service.js";
+import {CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope} from '@nestjs/common';
+import {catchError, finalize, Observable, throwError}                      from 'rxjs';
+import * as Sentry                                                         from '@sentry/node';
+import {SentryServiceV2}                                                   from "./sentry-service-v2.js";
 
 
 
-@Injectable()
-export class AuditInterceptor
+/**
+ * We must be in Request scope as we inject SentryService
+ */
+@Injectable({scope: Scope.REQUEST})
+export class SentryInterceptorV2
 	implements NestInterceptor {
-	private logger = new Logger("interceptor:audit")
+	constructor(private sentryService : SentryServiceV2) {}
 
-	constructor(
-		private readonly reflector : Reflector,
-		private prisma : PrismaService,
-	)
-	{}
+	intercept(context : ExecutionContext, next : CallHandler) : Observable<any> {
+		// start a child span for performance tracing
+		const span = this.sentryService.startChild({op: `route handler`});
 
-	intercept(context : ExecutionContext, next : CallHandler<any>) : Observable<any> | Promise<Observable<any>> {
-		// const auditLog = this.reflector.get<string>("XYZ", context.getHandler())
-		return next.handle()
+		return next.handle().pipe(
+			catchError((error) => {
+				// capture the error, you can filter out some errors here
+				Sentry.captureException(error, this.sentryService.span.getTraceContext() as any);
+
+				// throw again the error
+				return throwError(() => error);
+			}),
+			finalize(() => {
+				span.finish();
+				this.sentryService.span.finish();
+			}),
+		);
 	}
 }

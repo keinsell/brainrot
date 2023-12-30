@@ -9,7 +9,7 @@ import {
 	PrismaHealthIndicator,
 }                          from "@nestjs/terminus";
 import {HealthCheckResult} from "@nestjs/terminus/dist/health-check/health-check-result.interface.js"
-import {PrismaService}     from "../../storage/prisma/services/prisma-service.js"
+import {PrismaService}     from "../../resources/prisma/services/prisma-service.js";
 
 
 

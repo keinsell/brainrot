@@ -1,3 +1,3 @@
 export interface SentryFilterFunction {
-	(exception: unknown): boolean;
+	(exception : unknown) : boolean;
 }

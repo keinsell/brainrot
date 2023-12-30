@@ -26,7 +26,6 @@
 import {tags}             from "typia";
 import {CreateAccountDto} from "../dtos/create-account-dto.js";
 import {PickType}         from "@nestjs/swagger";
-import {ApiModel}         from "../../../utilities/docs-utils/swagger-api-model.js";
 
 
 
@@ -37,9 +36,9 @@ export interface RegisterAccount2 {
 }
 
 
-@ApiModel({
-	name: "RegisterAccount",
-})
+// @ApiModel({
+// 	name: "RegisterAccount",
+// })
 export class RegisterAccountDtp
 	extends PickType(CreateAccountDto, [
 		"email",

@@ -3,8 +3,8 @@ import {Injectable, Logger} from "@nestjs/common"
 import {Address}            from "../../../common/libraries/address/address.js"
 import {CountryCode}        from "../../../common/libraries/address/country-code.js"
 import {SeederBase}         from "../../../common/libraries/seeder/seeder-base.js"
-import {PrismaService}      from "../../../common/modules/storage/prisma/services/prisma-service.js"
 import {Prisma}             from "../../../vendor/prisma/index.js"
+import {PrismaService}      from "../../../common/modules/resources/prisma/services/prisma-service.js";
 import UserCreateInput = Prisma.UserCreateInput;
 
 

@@ -8,21 +8,25 @@ import type {StripeModuleConfig}                      from "../interfaces/stripe
 
 @Injectable()
 export class StripePayloadService {
-	private readonly stripeWebhookSecret: string;
-	private readonly stripeConnectWebhookSecret: string;
+	private readonly stripeWebhookSecret : string;
+	private readonly stripeConnectWebhookSecret : string;
 
 
-	constructor(@InjectStripeModuleConfig() private readonly config: StripeModuleConfig, @InjectStripeClient() private readonly stripeClient: Stripe) {
+	constructor(
+		@InjectStripeModuleConfig() private readonly config : StripeModuleConfig,
+		@InjectStripeClient() private readonly stripeClient : Stripe,
+	)
+	{
 		this.stripeWebhookSecret        = this.config.webhookConfig?.stripeSecrets.account || '';
 		this.stripeConnectWebhookSecret = this.config.webhookConfig?.stripeSecrets.connect || '';
 	}
 
 
-	tryHydratePayload(signature: string, payload: Buffer): { type: string } {
+	tryHydratePayload(signature : string, payload : Buffer) : { type : string } {
 		const decodedPayload = JSON.parse(Buffer.isBuffer(payload) ? payload.toString('utf8') : payload);
 
 		return this.stripeClient.webhooks.constructEvent(payload, signature, decodedPayload.account ?
-			this.stripeConnectWebhookSecret :
-			this.stripeWebhookSecret);
+		                                                                     this.stripeConnectWebhookSecret :
+		                                                                     this.stripeWebhookSecret);
 	}
 }

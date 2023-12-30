@@ -25,28 +25,57 @@
 
 
 
-import * as Sentry from "@sentry/node";
-import {env}       from "../../configs/env.js";
+import Sentry                 from "@sentry/node";
+import {env, SENTRY_DSN}      from "../../configs/env.js";
+import {Logger}               from "@nestjs/common";
+import {setupGlobalHub}       from "@sentry/opentelemetry";
+import {ProfilingIntegration} from "@sentry/profiling-node";
 
 
 
 export function initializeSentry() : void {
+	new Logger().log(`Initializing Sentry... ${env.SENTRY_DSN}`);
+
+	// Turn ON if integrating with OTEL
+	setupGlobalHub();
+
+	// Non-OTEL Configuration
+	// Sentry.init({
+	// 	dsn                : SENTRY_DSN,
+	// 	autoSessionTracking: true,
+	// 	tracesSampleRate   : 1.0,
+	// 	profilesSampleRate : 1.0,
+	// 	enableTracing      : true,
+	// 	sampleRate         : 1.0,
+	// 	enabled            : true,
+	// 	debug              : true,
+	// 	// instrumenter       : "otel",
+	// 	// integrations       : [
+	// 	// 	// new Sentry.Integrations.Console(),
+	// 	// 	// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
+	// 	// 	// new Sentry.Integrations.Context(),
+	// 	// 	// new Sentry.Integrations.Prisma(),
+	// 	// 	// new ProfilingIntegration(),
+	// 	// ],
+	// })
+
+	// OTEL Configuration
 	Sentry.init({
-		dsn                : env.SENTRY_DSN,
+		dsn                : SENTRY_DSN,
 		autoSessionTracking: true,
 		tracesSampleRate   : 1.0,
 		profilesSampleRate : 1.0,
 		enableTracing      : true,
 		sampleRate         : 1.0,
 		enabled            : true,
-		debug              : true,
+		debug              : env.isDev,
+		profilesSampler    : () => 1.0,
 		instrumenter       : "otel",
 		integrations       : [
-			// new Sentry.Integrations.Console(),
-			// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
-			// new Sentry.Integrations.Context(),
-			// new Sentry.Integrations.Prisma(),
-			// new ProfilingIntegration(),
+			new ProfilingIntegration(),
 		],
+		attachStacktrace   : true,
 	})
+
+	new Logger().log(`Sentry initialized!`);
 }

@@ -1,25 +1,26 @@
 import {faker}              from "@faker-js/faker"
 import {Injectable, Logger} from "@nestjs/common"
 import {SeederBase}         from "../../common/libraries/seeder/seeder-base.js"
-import {PrismaService}      from "../../common/modules/storage/prisma/services/prisma-service.js"
 import type {Prisma}        from "../../vendor/prisma/index.js"
+import {PrismaService}      from "../../common/modules/resources/prisma/services/prisma-service.js";
 
 
 
 @Injectable()
-export class ProductSeeder extends SeederBase<Prisma.ProductCreateInput> {
+export class ProductSeeder
+	extends SeederBase<Prisma.ProductCreateInput> {
 
-	constructor(private prismaService: PrismaService) {
+	constructor(private prismaService : PrismaService) {
 		super(new Logger("seeder:product"))
 	}
 
 
-	public async count(): Promise<number> {
+	public async count() : Promise<number> {
 		return this.prismaService.product.count()
 	}
 
 
-	public async exists(input: Prisma.ProductCreateInput): Promise<boolean> {
+	public async exists(input : Prisma.ProductCreateInput) : Promise<boolean> {
 		const exists = await this.prismaService.product.findFirst({
 			where: {
 				name: input.name,
@@ -30,20 +31,20 @@ export class ProductSeeder extends SeederBase<Prisma.ProductCreateInput> {
 	}
 
 
-	public async fabricate(): Promise<Prisma.ProductCreateInput> {
+	public async fabricate() : Promise<Prisma.ProductCreateInput> {
 		return {
-			name:      faker.commerce.productName(),
-			price:     faker.number.int({
+			name     : faker.commerce.productName(),
+			price    : faker.number.int({
 				min: 1,
 				max: 1_000_000,
 			}),
-			currency:  "PLN",
+			currency : "PLN",
 			createdAt: faker.date.recent(),
 		}
 	}
 
 
-	public save(input: Prisma.ProductCreateInput): Promise<unknown> {
+	public save(input : Prisma.ProductCreateInput) : Promise<unknown> {
 		return this.prismaService.product.create({
 			data: input,
 		})

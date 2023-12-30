@@ -1,14 +1,13 @@
 import {faker}          from "@faker-js/faker"
 import {ApiProperty}    from "@nestjs/swagger"
-import {ApiModel}       from "../../../utilities/docs-utils/swagger-api-model.js"
 import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js"
 
 
 
-@ApiModel({
-	name       : "CreateAccount",
-	description: "asdasd",
-})
+// @ApiModel({
+// 	name       : "CreateAccount",
+// 	description: "asdasd",
+// })
 export class CreateAccountDto {
 	/**
 	 * Represents the unique identifier of an entity.

@@ -5,9 +5,10 @@ import {SentryOptionsFactory}                            from "./sentry-options-
 
 
 
-export interface SentryModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-	inject?: (InjectionToken | OptionalFactoryDependency)[];
-	useClass?: Type<SentryOptionsFactory>;
-	useExisting?: Type<SentryOptionsFactory>;
-	useFactory?: (...args: any[]) => Promise<SentryModuleOptions> | SentryModuleOptions;
+export interface SentryModuleAsyncOptions
+	extends Pick<ModuleMetadata, 'imports'> {
+	inject? : (InjectionToken | OptionalFactoryDependency)[];
+	useClass? : Type<SentryOptionsFactory>;
+	useExisting? : Type<SentryOptionsFactory>;
+	useFactory? : (...args : any[]) => Promise<SentryModuleOptions> | SentryModuleOptions;
 }
