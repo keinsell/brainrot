@@ -1,14 +1,14 @@
 import {Module}         from "@nestjs/common"
 import {DevtoolsModule} from "@nestjs/devtools-integration"
-import {env}            from "../../../../configs/env.js"
 import {portAllocator}  from "../../../../utilities/network-utils/port-allocator.js"
+import {isDevelopment}  from "../../../../configs/configuration-service.js";
 
 
 
 @Module({
 	imports    : [
 		DevtoolsModule.register({
-			http: env.isDevelopment,
+			http: isDevelopment(),
 			port: await portAllocator().then((port) => port.port),
 		}),
 	],

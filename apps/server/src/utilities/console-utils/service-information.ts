@@ -1,9 +1,8 @@
 import figlet from "figlet"
-import {env}  from "../../configs/env.js"
 
 
 
 export function prettyPrintServiceInformation() {
-	console.log(figlet.textSync(env.SERVICE_NAME as string, "Doom"))
-	console.log(env.SERVICE_DESCRIPTION + "\n")
+	console.log(figlet.textSync("Methylphenidate", "Doom"))
+	console.log(`Methylophenidate is a boilerplate for Nest.js applications with batteries included.` + "\n" + "\n")
 }

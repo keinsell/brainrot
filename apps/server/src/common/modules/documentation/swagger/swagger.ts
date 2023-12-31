@@ -4,8 +4,8 @@ import fs                                              from "node:fs"
 import process                                         from 'node:process'
 import tildify                                         from "tildify"
 import {ApplicationConfiguration}                      from "../../../../configs/application-configuration.js"
-import {env}                                           from "../../../../configs/env.js"
 import {getMetadataStore}                              from "../../../../utilities/docs-utils/swagger-api-model.js"
+import {config}                                        from "../../../../configs/configuration-service.js";
 
 
 
@@ -15,7 +15,7 @@ import {getMetadataStore}                              from "../../../../utiliti
  * @param {OpenAPIObject} document - The OpenAPI document to add model functionality to.
  * @return {void}
  */
-function experimentalAddApiModelFunctionality(document: OpenAPIObject): void {
+function experimentalAddApiModelFunctionality(document : OpenAPIObject) : void {
 	// ExperimentalL: Force OpenAPI Model Documentation
 
 	const modelMetadataStore = getMetadataStore();
@@ -40,7 +40,7 @@ function experimentalAddApiModelFunctionality(document: OpenAPIObject): void {
 	}
 
 	// Experimental
-	const updateSchema = (schema: any) => {
+	const updateSchema = (schema : any) => {
 		if (schema && schema.$ref) {
 			const refArray     = schema.$ref.split('/');
 			const originalName = refArray.pop();
@@ -86,21 +86,21 @@ function experimentalAddApiModelFunctionality(document: OpenAPIObject): void {
 }
 
 
-export async function buildSwaggerDocumentation(app: INestApplication): Promise<void> {
+export async function buildSwaggerDocumentation(app : INestApplication) : Promise<void> {
 	const logger = new Logger('doc:swagger');
 
-	const config = new DocumentBuilder()
-	.setTitle(env.SERVICE_NAME as string)
-	.setDescription(env.SERVICE_DESCRIPTION as string)
+	const swaggerConfig = new DocumentBuilder()
+	.setTitle(config.get('SERVICE_NAME'))
+	.setDescription(config.get('SERVICE_DESCRIPTION'))
 	.setVersion('1.0')
 	.addTag('api')
 	.build()
 
-	logger.verbose(`Swagger documentation base built for ${env.SERVICE_NAME} service.`);
+	logger.verbose(`Swagger documentation base built for ${config.get('SERVICE_NAME')} service.`);
 
-	const document = SwaggerModule.createDocument(app, config);
+	const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-	logger.verbose(`Swagger documentation document built for ${env.SERVICE_NAME} service.`);
+	logger.verbose(`Swagger documentation document built for ${config.get('SERVICE_NAME')} service.`);
 
 	experimentalAddApiModelFunctionality(document);
 
@@ -115,7 +115,7 @@ export async function buildSwaggerDocumentation(app: INestApplication): Promise<
 	//	},
 	//}))
 
-	logger.verbose(`Swagger documentation was attached to ${env.SERVICE_NAME} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
+	logger.verbose(`Swagger documentation was attached to ${config.get('SERVICE_NAME')} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
 
 	const documentationObjectPath = `${process.cwd()}/public/api/openapi3.json`;
 

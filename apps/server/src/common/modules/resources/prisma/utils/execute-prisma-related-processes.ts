@@ -1,15 +1,15 @@
-import {Logger} from "@nestjs/common"
-import {exec}   from "node:child_process"
-import {env}    from "../../../../../configs/env.js";
-import {StaticFeatureFlags} from "../../../../../configs/static-feature-flags.js";
-import {portAllocator} from "../../../../../utilities/network-utils/port-allocator.js";
+import {Logger}                   from "@nestjs/common"
+import {exec}                     from "node:child_process"
+import {StaticFeatureFlags}       from "../../../../../configs/static-feature-flags.js";
+import {portAllocator}            from "../../../../../utilities/network-utils/port-allocator.js";
 import {ApplicationConfiguration} from "../../../../../configs/application-configuration.js";
+import {isDevelopment}            from "../../../../../configs/configuration-service.js";
 
 
 
 // TODO: This may spamming a lot in process, needs to be fixed.
 export async function executePrismaRelatedProcesses() {
-	if (!env.isDev) {
+	if (!isDevelopment()) {
 		return
 	}
 

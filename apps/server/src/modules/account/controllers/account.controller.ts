@@ -4,10 +4,9 @@ import {readFileSync}                                  from 'node:fs'
 import {dirname}                                       from "path"
 import {fileURLToPath}                                 from "url"
 import {JwtAuthorizationGuard}                         from "../../authentication/guards/jwt-authorization-guard.js"
-import {RegisterAccount2, RegisterAccountDtp}          from "../commands/register-account-dtp.js"
+import {RegisterAccountDtp}                            from "../commands/register-account-dtp.js"
 import {AccountService}                                from "../services/account-service.js"
 import {AccountViewModel}                              from "../view-model/account-view-model.js"
-import typia                                           from "typia";
 import Sentry                                          from "@sentry/node";
 import {Request}                                       from "express";
 
@@ -48,7 +47,7 @@ export class AccountController {
 		@Req() request : Request,
 		@Body() registerAccountBody : RegisterAccountDtp,
 	) : Promise<AccountViewModel> {
-		const body = typia.assert<RegisterAccount2>(registerAccountBody)
+		// const body = typia.assert<RegisterAccount2>(registerAccountBody)
 
 		Sentry.setUser({
 			ip_address: request.ip,
@@ -58,7 +57,8 @@ export class AccountController {
 		// TODO: Normalize Username
 
 		const result = await this.service.register({
-			username: body.username, email: body.email, password: body.password,
+			username: registerAccountBody.username, email: registerAccountBody.email,
+			password: registerAccountBody.password,
 		})
 
 		Sentry.setUser({
