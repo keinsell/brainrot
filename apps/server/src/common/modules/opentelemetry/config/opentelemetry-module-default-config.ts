@@ -30,7 +30,6 @@ import {getNodeAutoInstrumentations}     from "@opentelemetry/auto-instrumentati
 import {Provider}                        from "@nestjs/common";
 import {AutoTraceInjector}               from "../injector/auto-trace-injector.js";
 import {ControllerInjector}              from "../injector/controller-injector.js";
-import {env}                             from "../../../../configs/env.js";
 import {EventEmitterInjector}            from "../injector/event-emitter-injector.js";
 import {ScheduleInjector}                from "../injector/schedule-injector.js";
 import {PipeInjector}                    from "../injector/pipe-injector.js";
@@ -41,6 +40,7 @@ import {W3CTraceContextPropagator}       from "@opentelemetry/core";
 import {NestLoggerSpanExporter}          from "../service/nest-logger-span-exporter.js";
 import {SimpleSpanProcessor}             from "@opentelemetry/sdk-trace-base";
 import {PrismaInstrumentation}           from "@prisma/instrumentation";
+import {config}                          from "../../../../configs/configuration-service.js";
 
 
 
@@ -51,7 +51,7 @@ export interface OpenTelemetryModuleConfig
 
 
 export const OpenTelemetryModuleDefaultConfig = {
-	serviceName        : env.SERVICE_NAME,
+	serviceName        : config.get("SERVICE_NAME"),
 	traceAutoInjectors : [
 		ControllerInjector,
 		GuardInjector,

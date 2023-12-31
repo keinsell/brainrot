@@ -73,7 +73,7 @@
       {
         "transform": "tsc-progress",
         "title": "Compiling..."
-      },
+      }
       //      {
       //        "transform": "@nestia/core/lib/transform",
       //        /**
@@ -98,9 +98,9 @@
       //         */
       //        "stringify": "assert"
       //      },
-      {
-        "transform": "typia/lib/transform"
-      }
+      //      {
+      //        "transform": "typia/lib/transform"
+      //      }
     ]
   },
   "include": [

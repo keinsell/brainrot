@@ -1,7 +1,7 @@
 import {Logger}             from "@nestjs/common"
 import {exec}               from "node:child_process"
-import {env}                from "../../../../configs/env.js"
 import {StaticFeatureFlags} from "../../../../configs/static-feature-flags.js"
+import {isDevelopment}      from "../../../../configs/configuration-service.js";
 
 
 
@@ -10,7 +10,7 @@ import {StaticFeatureFlags} from "../../../../configs/static-feature-flags.js"
 export function buildCompodocDocumentation() {
 	const logger = new Logger('doc:compodoc');
 
-	if (!env.isDev || !StaticFeatureFlags.shouldGenerateCompodoc) {
+	if (!isDevelopment() || !StaticFeatureFlags.shouldGenerateCompodoc) {
 		return;
 	}
 	exec('pnpm docs:compodoc', (error, stdout, stderr) => {

@@ -8,7 +8,6 @@ import {buildCompodocDocumentation}   from "./common/modules/documentation/compo
 import {buildSwaggerDocumentation}    from "./common/modules/documentation/swagger/swagger.js"
 import {DatabaseModule}               from "./common/modules/database/database.module.js"
 import {ApplicationConfiguration}     from "./configs/application-configuration.js"
-import {env}                          from "./configs/env.js"
 import {StaticFeatureFlags}           from "./configs/static-feature-flags.js"
 import {Container}                    from "./container.js"
 import {AccountModule}                from "./modules/account/account.module.js"
@@ -25,13 +24,14 @@ import {
 import {
 	executePrismaRelatedProcesses,
 }                                     from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
+import {config, isDevelopment}        from "./configs/configuration-service.js";
 
 
 
 export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
 		abortOnError: false,
-		snapshot    : !!env.isDev,
+		snapshot    : isDevelopment(),
 	});
 
 	// Enable Prisma Exception Filter for Http Service
@@ -59,33 +59,39 @@ export async function bootstrap() {
 		res.end(res.sentry + "\n");
 	});
 
+	const PORT = config.get("PORT")
+
 	// Listen on selected application port (with grace)
-	let openPort = await portAllocator(env.PORT);
+	let openPort = await portAllocator(PORT);
 
 	if (openPort.wasReplaced) {
-		logger.warn(`Application performed port availability check and ::${env.PORT} is not available, found a new shiny ::${openPort.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
+		logger.warn(`Application performed port availability check and ::${PORT} is not available, found a new shiny ::${openPort.port} instead. If you believe this is a mistake, please check your environment variables and processes that are running on your machine.`);
 	}
 	else {
-		logger.log(`Port availability check succeeded and requested ::${env.PORT} is available`);
+		logger.log(`Port availability check succeeded and requested ::${PORT} is available`);
 	}
 
 	let isApplicationListening = false;
 	let retryDelay             = ms("5s");
 	let retryCount             = 3
 
-	const applicationUrl = `${env.PROTOCOL}://${env.HOST}:${openPort.port}`
+	const PROTOCOL = config.get("PROTOCOL")
+	const HOST     = config.get("HOST")
+	const NODE_ENV = config.get("NODE_ENV")
+
+	const applicationUrl = `${PROTOCOL}://${HOST}:${openPort.port}`
 
 	while (!isApplicationListening) {
 		try {
 			await app.listen(openPort.port, () => {
 				logger.debug(`${"-".repeat(54)}`)
-				logger.log(`🚀 Application started on ${applicationUrl} in ${env.NODE_ENV} mode`);
+				logger.log(`🚀 Application started on ${applicationUrl} in ${NODE_ENV} mode`);
 				logger.debug(`${"-".repeat(54)}`)
 				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
 				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
 				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + ApplicationConfiguration.healthCheckPath}`)
 
-				if (env.isDev && StaticFeatureFlags.shouldRunPrismaStudio) {
+				if (isDevelopment() && StaticFeatureFlags.shouldRunPrismaStudio) {
 					logger.debug(`🧩 Prisma Admin is running on: http://localhost:${ApplicationConfiguration.prismaAdminPort}`)
 				}
 
@@ -98,7 +104,7 @@ export async function bootstrap() {
 				e as unknown as any
 			).message}`);
 			await delay(retryDelay);
-			openPort   = await portAllocator(env.PORT as number);
+			openPort   = await portAllocator(PORT);
 			retryDelay = retryDelay * 2;
 		}
 
@@ -113,7 +119,7 @@ export async function bootstrap() {
 
 
 	// If application is running in development mode, try to seed the database
-	if (env.isDev && StaticFeatureFlags.shouldRunSeeder) {
+	if (isDevelopment() && StaticFeatureFlags.shouldRunSeeder) {
 		try {
 			seeder({
 				imports  : [

@@ -1,8 +1,8 @@
 import {Logger}                         from "@nestjs/common"
-import {env}                            from "../../../configs/env.js"
 import {KeyDerivationFunction}          from "./key-derivation-functions/key-derivation-function.js"
 import {PhcString, SerializedPhcString} from "./types/phc-string.js"
 import {Salt}                           from "./types/salt.js"
+import {isDevelopment}                  from "../../../configs/configuration-service.js";
 
 
 
@@ -52,7 +52,7 @@ export class UnihashAlgorithm {
 
 
 	private maskPassword(plain : string) : string {
-		return env.isDev ? plain : "[REDACTED]"
+		return isDevelopment() ? plain : "[REDACTED]"
 		//		return plain.slice(0, 3) + "#".repeat(plain.length - 3)
 	}
 

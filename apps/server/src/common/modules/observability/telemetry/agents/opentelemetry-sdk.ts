@@ -19,16 +19,17 @@ import {PrismaInstrumentation}                              from "@prisma/instru
 import process                                              from "node:process"
 import signale                                              from "signale"
 import {
-	env,
-}                                                           from "../../../../../configs/env.js"
-import {
 	NestjsDiagnosticLogger,
 }                                                           from "../../../opentelemetry/service/nestjs-diagnostic-logger.js";
+import {
+	config,
+	isDevelopment,
+}                                                           from "../../../../../configs/configuration-service.js";
 
 
 
 export function experimentalOpenTelemetryTracker() {
-	if (env.isDev) {
+	if (isDevelopment()) {
 		diag.setLogger(new NestjsDiagnosticLogger(), DiagLogLevel.DEBUG);
 	}
 
@@ -48,7 +49,7 @@ export function experimentalOpenTelemetryTracker() {
 			osDetector,
 		],
 		resource         : new Resource({
-			[SemanticResourceAttributes.SERVICE_NAME]: env.SERVICE_NAME as string,
+			[SemanticResourceAttributes.SERVICE_NAME]: config.get("SERVICE_NAME"),
 		}),
 		metricReader     : new PeriodicExportingMetricReader({
 			exporter: new InMemoryMetricExporter(AggregationTemporality.CUMULATIVE),

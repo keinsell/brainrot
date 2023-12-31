@@ -1,8 +1,8 @@
-import {env} from "../../configs/env.js"
+import {isDevelopment} from "../../configs/configuration-service.js";
 
 
 
-export function censorString(string: string): string {
+export function censorString(string : string) : string {
 	//	return env.isDev ? string : string.replace(/./g, "*")
-	return env.isDev ? string : "[CENSORED]"
+	return isDevelopment() ? string : "[CENSORED]"
 }

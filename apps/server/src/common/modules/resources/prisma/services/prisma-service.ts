@@ -13,8 +13,10 @@ import {
 import {
 	PrismaServiceOptions,
 }                                                                            from "../structures/prisma-service-options.js"
-import {env}                                                                 from "../../../../../configs/env.js";
 import Sentry                                                                from "@sentry/node";
+import {
+	isProduction,
+}                                                                            from "../../../../../configs/configuration-service.js";
 
 
 
@@ -99,7 +101,7 @@ export class PrismaService
 				await delay(connectionRetryDelay);
 				connectionRetryDelay = connectionRetryDelay * 2;
 
-				if (env.isProduction) {
+				if (isProduction()) {
 					Sentry.captureException(error);
 				}
 			}

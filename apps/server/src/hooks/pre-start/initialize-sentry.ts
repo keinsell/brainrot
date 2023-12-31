@@ -25,16 +25,17 @@
 
 
 
-import Sentry                 from "@sentry/node";
-import {env, SENTRY_DSN}      from "../../configs/env.js";
-import {Logger}               from "@nestjs/common";
-import {setupGlobalHub}       from "@sentry/opentelemetry";
-import {ProfilingIntegration} from "@sentry/profiling-node";
+import Sentry                                from "@sentry/node";
+import {Logger}                              from "@nestjs/common";
+import {setupGlobalHub}                      from "@sentry/opentelemetry";
+import {ProfilingIntegration}                from "@sentry/profiling-node";
+import {config, isDevelopment, isProduction} from "../../configs/configuration-service.js";
 
 
 
 export function initializeSentry() : void {
-	new Logger().log(`Initializing Sentry... ${env.SENTRY_DSN}`);
+	new Logger().log(`Initializing Sentry... ${config.get('SENTRY_DSN')}`);
+
 
 	// Turn ON if integrating with OTEL
 	setupGlobalHub();
@@ -61,14 +62,14 @@ export function initializeSentry() : void {
 
 	// OTEL Configuration
 	Sentry.init({
-		dsn                : SENTRY_DSN,
+		dsn                : config.get('SENTRY_DSN'),
 		autoSessionTracking: true,
 		tracesSampleRate   : 1.0,
 		profilesSampleRate : 1.0,
-		enableTracing      : true,
 		sampleRate         : 1.0,
-		enabled            : true,
-		debug              : env.isDev,
+		enabled            : isProduction(),
+		enableTracing      : isProduction(),
+		debug              : isDevelopment(),
 		profilesSampler    : () => 1.0,
 		instrumenter       : "otel",
 		integrations       : [
