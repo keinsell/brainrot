@@ -23,42 +23,6 @@
  *
  */
 
-import {Injectable, Logger}                        from '@nestjs/common';
-import Convict                                     from 'convict';
-import * as dotenv                                 from 'dotenv';
-import {ConfigurationSchema, IConfigurationSchema} from "./configuration-schema.js";
 
 
-
-@Injectable()
-export class ConfigurationService {
-
-	private config : Convict.Config<IConfigurationSchema>;
-
-	constructor() {
-		this.config      = Convict(ConfigurationSchema);
-		const dotEnvFile = dotenv.config().parsed;
-
-		if (dotEnvFile) {
-			this.config.load(dotenv.config().parsed);
-		}
-
-		this.config.validate({
-			allowed  : 'warn', output: (message) => {
-				const chunks = message.split('\n');
-				chunks.forEach((chunk) => {
-					new Logger("config").verbose(chunk);
-				});
-			}, strict: false,
-		});
-	}
-
-	get<K extends keyof IConfigurationSchema>(key : K) {
-		return this.config.get(key);
-	}
-}
-
-
-export const config = new ConfigurationService();
-
-export const isDevelopment = () => config.get('NODE_ENV') === 'development';
+export const isProduction = () => process.env.NODE_ENV === 'production';

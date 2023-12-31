@@ -7,11 +7,13 @@ import {ContinuationLocalStorageModule} from "./modules/environment/local-storag
 import {HealthModule}                   from "./modules/observability/healthcheck/health-module.js"
 import {TelemetryModule}                from "./modules/observability/telemetry/telemetry-module.js"
 import {DatabaseModule}                 from "./modules/database/database.module.js"
+import {ConfigModule}                   from "../configs/config-module.js";
 
 
 
 @Module({
 	imports  : [
+		ConfigModule.forRoot(),
 		TelemetryModule,
 		DatabaseModule,
 		ContinuationLocalStorageModule,
@@ -42,6 +44,7 @@ import {DatabaseModule}                 from "./modules/database/database.module
 		DocumentaitonModule,
 		HealthModule,
 		DeveloperToolsModule,
+		ConfigModule,
 	],
 })
 export class SharedModule {

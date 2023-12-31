@@ -1,11 +1,8 @@
-import figlet                 from "figlet"
-import {ConfigurationService} from "../../configs/configuration-service.js";
+import figlet from "figlet"
 
 
 
 export function prettyPrintServiceInformation() {
-	const configService = new ConfigurationService()
-
-	console.log(figlet.textSync(configService.get("SERVICE_NAME"), "Doom"))
-	console.log(configService.get("SERVICE_DESCRIPTION") + "\n")
+	console.log(figlet.textSync("Methylphenidate", "Doom"))
+	console.log(`Methylophenidate is a boilerplate for Nest.js applications with batteries included.` + "\n" + "\n")
 }

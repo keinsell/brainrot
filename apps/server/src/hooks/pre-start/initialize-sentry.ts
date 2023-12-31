@@ -25,11 +25,12 @@
 
 
 
-import Sentry                                from "@sentry/node";
-import {Logger}                              from "@nestjs/common";
-import {setupGlobalHub}                      from "@sentry/opentelemetry";
-import {ProfilingIntegration}                from "@sentry/profiling-node";
-import {config, isDevelopment, isProduction} from "../../configs/configuration-service.js";
+import Sentry                  from "@sentry/node";
+import {Logger}                from "@nestjs/common";
+import {setupGlobalHub}        from "@sentry/opentelemetry";
+import {ProfilingIntegration}  from "@sentry/profiling-node";
+import {config, isDevelopment} from "../../configs/configuration-service.js";
+import {isProduction}          from "../../configs/is-production.js";
 
 
 

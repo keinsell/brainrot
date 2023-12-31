@@ -14,9 +14,8 @@ import {
 	PrismaServiceOptions,
 }                                                                            from "../structures/prisma-service-options.js"
 import Sentry                                                                from "@sentry/node";
-import {
-	isProduction,
-}                                                                            from "../../../../../configs/configuration-service.js";
+
+import {isProduction} from "../../../../../configs/is-production.js";
 
 
 
