@@ -4,10 +4,6 @@ import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js"
 
 
 
-// @ApiModel({
-// 	name       : "CreateAccount",
-// 	description: "asdasd",
-// })
 export class CreateAccountDto {
 	/**
 	 * Represents the unique identifier of an entity.

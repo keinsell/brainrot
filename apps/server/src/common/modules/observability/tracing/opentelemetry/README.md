@@ -1,3 +1,29 @@
+# `@mph/opentelemetry`
+
+Github is full of forks from one or two repositories implementing OpenTelemetry in Nest.js - almost all of these
+repositories are outdated or use outdated versions of OpenTelemetry. This repository is an attempt to create a
+replacement which eventually also will become outdated and not maintained as well.
+
+## TODOs
+
+- [ ] Documentation
+- [ ] Tests
+- [ ] Sentry Integration
+- [ ] Jaeger Integration
+- [ ] Cross-Environment Compatibility (Express, Nest.js)
+
+### References
+
+- https://www.jsdelivr.com/package/npm/nestjs-opentelemetry-setup
+- https://github.com/amplication/opentelemetry-nestjs/tree/main
+- https://www.tomray.dev/nestjs-open-telemetry
+- https://www.npmjs.com/package/nestjs-otel
+- https://www.npmjs.com/package/@easyv/nestjs-opentelemetry
+- https://github.com/Yuuki-Sakura/nestjs-open-telemetry - Actually a fork that adds a bunch of useful functionalities
+
+### License
+
+```
 /*
  * MIT License
  *
@@ -22,33 +48,4 @@
  * SOFTWARE.
  *
  */
-
-import {CreateAccountDto} from "../dtos/create-account-dto.js";
-import {PickType}         from "@nestjs/swagger";
-import {faker}            from "@faker-js/faker";
-
-
-
-// export interface RegisterAccount2 {
-// 	email : string & tags.Format<"email">
-// 	username : string & tags.Pattern<string>
-// 	password : string & tags.Pattern<string>
-// }
-//
-
-export class RegisterAccountDtp
-	extends PickType(CreateAccountDto, [
-		"email",
-		"password",
-		"username",
-	] as const)
-{
-	static example() : RegisterAccountDtp {
-		return {
-			email   : faker.internet.email(),
-			password: faker.internet.password(),
-			username: faker.internet.userName(),
-		}
-	}
-}
-
+```

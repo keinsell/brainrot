@@ -1,11 +1,11 @@
 import {Module}                         from "@nestjs/common"
 import {SessionMiddlewareModule}        from "./middleware/session/session-middleware-module.js"
-import {DocumentaitonModule}            from "./modules/documentation/documentaiton-module.js"
+import {DocumentationModule}            from "./modules/documentation/documentation-module.js"
 import {DeveloperToolsModule}           from "./modules/environment/dev-tools/developer-tools.module.js"
 import {AsyncLocalStorageModule}        from "./modules/environment/local-storage/async-local-storage-module.js"
 import {ContinuationLocalStorageModule} from "./modules/environment/local-storage/continuation-local-storage-module.js"
 import {HealthModule}                   from "./modules/observability/healthcheck/health-module.js"
-import {TelemetryModule}                from "./modules/observability/telemetry/telemetry-module.js"
+import {ObservabilityModule}            from "./modules/observability/observability-module.js"
 import {DatabaseModule}                 from "./modules/database/database.module.js"
 import {ConfigModule}                   from "../configs/config-module.js";
 
@@ -14,11 +14,11 @@ import {ConfigModule}                   from "../configs/config-module.js";
 @Module({
 	imports  : [
 		ConfigModule.forRoot(),
-		TelemetryModule,
+		ObservabilityModule,
 		DatabaseModule,
 		ContinuationLocalStorageModule,
 		AsyncLocalStorageModule,
-		DocumentaitonModule,
+		DocumentationModule,
 		HealthModule,
 		DeveloperToolsModule,
 		SessionMiddlewareModule.forRoot({
@@ -37,11 +37,11 @@ import {ConfigModule}                   from "../configs/config-module.js";
 	],
 	providers: [],
 	exports  : [
-		TelemetryModule,
+		ObservabilityModule,
 		DatabaseModule,
 		ContinuationLocalStorageModule,
 		AsyncLocalStorageModule,
-		DocumentaitonModule,
+		DocumentationModule,
 		HealthModule,
 		DeveloperToolsModule,
 		ConfigModule,

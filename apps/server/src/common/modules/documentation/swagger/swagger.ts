@@ -117,9 +117,13 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 
 	logger.verbose(`Swagger documentation was attached to ${config.get('SERVICE_NAME')} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
 
-	const documentationObjectPath = `${process.cwd()}/public/api/openapi3.json`;
+	const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`;
 
 	// Save Swagger Documentation to File
-	fs.writeFileSync('./public/api/openapi3.json', JSON.stringify(document));
+	fs.writeFileSync(
+		documentationObjectPath,
+		JSON.stringify(document),
+	);
+	
 	logger.verbose(`Swagger documentation was snapshot into ${tildify(documentationObjectPath)}`);
 }

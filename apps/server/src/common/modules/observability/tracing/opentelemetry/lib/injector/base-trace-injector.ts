@@ -48,8 +48,8 @@ export class BaseTraceInjector {
 	protected* getControllers() : Generator<InstanceWrapper<Controller>> {
 		for (const module of this.modulesContainer.values()) {
 			for (const controller of module.controllers.values()) {
-				if (controller && controller.metatype?.prototype) {
-					yield controller as InstanceWrapper<Controller>;
+				if (controller?.metatype?.prototype) {
+					yield controller;
 				}
 			}
 		}
@@ -58,8 +58,8 @@ export class BaseTraceInjector {
 	protected* getProviders() : Generator<InstanceWrapper<Injectable>> {
 		for (const module of this.modulesContainer.values()) {
 			for (const provider of module.providers.values()) {
-				if (provider && provider.metatype?.prototype) {
-					yield provider as InstanceWrapper<Injectable>;
+				if (provider?.metatype?.prototype) {
+					yield provider;
 				}
 			}
 		}

@@ -5,3 +5,5 @@ the best way to handle concurrency is to use `async/await` and `Promise` to hand
 to deal with additional complexities.
 
 - `Mutex`
+- `Fiber`
+- `Semaphore`

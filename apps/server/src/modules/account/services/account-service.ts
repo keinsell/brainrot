@@ -1,22 +1,27 @@
-import {Injectable, Logger} from "@nestjs/common"
-import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
-import {PasswordHashing}    from "../../../common/libraries/unihash/index.js"
-import {KdfAlgorithm}       from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
-import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
-import {RegisterAccountDtp} from "../commands/register-account-dtp.js"
-import {Account}            from "../entities/account.js"
-import {AccountPolicy}      from "../policies/account-policy.js"
-import {AccountRepository}  from "../repositories/account-repository.js"
-import {Email}              from "../value-objects/email.js"
-import {Password}           from "../value-objects/password.js"
+import {Inject, Injectable, Logger} from "@nestjs/common"
+import {ServiceAbstract}            from "../../../common/libraries/services/service-abstract.js"
+import {PasswordHashing}            from "../../../common/libraries/unihash/index.js"
+import {
+	KdfAlgorithm,
+}                                   from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
+import {EventBus}                   from "../../../common/modules/messaging/event-bus.js"
+import {RegisterAccountDtp}         from "../commands/register-account-dtp.js"
+import {Account}                    from "../entities/account.js"
+import {AccountPolicy}              from "../policies/account-policy.js"
+import {AccountRepository}          from "../repositories/account-repository.js"
+import {Email}                      from "../value-objects/email.js"
+import {Password}                   from "../value-objects/password.js"
+import {
+	TraceService
+}                                   from "../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js";
 
 
 
 @Injectable()
 export class AccountService
 	extends ServiceAbstract<Account> {
+	@Inject(TraceService) tracer : TraceService;
 	private logger : Logger = new Logger("account::service")
-
 
 	constructor(
 		private policy : AccountPolicy,
@@ -38,6 +43,8 @@ export class AccountService
 	 * @returns {Promise<Account>}
 	 */
 	public async register(registerAccount : RegisterAccountDtp) : Promise<Account> {
+		this.tracer.startSpan("register-account")
+
 		const email = Email.create({
 			isVerified: false,
 			address   : registerAccount.email.toLowerCase(),

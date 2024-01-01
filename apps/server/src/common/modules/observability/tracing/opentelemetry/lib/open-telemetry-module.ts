@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +27,16 @@ import {ModuleRef}                        from "@nestjs/core";
 import {DynamicModule, FactoryProvider}   from "@nestjs/common";
 import {EventEmitterModule}               from "@nestjs/event-emitter";
 import {OpenTelemetryService}             from "./service/open-telemetry-service.js";
-import {NodeSDK}                          from "@opentelemetry/sdk-node";
-import {OPEN_TELEMETRY_SDK_CONFIG}        from "./constant/OPEN_TELEMETRY_SDK_CONFIG.js";
-import {OpenTelemetryModuleConfig}        from "./interfaces/opentelemetry-module-config.js";
-import {Tracer}                           from "@opentelemetry/sdk-trace-node";
-import {OPEN_TELEMETRY_SDK}               from "./constant/OPEN_TELEMETRY_SDK.js";
+import {NodeSDK}                         from "@opentelemetry/sdk-node";
+import {OPEN_TELEMETRY_SDK_CONFIG}       from "./constant/OPEN_TELEMETRY_SDK_CONFIG.js";
+import {OpenTelemetryModuleConfig}       from "./interfaces/opentelemetry-module-config.js";
+import {Tracer}                          from "@opentelemetry/sdk-trace-node";
+import {OPEN_TELEMETRY_SDK}              from "./constant/OPEN_TELEMETRY_SDK.js";
 import {OpentelemetryModuleAsyncOptions}  from "./interfaces/opentelemetry-module-async-options.js";
 import {OpenTelemetryModuleDefaultConfig} from "./config/opentelemetry-module-default-config.js";
 import {DecoratorInjector}                from "./injector/decorator-injector.js";
-import {TraceService}                     from "./service/trace-service.js";
-import {OPEN_TELEMETRY_SDK_INJECTORS}     from "./constant/OPEN_TELEMETRY_SDK_INJECTORS.js";
+import {TraceService}                    from "./service/trace-service.js";
+import {OPEN_TELEMETRY_SDK_INJECTORS}    from "./constant/OPEN_TELEMETRY_SDK_INJECTORS.js";
 import {
 	getClient,
 	SentryPropagator,
@@ -45,7 +45,7 @@ import {
 	setOpenTelemetryContextAsyncContextStrategy,
 	setupEventContextTrace,
 	wrapContextManagerClass,
-}                                         from "@sentry/opentelemetry";
+}                                        from "@sentry/opentelemetry";
 import {AsyncLocalStorageContextManager}  from "@opentelemetry/context-async-hooks";
 import otelApi                            from "@opentelemetry/api";
 

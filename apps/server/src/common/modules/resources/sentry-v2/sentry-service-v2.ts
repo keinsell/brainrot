@@ -28,6 +28,7 @@ import {Inject, Injectable, Scope} from '@nestjs/common';
 import {REQUEST}                   from '@nestjs/core';
 import * as Sentry                 from '@sentry/node';
 import {Span, SpanContext}         from '@sentry/types';
+import {TraceService}              from "../../observability/tracing/opentelemetry/lib/service/trace-service.js";
 
 
 
@@ -36,6 +37,8 @@ import {Span, SpanContext}         from '@sentry/types';
  */
 @Injectable({scope: Scope.REQUEST})
 export class SentryServiceV2 {
+	@Inject(TraceService) tracer : TraceService;
+
 	/**
 	 * When injecting the service it will create the main transaction
 	 *
@@ -59,6 +62,7 @@ export class SentryServiceV2 {
 				method,
 				url,
 				headers,
+				http_method: method,
 			});
 		});
 	}
@@ -68,6 +72,7 @@ export class SentryServiceV2 {
 	 */
 	get span() : Span {
 		return Sentry.getCurrentHub().getScope().getSpan()!;
+		// return getActiveSpan()!
 	}
 
 	/**

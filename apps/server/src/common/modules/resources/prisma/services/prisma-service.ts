@@ -42,6 +42,20 @@ export class PrismaService
 		if (this.prismaServiceOptions.middlewares) {
 			this.prismaServiceOptions.middlewares.forEach((middleware) => this.$use(middleware));
 		}
+
+		// Integrate with Sentry
+		if (Sentry.getCurrentHub().getClient()?.getOptions().enabled) {
+			this.logger.verbose(`Sentry is enabled, Prisma will send events to Sentry.`)
+
+			const hub    = Sentry.getCurrentHub()
+			const client = hub.getClient()
+
+			if (client) {
+				Sentry.addIntegration(new Sentry.Integrations.Prisma({
+					client: this,
+				}))
+			}
+		}
 	}
 
 

@@ -43,6 +43,9 @@ export async function bootstrap() {
 
 	await executePrismaRelatedProcesses()
 
+	Sentry.addIntegration(new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}));
+	Sentry.addIntegration(new Sentry.Integrations.Express({app: app.getHttpAdapter().getInstance()}))
+
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()
 
