@@ -25,59 +25,26 @@
 
 
 
-import Sentry                  from "@sentry/node";
-import {Logger}                from "@nestjs/common";
-import {setupGlobalHub}        from "@sentry/opentelemetry";
-import {ProfilingIntegration}  from "@sentry/profiling-node";
-import {config, isDevelopment} from "../../configs/configuration-service.js";
-import {isProduction}          from "../../configs/is-production.js";
+import * as Sentry            from "@sentry/node";
+import {Logger}               from "@nestjs/common";
+import {setupGlobalHub}       from "@sentry/opentelemetry";
+import {config}               from "../../configs/configuration-service.js";
+import {SENTRY_CONFIGURATION} from "../../configs/sentry-configuration.js";
 
 
 
 export function initializeSentry() : void {
 	new Logger().log(`Initializing Sentry... ${config.get('SENTRY_DSN')}`);
-
-
+	
 	// Turn ON if integrating with OTEL
 	setupGlobalHub();
 
-	// Non-OTEL Configuration
-	// Sentry.init({
-	// 	dsn                : SENTRY_DSN,
-	// 	autoSessionTracking: true,
-	// 	tracesSampleRate   : 1.0,
-	// 	profilesSampleRate : 1.0,
-	// 	enableTracing      : true,
-	// 	sampleRate         : 1.0,
-	// 	enabled            : true,
-	// 	debug              : true,
-	// 	// instrumenter       : "otel",
-	// 	// integrations       : [
-	// 	// 	// new Sentry.Integrations.Console(),
-	// 	// 	// new Sentry.Integrations.Http({tracing: true, breadcrumbs: true}),
-	// 	// 	// new Sentry.Integrations.Context(),
-	// 	// 	// new Sentry.Integrations.Prisma(),
-	// 	// 	// new ProfilingIntegration(),
-	// 	// ],
-	// })
-
 	// OTEL Configuration
 	Sentry.init({
-		dsn                : config.get('SENTRY_DSN'),
-		autoSessionTracking: true,
-		tracesSampleRate   : 1.0,
-		profilesSampleRate : 1.0,
-		sampleRate         : 1.0,
-		enabled            : isProduction(),
-		enableTracing      : isProduction(),
-		debug              : isDevelopment(),
-		profilesSampler    : () => 1.0,
-		instrumenter       : "otel",
-		integrations       : [
-			new ProfilingIntegration(),
-		],
-		attachStacktrace   : true,
+		...SENTRY_CONFIGURATION,
 	})
+
+	Sentry.autoDiscoverNodePerformanceMonitoringIntegrations()
 
 	new Logger().log(`Sentry initialized!`);
 }

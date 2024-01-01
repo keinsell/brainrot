@@ -47,8 +47,6 @@ export class AccountController {
 		@Req() request : Request,
 		@Body() registerAccountBody : RegisterAccountDtp,
 	) : Promise<AccountViewModel> {
-		// const body = typia.assert<RegisterAccount2>(registerAccountBody)
-
 		Sentry.setUser({
 			ip_address: request.ip,
 		})

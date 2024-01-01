@@ -36,7 +36,7 @@
     "db:push:force": "prisma db push --accept-data-loss",
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate & pnpm docs:compodoc && typesync",
-    "prepare": "ts-patch install && typia patch -s",
+    "inactive::prepare": "ts-patch install && typia patch -s",
     "docs:compodoc": "compodoc -p tsconfig.compodoc.json --output src/vendor/compodoc --theme laravel"
   },
   "type": "module",

@@ -5,20 +5,21 @@ import {CompodocModule}    from "./compodoc/compodoc.module.js"
 
 
 
-const documentationObjectPath = `${process.cwd()}/public/api`;
+const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api`;
 
 
 @Module({
-	imports:     [
-		CompodocModule, ServeStaticModule.forRoot({
-			rootPath:  documentationObjectPath,
+	imports    : [
+		CompodocModule,
+		ServeStaticModule.forRoot({
+			rootPath : documentationObjectPath,
 			serveRoot: "/api",
 		}),
 	],
 	controllers: [],
-	providers:   [],
-	exports:     [],
+	providers  : [],
+	exports    : [],
 })
-export class DocumentaitonModule {
+export class DocumentationModule {
 
 }

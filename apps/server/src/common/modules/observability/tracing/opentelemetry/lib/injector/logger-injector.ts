@@ -24,8 +24,8 @@
  */
 
 import {ConsoleLogger, Injectable} from "@nestjs/common";
-import {context, trace}            from "@opentelemetry/api";
-import {AutoTraceInjector}         from "./auto-trace-injector.js";
+import {context, trace}    from "@opentelemetry/api";
+import {AutoTraceInjector} from "./auto-trace-injector.js";
 
 
 

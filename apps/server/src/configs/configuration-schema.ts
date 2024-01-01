@@ -23,7 +23,7 @@
  *
  */
 
-import * as Convict from 'convict';
+import convict from 'convict';
 
 
 
@@ -54,7 +54,7 @@ export interface IConfigurationSchema {
 }
 
 
-export const ConfigurationSchema : Convict.Schema<IConfigurationSchema> = {
+export const ConfigurationSchema : convict.Schema<IConfigurationSchema> = {
 	PROTOCOL           : {
 		doc    : 'Defines the protocol used by the application. Options are \'http\' or \'https\'. Default is \'http\'.',
 		default: "http",

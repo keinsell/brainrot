@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,11 @@
  *
  */
 
-import {CreateAccountDto} from "../dtos/create-account-dto.js";
-import {PickType}         from "@nestjs/swagger";
-import {faker}            from "@faker-js/faker";
+import Sentry from "@sentry/node";
 
 
 
-// export interface RegisterAccount2 {
-// 	email : string & tags.Format<"email">
-// 	username : string & tags.Pattern<string>
-// 	password : string & tags.Pattern<string>
-// }
-//
-
-export class RegisterAccountDtp
-	extends PickType(CreateAccountDto, [
-		"email",
-		"password",
-		"username",
-	] as const)
-{
-	static example() : RegisterAccountDtp {
-		return {
-			email   : faker.internet.email(),
-			password: faker.internet.password(),
-			username: faker.internet.userName(),
-		}
-	}
+export function getSentry() {
+	const hub = Sentry.getCurrentHub()
+	return hub.getClient()
 }
-

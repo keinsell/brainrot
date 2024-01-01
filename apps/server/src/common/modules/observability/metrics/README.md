@@ -1,5 +1,11 @@
 # Metrics Module
 
+- [ ] Etcd metrics
+- [ ] Redis metrics
+- [ ] Postgres metrics
+- [ ] RabbitMQ metrics
+- [ ] Nats metrics
+
 ## System-related Metrics
 
 - CPU Usage
