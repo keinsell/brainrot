@@ -41,12 +41,12 @@ function experimentalAddApiModelFunctionality(document : OpenAPIObject) : void {
 
 	// Experimental
 	const updateSchema = (schema : any) => {
-		if (schema && schema.$ref) {
+		if (schema?.$ref) {
 			const refArray     = schema.$ref.split('/');
 			const originalName = refArray.pop();
 			const metatype     = modelMetadataStore[originalName];
 
-			if (metatype && metatype.name) {
+			if (metatype?.name) {
 				refArray.push(metatype.name);
 				schema.$ref = refArray.join('/');
 			}
@@ -58,20 +58,20 @@ function experimentalAddApiModelFunctionality(document : OpenAPIObject) : void {
 		for (const methodKey in document.paths[pathKey]) {
 			const operation = document.paths[pathKey][methodKey];
 
-			if (operation && operation.parameters) {
+			if (operation?.parameters) {
 				for (const param of operation.parameters) {
 					updateSchema(param.schema); // references under parameters can be updated
 				}
 			}
 
-			if (operation && operation.requestBody && operation.requestBody.content) {
+			if (operation?.requestBody?.content) {
 				for (const mediaTypeKey in operation.requestBody.content) {
 					const schema = operation.requestBody.content[mediaTypeKey].schema;
 					updateSchema(schema); // references under request bodies can be updated
 				}
 			}
 
-			if (operation && operation.responses) {
+			if (operation?.responses) {
 				for (const responseKey in operation.responses) {
 					const contentType = operation.responses[responseKey]?.content;
 
@@ -124,6 +124,6 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 		documentationObjectPath,
 		JSON.stringify(document),
 	);
-	
+
 	logger.verbose(`Swagger documentation was snapshot into ${tildify(documentationObjectPath)}`);
 }
