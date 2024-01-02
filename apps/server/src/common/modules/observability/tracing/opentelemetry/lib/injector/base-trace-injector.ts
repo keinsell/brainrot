@@ -31,6 +31,7 @@ import {PATH_METADATA}                        from "@nestjs/common/constants.js"
 import {InstanceWrapper}                      from "@nestjs/core/injector/instance-wrapper.js";
 import {OPEN_TELEMETRY_TRACE_METADATA}        from "../constant/OPEN_TELEMETRY_TRACE_METADATA.js";
 import {OPEN_TELEMETRY_TRACE_METADATA_ACTIVE} from "../constant/OPEN_TELEMETRY_TRACE_METADATA_ACTIVE.js";
+import {Logger}                               from "@nestjs/common";
 
 
 
@@ -92,6 +93,8 @@ export class BaseTraceInjector {
 
 	protected wrap(prototype : Record<any, any>, traceName : string, attributes = {}) {
 		const method = function (...args : any[]) {
+
+			new Logger().debug(`[${traceName}]`);
 
 			const tracer      = trace.getTracer('default');
 			const currentSpan = tracer.startSpan(traceName);

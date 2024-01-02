@@ -23,9 +23,8 @@
  *
  */
 
-import {CreateAccountDto} from "../dtos/create-account-dto.js";
-import {PickType}         from "@nestjs/swagger";
-import {faker}            from "@faker-js/faker";
+import {ApiProperty}    from "@nestjs/swagger";
+import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js";
 
 
 
@@ -36,19 +35,40 @@ import {faker}            from "@faker-js/faker";
 // }
 //
 
-export class RegisterAccountDtp
-	extends PickType(CreateAccountDto, [
-		"email",
-		"password",
-		"username",
-	] as const)
+export class RegisterAccountCommand
 {
-	static example() : RegisterAccountDtp {
-		return {
-			email   : faker.internet.email(),
-			password: faker.internet.password(),
-			username: faker.internet.userName(),
-		}
-	}
+	/**
+	 * Represents an email address.
+	 * @typedef {string} email
+	 */
+	@ApiProperty({
+		name       : "email",
+		description: "The domain's email address",
+		example    : AccountFixture.email,
+		examples   : AccountFixture._examples.emails,
+	}) email : string;
+
+	/**
+	 * The password variable is a string that represents a user's password.
+	 *
+	 * @type {string}
+	 */
+	@ApiProperty({
+		name       : "password",
+		description: "The domain's password",
+		example    : AccountFixture.password,
+		examples   : AccountFixture._examples.passwords,
+	}) password : string;
+
+	/**
+	 * Represents a username.
+	 * @typedef {string} username
+	 */
+	@ApiProperty({
+		name       : "username",
+		description: "The domain's username",
+		example    : AccountFixture.username,
+		examples   : AccountFixture._examples.usernames,
+	}) username : string;
 }
 

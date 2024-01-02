@@ -1,10 +1,10 @@
 import {Body, Controller, Patch, Post, Req, UseGuards} from "@nestjs/common"
-import {ApiOkResponse, ApiOperation}                   from "@nestjs/swagger"
+import {ApiBody, ApiOkResponse, ApiOperation}          from "@nestjs/swagger"
 import {readFileSync}                                  from 'node:fs'
 import {dirname}                                       from "path"
 import {fileURLToPath}                                 from "url"
 import {JwtAuthorizationGuard}                         from "../../authentication/guards/jwt-authorization-guard.js"
-import {RegisterAccountDtp}                            from "../commands/register-account-dtp.js"
+import {RegisterAccountCommand}                        from "../commands/register-account-command.js"
 import {AccountService}                                from "../services/account-service.js"
 import {AccountViewModel}                              from "../view-model/account-view-model.js"
 import Sentry                                          from "@sentry/node";
@@ -38,6 +38,7 @@ export class AccountController {
 		operationId: "register", summary: "Register account",
 		description: getOperationDocumentation("register"), tags: ['account'],
 	})
+	@ApiBody({type: RegisterAccountCommand})
 	@ApiOkResponse({
 		type       : AccountViewModel,
 		description: "Account was successfully registered in system.",
@@ -45,7 +46,7 @@ export class AccountController {
 	@Post()
 	async register(
 		@Req() request : Request,
-		@Body() registerAccountBody : RegisterAccountDtp,
+		@Body() registerAccountBody : RegisterAccountCommand,
 	) : Promise<AccountViewModel> {
 		Sentry.setUser({
 			ip_address: request.ip,

@@ -5,14 +5,14 @@ import {
 	KdfAlgorithm,
 }                                   from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
 import {EventBus}                   from "../../../common/modules/messaging/event-bus.js"
-import {RegisterAccountDtp}         from "../commands/register-account-dtp.js"
+import {RegisterAccountCommand}     from "../commands/register-account-command.js"
 import {Account}                    from "../entities/account.js"
 import {AccountPolicy}              from "../policies/account-policy.js"
 import {AccountRepository}          from "../repositories/account-repository.js"
 import {Email}                      from "../value-objects/email.js"
 import {Password}                   from "../value-objects/password.js"
 import {
-	TraceService
+	TraceService,
 }                                   from "../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js";
 
 
@@ -39,10 +39,10 @@ export class AccountService
 	 *
 	 * Register account is an operation dedicated to creating new accounts in codebase.
 	 *
-	 * @param {RegisterAccountDtp} registerAccount
+	 * @param {RegisterAccountCommand} registerAccount
 	 * @returns {Promise<Account>}
 	 */
-	public async register(registerAccount : RegisterAccountDtp) : Promise<Account> {
+	public async register(registerAccount : RegisterAccountCommand) : Promise<Account> {
 		this.tracer.startSpan("register-account")
 
 		const email = Email.create({
