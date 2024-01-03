@@ -8,7 +8,7 @@ import {SignedJsonwebtoken}                                from "../value-object
 import {AccessToken}                                       from "../value-objects/tokens/access-token.js"
 import {RefreshToken}                                      from "../value-objects/tokens/refresh-token.js"
 import {TokenManagement}                                   from "./token-management.js"
-import {AuthenticationService}                             from "./api/authentication-service.js";
+import {AuthenticationService}                             from "../contract/authentication-service.js";
 
 
 
@@ -56,19 +56,19 @@ export class LocalAuthenticationService
 
 		const tokenPayload : Omit<JwtPayload, "exp" | "iat" | "nbf" | "jti"> & {
 			jti? : string, nbf? : number, iat? : number, exp? : number
-		} = {
+		}                  = {
 			sub: account.id, aud: "http://localhost:1337", metadata: {
 				username: account.username, email: account.email.address,
 			},
 		}
-		const accessToken = new AccessToken({
+		const accessToken  = new AccessToken({
 			...tokenPayload,
 		}, "1h")
 		const refreshToken = new AccessToken({
 			...tokenPayload,
 		}, "3w")
 
-		const signedAccessToken = await this.tokenManagement.sign(accessToken)
+		const signedAccessToken  = await this.tokenManagement.sign(accessToken)
 		const signedRefreshToken = await this.tokenManagement.sign(refreshToken)
 
 		return ok({
@@ -88,13 +88,13 @@ export class LocalAuthenticationService
 	{
 		const decodedRefreshToken = await this.tokenManagement.decode(
 			refreshToken)
-		const refreshTokenObject = new RefreshToken(decodedRefreshToken)
-		const accessTokn = new AccessToken({
+		const refreshTokenObject  = new RefreshToken(decodedRefreshToken)
+		const accessTokn          = new AccessToken({
 			...decodedRefreshToken,
 			iat: new Date().getTime(),
 			exp: new Date().getTime() + 1000 * 60 * 60,
 		}, "1h")
-		const signedAccessToken = await this.tokenManagement.sign(accessTokn)
+		const signedAccessToken   = await this.tokenManagement.sign(accessTokn)
 		return {
 			refreshToken: refreshTokenObject, accessToken: signedAccessToken,
 		}

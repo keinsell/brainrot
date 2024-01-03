@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
  */
 
 import {Result}                                from "neverthrow";
-import {SignedJsonwebtoken}                    from "../../value-objects/signed-jsonwebtoken.js";
+import {SignedJsonwebtoken}                    from "../value-objects/signed-jsonwebtoken.js";
 import {ForbiddenException, NotFoundException} from "@nestjs/common";
-import {RefreshToken}                          from "../../value-objects/tokens/refresh-token.js";
+import {RefreshToken}                          from "../value-objects/tokens/refresh-token.js";
 
 
 

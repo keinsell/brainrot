@@ -7,13 +7,13 @@ import jwt           from "jsonwebtoken"
 //})
 export class RefreshSession {
 	@ApiProperty({
-		name:        "refreshToken",
+		name       : "refreshToken",
 		description: "...",
-		example:     jwt.sign({ payload: {} }, 'secret'),
-		examples:    [
-			jwt.sign({ payload: {} }, 'secret'),
-			jwt.sign({ payload: {} }, 'secret'),
-			jwt.sign({ payload: {} }, 'secret')
+		example    : jwt.sign({payload: {}}, 'secret'),
+		examples   : [
+			jwt.sign({payload: {}}, 'secret'),
+			jwt.sign({payload: {}}, 'secret'),
+			jwt.sign({payload: {}}, 'secret'),
 		],
-	}) refreshToken: string;
+	}) refreshToken : string;
 }

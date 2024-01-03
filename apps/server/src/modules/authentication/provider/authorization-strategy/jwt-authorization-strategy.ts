@@ -3,9 +3,9 @@ import {PassportStrategy}           from "@nestjs/passport"
 import {ExtractJwt, Strategy}       from "passport-jwt"
 import {authorizationConfiguration} from "../../../../configs/authorization-configuration.js"
 import {AccountService}             from "../../../account/services/account-service.js"
-import {AuthenticationStrategyType} from "../../utils/authentication-strategy-type.js"
+import {AuthenticationStrategyType} from "../../contract/authentication-strategy/authentication-strategy-type.js"
 import {JwtPayload}                 from "../../value-objects/jwt-payload.js"
-import {AuthenticationStrategy}     from "../api/authentication-strategy.js"
+import {AuthenticationStrategy}     from "../../contract/authentication-strategy/authentication-strategy.js"
 
 
 
