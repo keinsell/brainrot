@@ -1,5 +1,4 @@
 import {Inject, Injectable, Logger} from "@nestjs/common"
-import {ServiceAbstract}            from "../../../common/libraries/services/service-abstract.js"
 import {PasswordHashing}            from "../../../common/libraries/unihash/index.js"
 import {
 	KdfAlgorithm,
@@ -14,12 +13,16 @@ import {Password}                   from "../value-objects/password.js"
 import {
 	TraceService,
 }                                   from "../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js";
+import {AccountSelfService}         from "../contract/account-self-service.js";
+import {ServiceAbstract}            from "../../../common/libraries/services/service-abstract.js";
 
 
 
 @Injectable()
 export class AccountService
-	extends ServiceAbstract<Account> {
+	extends ServiceAbstract<Account>
+	implements AccountSelfService
+{
 	@Inject(TraceService) tracer : TraceService;
 	private logger : Logger = new Logger("account::service")
 
@@ -42,9 +45,7 @@ export class AccountService
 	 * @param {RegisterAccountCommand} registerAccount
 	 * @returns {Promise<Account>}
 	 */
-	public async register(registerAccount : RegisterAccountCommand) : Promise<Account> {
-		this.tracer.startSpan("register-account")
-
+	async register(registerAccount : RegisterAccountCommand) : Promise<Account> {
 		const email = Email.create({
 			isVerified: false,
 			address   : registerAccount.email.toLowerCase(),
