@@ -57,11 +57,11 @@ resource "neon_database" "postgres" {
   ]
 }
 
-resource "random_pet" "application_name" {}
-resource "random_pet" "service_name" {}
 
 resource "koyeb_app" "methyphenidate-server" {
-  name = random_pet.application_name.id
+  # This name stands for top-tier naming under which services are placed
+  # Preferably this should be related to our project name
+  name = var.project_name
 }
 
 #resource "koyeb_secret" "secret_dockerhub_registry_configuration" {
@@ -77,9 +77,14 @@ variable "application_http_port" {
   default = 1337
 }
 
-resource "koyeb_service" "my-service" {
-  app_name = random_pet.application_name.id
+resource "random_pet" "service_name" {}
+
+resource "koyeb_service" "methylophenidate-server" {
+  app_name = koyeb_app.methyphenidate-server.name
   definition {
+    # This name stands for the name of the service
+    # Preferably this should be related to our project name
+    # Random pet is used to generate a random name
     name = random_pet.service_name.id
 
     # Instance types
