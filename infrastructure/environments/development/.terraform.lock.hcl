@@ -4,7 +4,7 @@
 provider "registry.terraform.io/hashicorp/random" {
   version     = "3.4.3"
   constraints = "3.4.3"
-  hashes      = [
+  hashes = [
     "h1:xZGZf18JjMS06pFa4NErzANI98qi59SEcBsOcS2P2yQ=",
     "zh:41c53ba47085d8261590990f8633c8906696fa0a3c4b384ff6a7ecbf84339752",
     "zh:59d98081c4475f2ad77d881c4412c5129c56214892f490adf11c7e7a5a47de9b",
@@ -21,10 +21,32 @@ provider "registry.terraform.io/hashicorp/random" {
   ]
 }
 
+provider "registry.terraform.io/koyeb/koyeb" {
+  version = "0.1.5"
+  hashes = [
+    "h1:x6zAuN3dznOzba+rC4ndlror/ZkPZuUuBhRBE9X1w1g=",
+    "zh:0a0636ca149dd6564383705c733bc3d3451ee24681466d5e4f1767d75104b026",
+    "zh:2d325cb8628fbd7551432225e96ff1a4a1db24b51f1d649aafb85469c2e57d80",
+    "zh:329b0cfbdde0534635c83db6ae29dcce49c425dae1f56921de44e38dc498b7f6",
+    "zh:40c7867f1bbbd44dde105ddcf954e2e83bc1ee9663b5904edb7f0df9b9b862cc",
+    "zh:50277683f599906020887245b13e7a13207a0cfbbf8ea41c6de3cfebb73d9f89",
+    "zh:514814def2058b2d84f480e9e53390e03b18e4d136fe5960537f81cb6041bbeb",
+    "zh:52b0ca715746ad33cc0f9ff7da30032b6d56a25b0c66387580d9687695120f0f",
+    "zh:52e444dd223468ecf0d68b9139fc2eb13ff9ca977969cb3c610900ee7e44ef0a",
+    "zh:5f62cc05f25bd4a4cf5a190f2a8f7b2a5bee0e234cfe7f52ac92f42060ac2184",
+    "zh:95b7bdc06c7b3568182a8b9a8660580a1d7eda4e8d43e9c5c029866ed15338fc",
+    "zh:9a0f8936a1b3288cec3349d0758e9319188c9364d3890d9a87d6e30b22ac9823",
+    "zh:a4b6aa9133e1e209c5015460d489b132ee2b4488beb39a6f75ebffbbb98d9607",
+    "zh:d28d41b72ed1cc488c3c09c5f24347e4492c46a31663ca676b0ad95ceb35e382",
+    "zh:e71ca01502a757712d3cc1ee61946f242e4e5acc774692a319c48720f8f33ab8",
+    "zh:f569b65999264a9416862bca5cd2a6177d94ccb0424f3a4ef424428912b9cb3c",
+  ]
+}
+
 provider "registry.terraform.io/scaleway/scaleway" {
   version     = "2.12.0"
   constraints = "2.12.0"
-  hashes      = [
+  hashes = [
     "h1:o6HJxfAe1x1snAQransRrjwvQl8A6FAnL7XUI0NhBhM=",
     "zh:0c14754788deece86f4c2b5ef42eb006bcd42cc35c04c169d6dfd1c9765b1d9c",
     "zh:14cbaafde2e3b449db593b7249df6061defbc7cce248b5e303884d6ed8191bec",
@@ -46,7 +68,7 @@ provider "registry.terraform.io/scaleway/scaleway" {
 provider "registry.terraform.io/terraform-community-providers/neon" {
   version     = "0.1.5"
   constraints = "0.1.5"
-  hashes      = [
+  hashes = [
     "h1:r4r+bxmm6GFvQv3190BnO8gqKsP+c9EDdZ4EdkbN8VU=",
     "zh:07d72e4e530efa61816e35da8f43d9616aab816be5430007bcb7cedbe6cef7b3",
     "zh:278ab9f8725cd3cdd33855ab7fbc813a239ae2e32333e831b446e52cd906aab4",
