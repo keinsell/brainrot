@@ -18,6 +18,9 @@ terraform {
       source  = "terraform-community-providers/neon"
       version = "0.1.5"
     }
+    koyeb = {
+      source = "koyeb/koyeb"
+    }
   }
   required_version = ">= 1.0"
 }
@@ -51,5 +54,88 @@ resource "neon_database" "postgres" {
   depends_on = [
     neon_project.default,
     neon_role.db_owner,
+  ]
+}
+
+resource "random_pet" "application_name" {}
+resource "random_pet" "service_name" {}
+
+resource "koyeb_app" "methyphenidate-server" {
+  name = random_pet.application_name.id
+}
+
+#resource "koyeb_secret" "secret_dockerhub_registry_configuration" {
+#  name = var.secret_dockerhub_registry_configuration_name
+#  type = "REGISTRY"
+#  docker_hub_registry {
+#    username = var.secret_dockerhub_registry_configuration_username
+#    password = var.secret_dockerhub_registry_configuration_token
+#  }
+#}
+
+variable "application_http_port" {
+  default = 1337
+}
+
+resource "koyeb_service" "my-service" {
+  app_name = random_pet.application_name.id
+  definition {
+    name = random_pet.service_name.id
+
+    # Instance types
+    instance_types {
+      type = "free"
+    }
+
+    # Scaling
+    scalings {
+      min = 1
+      max = 1
+    }
+    
+    # Environment variables
+    env {
+      key   = "SERVICE_NAME"
+      value = random_pet.service_name.id
+    }
+    env {
+      key    = "DATABASE_URI"
+      #      value  = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+    }
+
+
+    # Exposure
+    routes {
+      path = "/"
+      port = var.application_http_port
+    }
+    # Ports
+    ports {
+      port     = var.application_http_port
+      protocol = "http"
+    }
+
+    # Health checks
+    #    health_checks {
+    #      http {
+    #        port = var.application_http_port
+    #        path = "/health"
+    #      }
+    #    }
+
+
+    # Regions
+    regions = ["fra"]
+
+    # Configuration of docker deployment
+    docker {
+      image = "keinsell/methylphenidate-server:dev"
+    }
+  }
+
+  depends_on = [
+    neon_project.default,
+    koyeb_app.methyphenidate-server
   ]
 }
