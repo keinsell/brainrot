@@ -92,16 +92,16 @@ resource "koyeb_service" "my-service" {
       min = 1
       max = 1
     }
-    
+
     # Environment variables
     env {
       key   = "SERVICE_NAME"
       value = random_pet.service_name.id
     }
     env {
-      key    = "DATABASE_URI"
-      #      value  = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
-      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+      key   = "DATABASE_URI"
+      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+      #      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
     }
 
 
