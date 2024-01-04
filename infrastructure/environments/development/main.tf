@@ -104,6 +104,10 @@ resource "koyeb_service" "methylophenidate-server" {
       value = random_pet.service_name.id
     }
     env {
+      key   = "NODE_ENV"
+      value = "production"
+    }
+    env {
       key   = "DATABASE_URI"
       value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
       #      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
