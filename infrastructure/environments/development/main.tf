@@ -135,7 +135,7 @@ resource "koyeb_service" "methylophenidate-server" {
 
     # Configuration of docker deployment
     docker {
-      image = "keinsell/methylphenidate-server:dev"
+      image = "keinsell/methylphenidate-server:latest"
     }
   }
 
