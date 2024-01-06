@@ -5,7 +5,7 @@ import {ok, Result}                                                             
 import {randomUUID}                                                                        from "node:crypto"
 import {
 	CacheManager,
-}                                                                                          from "../../../common/libraries/cache-manager/cache-manager.js"
+}                                                                                          from "../../../common/libraries/cache-manager/contract/cache-manager.js"
 import {
 	EventBus,
 }                                                                                          from "../../../common/modules/messaging/event-bus.js"

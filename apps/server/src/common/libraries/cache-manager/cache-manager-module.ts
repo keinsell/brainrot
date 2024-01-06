@@ -1,17 +1,17 @@
 import {Module}               from '@nestjs/common';
-import {CacheManager}         from "./cache-manager.js"
-import {InMemoryCacheManager} from "./in-memory-cache-manager.js"
+import {CacheManager}         from "./contract/cache-manager.js"
+import {InMemoryCacheManager} from "./provider/cache-manager/in-memory-cache-manager.js"
 
 
 
 @Module({
-	imports:   [],
+	imports  : [],
 	providers: [
 		{
-			provide:  CacheManager,
+			provide : CacheManager,
 			useClass: InMemoryCacheManager,
 		},
 	],
-	exports:   [CacheManager],
+	exports  : [CacheManager],
 })
 export class CacheManagerModule {}
