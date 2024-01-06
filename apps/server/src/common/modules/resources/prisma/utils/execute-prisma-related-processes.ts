@@ -3,7 +3,7 @@ import {exec}                     from "node:child_process"
 import {StaticFeatureFlags}       from "../../../../../configs/static-feature-flags.js";
 import {portAllocator}            from "../../../../../utilities/network-utils/port-allocator.js";
 import {ApplicationConfiguration} from "../../../../../configs/application-configuration.js";
-import {isDevelopment}            from "../../../../../configs/configuration-service.js";
+import {isDevelopment}            from "../../../../../configs/service/configuration-service.js";
 
 
 

@@ -23,9 +23,12 @@
  *
  */
 
-import Sentry                  from "@sentry/node";
-import {config, isDevelopment} from "./configuration-service.js";
-import {ProfilingIntegration}  from "@sentry/profiling-node";
+import Sentry                 from "@sentry/node";
+import {isDevelopment}        from "../service/configuration-service.js";
+import {ProfilingIntegration} from "@sentry/profiling-node";
+import {isDebug}              from "../helper/is-debug.js";
+import {isProduction}         from "../helper/is-production.js";
+import {__config}             from "../global/__config.js";
 
 
 
@@ -34,16 +37,17 @@ export interface ISentryConfiguration
 
 
 export const SENTRY_CONFIGURATION : ISentryConfiguration = {
-	dsn                : config.get('SENTRY_DSN'),
+	dsn                : __config.get('SENTRY_DSN'),
 	autoSessionTracking: true,
-	tracesSampleRate   : 1.0,
-	profilesSampleRate : 1.0,
+	tracesSampleRate   : isDevelopment() ? 1.0 : 0.1,
+	profilesSampleRate : isDevelopment() ? 1.0 : 0.1,
 	sampleRate         : 1.0,
-	enabled            : true,
+	enabled            : isProduction(),
 	enableTracing      : true,
-	debug              : isDevelopment(),
+	debug              : isDebug(),
 	instrumenter       : "otel",
 	integrations       : [
+		...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
 		new ProfilingIntegration(),
 		// new Sentry.Integrations.Anr({captureStackTrace: true, anrThreshold: 2_000}),
 		new Sentry.Integrations.ContextLines(),
@@ -54,6 +58,11 @@ export const SENTRY_CONFIGURATION : ISentryConfiguration = {
 		new Sentry.Integrations.RequestData(),
 		new Sentry.Integrations.LocalVariables(),
 		new Sentry.Integrations.LinkedErrors(),
+		new Sentry.Integrations.Prisma(),
+		new Sentry.Integrations.Modules(),
+		new Sentry.Integrations.Console(),
+		new Sentry.Integrations.Context(),
+		new Sentry.Integrations.Postgres(),
 		// TODO: Spotlight is good option for front-end
 		// new Sentry.Integrations.Spotlight(),
 	],

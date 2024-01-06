@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,42 +23,8 @@
  *
  */
 
-import {Injectable, Logger}                        from '@nestjs/common';
-import Convict                                     from 'convict';
-import * as dotenv                                 from 'dotenv';
-import {ConfigurationSchema, IConfigurationSchema} from "./configuration-schema.js";
+import {ConfigurationService} from "../service/configuration-service.js";
 
 
 
-@Injectable()
-export class ConfigurationService {
-
-	private config : Convict.Config<IConfigurationSchema>;
-
-	constructor() {
-		this.config      = Convict(ConfigurationSchema);
-		const dotEnvFile = dotenv.config().parsed;
-
-		if (dotEnvFile) {
-			this.config.load(dotenv.config().parsed);
-		}
-
-		this.config.validate({
-			allowed  : 'warn', output: (message) => {
-				const chunks = message.split('\n');
-				chunks.forEach((chunk) => {
-					new Logger("config").verbose(chunk);
-				});
-			}, strict: false,
-		});
-	}
-
-	get<K extends keyof IConfigurationSchema>(key : K) {
-		return this.config.get(key);
-	}
-}
-
-
-export const config = new ConfigurationService();
-
-export const isDevelopment = () => config.get('NODE_ENV') === 'development';
+export var __config = new ConfigurationService();

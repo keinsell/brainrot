@@ -24,7 +24,7 @@ import {
 import {
 	executePrismaRelatedProcesses,
 }                                     from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
-import {config, isDevelopment}        from "./configs/configuration-service.js";
+import {config, isDevelopment}        from "./configs/service/configuration-service.js";
 
 
 

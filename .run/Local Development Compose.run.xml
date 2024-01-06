@@ -4,6 +4,7 @@
       <settings>
         <option name="envFilePath" value="" />
         <option name="sourceFilePath" value="compose-dev.yml" />
+        <option name="upDetach" value="false" />
       </settings>
     </deployment>
     <method v="2" />

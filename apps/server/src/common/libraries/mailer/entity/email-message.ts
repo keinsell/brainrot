@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,50 @@
  *
  */
 
-
-
-import * as Sentry            from "@sentry/node";
-import {Logger}               from "@nestjs/common";
-import {setupGlobalHub}       from "@sentry/opentelemetry";
-import {config}               from "../../configs/service/configuration-service.js";
-import {SENTRY_CONFIGURATION} from "../../configs/config-set/sentry-configuration.js";
+import {EmailAddress}    from "../value-object/email-address.js"
+import {EmailAttachment} from "../value-object/email-attachment.js"
+import {Html}            from "../value-object/html.js"
+import {PlainText}       from "../value-object/plain-text.js"
 
 
 
-export function initializeSentry() : void {
-	new Logger().log(`Initializing Sentry... ${config.get('SENTRY_DSN')}`);
+export interface IEmailMessage {
+	recipient : {
+		to : EmailAddress
+		cc? : EmailAddress[]
+		bcc? : EmailAddress[]
+	}
+	sender? : {
+		from : EmailAddress
+		replyTo? : string
+	}
+	subject? : string
+	body? : Html | PlainText
+	attachments? : EmailAttachment[]
+}
 
-	// Turn ON if integrating with OTEL
-	setupGlobalHub();
 
-	// OTEL Configuration
-	Sentry.init({
-		...SENTRY_CONFIGURATION,
-	})
+export class EmailMessage
+	implements IEmailMessage {
+	attachments? : EmailAttachment[]
+	body? : Html | PlainText
+	recipient : {
+		to : EmailAddress
+		cc? : EmailAddress[]
+		bcc? : EmailAddress[]
+	}
+	sender? : {
+		from : EmailAddress
+		replyTo? : string
+	}
+	subject? : string
 
-	new Logger().log(`Sentry initialized!`);
 
-	const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || [];
-
-	new Logger().log(`Sentry have initialized ${integrations.length} integrations: [${integrations.map(integration => integration.name)
-	                                                                                              .join(', ')}]`);
+	constructor(message : EmailMessage) {
+		this.body        = message.body
+		this.recipient   = message.recipient
+		this.sender      = message.sender
+		this.subject     = message.subject
+		this.attachments = message.attachments
+	}
 }

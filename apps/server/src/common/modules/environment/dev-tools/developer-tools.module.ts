@@ -1,7 +1,7 @@
 import {Module}         from "@nestjs/common"
 import {DevtoolsModule} from "@nestjs/devtools-integration"
 import {portAllocator}  from "../../../../utilities/network-utils/port-allocator.js"
-import {isDevelopment}  from "../../../../configs/configuration-service.js";
+import {isDevelopment}  from "../../../../configs/service/configuration-service.js";
 
 
 

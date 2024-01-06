@@ -72,7 +72,7 @@ import {
 }                                  from "@opentelemetry/sdk-metrics";
 import {
 	config,
-}                                  from "../../../../../../../configs/configuration-service.js";
+}                                  from "../../../../../../../configs/service/configuration-service.js";
 
 
 

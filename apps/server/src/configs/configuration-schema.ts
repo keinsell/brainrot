@@ -51,6 +51,7 @@ export interface IConfigurationSchema {
 
 	/** Defines the Sentry DSN. Default is empty. */
 	SENTRY_DSN : string;
+	DEBUG : boolean;
 }
 
 
@@ -101,5 +102,10 @@ export const ConfigurationSchema : convict.Schema<IConfigurationSchema> = {
 		doc    : 'Defines the Sentry DSN. Default is empty.',
 		default: '',
 		env    : 'SENTRY_DSN',
+	},
+	DEBUG              : {
+		doc    : 'Enables or disables debug mode. Default is disabled.',
+		default: false,
+		env    : 'DEBUG',
 	},
 };

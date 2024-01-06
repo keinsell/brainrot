@@ -1,4 +1,4 @@
-import {isDevelopment} from "../../configs/configuration-service.js";
+import {isDevelopment} from "../../configs/service/configuration-service.js";
 
 
 

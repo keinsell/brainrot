@@ -21,6 +21,12 @@ import {
 import {
 	AccountRepository,
 }                                                                                          from "../repositories/account-repository.js"
+import {
+	Mailer,
+}                                                                                          from "../../../common/libraries/mailer/contract/mailer.js";
+import {
+	CreateEmailMessagePayload,
+}                                                                                          from "../../../common/libraries/mailer/dto/create-email-message-payload.js";
 
 
 
@@ -30,13 +36,21 @@ export class AccountVerification {
 	private accountRepository : AccountRepository
 	private publisher : EventBus
 	private cacheManager : CacheManager
+	private mailer : Mailer
 
 
-	constructor(accountRepository : AccountRepository, eventBus : EventBus, cacheManager : CacheManager) {
+	constructor(
+		accountRepository : AccountRepository,
+		eventBus : EventBus,
+		cacheManager : CacheManager,
+		mailer : Mailer,
+	)
+	{
 		this.logger            = new Logger("account::verification::service")
 		this.accountRepository = accountRepository
 		this.publisher         = eventBus
 		this.cacheManager      = cacheManager
+		this.mailer            = mailer
 	}
 
 
@@ -50,7 +64,16 @@ export class AccountVerification {
 		await this.cacheManager.set(`verification_${verificationSecret}`, accountId, ms("15m"))
 
 		// Send verification email
-		this.logger.warn(`Missing implementation to send email for ${account.email.address}`)
+		// TODO: Email template may be moved somewhere else
+		const verificationEmail : CreateEmailMessagePayload = {
+			recipient: {
+				to: account.email.address,
+			},
+			subject  : "Account Confirmation",
+			body     : "Your verification code is: " + verificationSecret,
+		}
+
+		await this.mailer.sendEmail(verificationEmail)
 
 		// Emit verification email sent event
 		const emailVerificationSentEvent = new AccountVerificationEmailSent(account)

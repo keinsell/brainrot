@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +25,19 @@
 
 
 
-import * as Sentry            from "@sentry/node";
-import {Logger}               from "@nestjs/common";
-import {setupGlobalHub}       from "@sentry/opentelemetry";
-import {config}               from "../../configs/service/configuration-service.js";
-import {SENTRY_CONFIGURATION} from "../../configs/config-set/sentry-configuration.js";
+import {Mailer}                    from "../../contract/mailer.js";
+import {Injectable, Logger}        from "@nestjs/common";
+import {CreateEmailMessagePayload} from "../../dto/create-email-message-payload.js";
 
 
 
-export function initializeSentry() : void {
-	new Logger().log(`Initializing Sentry... ${config.get('SENTRY_DSN')}`);
+@Injectable()
+export class NoopMailer
+	implements Mailer {
+	private logger : Logger = new Logger("noop:mailer");
 
-	// Turn ON if integrating with OTEL
-	setupGlobalHub();
-
-	// OTEL Configuration
-	Sentry.init({
-		...SENTRY_CONFIGURATION,
-	})
-
-	new Logger().log(`Sentry initialized!`);
-
-	const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || [];
-
-	new Logger().log(`Sentry have initialized ${integrations.length} integrations: [${integrations.map(integration => integration.name)
-	                                                                                              .join(', ')}]`);
+	async sendEmail(email : CreateEmailMessagePayload) : Promise<void> {
+		this.logger.debug(`Sending email to ${email.recipient.to}...`);
+		this.logger.debug(email.body)
+	}
 }

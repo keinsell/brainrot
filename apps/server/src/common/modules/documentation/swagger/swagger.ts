@@ -5,7 +5,7 @@ import process                                         from 'node:process'
 import tildify                                         from "tildify"
 import {ApplicationConfiguration}                      from "../../../../configs/application-configuration.js"
 import {getMetadataStore}                              from "../../../../utilities/docs-utils/swagger-api-model.js"
-import {config}                                        from "../../../../configs/configuration-service.js";
+import {config}                                        from "../../../../configs/service/configuration-service.js";
 
 
 

@@ -1,7 +1,7 @@
 import {Logger}             from "@nestjs/common"
 import {exec}               from "node:child_process"
 import {StaticFeatureFlags} from "../../../../configs/static-feature-flags.js"
-import {isDevelopment}      from "../../../../configs/configuration-service.js";
+import {isDevelopment}      from "../../../../configs/service/configuration-service.js";
 
 
 

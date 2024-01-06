@@ -13,6 +13,7 @@ import {PrismaAccountRepository}       from "./repositories/prisma-account-repos
 import {AccountService}                from "./services/account-service.js"
 import {AccountVerification}           from "./services/account-verification.js"
 import {AccountRecovery}               from "./services/account-recovery.js";
+import {MailerModule}                  from "../../common/libraries/mailer/mailer-module.js";
 
 
 
@@ -23,6 +24,7 @@ import {AccountRecovery}               from "./services/account-recovery.js";
 		UnihashModule,
 		EventBusModule,
 		CacheManagerModule,
+		MailerModule,
 	],
 	controllers: [
 		AccountController,
