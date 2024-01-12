@@ -1,4 +1,5 @@
-import {TypeID} from "../identification/index.js"
+import {TypeID}      from "../identification/index.js"
+import {MessageType} from "./values/message-type.js";
 
 
 // Messages are just plain data structures. They have attributes and that's it.
@@ -42,7 +43,7 @@ export class Message<BODY = unknown> {
 	readonly timestamp: Date                                                       = new Date()
 	readonly namespace: string                                                     = "default"
 	readonly body?: BODY | undefined
-	readonly type: "message" | "event" | "command" | "request" | "reply" | "query" = "message"
+	readonly type: MessageType = MessageType.MESSAGE
 	
 	
 	constructor(payload: Omit<Message<BODY>, "id" | "timestamp" | "type">) {

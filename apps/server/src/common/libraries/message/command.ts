@@ -1,7 +1,8 @@
-import {Message} from "./message.js"
+import {Message}     from "./message.js"
+import {MessageType} from "./values/message-type.js";
 
 
 
 export class Command extends Message {
-	type: "message" | "event" | "command" | "request" | "reply" | "query" = "command"
+	type: MessageType = MessageType.COMMAND
 }

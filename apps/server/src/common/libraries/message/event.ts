@@ -1,9 +1,10 @@
-import {Message} from "./message.js"
+import {Message}     from "./message.js"
+import {MessageType} from "./values/message-type.js";
 
 
 
 export class Event<BODY = unknown> extends Message<BODY> {
-	override type: "message" | "event" | "command" | "request" | "reply" | "query" = "event"
+	override type: MessageType = MessageType.EVENT
 
 
 	constructor(payload: Omit<Message<BODY>, "id" | "timestamp" | "type">) {
