@@ -23,18 +23,15 @@
  *
  */
 
-import t             from 'typia'
-import typia, {tags} from 'typia'
-import {Opaque}      from "type-fest";
+import t                      from 'typia'
+import typia, {tags}          from 'typia'
+import {Opaque, UnwrapOpaque} from "../../opaque.js";
 
 
 
-const validateLongitude = typia.createValidate<LongitudeValue>()
+export type Longitude = Opaque<number & t.tags.Maximum<180> & t.tags.Minimum<-180> & tags.Type<"float">, "longitude">
 
-
-type LongitudeValue = number & t.tags.Maximum<180> & t.tags.Minimum<-180> & tags.Type<"float">
-
-export type Longitude = Opaque<LongitudeValue, "longitude">
+const validateLongitude = typia.createValidate<UnwrapOpaque<Longitude>>()
 
 export function createLongitude(longitude: unknown): Longitude {
 	const validation = validateLongitude(longitude)
