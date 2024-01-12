@@ -1,11 +1,36 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
 import {Injectable, Logger}         from "@nestjs/common"
 import {JwtService, JwtSignOptions} from "@nestjs/jwt"
-import {authorizationConfiguration} from "../../../configs/authorization-configuration.js"
-import {JsonWebToken}               from "../value-objects/jsonwebtoken.js"
-import {JwtPayload}                 from "../value-objects/jwt-payload.js"
-import {SignedJsonwebtoken}         from "../value-objects/signed-jsonwebtoken.js"
-import {AccessToken}                from "../value-objects/tokens/access-token.js"
-import {RefreshToken}               from "../value-objects/tokens/refresh-token.js"
+import {authorizationConfiguration} from "../../configs/authorization-configuration.js"
+import {JsonWebToken}               from "./entity/jsonwebtoken.js"
+import {JwtPayload}                 from "../authentication/value-objects/jwt-payload.js"
+import {SingedJwt}                  from "../authentication/value-objects/singed-jwt.js"
+import {AccessToken}                from "../authentication/value-objects/tokens/access-token.js"
+import {RefreshToken}               from "../authentication/value-objects/tokens/refresh-token.js"
 
 
 
@@ -13,7 +38,7 @@ export abstract class TokenManagement {
 	abstract create(payload: JwtPayload): Promise<JsonWebToken | RefreshToken | AccessToken>
 
 
-	abstract sign(payload: JsonWebToken | RefreshToken | AccessToken): Promise<SignedJsonwebtoken>
+	abstract sign(payload: JsonWebToken | RefreshToken | AccessToken): Promise<SingedJwt>
 
 
 	abstract verify(token: string): Promise<boolean>
@@ -47,12 +72,12 @@ export class JwtTokenManagement extends TokenManagement {
 		return decoded;
 	}
 
-	public async sign(payload: JsonWebToken | RefreshToken | AccessToken): Promise<SignedJsonwebtoken> {
+	public async sign(payload: JsonWebToken | RefreshToken | AccessToken): Promise<SingedJwt> {
 		this.logger.verbose(`Signing token: ${JSON.stringify(payload)}`)
 		const signed = await this.jwtService.signAsync(payload.toPlainObject(), {secret: authorizationConfiguration.jwtSecret});
 		this.logger.verbose(`Signed token: ${signed}`)
 		this.logger.log(`Issued token ${payload.jti} for ${payload.sub}`)
-		return new SignedJsonwebtoken(payload,  signed);
+		return new SingedJwt(payload,  signed);
 	}
 
 	public async verify(token: string): Promise<boolean> {

@@ -24,7 +24,7 @@
  */
 
 import {Result}                                from "neverthrow";
-import {SignedJsonwebtoken}                    from "../value-objects/signed-jsonwebtoken.js";
+import {SingedJwt}                             from "../value-objects/singed-jwt.js";
 import {ForbiddenException, NotFoundException} from "@nestjs/common";
 import {RefreshToken}                          from "../value-objects/tokens/refresh-token.js";
 
@@ -48,14 +48,14 @@ export abstract class AuthenticationService {
 		username : string,
 		password : string,
 	) : Promise<Result<{
-		accessToken : SignedJsonwebtoken,
-		refreshToken : SignedJsonwebtoken,
+		accessToken : SingedJwt,
+		refreshToken : SingedJwt,
 		accountId : string
 	}, NotFoundException | ForbiddenException>>;
 
 	public abstract logout() : Promise<void>;
 
 	public abstract refreshToken(refreshToken : string) : Promise<{
-		refreshToken : RefreshToken, accessToken : SignedJsonwebtoken
+		refreshToken : RefreshToken, accessToken : SingedJwt
 	}>;
 }

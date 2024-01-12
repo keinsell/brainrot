@@ -1,7 +1,7 @@
 import {Module}                              from "@nestjs/common"
 import {JwtModule}                           from "@nestjs/jwt"
 import {authorizationConfiguration}          from "../../configs/authorization-configuration.js"
-import {JwtTokenManagement, TokenManagement} from "../authentication/services/token-management.js"
+import {JwtTokenManagement, TokenManagement} from "../token/token-management.js"
 import {SessionController}                   from "./controllers/session-controller.js"
 import {InMemorySessionRepository}           from "./repositories/in-memory.session-repository.js"
 import {SessionRepository}                   from "./repositories/session-repository.js"

@@ -4,10 +4,10 @@ import {
 	CredentialValidator,
 }                                                          from "../../account/shared-kernel/credential-validator/credential-validator.js"
 import {JwtPayload}                                        from "../value-objects/jwt-payload.js"
-import {SignedJsonwebtoken}                                from "../value-objects/signed-jsonwebtoken.js"
+import {SingedJwt}                                         from "../value-objects/singed-jwt.js"
 import {AccessToken}                                       from "../value-objects/tokens/access-token.js"
 import {RefreshToken}                                      from "../value-objects/tokens/refresh-token.js"
-import {TokenManagement}                                   from "./token-management.js"
+import {TokenManagement}                                   from "../../token/token-management.js"
 import {AuthenticationService}                             from "../contract/authentication-service.js";
 
 
@@ -40,8 +40,8 @@ export class LocalAuthenticationService
 		username : string,
 		password : string,
 	) : Promise<Result<{
-		accessToken : SignedJsonwebtoken,
-		refreshToken : SignedJsonwebtoken,
+		accessToken : SingedJwt,
+		refreshToken : SingedJwt,
 		accountId : string
 	}, NotFoundException | ForbiddenException>>
 	{
@@ -83,7 +83,7 @@ export class LocalAuthenticationService
 	}
 
 	public async refreshToken(refreshToken : string) : Promise<{
-		refreshToken : RefreshToken, accessToken : SignedJsonwebtoken
+		refreshToken : RefreshToken, accessToken : SingedJwt
 	}>
 	{
 		const decodedRefreshToken = await this.tokenManagement.decode(

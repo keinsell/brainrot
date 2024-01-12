@@ -1,4 +1,4 @@
-import {JsonWebToken} from "../jsonwebtoken.js"
+import {JsonWebToken} from "../../../token/entity/jsonwebtoken.js"
 
 
 

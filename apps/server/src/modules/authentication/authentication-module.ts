@@ -14,7 +14,7 @@ import {
 }                                                             from "../session/repositories/prisma-session-repository.js"
 import {LocalAuthenticationService}                           from "./services/local-authentication-service.js"
 import {JwtAuthorizationStrategy, LocalAuthorizationStrategy} from "./provider/authorization-strategy/index.js"
-import {JwtTokenManagement, TokenManagement}                  from "./services/token-management.js"
+import {JwtTokenManagement, TokenManagement}                  from "../token/token-management.js"
 import {SessionRepository}                                    from "../session/repositories/session-repository.js";
 
 
