@@ -2,7 +2,6 @@ import {Module}                                               from "@nestjs/comm
 import {JwtModule}                                            from "@nestjs/jwt"
 import {PassportModule}                                       from "@nestjs/passport"
 import {DatabaseModule}                                       from "../../common/modules/database/database.module.js"
-import {authorizationConfiguration}                           from "../../configs/authorization-configuration.js"
 import {AccountModule}                                        from "../account/account.module.js"
 import {
 	CredentialValidatorModule,
@@ -16,6 +15,7 @@ import {LocalAuthenticationService}                           from "./services/l
 import {JwtAuthorizationStrategy, LocalAuthorizationStrategy} from "./provider/authorization-strategy/index.js"
 import {JwtTokenManagement, TokenManagement}                  from "../token/token-management.js"
 import {SessionRepository}                                    from "../session/repositories/session-repository.js";
+import {__authConfig}                                         from "../../configs/global/__config.js";
 
 
 
@@ -28,7 +28,7 @@ import {SessionRepository}                                    from "../session/r
 		}),
 		DatabaseModule,
 		JwtModule.register({
-			secretOrPrivateKey: authorizationConfiguration.jwtSecret,
+			secretOrPrivateKey: __authConfig.JWT_SECRET,
 		}),
 		SessionModule,
 	], controllers: [AuthenticationController], providers: [

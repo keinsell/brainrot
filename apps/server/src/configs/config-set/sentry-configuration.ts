@@ -24,11 +24,11 @@
  */
 
 import Sentry                 from "@sentry/node";
-import {isDevelopment}        from "../service/configuration-service.js";
 import {ProfilingIntegration} from "@sentry/profiling-node";
 import {isDebug}              from "../helper/is-debug.js";
 import {isProduction}         from "../helper/is-production.js";
 import {__config}             from "../global/__config.js";
+import {isDevelopment}        from "../helper/is-development.js";
 
 
 

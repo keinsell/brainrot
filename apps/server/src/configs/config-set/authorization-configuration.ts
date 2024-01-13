@@ -23,10 +23,30 @@
  *
  */
 
-import {ConfigurationService} from "../service/configuration-service.js";
+import Convict from "convict";
+import ms      from "ms";
 
 
 
-export var __config     = new ConfigurationService();
-export var __appConfig  = __config.get("APPLICATION")
-export var __authConfig = __config.get("AUTH")
+export interface IAuthorizationConfiguration {
+	JWT_SECRET : string,
+	ACCESS_TOKEN_DURATION : number
+	REFRESH_TOKEN_DURATION : number
+}
+
+
+export const AuthroizationConfiguration : Convict.Schema<IAuthorizationConfiguration> = {
+	JWT_SECRET            : {
+		default  : null,
+		format   : String,
+		env      : "JWT_SECRET",
+		sensitive: true,
+		nullable : false,
+	},
+	ACCESS_TOKEN_DURATION : {
+		default: ms("24h"),
+	},
+	REFRESH_TOKEN_DURATION: {
+		default: ms("32w"),
+	},
+}

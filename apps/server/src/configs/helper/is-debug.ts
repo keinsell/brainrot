@@ -23,10 +23,10 @@
  *
  */
 
-import {config} from "../service/configuration-service.js";
+import process from "node:process";
 
 
 
 export function isDebug() : boolean {
-	return config.get("DEBUG")
+	return process.env["DEBUG"] === "true"
 }

@@ -38,8 +38,8 @@ import {
 	LocalAuthenticationService,
 }                                                            from "../services/local-authentication-service.js"
 import {
-	IpAddress,
-}                                                            from "../value-objects/ip-address.js"
+	IPV4,
+}                                                            from "../value-objects/ipv4.js"
 
 
 
@@ -65,7 +65,7 @@ export class AuthenticationController {
 		description: "The user could not be found.",
 	})
 	async authenticate(@Req() request : Request, @Body() body : Authenticate) : Promise<AuthenticationResponse> {
-		const ipAddress = request.ip as IpAddress
+		const ipAddress = request.ip as IPV4
 		const userAgent = request.headers['user-agent'] as string
 
 		const user : Account = request.user as unknown as Account

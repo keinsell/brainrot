@@ -23,10 +23,25 @@
  *
  */
 
-import {ConfigurationService} from "../service/configuration-service.js";
+/**
+ * Represents the available environments for a node application.
+ */
+export enum NodeEnvironment {
 
-
-
-export var __config     = new ConfigurationService();
-export var __appConfig  = __config.get("APPLICATION")
-export var __authConfig = __config.get("AUTH")
+	/**
+	 * Represents the current production environment.
+	 *
+	 * @constant {string} PRODUCTION - The value representing the production environment.
+	 */
+	PRODUCTION  = "production",
+	/**
+	 * This variable represents the current development environment.
+	 * It is used to differentiate between different stages of software development.
+	 *
+	 * @type {string}
+	 */
+	DEVELOPMENT = "development",
+	TESTING     = "testing",
+	INTEGRATION = "integration",
+	DEBUG       = "debug",
+}

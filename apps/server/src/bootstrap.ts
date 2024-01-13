@@ -7,7 +7,6 @@ import {seeder}                       from "./common/libraries/seeder/seeder.js"
 import {buildCompodocDocumentation}   from "./common/modules/documentation/compodoc/compodoc.js"
 import {buildSwaggerDocumentation}    from "./common/modules/documentation/swagger/swagger.js"
 import {DatabaseModule}               from "./common/modules/database/database.module.js"
-import {ApplicationConfiguration}     from "./configs/application-configuration.js"
 import {StaticFeatureFlags}           from "./configs/static-feature-flags.js"
 import {Container}                    from "./container.js"
 import {AccountModule}                from "./modules/account/account.module.js"
@@ -24,14 +23,17 @@ import {
 import {
 	executePrismaRelatedProcesses,
 }                                     from "./common/modules/resources/prisma/utils/execute-prisma-related-processes.js";
-import {config, isDevelopment}        from "./configs/service/configuration-service.js";
+import {__appConfig, __config}        from "./configs/global/__config.js";
+import {isDevelopment}                from "./configs/helper/is-development.js";
 
 
 
 export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
-		abortOnError: false,
-		snapshot    : isDevelopment(),
+		abortOnError : false,
+		autoFlushLogs: true,
+		bufferLogs   : true,
+		snapshot     : isDevelopment(),
 	});
 
 	// Enable Prisma Exception Filter for Http Service
@@ -62,7 +64,7 @@ export async function bootstrap() {
 		res.end(res.sentry + "\n");
 	});
 
-	const PORT = config.get("PORT")
+	const PORT = __config.get("PORT")
 
 	// Listen on selected application port (with grace)
 	let openPort = await portAllocator(PORT);
@@ -78,9 +80,9 @@ export async function bootstrap() {
 	let retryDelay             = ms("5s");
 	let retryCount             = 3
 
-	const PROTOCOL = config.get("PROTOCOL")
-	const HOST     = config.get("HOST")
-	const NODE_ENV = config.get("NODE_ENV")
+	const PROTOCOL = __config.get("PROTOCOL")
+	const HOST     = __config.get("HOST")
+	const NODE_ENV = __config.get("NODE_ENV")
 
 	const applicationUrl = `${PROTOCOL}://${HOST}:${openPort.port}`
 
@@ -92,10 +94,11 @@ export async function bootstrap() {
 				logger.debug(`${"-".repeat(54)}`)
 				logger.debug(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
 				logger.debug(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
-				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl + ApplicationConfiguration.healthCheckPath}`)
+				logger.debug(`🩺 Healthcheck endpoint: ${applicationUrl
+				                                        + __config.get("APPLICATION").HEALTHCHECK_ENDPOINT}`)
 
 				if (isDevelopment() && StaticFeatureFlags.shouldRunPrismaStudio) {
-					logger.debug(`🧩 Prisma Admin is running on: http://localhost:${ApplicationConfiguration.prismaAdminPort}`)
+					logger.debug(`🧩 Prisma Admin is running on: http://localhost:${__appConfig.PRISMA_ADMIN_PORT}`)
 				}
 
 				logger.debug(`${"-".repeat(54)}`)
@@ -119,10 +122,8 @@ export async function bootstrap() {
 		retryCount--;
 	}
 
-
-
 	// If application is running in development mode, try to seed the database
-	if (isDevelopment() && StaticFeatureFlags.shouldRunSeeder) {
+	if (isDevelopment() && __config.get("APPLICATION").RUN_SEED) {
 		try {
 			seeder({
 				imports  : [

@@ -23,10 +23,6 @@
  *
  */
 
-import {ConfigurationService} from "../service/configuration-service.js";
-
-
-
-export var __config     = new ConfigurationService();
-export var __appConfig  = __config.get("APPLICATION")
-export var __authConfig = __config.get("AUTH")
+export interface ConfigSet {
+	[key : string] : string | number | boolean | object;
+}

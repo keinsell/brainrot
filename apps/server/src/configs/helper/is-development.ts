@@ -23,10 +23,8 @@
  *
  */
 
-import {ConfigurationService} from "../service/configuration-service.js";
+import {NodeEnvironment} from "../values/node-environment.js";
 
 
 
-export var __config     = new ConfigurationService();
-export var __appConfig  = __config.get("APPLICATION")
-export var __authConfig = __config.get("AUTH")
+export const isDevelopment = () => process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT;

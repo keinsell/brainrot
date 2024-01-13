@@ -3,9 +3,8 @@ import {DocumentBuilder, OpenAPIObject, SwaggerModule} from "@nestjs/swagger"
 import fs                                              from "node:fs"
 import process                                         from 'node:process'
 import tildify                                         from "tildify"
-import {ApplicationConfiguration}                      from "../../../../configs/application-configuration.js"
 import {getMetadataStore}                              from "../../../../utilities/docs-utils/swagger-api-model.js"
-import {config}                                        from "../../../../configs/service/configuration-service.js";
+import {__config}                                      from "../../../../configs/global/__config.js";
 
 
 
@@ -90,17 +89,17 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	const logger = new Logger('doc:swagger');
 
 	const swaggerConfig = new DocumentBuilder()
-	.setTitle(config.get('SERVICE_NAME'))
-	.setDescription(config.get('SERVICE_DESCRIPTION'))
+	.setTitle(__config.get('SERVICE_NAME'))
+	.setDescription(__config.get('SERVICE_DESCRIPTION'))
 	.setVersion('1.0')
 	.addTag('api')
 	.build()
 
-	logger.verbose(`Swagger documentation base built for ${config.get('SERVICE_NAME')} service.`);
+	logger.verbose(`Swagger documentation base built for ${__config.get('SERVICE_NAME')} service.`);
 
 	const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-	logger.verbose(`Swagger documentation document built for ${config.get('SERVICE_NAME')} service.`);
+	logger.verbose(`Swagger documentation document built for ${__config.get('SERVICE_NAME')} service.`);
 
 	experimentalAddApiModelFunctionality(document);
 
@@ -114,8 +113,6 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	//		content: document,
 	//	},
 	//}))
-
-	logger.verbose(`Swagger documentation was attached to ${config.get('SERVICE_NAME')} service at ${ApplicationConfiguration.openapiDocumentationPath}`);
 
 	const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`;
 

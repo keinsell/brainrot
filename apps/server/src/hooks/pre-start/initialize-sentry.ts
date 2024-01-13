@@ -28,13 +28,13 @@
 import * as Sentry            from "@sentry/node";
 import {Logger}               from "@nestjs/common";
 import {setupGlobalHub}       from "@sentry/opentelemetry";
-import {config}               from "../../configs/service/configuration-service.js";
 import {SENTRY_CONFIGURATION} from "../../configs/config-set/sentry-configuration.js";
+import {__config}             from "../../configs/global/__config.js";
 
 
 
 export function initializeSentry() : void {
-	new Logger().log(`Initializing Sentry... ${config.get('SENTRY_DSN')}`);
+	new Logger().log(`Initializing Sentry... ${__config.get('SENTRY_DSN')}`);
 
 	// Turn ON if integrating with OTEL
 	setupGlobalHub();

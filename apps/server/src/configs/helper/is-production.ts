@@ -25,4 +25,8 @@
 
 
 
-export const isProduction = () => process.env.NODE_ENV === 'production';
+import {NodeEnvironment} from "../values/node-environment.js";
+
+
+
+export const isProduction = () => process.env.NODE_ENV === NodeEnvironment.PRODUCTION;
