@@ -13,9 +13,10 @@ import {
 }                                                             from "../session/repositories/prisma-session-repository.js"
 import {LocalAuthenticationService}                           from "./services/local-authentication-service.js"
 import {JwtAuthorizationStrategy, LocalAuthorizationStrategy} from "./provider/authorization-strategy/index.js"
-import {JwtTokenManagement, TokenManagement}                  from "../token/token-management.js"
+import {JwtTokenManagement, TokenManagement}                  from "../authtoken/token-management.js"
 import {SessionRepository}                                    from "../session/repositories/session-repository.js";
 import {__authConfig}                                         from "../../configs/global/__config.js";
+import {AuthtokenModule}                                     from "../authtoken/authtoken-module.js";
 
 
 
@@ -23,6 +24,7 @@ import {__authConfig}                                         from "../../config
 	imports       : [
 		CredentialValidatorModule,
 		AccountModule,
+		AuthtokenModule,
 		PassportModule.register({
 			session: true,
 		}),

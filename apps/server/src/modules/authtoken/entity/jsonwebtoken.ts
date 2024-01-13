@@ -23,9 +23,9 @@
  *
  */
 
-import ms           from "ms"
-import {randomUUID} from "node:crypto"
-import {JwtPayload} from "../../authentication/value-objects/jwt-payload.js"
+import ms             from "ms"
+import {randomUUID}   from "node:crypto"
+import {jsonwebtoken} from "../dto/jsonwebtoken.js"
 
 
 
@@ -42,7 +42,7 @@ export class JsonWebToken {
 	readonly sub? : string | undefined;
 
 
-	constructor(payload : Omit<JwtPayload, "exp" | "iat" | "nbf" | "jti"> & {
+	constructor(payload : Omit<jsonwebtoken, "exp" | "iat" | "nbf" | "jti"> & {
 		jti? : string,
 		nbf? : number,
 		iat? : number,
@@ -60,7 +60,7 @@ export class JsonWebToken {
 	}
 
 
-	toPlainObject() : JwtPayload {
+	toPlainObject() : jsonwebtoken {
 		return {
 			aud     : this.audience,
 			exp     : this.expiresAt,

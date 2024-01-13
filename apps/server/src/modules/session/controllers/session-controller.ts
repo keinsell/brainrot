@@ -1,7 +1,7 @@
 import {Body, Controller, Post} from "@nestjs/common"
 import {ApiOperation}           from "@nestjs/swagger"
 import {OpenapiTags}            from "../../../common/modules/documentation/swagger/openapi-tags.js"
-import {TokenManagement}        from "../../token/token-management.js"
+import {TokenManagement}        from "../../authtoken/token-management.js"
 import {AccessToken}            from "../../authentication/value-objects/tokens/access-token.js"
 import {RefreshSession}         from "../commands/refresh-session.js"
 import {SessionService}         from "../services/session-service.js"
@@ -23,7 +23,7 @@ export class SessionController {
 	async refreshSession(@Body() body : RefreshSession) : Promise<string> {
 		// Decode token
 		const maybeRefreshedToken = await this.tokenManagement.decode(body.refreshToken)
-		
+
 		// Find session related to token
 		const session = await this.sessionService.getByJti(maybeRefreshedToken.jti)
 

@@ -2,44 +2,28 @@ import {Body, Controller, Get, Logger, Post, Req, UseGuards} from "@nestjs/commo
 import {
 	ApiBasicAuth,
 	ApiBearerAuth,
+	ApiBody,
 	ApiCreatedResponse,
 	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
 }                                                            from "@nestjs/swagger"
+import {Request}                                             from "express"
+import {Account}                                             from "../../account/entities/account.js"
+import {AccountViewModel}                                    from "../../account/view-model/account-view-model.js"
+import {SessionService}                                      from "../../session/services/session-service.js"
+import {SessionStatus}                                       from "../../session/value-objects/session-status.js"
+import {Authenticate}                                        from "../commands/authenticate.js"
+import {AuthenticationResponse}                              from "../dtos/authentication-response.js"
+import {JwtAuthorizationGuard}                               from "../guards/jwt-authorization-guard.js"
+import {LocalAuthorizationGuard}                             from "../guards/local-authorization-guard.js"
+import {LocalAuthenticationService}                          from "../services/local-authentication-service.js"
+import {IPV4}                                                from "../value-objects/ipv4.js"
 import {
-	Request,
-}                                                            from "express"
-import {
-	Account,
-}                                                            from "../../account/entities/account.js"
-import {
-	AccountViewModel,
-}                                                            from "../../account/view-model/account-view-model.js"
-import {
-	SessionService,
-}                                                            from "../../session/services/session-service.js"
-import {
-	SessionStatus,
-}                                                            from "../../session/value-objects/session-status.js"
-import {
-	Authenticate,
-}                                                            from "../commands/authenticate.js"
-import {
-	AuthenticationResponse,
-}                                                            from "../dtos/authentication-response.js"
-import {
-	JwtAuthorizationGuard,
-}                                                            from "../guards/jwt-authorization-guard.js"
-import {
-	LocalAuthorizationGuard,
-}                                                            from "../guards/local-authorization-guard.js"
-import {
-	LocalAuthenticationService,
-}                                                            from "../services/local-authentication-service.js"
-import {
-	IPV4,
-}                                                            from "../value-objects/ipv4.js"
+	SessionExpirationDate,
+}                                                            from "../../session/value-objects/session-expiration-date.js";
+import {TokenManagement}                                    from "../../authtoken/contract/token-management.js";
+import ms                                                    from "ms";
 
 
 
@@ -48,7 +32,12 @@ export class AuthenticationController {
 	private logger : Logger = new Logger("authentication::controller")
 
 
-	constructor(private authenticationService : LocalAuthenticationService, private sessionService : SessionService) {
+	constructor(
+		private authenticationService : LocalAuthenticationService,
+		private sessionService : SessionService,
+		private tokenManagement : TokenManagement,
+	)
+	{
 	}
 
 
@@ -64,6 +53,7 @@ export class AuthenticationController {
 	}) @ApiNotFoundResponse({
 		description: "The user could not be found.",
 	})
+	@ApiBody({type: Authenticate})
 	async authenticate(@Req() request : Request, @Body() body : Authenticate) : Promise<AuthenticationResponse> {
 		const ipAddress = request.ip as IPV4
 		const userAgent = request.headers['user-agent'] as string
@@ -85,8 +75,14 @@ export class AuthenticationController {
 			tokenId  : authenticationResult.refreshToken.jti,
 			tokens   : [authenticationResult.accessToken.jti],
 			endTime  : null,
-			expiresAt: new Date(authenticationResult.refreshToken.expiresAt),
+			expiresAt: new Date(authenticationResult.refreshToken.expiresAt) as SessionExpirationDate,
 			status   : SessionStatus.ACTIVE,
+		})
+
+		await this.tokenManagement.issueToken({
+			owner   : authenticationResult.accountId,
+			duration: ms("32h"),
+			metadata: {},
 		})
 
 		this.logger.log(`Issued session ${maybeSession.id}`)

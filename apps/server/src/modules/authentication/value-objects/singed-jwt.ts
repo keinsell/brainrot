@@ -1,14 +1,16 @@
-import {JsonWebToken} from "../../token/entity/jsonwebtoken.js"
+import {JsonWebToken} from "../../authtoken/entity/jsonwebtoken.js"
 
 
 
 export class SingedJwt
 	extends JsonWebToken {
 	constructor(
-		jwt: JsonWebToken,
-		public signature: string,
-	) {super(
-jwt.toPlainObject(),
+		jwt : JsonWebToken,
+		public signature : string,
 	)
+	{
+		super(
+			jwt.toPlainObject(),
+		)
 	}
 }

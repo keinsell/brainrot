@@ -2,7 +2,8 @@ import {Logger}                         from "@nestjs/common"
 import {KeyDerivationFunction}          from "./key-derivation-functions/key-derivation-function.js"
 import {PhcString, SerializedPhcString} from "./types/phc-string.js"
 import {Salt}                           from "./types/salt.js"
-import {isDevelopment}                  from "../../../configs/service/configuration-service.js";
+
+import {isDevelopment} from "../../../configs/helper/is-development.js";
 
 
 

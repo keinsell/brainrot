@@ -124,8 +124,6 @@ model TokenAudit {
   accountId  String
   /// The ID of the token (jti claim from JWT)
   tokenId    String
-  ///  Information about the device (e.g., browser, OS)
-  deviceInfo String
   /// The issue time of the token (iat claim from JWT)
   issuedAt   DateTime
   /// The expiration time of the token (exp claim from JWT)
@@ -133,7 +131,11 @@ model TokenAudit {
   /// Indicates if the token is revoked
   isRevoked  Boolean
   /// The last time the token was used
-  lastUsedAt DateTime
+  lastUsedAt DateTime?
+    // --------------------------------------------------
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    version   Int       @default(1)
   // --------------------------------------------------
   Account    Account  @relation(fields: [accountId], references: [id])
 }

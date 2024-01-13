@@ -1,32 +1,28 @@
 // https://gist.github.com/joyrexus/6510992
-import {Address} from "../address/address.js"
+import {Address}         from "../address/address.js"
+import {GeocodeProvider} from "./contract/geocode-provider.js";
 
-
-
-export interface GeocoderProvider {
-
-}
 
 
 export abstract class Geocoder {
-	private providers: GeocoderProvider[] = [];
+	private providers : GeocodeProvider[] = [];
 
 
-	abstract geocode(query: any): Promise<Address[]>;
+	abstract geocode(query : any) : Promise<Address[]>;
 
 
-	abstract reverse(query: any): Promise<Address[]>;
+	abstract reverse(query : any) : Promise<Address[]>;
 
 
-	abstract suggest(query: any): Promise<any[]>;
+	abstract suggest(query : any) : Promise<any[]>;
 
 
-	registerProvider(provider: GeocoderProvider) {
+	registerProvider(provider : GeocodeProvider) {
 		this.providers.push(provider);
 	}
 
 
-	getFirstProvider(): GeocoderProvider {
+	getFirstProvider() : GeocodeProvider {
 		return this.providers[0];
 	}
 }

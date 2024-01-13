@@ -26,7 +26,7 @@
 import {Injectable, Logger}         from "@nestjs/common"
 import {JwtService, JwtSignOptions} from "@nestjs/jwt"
 import {JsonWebToken}               from "./entity/jsonwebtoken.js"
-import {JwtPayload}                 from "../authentication/value-objects/jwt-payload.js"
+import {jsonwebtoken}               from "./dto/jsonwebtoken.js"
 import {SingedJwt}                  from "../authentication/value-objects/singed-jwt.js"
 import {AccessToken}                from "../authentication/value-objects/tokens/access-token.js"
 import {RefreshToken}               from "../authentication/value-objects/tokens/refresh-token.js"
@@ -35,7 +35,7 @@ import {__authConfig, __config}     from "../../configs/global/__config.js";
 
 
 export abstract class TokenManagement {
-	abstract create(payload : JwtPayload) : Promise<JsonWebToken | RefreshToken | AccessToken>
+	abstract create(payload : jsonwebtoken) : Promise<JsonWebToken | RefreshToken | AccessToken>
 
 
 	abstract sign(payload : JsonWebToken | RefreshToken | AccessToken) : Promise<SingedJwt>
@@ -44,7 +44,7 @@ export abstract class TokenManagement {
 	abstract verify(token : string) : Promise<boolean>
 
 
-	abstract decode<T = JwtPayload>(token : string) : Promise<T>
+	abstract decode<T = jsonwebtoken>(token : string) : Promise<T>
 }
 
 
@@ -60,14 +60,14 @@ export class JwtTokenManagement
 		this.jwtService = jwtService;
 	}
 
-	public async create(payload : JwtPayload) : Promise<JsonWebToken | RefreshToken | AccessToken> {
+	public async create(payload : jsonwebtoken) : Promise<JsonWebToken | RefreshToken | AccessToken> {
 		this.logger.verbose(`Creating token for payload: ${JSON.stringify(payload)}`)
 		const tokenPayload = new JsonWebToken(payload);
 		this.logger.verbose(`Created token payload: ${JSON.stringify(tokenPayload)}`)
 		return tokenPayload;
 	}
 
-	public async decode<T = JwtPayload>(token : string) : Promise<T> {
+	public async decode<T = jsonwebtoken>(token : string) : Promise<T> {
 		this.logger.verbose(`Decoding token: ${token}`)
 		const decoded = await this.jwtService.decode(token) as T;
 		this.logger.verbose(`Decoded token: ${JSON.stringify(decoded)}`)

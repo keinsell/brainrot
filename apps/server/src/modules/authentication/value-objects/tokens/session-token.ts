@@ -1,5 +1,6 @@
-import {JsonWebToken} from "../../../token/entity/jsonwebtoken.js"
+import {JsonWebToken} from "../../../authtoken/entity/jsonwebtoken.js"
 
 
 
-export class SessionToken extends JsonWebToken {}
+export class SessionToken
+	extends JsonWebToken {}

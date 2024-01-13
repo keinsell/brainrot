@@ -71,8 +71,8 @@ import {
 	PeriodicExportingMetricReader,
 }                                  from "@opentelemetry/sdk-metrics";
 import {
-	config,
-}                                  from "../../../../../../../configs/service/configuration-service.js";
+	__config,
+}                                  from "../../../../../../../configs/global/__config.js";
 
 
 
@@ -83,7 +83,7 @@ export interface OpenTelemetryModuleConfig
 
 
 export const OpenTelemetryModuleDefaultConfig = {
-	serviceName        : config.get("SERVICE_NAME"),
+	serviceName        : __config.get("SERVICE_NAME"),
 	traceAutoInjectors : [
 		ControllerInjector,
 		GuardInjector,

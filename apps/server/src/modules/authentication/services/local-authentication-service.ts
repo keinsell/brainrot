@@ -3,11 +3,11 @@ import {ok, Result}                                        from "neverthrow"
 import {
 	CredentialValidator,
 }                                                          from "../../account/shared-kernel/credential-validator/credential-validator.js"
-import {JwtPayload}                                        from "../value-objects/jwt-payload.js"
+import {jsonwebtoken}                                      from "../../authtoken/dto/jsonwebtoken.js"
 import {SingedJwt}                                         from "../value-objects/singed-jwt.js"
 import {AccessToken}                                       from "../value-objects/tokens/access-token.js"
 import {RefreshToken}                                      from "../value-objects/tokens/refresh-token.js"
-import {TokenManagement}                                   from "../../token/token-management.js"
+import {TokenManagement}                                   from "../../authtoken/token-management.js"
 import {AuthenticationService}                             from "../contract/authentication-service.js";
 
 
@@ -54,7 +54,7 @@ export class LocalAuthenticationService
 		}
 		const account = isValid.value
 
-		const tokenPayload : Omit<JwtPayload, "exp" | "iat" | "nbf" | "jti"> & {
+		const tokenPayload : Omit<jsonwebtoken, "exp" | "iat" | "nbf" | "jti"> & {
 			jti? : string, nbf? : number, iat? : number, exp? : number
 		}                  = {
 			sub: account.id, aud: "http://localhost:1337", metadata: {

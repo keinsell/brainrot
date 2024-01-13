@@ -1,6 +1,6 @@
 import {BaseAggregateRoot}     from "../../../common/libraries/domain/aggregate.js"
 import {AccountId}             from "../../account/shared-kernel/account-id.js"
-import {IpAddress}             from "../../authentication/value-objects/ip-address.js"
+import {IPV4}                  from "../../authentication/value-objects/ipv4.js"
 import {SessionEvent}          from "../events/session-event.js"
 import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"
 import {SessionStatus}         from "../value-objects/session-status.js"
@@ -31,7 +31,7 @@ export interface SessionProperties {
 	subject : AccountId;
 	expiresAt : SessionExpirationDate;
 	userAgent? : UserAgent;
-	ipAddress? : IpAddress;
+	ipAddress? : IPV4;
 	location? : string;
 	device? : string;
 	status : SessionStatus
@@ -46,8 +46,8 @@ export class UserSession
 
 	public device : string
 	public endTime : Date | null
-	public expiresAt : Date
-	public ipAddress : IpAddress
+	public expiresAt : SessionExpirationDate
+	public ipAddress : IPV4
 	public location : string
 	public startTime : Date
 	public status : SessionStatus
@@ -59,7 +59,7 @@ export class UserSession
 
 	constructor(props : SessionProperties) {
 		super(props)
-		this.expiresAt = props.expiresAt as any
+		this.expiresAt = props.expiresAt
 		this.ipAddress = props.ipAddress as any
 		this.subject   = props.subject as any
 		this.userAgent = props.userAgent as any

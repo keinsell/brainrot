@@ -1,4 +1,4 @@
-import {ULID} from "./ulid.js"
+import {ULID} from "./ulid/ulid.js"
 
 
 

@@ -3,7 +3,7 @@ import {PassportStrategy}           from "@nestjs/passport"
 import {ExtractJwt, Strategy}       from "passport-jwt"
 import {AccountService}             from "../../../account/services/account-service.js"
 import {AuthenticationStrategyType} from "../../contract/authentication-strategy/authentication-strategy-type.js"
-import {JwtPayload}                 from "../../value-objects/jwt-payload.js"
+import {jsonwebtoken}               from "../../../authtoken/dto/jsonwebtoken.js"
 import {AuthenticationStrategy}     from "../../contract/authentication-strategy/authentication-strategy.js"
 import {__authConfig}               from "../../../../configs/global/__config.js";
 
@@ -24,7 +24,7 @@ export class JwtAuthorizationStrategy
 	}
 
 
-	async validate(payload : JwtPayload) : Promise<any> {
+	async validate(payload : jsonwebtoken) : Promise<any> {
 		this.logger.verbose(`Request performed using jwt_${payload.jti} for user ${payload.sub}`)
 
 		// Typeguard against missing sub
