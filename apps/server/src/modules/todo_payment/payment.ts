@@ -1,9 +1,11 @@
-import {PaymentProcessorIdentifier} from "./value-objects/payment-processor-identifier.js"
-
+import {PaymentId} from "./value-objects/payment-id.js";
+import {
+	PaymentProcessorIdentifier
+}                  from "./value-objects/payment-processor-identifier.js"
 
 
 export interface Payment {
-	id: string
+	id: PaymentId
 	userId: string
 	processor: PaymentProcessorIdentifier
 	amount: number

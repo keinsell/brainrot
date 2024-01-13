@@ -1,4 +1,5 @@
 export enum PaymentProcessorIdentifier {
-	Stripe = "Stripe",
-	Manual = "Manual",
+	Stripe = "STRIPE",
+	PayPal = "PAYPAL",
+	//Manual = "Manual",
 }

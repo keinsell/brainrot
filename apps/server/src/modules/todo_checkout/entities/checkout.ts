@@ -1,5 +1,5 @@
 // Do started checkout should snapshot cart?
-import {PaymentMethod} from "../../todo_payment-method/payment-method.js"
+import {PaymentMethod} from "../../todo_payment-method/entity/payment-method.js"
 import {CheckoutItem}  from "./checkout-item.js"
 
 
