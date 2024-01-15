@@ -23,12 +23,13 @@
  *
  */
 
-import {Grant} from "../../authorization/entities/grant.js";
+import { Grant } from '../../authorization/entities/grant.js'
 
 
 
-export interface Role {
-	id : string
-	name : string
-	grants : Grant[]
-}
+export interface Role
+  {
+	 id : string
+	 name : string
+	 grants : Grant[]
+  }

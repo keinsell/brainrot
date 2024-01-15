@@ -1,10 +1,10 @@
-import {BaseAggregateRoot}     from "../../../common/libraries/domain/aggregate.js"
-import {AccountId}             from "../../account/shared-kernel/account-id.js"
-import {IPV4}                  from "../../authentication/value-objects/ipv4.js"
-import {SessionEvent}          from "../events/session-event.js"
-import {SessionExpirationDate} from "../value-objects/session-expiration-date.js"
-import {SessionStatus}         from "../value-objects/session-status.js"
-import {UserAgent}             from "../value-objects/user-agent.js"
+import { BaseAggregateRoot }     from '../../../common/libraries/domain/aggregate.js'
+import { AccountId }             from '../../account/shared-kernel/account-id.js'
+import { IPV4 }                  from '../../authentication/value-objects/ipv4.js'
+import { SessionEvent }          from '../events/session-event.js'
+import { SessionExpirationDate } from '../value-objects/session-expiration-date.js'
+import { SessionStatus }         from '../value-objects/session-status.js'
+import { UserAgent }             from '../value-objects/user-agent.js'
 
 //User Identity: Sessions often include information about the authenticated user, such as their user ID, username, or
 // email address. This is crucial for associating user-specific data and permissions with the session.  Authentication
@@ -21,84 +21,92 @@ import {UserAgent}             from "../value-objects/user-agent.js"
 // can be included in the session data.  Security Information: Information related to session security, such as IP
 // address, user agent, and other data used for security checks and fraud prevention, may be included.
 
-export interface SessionProperties {
-	/** unique identifier for the session */
-	id : string
-	/** The timestamp when the session started */
-	startTime : Date
-	/** The timestamp when the session ended. */
-	endTime : Date | null
-	subject : AccountId;
-	expiresAt : SessionExpirationDate;
-	userAgent? : UserAgent;
-	ipAddress? : IPV4;
-	location? : string;
-	device? : string;
-	status : SessionStatus
-	tokenId? : string
-	tokens? : string[]
-}
+export interface SessionProperties
+  {
+	 /** unique identifier for the session */
+	 id : string
+	 /** The timestamp when the session started */
+	 startTime : Date
+	 /** The timestamp when the session ended. */
+	 endTime : Date | null
+	 subject : AccountId;
+	 expiresAt : SessionExpirationDate;
+	 userAgent? : UserAgent;
+	 ipAddress? : IPV4;
+	 location? : string;
+	 device? : string;
+	 status : SessionStatus
+	 tokenId? : string
+	 tokens? : string[]
+  }
 
 
 export class UserSession
-	extends BaseAggregateRoot
-	implements SessionProperties {
+  extends BaseAggregateRoot<string>
+  implements SessionProperties
+  {
 
-	public device : string
-	public endTime : Date | null
-	public expiresAt : SessionExpirationDate
-	public ipAddress : IPV4
-	public location : string
-	public startTime : Date
-	public status : SessionStatus
-	public subject : AccountId
-	public tokenId : string
-	public tokens : string[]
-	public userAgent : string
-
-
-	constructor(props : SessionProperties) {
-		super(props)
-		this.expiresAt = props.expiresAt
-		this.ipAddress = props.ipAddress as any
-		this.subject   = props.subject as any
-		this.userAgent = props.userAgent as any
-		this.endTime   = props.endTime as any
-		this.location  = props.location as any
-		this.device    = props.device as any
-		this.status    = props.status as any
-		this.tokenId   = props.tokenId as any
-		this.tokens    = props.tokens as any
-	}
+	 public device : string
+	 public endTime : Date | null
+	 public expiresAt : SessionExpirationDate
+	 public ipAddress : IPV4
+	 public location : string
+	 public startTime : Date
+	 public status : SessionStatus
+	 public subject : AccountId
+	 public tokenId : string
+	 public tokens : string[]
+	 public userAgent : string
 
 
-	public static build(props : SessionProperties) : UserSession {
-		return new UserSession({
-			...props,
-			startTime: new Date(),
-		})
-	}
+	 constructor(props : SessionProperties)
+		{
+		  super( props )
+		  this.expiresAt = props.expiresAt
+		  this.ipAddress = props.ipAddress as any
+		  this.subject   = props.subject as any
+		  this.userAgent = props.userAgent as any
+		  this.endTime   = props.endTime as any
+		  this.location  = props.location as any
+		  this.device    = props.device as any
+		  this.status    = props.status as any
+		  this.tokenId   = props.tokenId as any
+		  this.tokens    = props.tokens as any
+		}
 
 
-	public RestoreSession(props : SessionProperties) : UserSession {
-		return new UserSession(props)
-	}
+	 public static build(props : SessionProperties) : UserSession
+		{
+		  return new UserSession( {
+											 ...props,
+											 startTime : new Date(),
+										  } )
+		}
 
 
-	public refreshSession(tokenId : string) : UserSession {
-		this.logger.log(`Refreshed with token ${tokenId}`)
-		this.tokens.push(tokenId)
-		return this
-	}
+	 public RestoreSession(props : SessionProperties) : UserSession
+		{
+		  return new UserSession( props )
+		}
 
 
-	public destroySession() : UserSession {
-		return this
-	}
+	 public refreshSession(tokenId : string) : UserSession
+		{
+		  this.logger.log( `Refreshed with token ${tokenId}` )
+		  this.tokens.push( tokenId )
+		  return this
+		}
 
 
-	public startSession() : UserSession {
-		this.appendEvent(new SessionEvent.SessionCreated(this))
-		return this
-	}
-}
+	 public destroySession() : UserSession
+		{
+		  return this
+		}
+
+
+	 public startSession() : UserSession
+		{
+		  this.appendEvent( new SessionEvent.SessionCreated( this ) )
+		  return this
+		}
+  }

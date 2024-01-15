@@ -23,23 +23,31 @@
  *
  */
 
-import { Event }      from '../message/event.js'
-import { EntityBase } from './entity/entity-base.js'
+import { Event }       from '../message/event.js'
+import { MessageType } from '../message/values/message-type.js'
+import { EntityBase }  from './entity/entity-base.js'
 
 
 
 /** Domain Event is a type of message (event) that is happening from a specific aggregate, the aim of this abstraction is to provide simplified way of handling domain events. */
-export abstract class DomainEvent<T extends EntityBase>
-  extends Event<string>
+export abstract class DomainEvent<T extends EntityBase<unknown>, PROPERTIES extends Object>
+  extends Event<PROPERTIES & {
+	 aggregateId : T['id'], aggregateVersion : T['version']
+  }>
   {
-	 protected constructor(
-		aggregateOrEntity : T,
-		namespace : string,
+	 public constructor(
+		aggregateOrEntity : T & PROPERTIES,
+		namespace? : string,
 	 )
 		{
 		  super( {
-					  namespace : namespace,
-					  body      : JSON.stringify( aggregateOrEntity ),
+					  body : {
+						 ...aggregateOrEntity.__clearEvents() as T & PROPERTIES,
+						 _events          : [],
+						 aggregateId      : aggregateOrEntity.id,
+						 aggregateVersion : aggregateOrEntity.version,
+					  },
+					  type : MessageType.EVENT,
 					} )
 		}
   }

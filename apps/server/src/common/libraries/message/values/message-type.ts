@@ -25,10 +25,11 @@
 
 export enum MessageType
   {
-	 MESSAGE = 'message',
-	 EVENT   = 'event',
-	 COMMAND = 'command',
-	 REQUEST = 'request',
-	 REPLY   = 'reply',
-	 QUERY   = 'query',
+	 MESSAGE  = 'message',
+	 EVENT    = 'event',
+	 COMMAND  = 'command',
+	 REQUEST  = 'request',
+	 REPLY    = 'reply',
+	 QUERY    = 'query',
+	 DOCUMENT = 'document'
   }

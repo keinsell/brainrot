@@ -22,7 +22,6 @@ import { AccountEmailConfirmed }        from '../events/account-email-confirmed.
 import { AccountRegistered }            from '../events/account-registered.js'
 import { AccountVerificationEmailSent } from '../events/account-verification-email-sent.js'
 import { AccountConfirmedNotification } from '../notifcation/account-confirmed-notification.js'
-import { ConfirmEmailNotification }     from '../notifcation/confirm-email-notification.js'
 import { AccountRepository }            from '../repositories/account-repository.js'
 
 
@@ -75,15 +74,11 @@ export class AccountVerification
 			 body      : 'Your verification code is: ' + verificationSecret,
 		  }
 
-		  const notification = new ConfirmEmailNotification( verificationSecret, account.email )
-
-		  this.logger.log( `Notification created: ${JSON.stringify( notification )}` )
-
 		  await this.mailer.sendEmail( verificationEmail )
 
 		  // Emit verification email sent event
 		  const emailVerificationSentEvent = new AccountVerificationEmailSent( account )
-		  await this.publisher.publish( emailVerificationSentEvent )
+		  this.publisher.publish( emailVerificationSentEvent )
 		}
 
 
@@ -144,12 +139,12 @@ export class AccountVerification
 		}
 
 
-	 @OnEvent( 'account.registered' )
+	 @OnEvent( 'account.registered', {async : true} )
 	 private async onAccountRegistered(event : AccountRegistered) : Promise<void>
 		{
-		  this.logger.verbose( `Handling ${event.id} with "onAccountRegistered": ${JSON.stringify( event )}` )
-		  await this.sendVerificationEmail( event.body!.accountId )
-		  this.logger.debug( `Handled ${event.id} with "onAccountRegistered"` )
+		  this.logger.debug( `Handling ${event.id} with "onAccountRegistered": ${JSON.stringify( event )}` )
+		  await this.sendVerificationEmail( event.body!.aggregateId )
+		  this.logger.verbose( `Handled ${event.id} with "onAccountRegistered"` )
 		}
 
 	 @OnEvent( 'account.verification.completed' )

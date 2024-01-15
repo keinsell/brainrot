@@ -24,34 +24,43 @@
  */
 
 
-import {Controller, Delete, Get, Param, Patch, Post} from "@nestjs/common";
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+}                       from '@nestjs/common'
+import { ApiOperation } from '@nestjs/swagger'
 
 
 
-@Controller("role")
-export class RoleController {
-	@Get("")
-	getRoles() {
-		// code to get roles
-	}
+@Controller( 'role' )
+export class RoleController
+  {
+	 @ApiOperation( {operationId : 'list-roles'} ) @Get() getRoles()
+		{
+		  // code to get roles
+		}
 
-	@Get("/:id")
-	getRoleById(@Param("id") id : string) {
-		// code to get role by id
-	}
+	 @ApiOperation( {operationId : 'get-role'} ) @Get( '/:id' ) getRoleById(@Param( 'id' ) id : string)
+		{
+		  // code to get role by id
+		}
 
-	@Patch("/:id")
-	updateRole(@Param("id") id : string) {
-		// code to update role by id
-	}
+	 @ApiOperation( {operationId : 'patch-role'} ) @Patch( '/:id' ) updateRole(@Param( 'id' ) id : string)
+		{
+		  // code to update role by id
+		}
 
-	@Post("")
-	createRole() {
-		// code to create a new role
-	}
-	
-	@Delete("/:id")
-	deleteRole(@Param("id") id : string) {
-		// code to delete role by id
-	}
-}
+	 @ApiOperation( {operationId : 'create-role'} ) @Post( '' ) createRole()
+		{
+		  // code to create a new role
+		}
+
+	 @ApiOperation( {operationId : 'delete-role'} ) @Delete( '/:id' ) deleteRole(@Param( 'id' ) id : string)
+		{
+		  // code to delete role by id
+		}
+  }

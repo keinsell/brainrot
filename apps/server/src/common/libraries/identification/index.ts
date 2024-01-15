@@ -1,4 +1,5 @@
-import { ULID } from './ulid/ulid.js'
+import type { ApiPropertyOptions } from '@nestjs/swagger'
+import { ULID }                    from './ulid/ulid.js'
 
 
 
@@ -30,3 +31,7 @@ export type UniqueIdentifier =
   | ULID
   | KSUID;
 
+export const UniqueIdentifierApiSpecification : ApiPropertyOptions = {
+  name        : 'id',
+  description : 'Unique identifier of given resource.',
+}

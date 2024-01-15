@@ -1,5 +1,6 @@
-import { Message }     from './message.js'
-import { MessageType } from './values/message-type.js'
+import type { SetOptional } from 'type-fest'
+import { Message }          from './message.js'
+import { MessageType }      from './values/message-type.js'
 
 
 
@@ -9,7 +10,7 @@ export class Event<BODY = unknown>
 	 override type : MessageType = MessageType.EVENT
 
 
-	 constructor(payload : Omit<Message<BODY>, 'id' | 'timestamp' | 'type'>)
+	 constructor(payload : SetOptional<Message<BODY>, 'id' | 'timestamp' | 'type' | 'namespace'>)
 		{
 		  super( {
 					  ...payload,

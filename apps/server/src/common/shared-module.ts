@@ -2,11 +2,9 @@ import { Module }                         from '@nestjs/common'
 import { ConfigModule }                   from '../configs/config-module.js'
 import { SessionMiddlewareModule }        from './middleware/session/session-middleware-module.js'
 import { DatabaseModule }                 from './modules/database/database.module.js'
-import { DocumentationModule }            from './modules/documentation/documentation-module.js'
-import { DeveloperToolsModule }           from './modules/environment/dev-tools/developer-tools.module.js'
 import { AsyncLocalStorageModule }        from './modules/environment/local-storage/async-local-storage-module.js'
 import { ContinuationLocalStorageModule } from './modules/environment/local-storage/continuation-local-storage-module.js'
-import { HealthModule }                   from './modules/observability/healthcheck/health-module.js'
+import { EventBusModule }                 from './modules/messaging/event-bus-module.js'
 import { ObservabilityModule }            from './modules/observability/observability-module.js'
 
 
@@ -18,9 +16,7 @@ import { ObservabilityModule }            from './modules/observability/observab
 				 DatabaseModule,
 				 ContinuationLocalStorageModule,
 				 AsyncLocalStorageModule,
-				 DocumentationModule,
-				 HealthModule,
-				 DeveloperToolsModule,
+				 EventBusModule,
 				 SessionMiddlewareModule.forRoot( {
 																session : {
 																  secret            : 'secretomitted',
@@ -41,10 +37,8 @@ import { ObservabilityModule }            from './modules/observability/observab
 				 DatabaseModule,
 				 ContinuationLocalStorageModule,
 				 AsyncLocalStorageModule,
-				 DocumentationModule,
-				 HealthModule,
-				 DeveloperToolsModule,
 				 ConfigModule,
+				 EventBusModule,
 			  ],
 			} )
 export class SharedModule

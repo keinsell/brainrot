@@ -24,6 +24,7 @@
  */
 
 import { EmailNotification } from '../../../common/notification/entity/email-notification.js'
+import type { AccountId }    from '../shared-kernel/account-id.js'
 import type { AccountEmail } from '../value-objects/account-email.js'
 
 
@@ -37,21 +38,19 @@ export class ConfirmEmailNotification
 		email : AccountEmail,
 	 )
 		{
-		  super(
-			 {
-				id        : '',
-				sentAt    : undefined,
-				createdAt : new Date(),
-				updatedAt : new Date(),
-				sentBy    : '',
-				status    : 'QUEUED',
-				priority  : 'HIGH',
-				content   : {
-				  subject : 'Account verification',
-				  body    : `${verificationCode}`,
-				},
-				receipent : {to : email.address},
-			 },
-		  )
+		  super( {
+					  id        : '',
+					  sentAt    : undefined,
+					  createdAt : new Date(),
+					  updatedAt : new Date(),
+					  sentBy    : '' as AccountId,
+					  status    : 'QUEUED',
+					  priority  : 'HIGH',
+					  content   : {
+						 subject : 'Account verification',
+						 body    : `${verificationCode}`,
+					  },
+					  receipent : {to : email.address},
+					} )
 		}
   }

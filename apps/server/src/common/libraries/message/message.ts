@@ -1,5 +1,7 @@
-import { TypeID }      from '../identification/index.js'
-import { MessageType } from './values/message-type.js'
+import { Logger }           from '@nestjs/common'
+import type { SetOptional } from 'type-fest'
+import { TypeID }           from '../identification/index.js'
+import { MessageType }      from './values/message-type.js'
 
 
 // Messages are just plain data structures. They have attributes and that's it.
@@ -12,7 +14,14 @@ import { MessageType } from './values/message-type.js'
 
 export class Message<BODY = unknown>
   {
-	 id : TypeID<'message' | 'event' | 'command' | 'request' | 'reply' | 'query'>
+	 // Convert UserCreated/UserCreatedMessage to user.created
+	 static namespace : string = this.name
+												.replace( /Message$/, '' )
+												.replace( /([A-Z])/g, (match) => `.${match.toLowerCase()}` )
+												.replace( /^\./, '' )
+												.toLowerCase()
+
+	 id : TypeID<MessageType>
 	 /** `causationId` is an identifier used in event-driven architectures to track
 	  * the causal relationship between events. It represents the ID of the
 	  * event that caused the current event to occur. This can be useful for
@@ -24,7 +33,6 @@ export class Message<BODY = unknown>
 	  * @see [thenativeweb/commands-events/#1](https://github.com/thenativeweb/commands-events/issues/1#issuecomment-385862281)
 	  */
 	 causationId? : TypeID<'message' | 'event' | 'command' | 'request' | 'reply' | 'query'> | undefined
-
 	 /** A correlation ID is a unique identifier used to correlate and track a
 	  * specific transaction or event as it moves through a distributed system
 	  * or
@@ -38,23 +46,38 @@ export class Message<BODY = unknown>
 	  * @see [thenativeweb/commands-events/#1](https://github.com/thenativeweb/commands-events/issues/1#issuecomment-385862281)
 	  */
 	 readonly correlationId? : string | undefined
-
 	 readonly headers? : Record<string, unknown> | undefined
 	 readonly metadata? : Record<string, unknown> | undefined
 	 readonly timestamp : Date   = new Date()
-	 readonly namespace : string = 'default'
+	 readonly namespace : string = this.constructor.name
+												  .replace( /Message$/, '' )
+												  .replace( /([A-Z])/g, (match) => `.${match.toLowerCase()}` )
+												  .replace( /^\./, '' )
+												  .toLowerCase()
 	 readonly body? : BODY | undefined
 	 readonly type : MessageType = MessageType.MESSAGE
+	 private readonly logger : Logger
 
-
-	 constructor(payload : Omit<Message<BODY>, 'id' | 'timestamp' | 'type'>)
+	 constructor(payload : SetOptional<Message<BODY>, 'id' | 'timestamp' | 'type' | 'namespace'>)
 		{
-		  Object.assign( this, payload )
-		  this.id = this.generateIdWithNamespace( this.type )
+		  this.type          = payload.type ?? MessageType.MESSAGE
+		  this.namespace     = payload.namespace ?? this.constructor.name
+																		.replace( /Message$/, '' )
+																		.replace( /([A-Z])/g, (match) => `.${match.toLowerCase()}` )
+																		.replace( /^\./, '' )
+																		.toLowerCase()
+		  this.causationId   = payload.causationId
+		  this.correlationId = payload.correlationId
+		  this.timestamp     = payload.timestamp ?? new Date()
+		  this.body          = payload.body ?? undefined
+		  this.headers       = payload.headers
+		  this.id            = this.generateIdWithNamespace( this.type )
+
+		  this.logger = new Logger( `${this.id}`.replace( '_', '::' ) )
+		  this.logger.verbose( `Created ${this.id} with ${JSON.stringify( this )}` )
 		}
 
-
-	 protected generateIdWithNamespace(namespace : 'message' | 'event' | 'command' | 'request' | 'reply' | 'query') : TypeID<'message' | 'event' | 'command' | 'request' | 'reply' | 'query'>
+	 protected generateIdWithNamespace(namespace : MessageType) : TypeID<MessageType>
 		{
 		  // Generate random ID with namespace using random bytes
 		  return `${namespace}_${Math.random().toString( 36 ).slice( 2 )}`

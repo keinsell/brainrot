@@ -23,77 +23,74 @@
  *
  */
 
-import {AuthenticationTokenId}      from "../value-object/authentication-token-id.js";
-import {AuthorizationTokenStatus}   from "../value-object/authorization-token-status.js";
-import {EntityBase}                 from "../../../common/libraries/domain/entity/entity-base.js";
-import {AuthenticationTokenIssued}  from "../event/authentication-token-issued.js";
-import {AuthenticationTokenRevoked} from "../event/authentication-token-revoked.js";
-import {AccountId}                  from "../../account/shared-kernel/account-id.js";
-import {Logger}                     from "@nestjs/common";
+import { EntityBase }                 from '../../../common/libraries/domain/entity/entity-base.js'
+import { AccountId }                  from '../../account/shared-kernel/account-id.js'
+import { AuthenticationTokenIssued }  from '../event/authentication-token-issued.js'
+import { AuthenticationTokenRevoked } from '../event/authentication-token-revoked.js'
+import { AuthenticationTokenId }      from '../value-object/authentication-token-id.js'
+import { AuthorizationTokenStatus }   from '../value-object/authorization-token-status.js'
 
 
 
-export interface AuthenticationTokenProperties {
-	id : AuthenticationTokenId
-	status : AuthorizationTokenStatus
-	owner : AccountId
-	issuedAt : Date
-	expiresAt : Date
-	lastUsedAt? : Date
-}
+export interface AuthenticationTokenProperties
+  {
+	 id : AuthenticationTokenId
+	 status : AuthorizationTokenStatus
+	 owner : AccountId
+	 issuedAt : Date
+	 expiresAt : Date
+	 lastUsedAt? : Date
+  }
 
 
 export class AuthenticationToken
-	extends EntityBase
-	implements AuthenticationTokenProperties {
-	id : AuthenticationTokenId
-	status : AuthorizationTokenStatus
-	owner : AccountId
-	issuedAt : Date
-	expiresAt : Date
-	lastUsedAt? : Date
-	private logger : Logger;
+  extends EntityBase<AuthenticationTokenId>
+  implements AuthenticationTokenProperties
+  {
+	 expiresAt : Date
+	 issuedAt : Date
+	 lastUsedAt? : Date
+	 owner : AccountId
+	 status : AuthorizationTokenStatus
 
-	private constructor(
-		payload : AuthenticationTokenProperties,
-	)
-	{
-		super();
-		this.id        = payload.id;
-		this.status    = payload.status;
-		this.owner     = payload.owner;
-		this.issuedAt  = payload.issuedAt;
-		this.expiresAt = payload.expiresAt;
-		this.logger    = new Logger(`authentication_token::${this.id}`)
-	}
+	 private constructor(payload : AuthenticationTokenProperties)
+		{
+		  super( payload.id )
+		  this.status    = payload.status
+		  this.owner     = payload.owner
+		  this.issuedAt  = payload.issuedAt
+		  this.expiresAt = payload.expiresAt
+		}
 
-	static build(
-		payload : AuthenticationTokenProperties,
-	) : AuthenticationToken {
-		return new AuthenticationToken(payload);
-	}
+	 static build(payload : AuthenticationTokenProperties) : AuthenticationToken
+		{
+		  return new AuthenticationToken( payload )
+		}
 
-	public issue() : this {
-		this.status = AuthorizationTokenStatus.ISSUED;
-		const event = new AuthenticationTokenIssued(this);
-		this.appendEvent(event);
-		this.logger.log("Authentication token has been issued.")
-		return this;
-	}
+	 public issue() : this
+		{
+		  this.status = AuthorizationTokenStatus.ISSUED
+		  const event = new AuthenticationTokenIssued( this )
+		  this.appendEvent( event )
+		  this.logger.log( 'Authentication token has been issued.' )
+		  return this
+		}
 
-	public revoke() : this {
-		this.status = AuthorizationTokenStatus.REVOKED;
-		const event = new AuthenticationTokenRevoked(this);
-		this.appendEvent(event);
-		this.logger.log("Authentication token has been revoked.")
-		return this;
-	}
+	 public revoke() : this
+		{
+		  this.status = AuthorizationTokenStatus.REVOKED
+		  const event = new AuthenticationTokenRevoked( this )
+		  this.appendEvent( event )
+		  this.logger.log( 'Authentication token has been revoked.' )
+		  return this
+		}
 
-	public expire() : this {
-		this.status = AuthorizationTokenStatus.EXPIRED;
-		const event = new AuthenticationTokenRevoked(this);
-		this.appendEvent(event);
-		this.logger.log("Authentication token has expired.")
-		return this;
-	}
-}
+	 public expire() : this
+		{
+		  this.status = AuthorizationTokenStatus.EXPIRED
+		  const event = new AuthenticationTokenRevoked( this )
+		  this.appendEvent( event )
+		  this.logger.log( 'Authentication token has expired.' )
+		  return this
+		}
+  }

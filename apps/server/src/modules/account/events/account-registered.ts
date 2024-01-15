@@ -1,18 +1,9 @@
-import {Event} from "../../../common/libraries/message/event.js"
+import { DomainEvent }  from '../../../common/libraries/domain/domain-event.js'
+import type { Account } from '../entities/account.js'
 
-
-
-interface AccountRegisteredPayload {
-	accountId : string
-}
 
 
 export class AccountRegistered
-	extends Event<AccountRegisteredPayload> {
-	constructor(payload : AccountRegisteredPayload) {
-		super({
-			namespace: "account.registered",
-			body     : payload,
-		})
-	}
-}
+  extends DomainEvent<Account, {}>
+  {
+  }

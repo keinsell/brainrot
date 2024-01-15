@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "declaration": true,
+    "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -25,7 +25,7 @@
     "pretty": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "incremental": false,
     "skipLibCheck": false,
     "strictNullChecks": true,
     "noImplicitAny": false,
@@ -33,10 +33,10 @@
     "forceConsistentCasingInFileNames": false,
     "traceResolution": false,
     "extendedDiagnostics": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
+    //    "tsBuildInfoFile": ".tsbuildinfo",
     "downlevelIteration": true,
     "assumeChangesOnlyAffectDirectDependencies": false,
-    "composite": true,
+    "composite": false,
     "noFallthroughCasesInSwitch": false,
     "types": [
       "@types/node",

@@ -46,9 +46,7 @@ export class ImmutableClass
 		values? : Omit<Partial<Type>, keyof ImmutableClass>,
 	 ) : Type
 		{
-		  const product = (
-			 produce( this.prototype, new this(), values as any ) as Type
-		  )
+		  const product = ( produce( this.prototype, new this(), values as any ) as Type )
 
 		  const isThis = product.validate()
 
@@ -57,7 +55,7 @@ export class ImmutableClass
 				throw new TypeError( `Constructed Value Object is invalid` )
 			 }
 
-		  new Logger( `${product.constructor.name.toLowerCase()}` ).debug(
+		  new Logger( `vo::${product.constructor.name.toLowerCase()}` ).verbose(
 			 `Created ${product.constructor.name} (${product.hash()}) with value: ${JSON.stringify( values )}` )
 
 		  return product
@@ -76,13 +74,8 @@ export class ImmutableClass
 			 {
 				let a = this[ key ]
 				let b = other[ key ]
-				if ( a !== b && (
-				  a == null || b == null || (
-					 a instanceof ImmutableClass && b instanceof ImmutableClass ?
-					 !a.equals( b ) :
-					 a.valueOf() !== b.valueOf()
-				  )
-				) )
+				if ( a !== b && ( a == null || b == null || ( a instanceof ImmutableClass && b instanceof ImmutableClass
+																			 ? !a.equals( b ) : a.valueOf() !== b.valueOf() ) ) )
 				  {
 					 return false
 				  }

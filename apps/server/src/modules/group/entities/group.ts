@@ -23,16 +23,16 @@
  *
  */
 
-import {GroupMember} from "../value-object/group-member.js"
-import {EntityBase}  from "../../../common/libraries/domain/entity/entity-base.js";
+import { EntityBase }  from '../../../common/libraries/domain/entity/entity-base.js'
+import { GroupMember } from '../value-object/group-member.js'
 
 
 
 /** A group can consist of multiple users that all need similar levels of access to specific resources. By putting these users into a group, you can manage their access controls collectively rather than individually. This can significantly streamline the process of assigning and managing access permissions, especially in larger organizations. */
 export class Group
-	extends EntityBase {
-	id : string
-	name : string
-	members : GroupMember[]
-	roles : string[]
-}
+  extends EntityBase
+  {
+	 name : string
+	 members : GroupMember[]
+	 roles : string[]
+  }

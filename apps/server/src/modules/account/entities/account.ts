@@ -6,6 +6,7 @@ import {
 import { AccountEmailConfirmed }             from '../events/account-email-confirmed.js'
 import { AccountEvent }                      from '../events/account-event.js'
 import { AccountVerificationEmailRequested } from '../events/account-verification-email-requested.js'
+import type { AccountId }                    from '../shared-kernel/account-id.js'
 import { AccountEmail }                      from '../value-objects/account-email.js'
 import { AccountGroup }                      from '../value-objects/account-group.js'
 import { AccountStatus }                     from '../value-objects/account-status.js'
@@ -26,7 +27,7 @@ export interface IdentityProperties
 
 
 export class Account
-  extends BaseAggregateRoot
+  extends BaseAggregateRoot<AccountId>
   implements IdentityProperties
   {
 	 public email : AccountEmail
@@ -35,8 +36,7 @@ export class Account
 	 public status : AccountStatus
 	 public username : Username
 	 public readonly usernameFields : any = [
-		'username',
-		'email',
+		'username', 'email',
 	 ]
 
 
@@ -81,7 +81,9 @@ export class Account
 		}
 
 
-	 public requestPasswordReset() {}
+	 public requestPasswordReset()
+		{
+		}
 
 
 	 public requestVerificationEmail()
@@ -92,7 +94,9 @@ export class Account
 		}
 
 
-	 public resetPassword() {}
+	 public resetPassword()
+		{
+		}
 
 
 	 public changeEmail(email : AccountEmail)
@@ -102,10 +106,14 @@ export class Account
 		}
 
 
-	 public changePassword() {}
+	 public changePassword()
+		{
+		}
 
 
-	 public deleteAccount() {}
+	 public deleteAccount()
+		{
+		}
 
 
 	 public verifyEmail()
@@ -133,11 +141,12 @@ export class Account
 		}
 
 
-	 public register() : Account
+	 public register() : this
 		{
-		  this.appendEvent( new AccountEvent.Registred( {
-																		  accountId : this.id,
-																		} ) )
+		  this.logger.debug( 'Registering account...' )
+		  this.status = AccountStatus.ACTIVE
+		  this.appendEvent( new AccountEvent.Registred( this ) )
+		  this.logger.log( 'Account Registered' )
 		  return this
 		}
 

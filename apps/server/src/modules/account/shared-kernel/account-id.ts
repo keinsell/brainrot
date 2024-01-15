@@ -1,6 +1,5 @@
-import {Opaque}  from "type-fest"
-import {Account} from "../entities/account.js"
+import { Opaque } from 'type-fest'
 
 
 
-export type AccountId = Opaque<Account["id"]>
+export type AccountId = Opaque<string, 'account.id'>

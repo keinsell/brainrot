@@ -23,37 +23,37 @@
  *
  */
 
-export interface LogAudit
+import { Logger } from '@nestjs/common'
+
+
+
+export class AggregateLogger
   {
-	 happenedAt : Date
-	 ipAddress : string
-	 version : string
-	 source : string
-	 releatedResources? : string[]
-	 idempotencyKey? : string
-	 request : AuditRequest
-	 response : AuditResponse
-  }
+	 private readonly logger : Logger
+	 private aggregateVersion : string
+	 private aggregateId : string
 
+	 constructor(entity : any)
+		{
+		  this.aggregateVersion = `[V${entity.version}]`
+		  this.aggregateId      = `[ID | ${entity.id}]`
+		  const aggregateName   = entity.constructor.name.toLowerCase()
 
-export interface AuditResource
-  {
-  }
+		  this.logger = new Logger( aggregateName )
+		}
 
+	 log(message : string)
+		{
+		  this.logger.log( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
+		}
 
-export interface AuditRequest
-  {
-	 method : 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE'
-	 url : string
-	 body? : Object
-	 queryParameters? : Object
-	 headers? : Object
-  }
+	 verbose(message : string)
+		{
+		  this.logger.verbose( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
+		}
 
-
-export interface AuditResponse
-  {
-	 statusCode : number
-	 body? : Object
-	 headers? : Object
+	 debug(message : string)
+		{
+		  this.logger.debug( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
+		}
   }

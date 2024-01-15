@@ -9,6 +9,7 @@ import {
 }                           from '@nestjs/swagger'
 import fs                   from 'node:fs'
 import process              from 'node:process'
+import prettier             from 'prettier'
 import tildify              from 'tildify'
 import { __config }         from '../../../../configs/global/__config.js'
 import { getMetadataStore } from '../../../../utilities/docs-utils/swagger-api-model.js'
@@ -43,9 +44,8 @@ function experimentalAddApiModelFunctionality(document : OpenAPIObject) : void
 
 					 if ( metatype.description )
 						{
-						  (
-							 document.components.schemas[ metatype.name ?? definitionKey ] as any
-						  ).description = metatype.description
+						  ( document.components.schemas[ metatype.name ?? definitionKey ] as any ).description
+							 = metatype.description
 						}
 				  }
 			 }
@@ -141,11 +141,15 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 
 	 const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`
 
+
+
+	 const formattedDocument = await prettier.format( JSON.stringify( document ), {
+		parser   : 'json-stringify',
+		tabWidth : 2,
+	 } )
+
 	 // Save Swagger Documentation to File
-	 fs.writeFileSync(
-		documentationObjectPath,
-		JSON.stringify( document ),
-	 )
+	 fs.writeFileSync( documentationObjectPath, formattedDocument )
 
 	 logger.verbose( `Swagger documentation was snapshot into ${tildify( documentationObjectPath )}` )
   }
