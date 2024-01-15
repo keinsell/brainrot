@@ -1,6 +1,5 @@
 import {
   EvaluationContext,
-  GenericEventEmitter,
   Hook,
   JsonValue,
   Logger,
@@ -16,7 +15,7 @@ import {
 export abstract class FeatureFlagProvider
   implements Provider
   {
-	 public abstract events : GenericEventEmitter
+	 public abstract events : any
 
 
 	 public abstract initialize(context? : EvaluationContext) : Promise<void>

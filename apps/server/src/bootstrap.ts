@@ -20,6 +20,7 @@ import {
 import { isDevelopment }                 from './configs/helper/is-development.js'
 import { StaticFeatureFlags }            from './configs/static-feature-flags.js'
 import { Container }                     from './container.js'
+import { migrateDatabase }               from './hooks/post-start/migrate-database.js'
 import { AccountModule }                 from './modules/account/account.module.js'
 import { AccountSeeder }                 from './modules/account/repositories/account-seeder.js'
 import { RoleSeeder }                    from './modules/role/seeder/role-seeder.js'
@@ -173,6 +174,8 @@ export async function bootstrap()
 				).message}` )
 			 }
 		}
+
+	 await migrateDatabase()
 
 	 return app
   }

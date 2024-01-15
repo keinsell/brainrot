@@ -23,32 +23,33 @@
  *
  */
 
-import { Provider }                         from '@nestjs/common'
+import { Provider }                        from '@nestjs/common'
 import {
   getNodeAutoInstrumentations,
   getResourceDetectors,
-}                                           from '@opentelemetry/auto-instrumentations-node'
+}                                          from '@opentelemetry/auto-instrumentations-node'
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks'
-import { W3CTraceContextPropagator }        from '@opentelemetry/core'
-import { Resource }                         from '@opentelemetry/resources'
+import { W3CTraceContextPropagator }       from '@opentelemetry/core'
+import { Resource }                        from '@opentelemetry/resources'
 import {
   AggregationTemporality,
   InMemoryMetricExporter,
   PeriodicExportingMetricReader,
-}                                           from '@opentelemetry/sdk-metrics'
-import { NodeSDKConfiguration }             from '@opentelemetry/sdk-node'
+}                                          from '@opentelemetry/sdk-metrics'
+import { NodeSDKConfiguration }            from '@opentelemetry/sdk-node'
 import { SimpleSpanProcessor }             from '@opentelemetry/sdk-trace-base'
-import { PrismaInstrumentation }            from '@prisma/instrumentation'
-import { __config }                        from '../../../../../../../configs/global/__config.js'
-import { AutoTraceInjector }               from '../injector/auto-trace-injector.js'
-import { ControllerInjector }              from '../injector/controller-injector.js'
-import { EventEmitterInjector }            from '../injector/event-emitter-injector.js'
-import { GraphQLResolverInjector }         from '../injector/graphql-resolver-injector.js'
-import { GuardInjector }                   from '../injector/guard-injector.js'
-import { LoggerInjector }                  from '../injector/logger-injector.js'
-import { PipeInjector }                    from '../injector/pipe-injector.js'
-import { ScheduleInjector }                from '../injector/schedule-injector.js'
-import { NestLoggerSpanExporter }          from '../service/nest-logger-span-exporter.js'
+
+import PrismaInstrumentation       from '@prisma/instrumentation'
+import { __config }                from '../../../../../../../configs/global/__config.js'
+import { AutoTraceInjector }       from '../injector/auto-trace-injector.js'
+import { ControllerInjector }      from '../injector/controller-injector.js'
+import { EventEmitterInjector }    from '../injector/event-emitter-injector.js'
+import { GraphQLResolverInjector } from '../injector/graphql-resolver-injector.js'
+import { GuardInjector }           from '../injector/guard-injector.js'
+import { LoggerInjector }          from '../injector/logger-injector.js'
+import { PipeInjector }            from '../injector/pipe-injector.js'
+import { ScheduleInjector }        from '../injector/schedule-injector.js'
+import { NestLoggerSpanExporter }  from '../service/nest-logger-span-exporter.js'
 
 
 
@@ -85,10 +86,10 @@ export const OpenTelemetryModuleDefaultConfig = {
 												 enabled : false,
 											  },
 											} ),
-	 new PrismaInstrumentation( {
-											middleware : true,
-											enabled    : true,
-										 } ),
+	 new PrismaInstrumentation.PrismaInstrumentation( {
+																		 middleware : true,
+																		 enabled    : true,
+																	  } ),
   ],
   traceExporter       : new NestLoggerSpanExporter(),
   spanProcessor       : new SimpleSpanProcessor( new NestLoggerSpanExporter() ),
