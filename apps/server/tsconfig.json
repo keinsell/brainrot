@@ -31,6 +31,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
+    "traceResolution": false,
+    "extendedDiagnostics": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "downlevelIteration": true,
+    "assumeChangesOnlyAffectDirectDependencies": false,
+    "composite": true,
     "noFallthroughCasesInSwitch": false,
     "types": [
       "@types/node",
@@ -63,13 +69,13 @@
         "transform": "typescript-transform-paths",
         "afterDeclarations": false
       },
-            {
-              "transform": "@formatjs/ts-transformer",
-              "import": "transform",
-              "type": "config",
-              "overrideIdFn": "[sha512:contenthash:base64:6]",
-              "ast": true
-            },
+      {
+        "transform": "@formatjs/ts-transformer",
+        "import": "transform",
+        "type": "config",
+        "overrideIdFn": "[sha512:contenthash:base64:6]",
+        "ast": true
+      },
       {
         "transform": "tsc-progress",
         "title": "Compiling..."
