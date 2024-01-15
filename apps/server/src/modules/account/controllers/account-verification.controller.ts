@@ -30,6 +30,7 @@ export class AccountVerificationController
 						 } ) @Post( 'verify-email' ) @ApiQuery( {
 																				name    : 'verification_code',
 																				example : 'verification_code',
+																				type    : String,
 																			 } )
 	 async verifyEmail(@Query( 'verification_code' ) verificationCode : string) : Promise<string>
 		{

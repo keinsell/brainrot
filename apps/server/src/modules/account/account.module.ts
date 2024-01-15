@@ -5,6 +5,7 @@ import { UnihashModule }                 from '../../common/libraries/unihash/in
 import { MailerModule }                  from '../../common/mailer/mailer-module.js'
 import { DatabaseModule }                from '../../common/modules/database/database.module.js'
 import { EventBusModule }                from '../../common/modules/messaging/event-bus-module.js'
+import { NotificationModule }            from '../../common/notification/notification-module.js'
 import { AccountRecoveryController }     from './controllers/account-recovery.controller.js'
 import { AccountVerificationController } from './controllers/account-verification.controller.js'
 import { AccountController }             from './controllers/account.controller.js'
@@ -25,6 +26,7 @@ import { AccountVerification }           from './services/account-verification.j
 				 EventBusModule,
 				 CacheManagerModule,
 				 MailerModule,
+				 NotificationModule,
 			  ],
 			  controllers : [
 				 AccountController,

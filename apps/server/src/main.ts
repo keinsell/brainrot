@@ -1,7 +1,10 @@
-import {isProduction}                                   from "./configs/helper/is-production.js";
-import {prettyPrintServiceInformation, printSystemInfo} from "./utilities/console-utils/index.js";
-import {initializeSentry}                               from "./hooks/pre-start/initialize-sentry.js";
-import {bootstrap}                                      from "./bootstrap.js";
+import { bootstrap }        from './bootstrap.js'
+import { isProduction }     from './configs/helper/is-production.js'
+import { initializeSentry } from './hooks/pre-start/initialize-sentry.js'
+import {
+  prettyPrintServiceInformation,
+  printSystemInfo,
+}                           from './utilities/console-utils/index.js'
 
 // TODO: Add check for minimal requirements to run server
 // TODO: Run warn if host machine is too small
@@ -9,12 +12,13 @@ import {bootstrap}                                      from "./bootstrap.js";
 // Min. CPU = 1x
 // Recommended OS: Linux
 
-if (isProduction()) {
-	printSystemInfo()
-}
+if ( isProduction() )
+  {
+	 printSystemInfo()
+  }
 
 prettyPrintServiceInformation()
 
 initializeSentry()
 
-await bootstrap();
+await bootstrap()

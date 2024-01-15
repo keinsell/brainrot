@@ -16,9 +16,12 @@ import { CacheManager }                 from '../../../common/libraries/cache-ma
 import { Mailer }                       from '../../../common/mailer/contract/mailer.js'
 import { CreateEmailMessagePayload }    from '../../../common/mailer/dto/create-email-message-payload.js'
 import { EventBus }                     from '../../../common/modules/messaging/event-bus.js'
+import { NotificationService }          from '../../../common/notification/contract/notification-service.js'
 import { StaticFeatureFlags }           from '../../../configs/static-feature-flags.js'
+import { AccountEmailConfirmed }        from '../events/account-email-confirmed.js'
 import { AccountRegistered }            from '../events/account-registered.js'
 import { AccountVerificationEmailSent } from '../events/account-verification-email-sent.js'
+import { AccountConfirmedNotification } from '../notifcation/account-confirmed-notification.js'
 import { ConfirmEmailNotification }     from '../notifcation/confirm-email-notification.js'
 import { AccountRepository }            from '../repositories/account-repository.js'
 
@@ -32,6 +35,7 @@ export class AccountVerification
 	 private publisher : EventBus
 	 private cacheManager : CacheManager
 	 private mailer : Mailer
+	 private notificationService : NotificationService
 
 
 	 constructor(
@@ -39,13 +43,15 @@ export class AccountVerification
 		eventBus : EventBus,
 		cacheManager : CacheManager,
 		mailer : Mailer,
+		notificationService : NotificationService,
 	 )
 		{
-		  this.logger            = new Logger( 'account::verification::service' )
-		  this.accountRepository = accountRepository
-		  this.publisher         = eventBus
-		  this.cacheManager      = cacheManager
-		  this.mailer            = mailer
+		  this.logger              = new Logger( 'account::verification::service' )
+		  this.accountRepository   = accountRepository
+		  this.publisher           = eventBus
+		  this.cacheManager        = cacheManager
+		  this.mailer              = mailer
+		  this.notificationService = notificationService
 		}
 
 
@@ -144,6 +150,25 @@ export class AccountVerification
 		  this.logger.verbose( `Handling ${event.id} with "onAccountRegistered": ${JSON.stringify( event )}` )
 		  await this.sendVerificationEmail( event.body!.accountId )
 		  this.logger.debug( `Handled ${event.id} with "onAccountRegistered"` )
+		}
+
+	 @OnEvent( 'account.verification.completed' )
+	 private async onEmailVerified(event : AccountEmailConfirmed) : Promise<void>
+		{
+		  this.logger.debug( `Handling ${event.id} with "onEmailVerified": ${JSON.stringify( event )}` )
+
+		  if ( !event.body?.email )
+			 {
+				throw new BadRequestException( 'Email is missing.' )
+			 }
+
+		  // Create notification
+		  const notification = new AccountConfirmedNotification( event.body?.email )
+
+		  // Send notification
+		  await this.notificationService.sendNotification( notification )
+
+		  this.logger.debug( `Handled ${event.id} with "onEmailVerified"` )
 		}
 
 

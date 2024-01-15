@@ -115,9 +115,18 @@ export class Account
 				throw new BadRequestException( 'Email is already verified.' )
 			 }
 
-		  this.email.isVerified = true
+		  const verifiedEmail = AccountEmail.create( {
+																	  address    : this.email.address,
+																	  isVerified : true,
+																	} )
 
-		  const event = new AccountEmailConfirmed( {accountId : this.id} )
+		  this.email = verifiedEmail
+
+		  const event = new AccountEmailConfirmed( {
+																	accountId : this.id,
+																	email     : this.email,
+																 } )
+
 		  this.appendEvent( event )
 
 		  return this
