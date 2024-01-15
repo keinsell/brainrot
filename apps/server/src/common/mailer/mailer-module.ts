@@ -23,20 +23,20 @@
  *
  */
 
-
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
-
+import { Module }     from '@nestjs/common'
+import { Mailer }     from './contract/mailer.js'
+import { NoopMailer } from './provider/mailer/noop-mailer.js'
 
 
-export abstract class PaymentMethodService
-  {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
 
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
-
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
-  }
+@Module( {
+			  imports   : [],
+			  providers : [
+				 {
+					provide  : Mailer,
+					useClass : NoopMailer,
+				 },
+			  ],
+			  exports   : [ Mailer ],
+			} )
+export class MailerModule {}

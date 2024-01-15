@@ -1,79 +1,104 @@
-import {Inject, Injectable, Logger} from "@nestjs/common"
-import {PasswordHashing}            from "../../../common/libraries/unihash/index.js"
 import {
-	KdfAlgorithm,
-}                                   from "../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
-import {EventBus}                   from "../../../common/modules/messaging/event-bus.js"
-import {RegisterAccountCommand}     from "../commands/register-account-command.js"
-import {Account}                    from "../entities/account.js"
-import {AccountPolicy}              from "../policies/account-policy.js"
-import {AccountRepository}          from "../repositories/account-repository.js"
-import {Email}                      from "../value-objects/email.js"
-import {Password}                   from "../value-objects/password.js"
-import {
-	TraceService,
-}                                   from "../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js";
-import {AccountSelfService}         from "../contract/account-self-service.js";
-import {ServiceAbstract}            from "../../../common/libraries/services/service-abstract.js";
+  Inject,
+  Injectable,
+  Logger,
+}                                 from '@nestjs/common'
+import { ServiceAbstract }        from '../../../common/libraries/services/service-abstract.js'
+import { PasswordHashing }        from '../../../common/libraries/unihash/index.js'
+import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
+import type { EmailAddress }      from '../../../common/mailer/value-object/email-address.js'
+import { EventBus }               from '../../../common/modules/messaging/event-bus.js'
+import { TraceService }           from '../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js'
+import { RegisterAccountCommand } from '../commands/register-account-command.js'
+import { AccountSelfService }     from '../contract/account-self-service.js'
+import { Account }                from '../entities/account.js'
+import { AccountPolicy }          from '../policies/account-policy.js'
+import { AccountRepository }      from '../repositories/account-repository.js'
+import { AccountEmail }           from '../value-objects/account-email.js'
+import { Password }               from '../value-objects/password.js'
 
 
 
 @Injectable()
 export class AccountService
-	extends ServiceAbstract<Account>
-	implements AccountSelfService
-{
-	@Inject(TraceService) tracer : TraceService;
-	private logger : Logger = new Logger("account::service")
+  extends ServiceAbstract<Account>
+  implements AccountSelfService
+  {
+	 @Inject( TraceService ) tracer : TraceService
+	 private logger : Logger = new Logger( 'account::service' )
 
-	constructor(
+	 constructor(
 		private policy : AccountPolicy,
 		private repository : AccountRepository,
 		private hashing : PasswordHashing,
 		private eventbus : EventBus,
-	)
-	{
-		super(repository)
-	}
+	 )
+		{
+		  super( repository )
+		}
 
+	 public closeAccount(accountId : string) : Promise<void>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
 
-	/**
-	 * # `register-account`
-	 *
-	 * Register account is an operation dedicated to creating new accounts in codebase.
-	 *
-	 * @param {RegisterAccountCommand} registerAccount
-	 * @returns {Promise<Account>}
-	 */
-	async register(registerAccount : RegisterAccountCommand) : Promise<Account> {
-		const email = Email.create({
-			isVerified: false,
-			address   : registerAccount.email.toLowerCase(),
-		})
+	 /**
+	  * # `register-account`
+	  *
+	  * Register account is an operation dedicated to creating new accounts in codebase.
+	  *
+	  * @param {RegisterAccountCommand} registerAccount
+	  * @returns {Promise<Account>}
+	  */
+	 async register(registerAccount : RegisterAccountCommand) : Promise<Account>
+		{
+		  this.logger.debug( 'Registering account...' )
 
-		const password = await Password.fromPlain(registerAccount.password, this.hashing.use(KdfAlgorithm.Argon2id));
+		  const email = AccountEmail.create( {
+															isVerified : false,
+															address    : registerAccount.email.toLowerCase() as EmailAddress,
+														 } )
 
-		await this.policy.canRegisterAccount({
-			email   : email.address,
-			password: registerAccount.password,
-			username: registerAccount.username.toLowerCase(),
-		})
+		  const password = await Password.fromPlain(
+			 registerAccount.password, this.hashing.use( KdfAlgorithm.Argon2id ) )
 
-		let identity = Account.RegisterAccount({
-			username: registerAccount.username.toLowerCase(),
-			email   : email,
-			password: password,
-			groups  : [],
-		});
+		  this.logger.debug( 'Running policy...' )
 
-		const events = identity.getUncommittedEvents()
+		  await this.policy.canRegisterAccount( {
+																email    : email.address,
+																password : registerAccount.password,
+																username : registerAccount.username.toLowerCase(),
+															 } )
 
-		identity = await this.repository.save(identity)
+		  this.logger.debug( 'Creating aggregate...' )
 
-		await this.eventbus.publishAll(events)
+		  let identity = Account.RegisterAccount( {
+																  username : registerAccount.username.toLowerCase(),
+																  email    : email,
+																  password : password,
+																  groups   : [],
+																} )
 
-		this.logger.log(`Account ${identity.id} was successfully registered.`)
+		  const events = identity.getUncommittedEvents()
 
-		return identity
-	}
-}
+		  this.logger.debug( 'Saving aggregate...' )
+
+		  identity = await this.repository.save( identity )
+
+		  this.logger.debug( 'Publishing events...' )
+
+		  await this.eventbus.publishAll( events )
+
+		  this.logger.log( `Account ${identity.id} was successfully registered.` )
+
+		  return identity
+		}
+
+	 public updateAccount(
+		accountId : string,
+		updateAccount : RegisterAccountCommand,
+	 ) : Promise<Account>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
+  }

@@ -94,6 +94,7 @@
     "cookie-session": "^2.0.0",
     "copyfiles": "^2.4.1",
     "craftpack": "^0.0.16",
+    "crc": "^4.3.2",
     "create-nestjs-middleware-module": "^0.3.1",
     "delay": "^6.0.0",
     "detect-port": "^1.5.1",

@@ -24,8 +24,8 @@
  */
 
 export interface Grant {
-	id : string
-	resourceGroup : string
-	resource : string
-	action : string
+	id: string
+	resourceGroup: string
+	resource: string
+	action: string
 }

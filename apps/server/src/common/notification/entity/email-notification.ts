@@ -23,20 +23,26 @@
  *
  */
 
+import { NotificationChannel } from '../value-object/notification-channel.js'
+import {
+  Notification,
+  type NotificationProperties,
+}                              from './notification.js'
 
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
 
 
-
-export abstract class PaymentMethodService
+export class EmailNotification
+  extends Notification<NotificationChannel.EMAIL>
   {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
-
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
+	 constructor(payload : Omit<NotificationProperties<NotificationChannel.EMAIL>, 'type'>)
+		{
+		  super(
+			 {
+				...payload,
+				type : NotificationChannel.EMAIL,
+			 },
+		  )
+		}
   }
+
+

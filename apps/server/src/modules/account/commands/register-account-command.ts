@@ -23,8 +23,8 @@
  *
  */
 
-import {ApiProperty}    from "@nestjs/swagger";
-import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js";
+import { ApiProperty }    from '@nestjs/swagger'
+import { AccountFixture } from '../../../utilities/fixtures/account-fixture.js'
 
 
 
@@ -36,39 +36,39 @@ import {AccountFixture} from "../../../utilities/fixtures/account-fixture.js";
 //
 
 export class RegisterAccountCommand
-{
-	/**
-	 * Represents an email address.
-	 * @typedef {string} email
-	 */
-	@ApiProperty({
-		name       : "email",
-		description: "The domain's email address",
-		example    : AccountFixture.email,
-		examples   : AccountFixture._examples.emails,
-	}) email : string;
+  {
+	 /**
+	  * Represents an email address.
+	  * @typedef {string} email
+	  */
+	 @ApiProperty( {
+						  name        : 'email',
+						  description : 'The domain\'s email address',
+						  example     : AccountFixture.email,
+						  examples    : AccountFixture._examples.emails,
+						} ) email : string
 
-	/**
-	 * The password variable is a string that represents a user's password.
-	 *
-	 * @type {string}
-	 */
-	@ApiProperty({
-		name       : "password",
-		description: "The domain's password",
-		example    : AccountFixture.password,
-		examples   : AccountFixture._examples.passwords,
-	}) password : string;
+	 /**
+	  * The password variable is a string that represents a user's password.
+	  *
+	  * @type {string}
+	  */
+	 @ApiProperty( {
+						  name        : 'password',
+						  description : 'The domain\'s password',
+						  example     : AccountFixture.password,
+						  examples    : AccountFixture._examples.passwords,
+						} ) password : string
 
-	/**
-	 * Represents a username.
-	 * @typedef {string} username
-	 */
-	@ApiProperty({
-		name       : "username",
-		description: "The domain's username",
-		example    : AccountFixture.username,
-		examples   : AccountFixture._examples.usernames,
-	}) username : string;
-}
+	 /**
+	  * Represents a username.
+	  * @typedef {string} username
+	  */
+	 @ApiProperty( {
+						  name        : 'username',
+						  description : 'The domain\'s username',
+						  example     : AccountFixture.username,
+						  examples    : AccountFixture._examples.usernames,
+						} ) username : string
+  }
 

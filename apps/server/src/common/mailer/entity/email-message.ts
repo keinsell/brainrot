@@ -23,20 +23,44 @@
  *
  */
 
+import { EmailAddress }        from '../value-object/email-address.js'
+import { EmailAttachment }     from '../value-object/email-attachment.js'
+import type { EmailContent }   from '../value-object/email-content.js'
+import type { EmailReceipent } from '../value-object/email-receipent.js'
+import { Html }                from '../value-object/html.js'
+import { PlainText }           from '../value-object/plain-text.js'
 
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
 
 
-
-export abstract class PaymentMethodService
+export interface IEmailMessage
+  extends EmailContent
   {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
+	 recipient : EmailReceipent
+	 sender? : {
+		from : EmailAddress
+		replyTo? : string
+	 }
+  }
 
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
 
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
+export class EmailMessage
+  implements IEmailMessage
+  {
+	 attachments? : EmailAttachment[]
+	 body? : Html | PlainText
+	 subject? : string
+	 recipient : EmailReceipent
+	 sender? : {
+		from : EmailAddress
+		replyTo? : string
+	 }
 
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
+	 constructor(message : IEmailMessage)
+		{
+		  this.body        = message.body
+		  this.recipient   = message.recipient
+		  this.sender      = message.sender
+		  this.subject     = message.subject
+		  this.attachments = message.attachments
+		}
   }

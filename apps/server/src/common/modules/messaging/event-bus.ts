@@ -1,64 +1,82 @@
-import {Injectable, Logger} from "@nestjs/common"
-import {EventEmitter2}      from "@nestjs/event-emitter"
-import {Event}              from "../../libraries/message/event.js"
-import {Message}            from "../../libraries/message/message.js"
+import {
+  Injectable,
+  Logger,
+}                        from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { Event }         from '../../libraries/message/event.js'
+import { Message }       from '../../libraries/message/message.js'
 
 
 
 @Injectable()
-export class EventBus {
-	private logger: Logger = new Logger("event_bus")
+export class EventBus
+  {
+	 private logger : Logger = new Logger( 'event_bus' )
 
 
-	constructor(private eventEmitter: EventEmitter2) {}
+	 constructor(private eventEmitter : EventEmitter2) {}
 
 
-	async publish(event: Event) {
-		this.logger.verbose(`Publishing ${event.constructor.name} to namespace ${event.namespace} (${event.id}) => ${JSON.stringify(event)}`)
-		this.eventEmitter.emit(event.namespace, event)
-		this.logger.debug(`Published ${event.id} to ${event.namespace}`)
-	}
+	 async publish(event : Event)
+		{
+		  this.logger.debug(
+			 `Publishing ${event.constructor.name} to namespace ${event.namespace} (${event.id}) => ${JSON.stringify(
+				event )}` )
 
-
-	async publishAll(events: Event[]) {
-		for (const event of events) {
-			await this.publish(event)
+		  this.eventEmitter.emit( event.namespace, event )
+		  
+		  this.logger.verbose( `Published ${event.id} to ${event.namespace}` )
 		}
-	}
-}
 
 
-export abstract class EventBusBase {
-	private messageBus: MessageBusBase
+	 async publishAll(events : Event[])
+		{
+		  for ( const event of events )
+			 {
+				await this.publish( event )
+			 }
+		}
+  }
 
 
-	constructor(messageBus: MessageBusBase) {
-		this.messageBus = messageBus
-	}
+export abstract class EventBusBase
+  {
+	 private messageBus : MessageBusBase
 
 
-	public async publish(event: Event): Promise<void> {
-		await this.messageBus.publish(event)
-	}
+	 constructor(messageBus : MessageBusBase)
+		{
+		  this.messageBus = messageBus
+		}
 
 
-	publishAll(events: any[]): Promise<void> {
-		return this.messageBus.publishAll(events)
-	}
-}
+	 public async publish(event : Event) : Promise<void>
+		{
+		  await this.messageBus.publish( event )
+		}
+
+
+	 publishAll(events : any[]) : Promise<void>
+		{
+		  return this.messageBus.publishAll( events )
+		}
+  }
 
 
 // TODO: Can have outbox pattern here
-export abstract class MessageBusBase {
-	constructor() {}
+export abstract class MessageBusBase
+  {
+	 constructor() {}
 
 
-	abstract publish(message: Message): Promise<void>
+	 abstract publish(message : Message) : Promise<void>
 
 
-	async publishAll(messages: Message[]) {
-		for (const message of messages) {
-			await this.publish(message)
+	 async publishAll(messages : Message[])
+		{
+		  for ( const message of messages )
+			 {
+				await this.publish( message )
+			 }
 		}
-	}
-}
+  }

@@ -23,13 +23,14 @@
  *
  */
 
-import {PaymentMethod}    from "./payment-method.js";
-import {StripeCustomerId} from "../value/stripe-customer-id.js";
+import { StripeCustomerId } from '../value/stripe-customer-id.js'
+import { PaymentMethod }    from './payment-method.js'
 
 
 
 export interface StripePaymentMethod
-	extends PaymentMethod {
-	stripeCustomerId : StripeCustomerId;
-	stripeCardId : string;
-}
+  extends PaymentMethod
+  {
+	 stripeCustomerId : StripeCustomerId;
+	 stripeCardId : string;
+  }

@@ -24,25 +24,27 @@
  */
 
 
-import {
-	DbContextModel
-}                      from "../../../common/modules/database/db-context-model.js";
-import {Prisma}        from "../../../vendor/prisma/index.js";
-import {PaymentMethod} from "../entity/payment-method.js";
+import { DbContextModel } from '../../../common/modules/database/db-context-model.js'
+import { Prisma }         from '../../../vendor/prisma/index.js'
+import { PaymentMethod }  from '../entity/payment-method.js'
 
 
-export class CreatePaymentMethodModel implements DbContextModel.PaymentMethod.CreatePayload {
-	public Account: Prisma.AccountCreateNestedOneWithoutPaymentMethodInput;
-	public Stripe?: Prisma.StripePaymentMethodCreateNestedOneWithoutPaymentMethodInput;
-	public createdAt?: Date | string;
-	public id?: string;
-	public processor: DbContextModel.Enums.PaymentProcessor;
-	public updatedAt?: Date | string;
 
-	static fromDomain(paymentMethod: PaymentMethod): CreatePaymentMethodModel {
-		return {
-			Account: {connect: {id: paymentMethod.customerId}},
-			processor: paymentMethod.processor,
+export class CreatePaymentMethodModel
+  implements DbContextModel.PaymentMethod.CreatePayload
+  {
+	 public Account : Prisma.AccountCreateNestedOneWithoutPaymentMethodInput
+	 public Stripe? : Prisma.StripePaymentMethodCreateNestedOneWithoutPaymentMethodInput
+	 public createdAt? : Date | string
+	 public id? : string
+	 public processor : DbContextModel.Enums.PaymentProcessor
+	 public updatedAt? : Date | string
+
+	 static fromDomain(paymentMethod : PaymentMethod) : CreatePaymentMethodModel
+		{
+		  return {
+			 Account   : {connect : {id : paymentMethod.customerId}},
+			 processor : paymentMethod.processor,
+		  }
 		}
-	}
-}
+  }

@@ -23,21 +23,35 @@
  *
  */
 
-
-
-import {Mailer}                    from "../../contract/mailer.js";
-import {Injectable, Logger}        from "@nestjs/common";
-import {CreateEmailMessagePayload} from "../../dto/create-email-message-payload.js";
+import { EmailNotification } from '../../../common/notification/entity/email-notification.js'
+import type { AccountEmail } from '../value-objects/account-email.js'
 
 
 
-@Injectable()
-export class NoopMailer
-	implements Mailer {
-	private logger : Logger = new Logger("noop:mailer");
+export class ConfirmEmailNotification
+  extends EmailNotification
+  {
 
-	async sendEmail(email : CreateEmailMessagePayload) : Promise<void> {
-		this.logger.debug(`Sending email to ${email.recipient.to}...`);
-		this.logger.debug(email.body)
-	}
-}
+	 constructor(
+		verificationCode : string,
+		email : AccountEmail,
+	 )
+		{
+		  super(
+			 {
+				id        : '',
+				sentAt    : undefined,
+				createdAt : new Date(),
+				updatedAt : new Date(),
+				sentBy    : '',
+				status    : 'QUEUED',
+				priority  : 'HIGH',
+				content   : {
+				  subject : 'Account verification',
+				  body    : `${verificationCode}`,
+				},
+				receipent : {to : email.address},
+			 },
+		  )
+		}
+  }

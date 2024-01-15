@@ -23,28 +23,28 @@
  *
  */
 
-import {ApiProperty} from "@nestjs/swagger"
+import {ApiProperty} from '@nestjs/swagger'
 
 
 
 export class AuthenticatedAccountViewModel {
 	@ApiProperty({
-		name:        "id",
-		description: "ID of authenticated account.",
-	}) id: string
+		             name       : 'id',
+		             description: 'ID of authenticated account.',
+	             }) id: string
 
 	@ApiProperty({
-		name:        "mfa",
-		description: "Indicates if account uses MFA. In case of true, additional steps are supposed to be made to" + " activate access token.",
-	}) mfa: boolean
+		             name       : 'mfa',
+		             description: 'Indicates if account uses MFA. In case of true, additional steps are supposed to be made to' + ' activate access token.',
+	             }) mfa: boolean
 
 	@ApiProperty({
-		name:        "accessToken",
-		description: "Access token.",
-	}) accessToken: string
+		             name       : 'accessToken',
+		             description: 'Access token.',
+	             }) accessToken: string
 
 	@ApiProperty({
-		name:        "refreshToken",
-		description: "Refresh token.",
-	}) refreshToken: string
+		             name       : 'refreshToken',
+		             description: 'Refresh token.',
+	             }) refreshToken: string
 }

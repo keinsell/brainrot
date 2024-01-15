@@ -23,20 +23,24 @@
  *
  */
 
-import {Mailer}     from "./contract/mailer.js";
-import {NoopMailer} from "./provider/mailer/noop-mailer.js";
-import {Module}     from "@nestjs/common";
+import { NotificationChannel } from '../value-object/notification-channel.js'
+import {
+  Notification,
+  type NotificationProperties,
+}                              from './notification.js'
 
 
 
-@Module({
-	imports  : [],
-	providers: [
+export class SmsNotification
+  extends Notification<NotificationChannel.SMS>
+  {
+	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
 		{
-			provide : Mailer,
-			useClass: NoopMailer,
-		},
-	],
-	exports  : [Mailer],
-})
-export class MailerModule {}
+		  super(
+			 {
+				...payload,
+				type : NotificationChannel.SMS,
+			 },
+		  )
+		}
+  }

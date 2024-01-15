@@ -23,58 +23,63 @@
  *
  */
 
-import {AccountId}                  from "../../account/shared-kernel/account-id.js";
-import {PaymentProcessorIdentifier} from "../../todo_payment/value-objects/payment-processor-identifier.js";
-import {PaymentMethodId}            from "../value/payment-method-id.js";
-import {StripeCustomerId}           from "../value/stripe-customer-id.js";
+import { AccountId }                  from '../../account/shared-kernel/account-id.js'
+import { PaymentProcessorIdentifier } from '../../todo_payment/value-objects/payment-processor-identifier.js'
+import { PaymentMethodId }            from '../value/payment-method-id.js'
+import { StripeCustomerId }           from '../value/stripe-customer-id.js'
 
 
 
-export interface PaymentMethod {
-	id : PaymentMethodId
-	customerId : AccountId
-	processor : PaymentProcessorIdentifier
-	paymentDetails : PaymentDetails
-	billingAddress : any
-	isDefault : boolean
-	status : "ACTIVE" | "INACTIVE" | "DELETED"
-	metadata : any
-}
+export interface PaymentMethod
+  {
+	 id : PaymentMethodId
+	 customerId : AccountId
+	 processor : PaymentProcessorIdentifier
+	 paymentDetails : PaymentDetails
+	 billingAddress : any
+	 isDefault : boolean
+	 status : 'ACTIVE' | 'INACTIVE' | 'DELETED'
+	 metadata : any
+  }
 
 
 export interface StripePaymentMethod
-	extends PaymentMethod {
-	stripeCustomerId : StripeCustomerId;
-	stripeCardId : string;
-}
+  extends PaymentMethod
+  {
+	 stripeCustomerId : StripeCustomerId;
+	 stripeCardId : string;
+  }
 
 
-export interface PaymentDetails {
-	id : string
-	paymentMethodId : PaymentMethodId
-	type : "CREDIT_CARD" | "BANK_ACCOUNT"
-}
+export interface PaymentDetails
+  {
+	 id : string
+	 paymentMethodId : PaymentMethodId
+	 type : 'CREDIT_CARD' | 'BANK_ACCOUNT'
+  }
 
 
 export interface CreditCardPaymentDetails
-	extends PaymentDetails {
-	cardNumber : string
-	cardHolderName : string
-	cardExpiryMonth : string
-	cardExpiryYear : string
-	cardCVC : string
-}
+  extends PaymentDetails
+  {
+	 cardNumber : string
+	 cardHolderName : string
+	 cardExpiryMonth : string
+	 cardExpiryYear : string
+	 cardCVC : string
+  }
 
 
 export interface BankAccountPaymentDetails
-	extends PaymentDetails {
-	bankAccountNumber : string
-	bankAccountHolderName : string
-	bankAccountType : "CHECKING" | "SAVINGS" | "OTHER"
-	bankAccountRoutingNumber : string
-	bankAccountIban : string
-	bankAccountBic : string
-	bankAccountCountry : string
-	bankAccountCurrency : string
-	bankAccountStatus : "NEW" | "VERIFIED" | "VERIFICATION_FAILED"
-}
+  extends PaymentDetails
+  {
+	 bankAccountNumber : string
+	 bankAccountHolderName : string
+	 bankAccountType : 'CHECKING' | 'SAVINGS' | 'OTHER'
+	 bankAccountRoutingNumber : string
+	 bankAccountIban : string
+	 bankAccountBic : string
+	 bankAccountCountry : string
+	 bankAccountCurrency : string
+	 bankAccountStatus : 'NEW' | 'VERIFIED' | 'VERIFICATION_FAILED'
+  }

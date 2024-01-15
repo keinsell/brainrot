@@ -23,22 +23,28 @@
  *
  */
 
-import {Module}                                from "@nestjs/common";
-import {TokenManagement}                       from "./contract/token-management.js";
-import {AuthorizationTokenService}             from "./service/authorization-token-service.js";
-import {AuthenticationTokenRepository}         from "./repository/authentication-token-repository.js";
-import {InMemoryAuthenticationTokenRepository} from "./repository/in-memory-authentication-token-repository.js";
-import {DatabaseModule}                        from "../../common/modules/database/database.module.js";
-import {EventBusModule}                        from "../../common/modules/messaging/event-bus-module.js";
+import {Module}                                from '@nestjs/common'
+import {DatabaseModule}                        from '../../common/modules/database/database.module.js'
+import {EventBusModule}                        from '../../common/modules/messaging/event-bus-module.js'
+import {TokenManagement}                       from './contract/token-management.js'
+import {AuthenticationTokenRepository}         from './repository/authentication-token-repository.js'
+import {InMemoryAuthenticationTokenRepository} from './repository/in-memory-authentication-token-repository.js'
+import {AuthorizationTokenService}             from './service/authorization-token-service.js'
 
 
 
 @Module({
 	imports  : [DatabaseModule, EventBusModule],
 	providers: [
-		{provide: TokenManagement, useClass: AuthorizationTokenService},
-		{provide: AuthenticationTokenRepository, useClass: InMemoryAuthenticationTokenRepository},
+		{
+			provide : TokenManagement,
+			useClass: AuthorizationTokenService,
+		}, {
+			provide : AuthenticationTokenRepository,
+			useClass: InMemoryAuthenticationTokenRepository,
+		},
 	],
 	exports  : [TokenManagement],
 })
-export class AuthtokenModule {}
+export class AuthtokenModule {
+}

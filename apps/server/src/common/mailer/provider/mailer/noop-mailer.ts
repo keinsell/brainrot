@@ -24,19 +24,25 @@
  */
 
 
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
+
+import {
+  Injectable,
+  Logger,
+}                                    from '@nestjs/common'
+import { Mailer }                    from '../../contract/mailer.js'
+import { CreateEmailMessagePayload } from '../../dto/create-email-message-payload.js'
 
 
 
-export abstract class PaymentMethodService
+@Injectable()
+export class NoopMailer
+  implements Mailer
   {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
+	 private logger : Logger = new Logger( 'noop:mailer' )
 
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
-
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
+	 async sendEmail(email : CreateEmailMessagePayload) : Promise<void>
+		{
+		  this.logger.debug( `Sending email to ${email.recipient.to}...` )
+		  this.logger.debug( email.body )
+		}
   }

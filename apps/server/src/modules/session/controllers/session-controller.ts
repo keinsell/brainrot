@@ -1,26 +1,34 @@
-import {Body, Controller, Post} from "@nestjs/common"
-import {ApiOperation}           from "@nestjs/swagger"
-import {OpenapiTags}            from "../../../common/modules/documentation/swagger/openapi-tags.js"
-import {TokenManagement}        from "../../authtoken/token-management.js"
-import {AccessToken}            from "../../authentication/value-objects/tokens/access-token.js"
-import {RefreshSession}         from "../commands/refresh-session.js"
-import {SessionService}         from "../services/session-service.js"
+import {
+	Body,
+	Controller,
+	Post,
+}                        from '@nestjs/common'
+import {ApiOperation}    from '@nestjs/swagger'
+import {OpenapiTags}     from '../../../common/modules/documentation/swagger/openapi-tags.js'
+import {AccessToken}     from '../../authentication/value-objects/tokens/access-token.js'
+import {TokenManagement} from '../../authtoken/token-management.js'
+import {RefreshSession}  from '../commands/refresh-session.js'
+import {SessionService}  from '../services/session-service.js'
 
 
 
 @Controller('session')
 export class SessionController {
 
-	constructor(private tokenManagement : TokenManagement, private sessionService : SessionService) {
+	constructor(
+		private tokenManagement: TokenManagement,
+		private sessionService: SessionService,
+	)
+	{
 
 	}
 
-	@Post("refresh-session") @ApiOperation({
-		operationId: "refresh-session",
-		description: "Use a refresh token to extend a session and generate another access token",
+	@Post('refresh-session') @ApiOperation({
+		operationId: 'refresh-session',
+		description: 'Use a refresh token to extend a session and generate another access token',
 		tags       : [OpenapiTags.SESSION],
 	})
-	async refreshSession(@Body() body : RefreshSession) : Promise<string> {
+	async refreshSession(@Body() body: RefreshSession): Promise<string> {
 		// Decode token
 		const maybeRefreshedToken = await this.tokenManagement.decode(body.refreshToken)
 
@@ -35,7 +43,10 @@ export class SessionController {
 		}))
 
 		// Refresh session
-		await this.sessionService.refreshSession(session, accessToken.jti)
+		await this.sessionService.refreshSession(
+			session,
+			accessToken.jti,
+		)
 
 		return accessToken.signature
 	}

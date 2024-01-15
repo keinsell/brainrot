@@ -23,10 +23,13 @@
  *
  */
 
-import {Result}                                from "neverthrow";
-import {SingedJwt}                             from "../value-objects/singed-jwt.js";
-import {ForbiddenException, NotFoundException} from "@nestjs/common";
-import {RefreshToken}                          from "../value-objects/tokens/refresh-token.js";
+import {
+	ForbiddenException,
+	NotFoundException,
+}                     from '@nestjs/common'
+import {Result}       from 'neverthrow'
+import {SingedJwt}    from '../value-objects/singed-jwt.js'
+import {RefreshToken} from '../value-objects/tokens/refresh-token.js'
 
 
 
@@ -45,17 +48,18 @@ export abstract class AuthenticationService {
 	 *     token. If unsuccessful, it contains the error.
 	 */
 	public abstract authenticate(
-		username : string,
-		password : string,
-	) : Promise<Result<{
-		accessToken : SingedJwt,
-		refreshToken : SingedJwt,
-		accountId : string
+		username: string,
+		password: string,
+	): Promise<Result<{
+		accessToken: SingedJwt,
+		refreshToken: SingedJwt,
+		accountId: string
 	}, NotFoundException | ForbiddenException>>;
 
-	public abstract logout() : Promise<void>;
+	public abstract logout(): Promise<void>;
 
-	public abstract refreshToken(refreshToken : string) : Promise<{
-		refreshToken : RefreshToken, accessToken : SingedJwt
+	public abstract refreshToken(refreshToken: string): Promise<{
+		refreshToken: RefreshToken,
+		accessToken: SingedJwt
 	}>;
 }

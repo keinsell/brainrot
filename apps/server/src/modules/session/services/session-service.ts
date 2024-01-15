@@ -1,29 +1,30 @@
-import {Injectable, Logger} from "@nestjs/common"
-import {randomUUID}         from "node:crypto"
-import {ServiceAbstract}    from "../../../common/libraries/services/service-abstract.js"
-import {EventBus}           from "../../../common/modules/messaging/event-bus.js"
-import {CreateSession}      from "../commands/create-session.js"
-import {UserSession}        from "../entities/user-session.js"
-import {SessionRepository}  from "../repositories/session-repository.js"
+import {
+	Injectable,
+	Logger,
+}                          from '@nestjs/common'
+import {randomUUID}        from 'node:crypto'
+import {ServiceAbstract}   from '../../../common/libraries/services/service-abstract.js'
+import {EventBus}          from '../../../common/modules/messaging/event-bus.js'
+import {CreateSession}     from '../commands/create-session.js'
+import {UserSession}       from '../entities/user-session.js'
+import {SessionRepository} from '../repositories/session-repository.js'
 
 
 
 @Injectable()
 export class SessionService
 	extends ServiceAbstract<UserSession> {
-	private logger : Logger = new Logger("session::service")
+	private logger: Logger = new Logger('session::service')
 
 	constructor(
-		private sessionRepository : SessionRepository,
-		private eventbus : EventBus,
+		private sessionRepository: SessionRepository,
+		private eventbus: EventBus,
 	)
 	{
-		super(
-			sessionRepository,
-		)
+		super(sessionRepository)
 	}
 
-	public async startSession(payload : CreateSession) : Promise<UserSession> {
+	public async startSession(payload: CreateSession): Promise<UserSession> {
 		const session = UserSession.build({
 			...payload,
 			id       : randomUUID(),
@@ -39,7 +40,10 @@ export class SessionService
 		return this.sessionRepository.create(session)
 	}
 
-	public async refreshSession(session : UserSession, accessTokenJti : string) : Promise<UserSession> {
+	public async refreshSession(
+		session: UserSession,
+		accessTokenJti: string,
+	): Promise<UserSession> {
 		session.refreshSession(accessTokenJti)
 
 		const events = session.getUncommittedEvents()
@@ -49,7 +53,7 @@ export class SessionService
 		return this.sessionRepository.update(session)
 	}
 
-	public async getByJti(jti : string) : Promise<UserSession> {
+	public async getByJti(jti: string): Promise<UserSession> {
 		return this.sessionRepository.getByJti(jti)
 	}
 }

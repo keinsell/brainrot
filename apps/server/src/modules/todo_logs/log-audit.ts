@@ -23,50 +23,31 @@
  *
  */
 
-import {EmailAddress}    from "../value-object/email-address.js"
-import {EmailAttachment} from "../value-object/email-attachment.js"
-import {Html}            from "../value-object/html.js"
-import {PlainText}       from "../value-object/plain-text.js"
-
-
-
-export interface IEmailMessage {
-	recipient : {
-		to : EmailAddress
-		cc? : EmailAddress[]
-		bcc? : EmailAddress[]
-	}
-	sender? : {
-		from : EmailAddress
-		replyTo? : string
-	}
-	subject? : string
-	body? : Html | PlainText
-	attachments? : EmailAttachment[]
+export interface LogAudit {
+	happenedAt: Date
+	ipAddress: string
+	version: string
+	source: string
+	releatedResources?: string[]
+	idempotencyKey?: string
+	request: AuditRequest
+	response: AuditResponse
 }
 
 
-export class EmailMessage
-	implements IEmailMessage {
-	attachments? : EmailAttachment[]
-	body? : Html | PlainText
-	recipient : {
-		to : EmailAddress
-		cc? : EmailAddress[]
-		bcc? : EmailAddress[]
-	}
-	sender? : {
-		from : EmailAddress
-		replyTo? : string
-	}
-	subject? : string
+export interface AuditResource {}
 
 
-	constructor(message : EmailMessage) {
-		this.body        = message.body
-		this.recipient   = message.recipient
-		this.sender      = message.sender
-		this.subject     = message.subject
-		this.attachments = message.attachments
-	}
+export interface AuditRequest {
+	method: "POST" | "GET" | "PUT" | "PATCH" | "DELETE"
+	url: string
+	body?: Object
+	queryParameters?: Object
+	headers?: Object
+}
+
+export interface AuditResponse {
+	statusCode: number
+	body?: Object
+	headers?: Object
 }

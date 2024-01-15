@@ -23,20 +23,12 @@
  *
  */
 
-
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
+import { EmailAddress } from './email-address.js'
 
 
 
-export abstract class PaymentMethodService
-  {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
-
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
-  }
+export type EmailReceipent = {
+  to : EmailAddress
+  cc? : EmailAddress[]
+  bcc? : EmailAddress[]
+}

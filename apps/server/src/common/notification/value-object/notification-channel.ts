@@ -23,20 +23,10 @@
  *
  */
 
-
-import { CreatePaymentMethod } from '../dto/create-payment-method.js'
-import { PaymentMethod }       from '../entity/payment-method.js'
-import { PaymentMethodId }     from '../value/payment-method-id.js'
-
-
-
-export abstract class PaymentMethodService
+export enum NotificationChannel
   {
-	 abstract addPaymentMethod(paymentMethod : CreatePaymentMethod) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethod(paymentMethodId : PaymentMethodId) : Promise<PaymentMethod>
-
-	 abstract getPaymentMethods() : Promise<PaymentMethod[]>
-
-	 abstract deletePaymentMethod(paymentMethodId : PaymentMethodId) : Promise<void>
+	 EMAIL   = 'email',
+	 SMS     = 'sms',
+	 PUSH    = 'push',
+	 WEBHOOK = 'webhook',
   }
