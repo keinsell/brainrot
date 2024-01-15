@@ -2,18 +2,23 @@ version: "3.7"
 
 services:
   traefik:
-     container_name: ${SERVICE_NAME}-traefik
-     image: traefik:v2.3
-     command:
-       - --api.insecure=true
-       - --providers.docker
-       - --providers.docker.exposedbydefault=false
-       - --entrypoints.web.address=:80
-     ports:
-       - "80:80"
-       - "8080:8080"
-     volumes:
-       - /var/run/docker.sock:/var/run/docker.sock
+    container_name: ${SERVICE_NAME}-traefik
+    image: traefik:v2.3
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
   jaeger:
     container_name: ${SERVICE_NAME}-jaeger
@@ -40,7 +45,11 @@ services:
     environment:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
       - COLLECTOR_OTLP_ENABLED=true
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
   postgres:
     container_name: ${SERVICE_NAME}-postgres
     image: postgres:latest
@@ -57,7 +66,11 @@ services:
       - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
     mem_reservation: 126M
     cpu_count: 1
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
   redis:
     container_name: ${SERVICE_NAME}-redis
     image: redis:latest
@@ -70,7 +83,11 @@ services:
       - "${PWD}/.docker/redis:/var/lib/redis"
     mem_reservation: 126M
     cpu_count: 1
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
   # Dashboard listing all services related to repository for easier navigation.
   # http://localhost:5005/
   flame:
@@ -81,6 +98,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 5005:5005
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
   nats:
     container_name: ${SERVICE_NAME}-nats
