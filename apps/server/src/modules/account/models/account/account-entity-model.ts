@@ -19,7 +19,16 @@ export class AccountEntityModel
 	 public updatedAt : Date
 	 public username : string
 	 public version : number
-
+	 public family_name : string | null
+	 public given_name : string | null
+	 public last_ip : string | null
+	 public last_login : Date | null
+	 public locale : string | null
+	 public name : string | null
+	 public nickname : string | null
+	 public phone_number : string | null
+	 public phone_verified : boolean
+	 public picture : string | null
 
 	 constructor(properties : DbContextModel.Account.Entity)
 		{
@@ -32,7 +41,6 @@ export class AccountEntityModel
 		  this.username                = properties.username
 		  this.version                 = properties.version
 		}
-
 
 	 toDomainModel() : Account
 		{

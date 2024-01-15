@@ -21,12 +21,41 @@ enum EmailVerificationStatus {
 model Account {
   id                      String                  @id @default(cuid())
   // --------------------------------------------------
+  /// The user's family name.
+  family_name             String?
+  /// The user's given name.
+  given_name              String?
+  /// The user's locale.
+  locale                  String?                 @default("en")
+  /// URL pointing to the user's profile picture.
+  picture                 String?
+  /// The user's full name
+  name                    String?
+  /// The user's nickname.
+  nickname                String?
+  /// The user's phone number. Only valid for users with SMS connections.
+  phone_number            String?
+  /// Indicates whether the user has been verified their phone number.
+  phone_verified          Boolean                 @default(false)
+  /// The user's username. Must be unique.
   username                String                  @unique
+  /// The user's email address. Must be unique.
   email                   String                  @unique
+  /// Indicates whether the user has verified their email address.
   emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
+  //   email_verified Boolean @default(false)
+  /// The user's password. Only valid for users with Database connections.
+  /// (It's argon2 hashed)
   password                String
+  /// IP address associated with the user's last login.
+  last_ip                 String?
+  /// Timestamp indicating when the user last logged in.
+  last_login              DateTime?
   // --------------------------------------------------
   createdAt               DateTime                @default(now())
+  /// Timestamp indicating when the user's profile was last updated/modified.
+  /// Changes to last_login are considered updates, so most of the time,
+  /// updated_at will match last_login.
   updatedAt               DateTime                @updatedAt
   version                 Int                     @default(1)
   // --------------------------------------------------
@@ -37,6 +66,21 @@ model Account {
   Group                   Group[]
   Role                    Role[]
   PaymentMethod           PaymentMethod[]
+  AccountMetadata         AccountMetadata[]
+}
+
+/// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
+model AccountMetadata {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  key       String
+  value     String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(1)
+  // --------------------------------------------------
+  Account   Account  @relation(fields: [id], references: [id])
 }
 
 model Group {
@@ -63,62 +107,14 @@ model Role {
   Accounts  Account[]
 }
 
-model AccountV2 {
-  id             String    @id @default(cuid())
-  // --------------------------------------------------
-  /// Custom fields that store info about a user that influences the user's access, such as support plan, security roles (if not using the Authorization Core feature set), or access control groups.
-  app_metadata   Json      @default("{}")
-  /// Indicates whether the user has been blocked.
-  blocked        Boolean   @default(false)
-  /// IP addresses that have been blocked under suspicion of a bruteforce attack.
-  blocked_for    String[]  @default([])
-  /// The user's email address. Must be unique.
-  email          String    @unique
-  /// Indicates whether the user has verified their email address.
-  email_verified Boolean   @default(false)
-  /// The user's family name.
-  family_name    String?
-  /// The user's given name.
-  given_name     String?
-  /// The user's locale.
-  locale         String?   @default("en")
-  /// The user's username. Must be unique.
-  username       String    @unique
-  /// URL pointing to the user's profile picture.
-  picture        String?
-  /// The user's full name
-  name           String?
-  /// The user's nickname.
-  nickname       String?
-  /// The user's phone number. Only valid for users with SMS connections.
-  phone_number   String?
-  /// Indicates whether the user has been verified their phone number. Only valid for users with SMS connections.
-  phone_verified Boolean   @default(false)
-  /// The user's password. Only valid for users with Database connections. (It's argon2 hashed)
-  password       String
-  /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
-  user_metadata  Json      @default("{}")
-  /// IP address associated with the user's last login.
-  last_ip        String?
-  /// Timestamp indicating when the user last logged in.
-  last_login     DateTime?
-  // --------------------------------------------------
-  createdAt      DateTime  @default(now())
-  /// Timestamp indicating when the user's profile was last updated/modified. Changes to last_login are considered updates, so most of the time, updated_at will match last_login.
-  updatedAt      DateTime  @updatedAt
-  version        Int       @default(1)
-  // --------------------------------------------------
-}
-
 model Session {
-  id          String   @id @default(cuid())
+  id        String   @id @default(cuid())
   // --------------------------------------------------
-  accountId   String
+  accountId String
   // --------------------------------------------------
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
   // --------------------------------------------------
-  Account     Account  @relation(fields: [accountId], references: [id])
-  accountV2Id String?
+  Account   Account  @relation(fields: [accountId], references: [id])
 }
 
 model TokenAudit {
@@ -196,14 +192,13 @@ model ShippingAddress {
 model UserMetadata {
   id        String   @id @default(cuid())
   // --------------------------------------------------
-  userId    String
   key       String
   value     String
   // --------------------------------------------------
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // --------------------------------------------------
-  User      User     @relation(fields: [userId], references: [id])
+  User      User     @relation(fields: [id], references: [id])
 }
 
 model Product {
@@ -351,4 +346,48 @@ model Blob {
   // --------------------------------------------------
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+///  A coupon contains information about a percent-off or amount-off discount
+/// you might want to apply to a customer. Coupons may be applied to
+/// subscriptions, invoices, checkout sessions, quotes, and more. Coupons do not
+/// work with conventional one-off charges or payment intents.
+model Coupon {
+  id                       String           @id @default(cuid())
+  // --------------------------------------------------
+  amountOff                Int?
+  percentOff               Int?
+  duration                 Int?
+  durationInMonths         Int?
+  maxRedemptions           Int?
+  minimumAmount            Int?
+  minimumAmountCurrency    String?
+  firstTimeTransactionOnly Boolean?
+  timesRedeemed            BigInt
+  // --------------------------------------------------
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  metadata                 CouponMetadata[]
+}
+
+/// Set of key-value pairs that you can attach to an object.
+/// This can be useful for storing additional information about the object in a
+/// structured format.
+model CouponMetadata {
+  id     String @id @default(cuid())
+  // --------------------------------------------------
+  key    String
+  value  String
+  // --------------------------------------------------
+  Coupon Coupon @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+/// A Promotion Code represents a customer-redeemable code for a coupon. It
+/// can be used to create multiple codes for a single coupon.
+
+model PromotionCode {
+  id     String  @id @default(cuid())
+  // --------------------------------------------------
+  code   String
+  active Boolean
 }

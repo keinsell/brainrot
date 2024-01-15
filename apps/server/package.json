@@ -34,6 +34,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:push:force": "prisma db push --accept-data-loss",
+    "db:reset": "prisma db push --force-reset --accept-data-loss",
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate & pnpm docs:compodoc && typesync",
     "prepare": "ts-patch install && typia patch -s",
