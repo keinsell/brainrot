@@ -23,6 +23,7 @@
  *
  */
 
-export abstract class ErrorReporter {
-	public abstract captureException(error : Error) : void;
-}
+export abstract class ErrorReporter
+  {
+	 public abstract captureException(error : Error) : void;
+  }

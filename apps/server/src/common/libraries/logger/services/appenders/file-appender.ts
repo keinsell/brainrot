@@ -23,24 +23,28 @@
  *
  */
 
-import {Log}         from "../../log.js";
-import fs            from "node:fs";
-import {LogAppender} from "../../log-appender.js";
+import fs              from 'node:fs'
+import { LogAppender } from '../../log-appender.js'
+import { Log }         from '../../log.js'
 
 
 
 export class FileAppender
-	extends LogAppender {
-	constructor(private readonly path: string) {
-		super()
-	}
-	
-	
-	append(log: Log) {
-		fs.appendFile(this.path, `${JSON.stringify(log)}\n`, (err) => {
-			if (err) {
-				console.error('Failed to append to log file', err);
-			}
-		});
-	}
-}
+  extends LogAppender
+  {
+	 constructor(private readonly path : string)
+		{
+		  super()
+		}
+
+
+	 append(log : Log)
+		{
+		  fs.appendFile( this.path, `${JSON.stringify( log )}\n`, (err) => {
+			 if ( err )
+				{
+				  console.error( 'Failed to append to log file', err )
+				}
+		  } )
+		}
+  }

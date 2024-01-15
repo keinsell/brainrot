@@ -23,19 +23,22 @@
  *
  */
 
-import {GeocodeProvider} from "../../../contract/geocode-provider.js";
-import {Coordinates}     from "../../../value-objects/coordinates.js";
-import {Address}         from "../../../../address/address.js";
+import { Address }         from '../../../../address/address.js'
+import { GeocodeProvider } from '../../../contract/geocode-provider.js'
+import { Coordinates }     from '../../../value-objects/coordinates.js'
 
 
 
 export class NoopGeocodingProvider
-	extends GeocodeProvider {
-	forwardGeocode(address : string | string[] | Address) : Promise<Coordinates> {
-		throw new Error("Method not implemented.");
-	}
+  extends GeocodeProvider
+  {
+	 forwardGeocode(address : string | string[] | Address) : Promise<Coordinates>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
 
-	reverseGeocode(coordinates : Coordinates) : Promise<Address> {
-		throw new Error("Method not implemented.");
-	}
-}
+	 reverseGeocode(coordinates : Coordinates) : Promise<Address>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
+  }

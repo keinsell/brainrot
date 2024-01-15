@@ -25,17 +25,18 @@
 
 
 
-import {OpenTelemetryModule} from "./tracing/opentelemetry/lib/open-telemetry-module.js";
-import {Module}              from "@nestjs/common";
+import { Module }              from '@nestjs/common'
+import { OpenTelemetryModule } from './tracing/opentelemetry/lib/open-telemetry-module.js'
 
 
 
-@Module({
-	imports: [
-		OpenTelemetryModule.forRoot(),
-	],
-	exports: [],
-})
-export class ObservabilityModule {
-}
+@Module( {
+			  imports : [
+				 OpenTelemetryModule.forRoot(),
+			  ],
+			  exports : [],
+			} )
+export class ObservabilityModule
+  {
+  }
 

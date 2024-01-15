@@ -1,65 +1,95 @@
-import {Logger}                         from "@nestjs/common"
-import {KeyDerivationFunction}          from "./key-derivation-functions/key-derivation-function.js"
-import {PhcString, SerializedPhcString} from "./types/phc-string.js"
-import {Salt}                           from "./types/salt.js"
+import { Logger } from '@nestjs/common'
 
-import {isDevelopment} from "../../../configs/helper/is-development.js";
-
-
-
-export class UnihashAlgorithm {
-	private readonly logger : Logger
+import { isDevelopment }         from '../../../configs/helper/is-development.js'
+import { KeyDerivationFunction } from './key-derivation-functions/key-derivation-function.js'
+import {
+  PhcString,
+  SerializedPhcString,
+}                                from './types/phc-string.js'
+import { Salt }                  from './types/salt.js'
 
 
-	constructor(private readonly kdf : KeyDerivationFunction) {
-		this.logger = new Logger(`${kdf.name}`)
-	}
+
+export class UnihashAlgorithm
+  {
+	 private readonly logger : Logger
 
 
-	async hash(plain : string, salt? : Salt) : Promise<SerializedPhcString> {
-		this.preHash(plain)
-		const phcString = await this.kdf.deriveKey(plain, salt as any)
-		this.postHash(plain, phcString.serialize())
-		return phcString.serialize()
-	}
+	 constructor(private readonly kdf : KeyDerivationFunction)
+		{
+		  this.logger = new Logger( `${kdf.name}` )
+		}
 
 
-	async verify(hash : string, plain : string) : Promise<boolean> {
-		this.preVerify(hash, plain)
-		const result = await this.kdf.verify(PhcString.deserialize(hash as unknown as SerializedPhcString), plain)
-		this.postVerify(hash, plain, result)
-		return result
-	}
+	 async hash(
+		plain : string,
+		salt? : Salt,
+	 ) : Promise<SerializedPhcString>
+		{
+		  this.preHash( plain )
+		  const phcString = await this.kdf.deriveKey( plain, salt as any )
+		  this.postHash( plain, phcString.serialize() )
+		  return phcString.serialize()
+		}
 
 
-	private preHash(plain : string) : void {
-		this.logger.verbose(`hash(${this.maskPassword(plain)})`)
-	}
+	 async verify(
+		hash : string,
+		plain : string,
+	 ) : Promise<boolean>
+		{
+		  this.preVerify( hash, plain )
+		  const result = await this.kdf.verify( PhcString.deserialize( hash as unknown as SerializedPhcString ), plain )
+		  this.postVerify( hash, plain, result )
+		  return result
+		}
 
 
-	private postHash(plain : string, hash : string) : void {
-		this.logger.debug(`hash(${this.maskPassword(plain)}) => ${this.formatHash(hash)}`)
-	}
+	 private preHash(plain : string) : void
+		{
+		  this.logger.verbose( `hash(${this.maskPassword( plain )})` )
+		}
 
 
-	private preVerify(hash : string, plain : string) : void {
-		this.logger.verbose(`verify(${this.maskPassword(plain)}, ${this.formatHash(hash)})`)
-	}
+	 private postHash(
+		plain : string,
+		hash : string,
+	 ) : void
+		{
+		  this.logger.debug( `hash(${this.maskPassword( plain )}) => ${this.formatHash( hash )}` )
+		}
 
 
-	private postVerify(hash : string, plain : string, result : boolean) : void {
-		this.logger.debug(`verify(${this.maskPassword(plain)},${this.formatHash(hash)}) => ${result ? "OK" : "FAIL"}`)
-	}
+	 private preVerify(
+		hash : string,
+		plain : string,
+	 ) : void
+		{
+		  this.logger.verbose( `verify(${this.maskPassword( plain )}, ${this.formatHash( hash )})` )
+		}
 
 
-	private maskPassword(plain : string) : string {
-		return isDevelopment() ? plain : "[REDACTED]"
-		//		return plain.slice(0, 3) + "#".repeat(plain.length - 3)
-	}
+	 private postVerify(
+		hash : string,
+		plain : string,
+		result : boolean,
+	 ) : void
+		{
+		  this.logger.debug(
+			 `verify(${this.maskPassword( plain )},${this.formatHash( hash )}) => ${result ? 'OK' : 'FAIL'}` )
+		}
 
 
-	/** Return last 20 characters of hash */
-	private formatHash(hash : string) : string {
-		return `${hash.slice(0, 10)}...${hash.slice(hash.length - 10)}`
-	}
-}
+	 private maskPassword(plain : string) : string
+		{
+		  return isDevelopment() ? plain : '[REDACTED]'
+		  //		return plain.slice(0, 3) + "#".repeat(plain.length - 3)
+		}
+
+
+	 /** Return last 20 characters of hash */
+	 private formatHash(hash : string) : string
+		{
+		  return `${hash.slice( 0, 10 )}...${hash.slice( hash.length - 10 )}`
+		}
+  }

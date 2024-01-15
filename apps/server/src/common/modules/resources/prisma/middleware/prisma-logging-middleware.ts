@@ -1,24 +1,28 @@
-import {Logger}                   from "@nestjs/common"
-import {Prisma}                   from "../../../../../vendor/prisma/index.js"
-import {LoggingMiddlewareOptions} from "../structures/prisma-logging-middleware-options.js"
+import { Logger }                   from '@nestjs/common'
+import { Prisma }                   from '../../../../../vendor/prisma/index.js'
+import { LoggingMiddlewareOptions } from '../structures/prisma-logging-middleware-options.js'
 
 
 
 export function prismaLoggingMiddleware(args : LoggingMiddlewareOptions = {
-	logger  : console,
-	logLevel: 'debug',
-}) : Prisma.Middleware {
-	return async (params, next) => {
-		const before = Date.now();
-		const result = await next(params);
-		const after  = Date.now();
+  logger   : console,
+  logLevel : 'debug',
+}) : Prisma.Middleware
+  {
+	 return async (
+		params,
+		next,
+	 ) => {
+		const before = Date.now()
+		const result = await next( params )
+		const after  = Date.now()
 
-		const executionTime = after - before;
+		const executionTime = after - before
 
-		const nestLogger = new Logger("prisma")
+		const nestLogger = new Logger( 'prisma' )
 
-		nestLogger.verbose(`Prisma query: ${params.model}.${params.action}() in ${executionTime}ms`)
+		nestLogger.verbose( `Prisma query: ${params.model}.${params.action}() in ${executionTime}ms` )
 
-		return result;
-	};
-}
+		return result
+	 }
+  }

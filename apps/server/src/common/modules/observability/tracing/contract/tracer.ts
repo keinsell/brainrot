@@ -23,14 +23,15 @@
  *
  */
 
-import {Span} from "../entity/span.js";
+import { Span } from '../entity/span.js'
 
 
 
-export abstract class Tracer {
-	abstract startSpan(name : string) : Span;
+export abstract class Tracer
+  {
+	 abstract startSpan(name : string) : Span;
 
-	abstract getCurrentSpan() : Span;
+	 abstract getCurrentSpan() : Span;
 
-	abstract setSpan(span : Span) : void;
-}
+	 abstract setSpan(span : Span) : void;
+  }

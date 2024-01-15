@@ -23,8 +23,12 @@
  *
  */
 
-import {Injectable}           from "@nestjs/common";
-import {context, Span, trace} from "@opentelemetry/api";
+import { Injectable } from '@nestjs/common'
+import {
+  context,
+  Span,
+  trace,
+}                     from '@opentelemetry/api'
 
 
 
@@ -35,17 +39,21 @@ import {context, Span, trace} from "@opentelemetry/api";
  * @Injectable()
  */
 @Injectable()
-export class TraceService {
-	public getTracer() {
-		return trace.getTracer('default');
-	}
+export class TraceService
+  {
+	 public getTracer()
+		{
+		  return trace.getTracer( 'default' )
+		}
 
-	public getSpan() : Span {
-		return trace.getSpan(context.active()) as Span;
-	}
+	 public getSpan() : Span
+		{
+		  return trace.getSpan( context.active() ) as Span
+		}
 
-	public startSpan(name : string) : Span {
-		const tracer = trace.getTracer('default');
-		return tracer.startSpan(name);
-	}
-}
+	 public startSpan(name : string) : Span
+		{
+		  const tracer = trace.getTracer( 'default' )
+		  return tracer.startSpan( name )
+		}
+  }

@@ -1,4 +1,4 @@
-import {WriteRepository} from "./write-repository.js"
+import { WriteRepository } from './write-repository.js'
 
 
 
@@ -6,7 +6,8 @@ import {WriteRepository} from "./write-repository.js"
  * `Repository` is a class that serves as a template for repository classes.
  * A repository class serves as a bridge between your application and the data source.
  * This base repository uses a generic type `T`, allowing it to store, access, and manipulate data of any type.
- * Extend this base class in your specific data repositories, providing more concrete implementations or additional methods as your application requires.
+ * Extend this base class in your specific data repositories, providing more concrete implementations or additional
+ * methods as your application requires.
  *
  * ### Repository Semantics
  *
@@ -27,4 +28,5 @@ import {WriteRepository} from "./write-repository.js"
  *
  * @class
  */
-export abstract class Repository<T> extends WriteRepository<T> {}
+export abstract class Repository<T>
+  extends WriteRepository<T> {}

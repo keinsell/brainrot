@@ -23,31 +23,34 @@
  *
  */
 
-import {ModuleRef}                        from "@nestjs/core";
-import {DynamicModule, FactoryProvider}   from "@nestjs/common";
-import {EventEmitterModule}               from "@nestjs/event-emitter";
-import {OpenTelemetryService}             from "./service/open-telemetry-service.js";
-import {NodeSDK}                         from "@opentelemetry/sdk-node";
-import {OPEN_TELEMETRY_SDK_CONFIG}       from "./constant/OPEN_TELEMETRY_SDK_CONFIG.js";
-import {OpenTelemetryModuleConfig}       from "./interfaces/opentelemetry-module-config.js";
-import {Tracer}                          from "@opentelemetry/sdk-trace-node";
-import {OPEN_TELEMETRY_SDK}              from "./constant/OPEN_TELEMETRY_SDK.js";
-import {OpentelemetryModuleAsyncOptions}  from "./interfaces/opentelemetry-module-async-options.js";
-import {OpenTelemetryModuleDefaultConfig} from "./config/opentelemetry-module-default-config.js";
-import {DecoratorInjector}                from "./injector/decorator-injector.js";
-import {TraceService}                    from "./service/trace-service.js";
-import {OPEN_TELEMETRY_SDK_INJECTORS}    from "./constant/OPEN_TELEMETRY_SDK_INJECTORS.js";
 import {
-	getClient,
-	SentryPropagator,
-	SentrySampler,
-	SentrySpanProcessor,
-	setOpenTelemetryContextAsyncContextStrategy,
-	setupEventContextTrace,
-	wrapContextManagerClass,
-}                                        from "@sentry/opentelemetry";
-import {AsyncLocalStorageContextManager}  from "@opentelemetry/context-async-hooks";
-import otelApi                            from "@opentelemetry/api";
+  DynamicModule,
+  FactoryProvider,
+}                                           from '@nestjs/common'
+import { ModuleRef }                        from '@nestjs/core'
+import { EventEmitterModule }               from '@nestjs/event-emitter'
+import otelApi                              from '@opentelemetry/api'
+import { AsyncLocalStorageContextManager }  from '@opentelemetry/context-async-hooks'
+import { NodeSDK }                          from '@opentelemetry/sdk-node'
+import { Tracer }                           from '@opentelemetry/sdk-trace-node'
+import {
+  getClient,
+  SentryPropagator,
+  SentrySampler,
+  SentrySpanProcessor,
+  setOpenTelemetryContextAsyncContextStrategy,
+  setupEventContextTrace,
+  wrapContextManagerClass,
+}                                           from '@sentry/opentelemetry'
+import { OpenTelemetryModuleDefaultConfig } from './config/opentelemetry-module-default-config.js'
+import { OPEN_TELEMETRY_SDK }               from './constant/OPEN_TELEMETRY_SDK.js'
+import { OPEN_TELEMETRY_SDK_CONFIG }        from './constant/OPEN_TELEMETRY_SDK_CONFIG.js'
+import { OPEN_TELEMETRY_SDK_INJECTORS }     from './constant/OPEN_TELEMETRY_SDK_INJECTORS.js'
+import { DecoratorInjector }                from './injector/decorator-injector.js'
+import { OpentelemetryModuleAsyncOptions }  from './interfaces/opentelemetry-module-async-options.js'
+import { OpenTelemetryModuleConfig }        from './interfaces/opentelemetry-module-config.js'
+import { OpenTelemetryService }             from './service/open-telemetry-service.js'
+import { TraceService }                     from './service/trace-service.js'
 
 
 
@@ -113,196 +116,210 @@ import otelApi                            from "@opentelemetry/api";
  *
  */
 
-export class OpenTelemetryModule {
-	/**
-	 * Initializes the OpenTelemetry module with the given configuration.
-	 *
-	 * @param {Partial<OpenTelemetryModuleConfig>} configuration - The configuration for the OpenTelemetry module.
-	 *     (optional)
-	 *
-	 * @return {Promise<DynamicModule>} A Promise that resolves to a DynamicModule object representing the
-	 *     OpenTelemetry module.
-	 */
-	static async forRoot(
+export class OpenTelemetryModule
+  {
+	 /**
+	  * Initializes the OpenTelemetry module with the given configuration.
+	  *
+	  * @param {Partial<OpenTelemetryModuleConfig>} configuration - The configuration for the OpenTelemetry module.
+	  *     (optional)
+	  *
+	  * @return {Promise<DynamicModule>} A Promise that resolves to a DynamicModule object representing the
+	  *     OpenTelemetry module.
+	  */
+	 static async forRoot(
 		configuration : Partial<OpenTelemetryModuleConfig> = {},
-	) : Promise<DynamicModule> {
-		configuration   = {...OpenTelemetryModuleDefaultConfig, ...configuration} as any;
-		const injectors = configuration?.traceAutoInjectors ?? [];
-		return {
-			global   : true,
-			module   : OpenTelemetryModule,
-			imports  : [EventEmitterModule.forRoot()],
-			providers: [
+	 ) : Promise<DynamicModule>
+		{
+		  configuration   = {...OpenTelemetryModuleDefaultConfig, ...configuration} as any
+		  const injectors = configuration?.traceAutoInjectors ?? []
+		  return {
+			 global    : true,
+			 module    : OpenTelemetryModule,
+			 imports   : [ EventEmitterModule.forRoot() ],
+			 providers : [
 				...injectors,
 				TraceService,
 				OpenTelemetryService,
 				DecoratorInjector,
-				this.buildProvider(configuration),
-				this.buildInjectors(configuration),
+				this.buildProvider( configuration ),
+				this.buildInjectors( configuration ),
 				this.buildTracer(),
 				{
-					provide : OPEN_TELEMETRY_SDK_CONFIG,
-					useValue: configuration,
+				  provide  : OPEN_TELEMETRY_SDK_CONFIG,
+				  useValue : configuration,
 				},
-			],
-			exports  : [
+			 ],
+			 exports   : [
 				TraceService,
 				Tracer,
-			],
-		};
-	}
+			 ],
+		  }
+		}
 
-	/**
-	 * Initialize the OpenTelemetry module asynchronously.
-	 *
-	 * @param {OpentelemetryModuleAsyncOptions} configuration - The configuration options for the module. Default is an
-	 *     empty object.
-	 * @returns {Promise<DynamicModule>} - A Promise that resolves to a DynamicModule object.
-	 */
-	static async forRootAsync(
+	 /**
+	  * Initialize the OpenTelemetry module asynchronously.
+	  *
+	  * @param {OpentelemetryModuleAsyncOptions} configuration - The configuration options for the module. Default is an
+	  *     empty object.
+	  * @returns {Promise<DynamicModule>} - A Promise that resolves to a DynamicModule object.
+	  */
+	 static async forRootAsync(
 		configuration : OpentelemetryModuleAsyncOptions = {},
-	) : Promise<DynamicModule> {
-		return {
-			global   : true,
-			module   : OpenTelemetryModule,
-			imports  : [
+	 ) : Promise<DynamicModule>
+		{
+		  return {
+			 global    : true,
+			 module    : OpenTelemetryModule,
+			 imports   : [
 				...configuration?.imports as any,
 				EventEmitterModule.forRoot(),
-			],
-			providers: [
+			 ],
+			 providers : [
 				TraceService,
 				OpenTelemetryService,
 				this.buildAsyncProvider(),
 				this.buildAsyncInjectors(),
 				this.buildTracer(),
 				{
-					provide   : OPEN_TELEMETRY_SDK_CONFIG,
-					useFactory: configuration.useFactory as any,
-					inject    : configuration.inject,
+				  provide    : OPEN_TELEMETRY_SDK_CONFIG,
+				  useFactory : configuration.useFactory as any,
+				  inject     : configuration.inject,
 				},
-			],
-			exports  : [
+			 ],
+			 exports   : [
 				TraceService,
 				Tracer,
-			],
-		};
-	}
+			 ],
+		  }
+		}
 
-	/**
-	 * Builds a factory provider for the OpenTelemetry SDK.
-	 *
-	 * @param {Partial<OpenTelemetryModuleConfig>} configuration - The optional configuration for the SDK.
-	 * @return {FactoryProvider} - The factory provider object.
-	 */
-	private static buildProvider(
+	 /**
+	  * Builds a factory provider for the OpenTelemetry SDK.
+	  *
+	  * @param {Partial<OpenTelemetryModuleConfig>} configuration - The optional configuration for the SDK.
+	  * @return {FactoryProvider} - The factory provider object.
+	  */
+	 private static buildProvider(
 		configuration? : Partial<OpenTelemetryModuleConfig>,
-	) : FactoryProvider {
-		return {
-			provide   : OPEN_TELEMETRY_SDK,
-			useFactory: async () => {
+	 ) : FactoryProvider
+		{
+		  return {
+			 provide    : OPEN_TELEMETRY_SDK,
+			 useFactory : async () => {
 
 
-				const sentryClient = getClient();
-				setupEventContextTrace(sentryClient!);
+				const sentryClient = getClient()
+				setupEventContextTrace( sentryClient! )
 
 
 				const SentryContextManager = wrapContextManagerClass(
-					AsyncLocalStorageContextManager,
-				);
+				  AsyncLocalStorageContextManager,
+				)
 
 				configuration = {
-					...configuration,
-					// traceExporter    : new OTLPTraceExporter(),
-					spanProcessor    : new SentrySpanProcessor(),
-					contextManager   : new SentryContextManager(),
-					textMapPropagator: new SentryPropagator(),
-					sampler          : new SentrySampler(sentryClient!),
+				  ...configuration,
+				  // traceExporter    : new OTLPTraceExporter(),
+				  spanProcessor     : new SentrySpanProcessor(),
+				  contextManager    : new SentryContextManager(),
+				  textMapPropagator : new SentryPropagator(),
+				  sampler           : new SentrySampler( sentryClient! ),
 				}
 
-				const sdk = new NodeSDK(configuration);
+				const sdk = new NodeSDK( configuration )
 
 				// Ensure OpenTelemetry Context & Sentry Hub/Scope is synced
-				setOpenTelemetryContextAsyncContextStrategy();
+				setOpenTelemetryContextAsyncContextStrategy()
 
 
-				otelApi.propagation.setGlobalPropagator(new SentryPropagator());
+				otelApi.propagation.setGlobalPropagator( new SentryPropagator() )
 
-				sdk.start();
+				sdk.start()
 
-				return sdk;
-			},
-		};
-	}
-
-	private static async executeInjectorMethods(...injectors) : Promise<void> {
-		for await (const injector of injectors) {
-			if (injector['inject']) await injector.inject();
+				return sdk
+			 },
+		  }
 		}
-	}
 
-	private static buildInjectors(config? : Partial<OpenTelemetryModuleConfig>) : FactoryProvider {
-		const injectors    = config?.traceAutoInjectors ?? [];
-		const dependencies = [
-			DecoratorInjector,
-			...(
+	 private static async executeInjectorMethods(...injectors) : Promise<void>
+		{
+		  for await ( const injector of injectors )
+			 {
+				if ( injector[ 'inject' ] ) await injector.inject()
+			 }
+		}
+
+	 private static buildInjectors(config? : Partial<OpenTelemetryModuleConfig>) : FactoryProvider
+		{
+		  const injectors    = config?.traceAutoInjectors ?? []
+		  const dependencies = [
+			 DecoratorInjector,
+			 ...(
 				injectors as []
-			),
-		];
+			 ),
+		  ]
 
-		return {
-			provide   : OPEN_TELEMETRY_SDK_INJECTORS,
-			useFactory: this.executeInjectorMethods,
-			inject    : dependencies,
-		};
-	}
+		  return {
+			 provide    : OPEN_TELEMETRY_SDK_INJECTORS,
+			 useFactory : this.executeInjectorMethods,
+			 inject     : dependencies,
+		  }
+		}
 
-	private static buildAsyncProvider() : FactoryProvider {
-		return {
-			provide   : OPEN_TELEMETRY_SDK,
-			useFactory: async (config) => {
-				config    = {...OpenTelemetryModuleDefaultConfig, ...config};
-				const sdk = new NodeSDK(config);
+	 private static buildAsyncProvider() : FactoryProvider
+		{
+		  return {
+			 provide    : OPEN_TELEMETRY_SDK,
+			 useFactory : async (config) => {
+				config    = {...OpenTelemetryModuleDefaultConfig, ...config}
+				const sdk = new NodeSDK( config )
 
-				sdk.start();
+				sdk.start()
 
-				return sdk;
-			},
-			inject    : [OPEN_TELEMETRY_SDK_CONFIG],
-		};
-	}
+				return sdk
+			 },
+			 inject     : [ OPEN_TELEMETRY_SDK_CONFIG ],
+		  }
+		}
 
-	private static buildAsyncInjectors() : FactoryProvider {
-		return {
-			provide   : OPEN_TELEMETRY_SDK_INJECTORS,
-			useFactory: async (config, moduleRef : ModuleRef) => {
-				config          = {...OpenTelemetryModuleDefaultConfig, ...config};
+	 private static buildAsyncInjectors() : FactoryProvider
+		{
+		  return {
+			 provide    : OPEN_TELEMETRY_SDK_INJECTORS,
+			 useFactory : async (
+				config,
+				moduleRef : ModuleRef,
+			 ) => {
+				config          = {...OpenTelemetryModuleDefaultConfig, ...config}
 				const injectors =
-					      config.traceAutoInjectors ??
-					      OpenTelemetryModuleDefaultConfig.traceAutoInjectors;
+						  config.traceAutoInjectors ??
+						  OpenTelemetryModuleDefaultConfig.traceAutoInjectors
 
-				const decoratorInjector = await moduleRef.create(DecoratorInjector);
+				const decoratorInjector = await moduleRef.create( DecoratorInjector )
 
-				decoratorInjector.inject();
+				decoratorInjector.inject()
 
-				for await (const injector of injectors) {
-					const created = await moduleRef.create(injector);
-					if (created['inject']) await created.inject();
-				}
+				for await ( const injector of injectors )
+				  {
+					 const created = await moduleRef.create( injector )
+					 if ( created[ 'inject' ] ) await created.inject()
+				  }
 
-				return {};
-			},
-			inject    : [
+				return {}
+			 },
+			 inject     : [
 				OPEN_TELEMETRY_SDK_CONFIG,
 				ModuleRef,
-			],
-		};
-	}
+			 ],
+		  }
+		}
 
-	private static buildTracer() {
-		return {
-			provide   : Tracer,
-			useFactory: (traceService : TraceService) => traceService.getTracer(),
-			inject    : [TraceService],
-		};
-	}
-}
+	 private static buildTracer()
+		{
+		  return {
+			 provide    : Tracer,
+			 useFactory : (traceService : TraceService) => traceService.getTracer(),
+			 inject     : [ TraceService ],
+		  }
+		}
+  }

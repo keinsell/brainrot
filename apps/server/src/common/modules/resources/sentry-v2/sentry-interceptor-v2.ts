@@ -23,37 +23,53 @@
  *
  */
 
-import {CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope} from '@nestjs/common';
-import {catchError, finalize, Observable, throwError}                      from 'rxjs';
-import * as Sentry                                                         from '@sentry/node';
-import {SentryServiceV2}                                                   from "./sentry-service-v2.js";
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  Scope,
+}                          from '@nestjs/common'
+import * as Sentry         from '@sentry/node'
+import {
+  catchError,
+  finalize,
+  Observable,
+  throwError,
+}                          from 'rxjs'
+import { SentryServiceV2 } from './sentry-service-v2.js'
 
 
 
 /**
  * We must be in Request scope as we inject SentryService
  */
-@Injectable({scope: Scope.REQUEST})
+@Injectable( {scope : Scope.REQUEST} )
 export class SentryInterceptorV2
-	implements NestInterceptor {
-	constructor(private sentryService : SentryServiceV2) {}
+  implements NestInterceptor
+  {
+	 constructor(private sentryService : SentryServiceV2) {}
 
-	intercept(context : ExecutionContext, next : CallHandler) : Observable<any> {
-		// start a child span for performance tracing
-		const span = this.sentryService.startChild({op: `route handler`});
+	 intercept(
+		context : ExecutionContext,
+		next : CallHandler,
+	 ) : Observable<any>
+		{
+		  // start a child span for performance tracing
+		  const span = this.sentryService.startChild( {op : `route handler`} )
 
-		return next.handle().pipe(
-			catchError((error) => {
+		  return next.handle().pipe(
+			 catchError( (error) => {
 				// capture the error, you can filter out some errors here
-				Sentry.captureException(error, this.sentryService.span.getTraceContext() as any);
+				Sentry.captureException( error, this.sentryService.span.getTraceContext() as any )
 
 				// throw again the error
-				return throwError(() => error);
-			}),
-			finalize(() => {
-				span.finish();
-				this.sentryService.span.finish();
-			}),
-		);
-	}
-}
+				return throwError( () => error )
+			 } ),
+			 finalize( () => {
+				span.finish()
+				this.sentryService.span.finish()
+			 } ),
+		  )
+		}
+  }

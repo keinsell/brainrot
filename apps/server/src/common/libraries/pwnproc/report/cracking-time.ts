@@ -1,7 +1,7 @@
-import {PasswordAttack} from "./password-attack.js"
+import { PasswordAttack } from './password-attack.js'
 
 
 
 export type CrackingTime = {
-	[key in PasswordAttack]: number
+  [key in PasswordAttack] : number
 }

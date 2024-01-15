@@ -25,26 +25,33 @@
 
 
 
-import {Logger}       from "@nestjs/common";
-import {SpanExporter} from "../interfaces/span-exporter.js";
-import {ReadableSpan} from "@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.js";
-import {ExportResult} from "@opentelemetry/core";
+import { Logger }       from '@nestjs/common'
+import { ExportResult } from '@opentelemetry/core'
+import { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.js'
+import { SpanExporter } from '../interfaces/span-exporter.js'
 
 
 
 export class NestLoggerSpanExporter
-	implements SpanExporter {
-	private logger = new Logger("otel")
+  implements SpanExporter
+  {
+	 private logger = new Logger( 'otel' )
 
 
-	public export(spans : ReadableSpan[], resultCallback : (result : ExportResult) => void) : void {
-		for (const span of spans) {
-			this.logger.verbose(`[${span.name}] ${JSON.stringify(span.spanContext())}`)
+	 public export(
+		spans : ReadableSpan[],
+		resultCallback : (result : ExportResult) => void,
+	 ) : void
+		{
+		  for ( const span of spans )
+			 {
+				this.logger.verbose( `[${span.name}] ${JSON.stringify( span.spanContext() )}` )
+			 }
 		}
-	}
 
 
-	public async shutdown() : Promise<void> {
-		return;
-	}
-}
+	 public async shutdown() : Promise<void>
+		{
+		  return
+		}
+  }

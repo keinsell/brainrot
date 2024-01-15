@@ -23,9 +23,10 @@
  *
  */
 
-import {EmailMessage} from "../entity/email-message.js";
+import { EmailMessage } from '../entity/email-message.js'
 
 
 
 export interface CreateEmailMessagePayload
-	extends Omit<EmailMessage, "sender"> {}
+  extends Omit<EmailMessage, 'sender'>
+  {}

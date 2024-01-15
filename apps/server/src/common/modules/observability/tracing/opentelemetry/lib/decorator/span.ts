@@ -23,10 +23,10 @@
  *
  */
 
-import {SetMetadata}                   from "@nestjs/common";
-import {OPEN_TELEMETRY_TRACE_METADATA} from "../constant/OPEN_TELEMETRY_TRACE_METADATA.js";
+import { SetMetadata }                   from '@nestjs/common'
+import { OPEN_TELEMETRY_TRACE_METADATA } from '../constant/OPEN_TELEMETRY_TRACE_METADATA.js'
 
 
 
 export const Span = (name? : string) =>
-	SetMetadata(OPEN_TELEMETRY_TRACE_METADATA, name);
+  SetMetadata( OPEN_TELEMETRY_TRACE_METADATA, name )

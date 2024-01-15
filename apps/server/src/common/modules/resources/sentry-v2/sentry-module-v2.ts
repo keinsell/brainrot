@@ -23,40 +23,43 @@
  *
  */
 
-import Sentry                  from "@sentry/node";
-import {APP_INTERCEPTOR}       from "@nestjs/core";
-import {SENTRY_MODULE_OPTIONS} from "../sentry-deprecated/constant/SENTRY_MODULE_OPTIONS.js";
-import {SentryInterceptorV2}   from "./sentry-interceptor-v2.js";
-import {Module}                from "@nestjs/common";
-import {SentryServiceV2}       from "./sentry-service-v2.js";
-import {getSentry}             from "./utils/get-sentry.js";
+import { Module }                from '@nestjs/common'
+import { APP_INTERCEPTOR }       from '@nestjs/core'
+import Sentry                    from '@sentry/node'
+import { SENTRY_MODULE_OPTIONS } from '../sentry-deprecated/constant/SENTRY_MODULE_OPTIONS.js'
+import { SentryInterceptorV2 }   from './sentry-interceptor-v2.js'
+import { SentryServiceV2 }       from './sentry-service-v2.js'
+import { getSentry }             from './utils/get-sentry.js'
 
 
 
-@Module({
-	providers: [SentryServiceV2],
-})
-export class SentryModuleV2 {
-	static forRoot(options : Sentry.NodeOptions) {
-		// Initialize Sentry if was not initialized before.
-		if (!getSentry()) {
-			Sentry.init(options);
-		}
+@Module( {
+			  providers : [ SentryServiceV2 ],
+			} )
+export class SentryModuleV2
+  {
+	 static forRoot(options : Sentry.NodeOptions)
+		{
+		  // Initialize Sentry if was not initialized before.
+		  if ( !getSentry() )
+			 {
+				Sentry.init( options )
+			 }
 
-		return {
-			module   : SentryModuleV2,
-			providers: [
+		  return {
+			 module    : SentryModuleV2,
+			 providers : [
 				{
-					provide : SENTRY_MODULE_OPTIONS,
-					useValue: options,
+				  provide  : SENTRY_MODULE_OPTIONS,
+				  useValue : options,
 				},
 				SentryServiceV2,
 				{
-					provide : APP_INTERCEPTOR,
-					useClass: SentryInterceptorV2,
+				  provide  : APP_INTERCEPTOR,
+				  useClass : SentryInterceptorV2,
 				},
-			],
-			exports  : [SentryServiceV2],
-		};
-	}
-}
+			 ],
+			 exports   : [ SentryServiceV2 ],
+		  }
+		}
+  }

@@ -23,58 +23,66 @@
  *
  */
 
-import {Injectable, Logger} from "@nestjs/common";
-import {BaseTraceInjector}  from "./base-trace-injector.js";
-import {ModulesContainer}   from "@nestjs/core";
-import {AutoTraceInjector}  from "./auto-trace-injector.js";
+import {
+  Injectable,
+  Logger,
+}                            from '@nestjs/common'
+import { ModulesContainer }  from '@nestjs/core'
+import { AutoTraceInjector } from './auto-trace-injector.js'
+import { BaseTraceInjector } from './base-trace-injector.js'
 
 
 
 @Injectable()
 export class ControllerInjector
-	extends BaseTraceInjector
-	implements AutoTraceInjector {
-	private readonly loggerService = new Logger();
+  extends BaseTraceInjector
+  implements AutoTraceInjector
+  {
+	 private readonly loggerService = new Logger()
 
-	constructor(protected readonly modulesContainer : ModulesContainer) {
-		super(modulesContainer);
-	}
-
-	public inject() {
-		const controllers = this.getControllers();
-
-		for (const controller of controllers) {
-			const keys = this.metadataScanner.getAllFilteredMethodNames(
-				controller.metatype.prototype,
-			);
-
-			for (const key of keys) {
-				if (
-					!this.isDecorated(controller.metatype.prototype[key]) &&
-					!this.isAffected(controller.metatype.prototype[key]) &&
-					this.isPath(controller.metatype.prototype[key])
-				)
-				{
-					const traceName = `controller - ${controller.name.toLowerCase()}.${controller.metatype.prototype[key].name.toLowerCase()}`;
-
-					const method = this.wrap(
-						controller.metatype.prototype[key],
-						traceName,
-						{
-							controller: controller.name,
-							method    : controller.metatype.prototype[key].name,
-						},
-					);
-
-					this.reDecorate(controller.metatype.prototype[key], method);
-
-					controller.metatype.prototype[key] = method;
-					this.loggerService.verbose(
-						`Mapped Controller: ${controller.name}.${key}`,
-						this.constructor.name,
-					);
-				}
-			}
+	 constructor(protected readonly modulesContainer : ModulesContainer)
+		{
+		  super( modulesContainer )
 		}
-	}
-}
+
+	 public inject()
+		{
+		  const controllers = this.getControllers()
+
+		  for ( const controller of controllers )
+			 {
+				const keys = this.metadataScanner.getAllFilteredMethodNames(
+				  controller.metatype.prototype,
+				)
+
+				for ( const key of keys )
+				  {
+					 if (
+						!this.isDecorated( controller.metatype.prototype[ key ] ) &&
+						!this.isAffected( controller.metatype.prototype[ key ] ) &&
+						this.isPath( controller.metatype.prototype[ key ] )
+					 )
+						{
+						  const traceName = `controller - ${controller.name.toLowerCase()}.${controller.metatype.prototype[ key ].name.toLowerCase()}`
+
+						  const method = this.wrap(
+							 controller.metatype.prototype[ key ],
+							 traceName,
+							 {
+								controller : controller.name,
+								method     : controller.metatype.prototype[ key ].name,
+							 },
+						  )
+
+						  this.reDecorate( controller.metatype.prototype[ key ], method )
+
+						  controller.metatype.prototype[ key ] = method
+						  this.loggerService.verbose(
+							 `Mapped Controller: ${controller.name}.${key}`,
+							 this.constructor.name,
+						  )
+						}
+				  }
+			 }
+		}
+  }

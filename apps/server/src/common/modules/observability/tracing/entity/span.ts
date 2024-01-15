@@ -23,9 +23,10 @@
  *
  */
 
-import {Span as OpenTelemetrySpan} from "@opentelemetry/api";
+import { Span as OpenTelemetrySpan } from '@opentelemetry/api'
 
 
 
 export interface Span
-	extends OpenTelemetrySpan {}
+  extends OpenTelemetrySpan
+  {}

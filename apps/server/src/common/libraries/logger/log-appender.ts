@@ -1,10 +1,12 @@
-import {Log} from "./log.js"
+import { Log } from './log.js'
 
 
 
-export class LogAppender {
-	append(log: Log) {
-	}
-}
+export class LogAppender
+  {
+	 append(log : Log)
+		{
+		}
+  }
 
 

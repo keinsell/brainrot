@@ -1,3 +1,4 @@
-export interface SentryFilterFunction {
-	(exception : unknown) : boolean;
-}
+export interface SentryFilterFunction
+  {
+	 (exception : unknown) : boolean;
+  }

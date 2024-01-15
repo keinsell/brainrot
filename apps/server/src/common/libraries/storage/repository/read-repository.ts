@@ -1,6 +1,7 @@
-export abstract class ReadRepository<T> {
-	abstract find(id: string): Promise<T | null>;
+export abstract class ReadRepository<T>
+  {
+	 abstract find(id : string) : Promise<T | null>;
 
 
-	abstract findAll(): Promise<T[]>;
-}
+	 abstract findAll() : Promise<T[]>;
+  }

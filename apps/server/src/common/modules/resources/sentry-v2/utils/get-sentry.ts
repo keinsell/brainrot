@@ -23,11 +23,12 @@
  *
  */
 
-import Sentry from "@sentry/node";
+import Sentry from '@sentry/node'
 
 
 
-export function getSentry() {
-	const hub = Sentry.getCurrentHub()
-	return hub.getClient()
-}
+export function getSentry()
+  {
+	 const hub = Sentry.getCurrentHub()
+	 return hub.getClient()
+  }

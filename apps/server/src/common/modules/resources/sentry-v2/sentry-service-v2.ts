@@ -23,64 +23,79 @@
  *
  */
 
-import {Request}                   from 'express';
-import {Inject, Injectable, Scope} from '@nestjs/common';
-import {REQUEST}                   from '@nestjs/core';
-import * as Sentry                 from '@sentry/node';
-import {Span, SpanContext}         from '@sentry/types';
-import {TraceService}              from "../../observability/tracing/opentelemetry/lib/service/trace-service.js";
+import {
+  Inject,
+  Injectable,
+  Scope,
+}                       from '@nestjs/common'
+import { REQUEST }      from '@nestjs/core'
+import * as Sentry      from '@sentry/node'
+import {
+  Span,
+  SpanContext,
+}                       from '@sentry/types'
+import { Request }      from 'express'
+import { TraceService } from '../../observability/tracing/opentelemetry/lib/service/trace-service.js'
 
 
 
 /**
  * Because we inject REQUEST we need to set the service as request scoped
  */
-@Injectable({scope: Scope.REQUEST})
-export class SentryServiceV2 {
-	@Inject(TraceService) tracer : TraceService;
+@Injectable( {scope : Scope.REQUEST} )
+export class SentryServiceV2
+  {
+	 @Inject( TraceService ) tracer : TraceService
 
-	/**
-	 * When injecting the service it will create the main transaction
-	 *
-	 * @param request
-	 */
-	constructor(@Inject(REQUEST) private request : Request) {
-		const {method, headers, url} = this.request;
+	 /**
+	  * When injecting the service it will create the main transaction
+	  *
+	  * @param request
+	  */
+	 constructor(@Inject( REQUEST ) private request : Request)
+		{
+		  const {
+					 method,
+					 headers,
+					 url,
+				  } = this.request
 
-		// recreate transaction based from HTTP request
-		const transaction = Sentry.startTransaction({
-			name: `${method} ${url}`,
-			op  : 'transaction',
-		});
+		  // recreate transaction based from HTTP request
+		  const transaction = Sentry.startTransaction( {
+																		 name : `${method} ${url}`,
+																		 op   : 'transaction',
+																	  } )
 
-		// setup context of newly created transaction
-		Sentry.getCurrentHub().configureScope((scope) => {
-			scope.setSpan(transaction);
+		  // setup context of newly created transaction
+		  Sentry.getCurrentHub().configureScope( (scope) => {
+			 scope.setSpan( transaction )
 
-			// customize your context here
-			scope.setContext('http', {
+			 // customize your context here
+			 scope.setContext( 'http', {
 				method,
 				url,
 				headers,
-				http_method: method,
-			});
-		});
-	}
+				http_method : method,
+			 } )
+		  } )
+		}
 
-	/**
-	 * Return the current span defined in the current Hub and Scope
-	 */
-	get span() : Span {
-		return Sentry.getCurrentHub().getScope().getSpan()!;
-		// return getActiveSpan()!
-	}
+	 /**
+	  * Return the current span defined in the current Hub and Scope
+	  */
+	 get span() : Span
+		{
+		  return Sentry.getCurrentHub().getScope().getSpan()!
+		  // return getActiveSpan()!
+		}
 
-	/**
-	 * This will simply start a new child span in the current span
-	 *
-	 * @param spanContext
-	 */
-	startChild(spanContext : SpanContext) {
-		return this.span.startChild(spanContext);
-	}
-}
+	 /**
+	  * This will simply start a new child span in the current span
+	  *
+	  * @param spanContext
+	  */
+	 startChild(spanContext : SpanContext)
+		{
+		  return this.span.startChild( spanContext )
+		}
+  }

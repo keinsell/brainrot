@@ -24,7 +24,7 @@ export class EventBus
 				event )}` )
 
 		  this.eventEmitter.emit( event.namespace, event )
-		  
+
 		  this.logger.verbose( `Published ${event.id} to ${event.namespace}` )
 		}
 

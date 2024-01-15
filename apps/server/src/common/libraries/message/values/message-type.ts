@@ -23,11 +23,12 @@
  *
  */
 
-export enum MessageType {
-	MESSAGE = "message",
-	EVENT   = "event",
-	COMMAND = "command",
-	REQUEST = "request",
-	REPLY   = "reply",
-	QUERY   = "query",
-}
+export enum MessageType
+  {
+	 MESSAGE = 'message',
+	 EVENT   = 'event',
+	 COMMAND = 'command',
+	 REQUEST = 'request',
+	 REPLY   = 'reply',
+	 QUERY   = 'query',
+  }

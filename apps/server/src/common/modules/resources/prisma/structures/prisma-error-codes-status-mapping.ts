@@ -1,5 +1,5 @@
 export type PrismaErrorCodesStatusMapping = {
-	[key: string]: | number | {
-		statusCode?: number; errorMessage?: string;
-	};
+  [ key : string ] : | number | {
+	 statusCode? : number; errorMessage? : string;
+  };
 };

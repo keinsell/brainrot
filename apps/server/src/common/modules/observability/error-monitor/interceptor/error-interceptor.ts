@@ -23,25 +23,39 @@
  *
  */
 
-import {CallHandler, ExecutionContext, NestInterceptor} from "@nestjs/common";
-import {catchError, finalize, Observable, throwError}   from "rxjs";
+import {
+  CallHandler,
+  ExecutionContext,
+  NestInterceptor,
+} from '@nestjs/common'
+import {
+  catchError,
+  finalize,
+  Observable,
+  throwError,
+} from 'rxjs'
 
 
 
 export abstract class ErrorInterceptor
-	implements NestInterceptor {
+  implements NestInterceptor
+  {
 
-	abstract capture(exception : unknown) : boolean
+	 abstract capture(exception : unknown) : boolean
 
-	public intercept(context : ExecutionContext, next : CallHandler) : Observable<any> {
-		return next.handle().pipe(
-			catchError((error) => {
-				this.capture(error)
-				return throwError(() => error);
-			}),
-			finalize(() => {
+	 public intercept(
+		context : ExecutionContext,
+		next : CallHandler,
+	 ) : Observable<any>
+		{
+		  return next.handle().pipe(
+			 catchError( (error) => {
+				this.capture( error )
+				return throwError( () => error )
+			 } ),
+			 finalize( () => {
 				// ...
-			}),
-		);
-	}
-}
+			 } ),
+		  )
+		}
+  }

@@ -1,39 +1,53 @@
-import {InternalServerErrorException} from '@nestjs/common';
-import * as express                   from 'express';
+import { InternalServerErrorException } from '@nestjs/common'
+import * as express                     from 'express'
 
 
 
-type WaitingStrategy = (attempt: number) => number;
+type WaitingStrategy = (attempt : number) => number;
 
 
-export function createRetriesMiddleware(sessionMiddleware: express.RequestHandler, retries: number, retiesStrategy: WaitingStrategy = () => 0): express.RequestHandler {
-	return async (req, res, next) => {
-		let attempt = 0;
+export function createRetriesMiddleware(
+  sessionMiddleware : express.RequestHandler,
+  retries : number,
+  retiesStrategy : WaitingStrategy = () => 0,
+) : express.RequestHandler
+  {
+	 return async (
+		req,
+		res,
+		next,
+	 ) => {
+		let attempt = 0
 
 
-		async function lookupSession(error?: unknown) {
-			if (error) {
-				return next(error);
-			}
+		async function lookupSession(error? : unknown)
+		  {
+			 if ( error )
+				{
+				  return next( error )
+				}
 
-			if (req.session !== undefined) {
-				return next();
-			}
+			 if ( req.session !== undefined )
+				{
+				  return next()
+				}
 
-			if (attempt > retries) {
-				return next(new InternalServerErrorException('Cannot create session'));
-			}
+			 if ( attempt > retries )
+				{
+				  return next( new InternalServerErrorException( 'Cannot create session' ) )
+				}
 
-			if (attempt !== 0) {
-				await new Promise((r) => setTimeout(r, retiesStrategy(attempt)));
-			}
+			 if ( attempt !== 0 )
+				{
+				  await new Promise( (r) => setTimeout( r, retiesStrategy( attempt ) ) )
+				}
 
-			attempt++;
+			 attempt++
 
-			sessionMiddleware(req, res, lookupSession);
-		}
+			 sessionMiddleware( req, res, lookupSession )
+		  }
 
 
-		await lookupSession();
-	};
-}
+		await lookupSession()
+	 }
+  }

@@ -23,12 +23,13 @@
  *
  */
 
-export enum UserAgentDevice {
-	CONSOLE  = 'console',
-	DESKTOP  = 'desktop',
-	EMBEDDED = 'embedded',
-	MOBILE   = 'mobile',
-	SMARTTV  = 'smarttv',
-	TABLET   = 'tablet',
-	WEARABLE = 'wearable',
-}
+export enum UserAgentDevice
+  {
+	 CONSOLE  = 'console',
+	 DESKTOP  = 'desktop',
+	 EMBEDDED = 'embedded',
+	 MOBILE   = 'mobile',
+	 SMARTTV  = 'smarttv',
+	 TABLET   = 'tablet',
+	 WEARABLE = 'wearable',
+  }

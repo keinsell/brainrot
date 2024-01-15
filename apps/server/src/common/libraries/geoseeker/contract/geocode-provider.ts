@@ -23,13 +23,14 @@
  *
  */
 
-import {Coordinates} from "../value-objects/coordinates.js";
-import {Address}     from "../../address/address.js";
+import { Address }     from '../../address/address.js'
+import { Coordinates } from '../value-objects/coordinates.js'
 
 
 
-export abstract class GeocodeProvider {
-	public abstract forwardGeocode(address : string | string[] | Address) : Promise<Coordinates>
+export abstract class GeocodeProvider
+  {
+	 public abstract forwardGeocode(address : string | string[] | Address) : Promise<Coordinates>
 
-	public abstract reverseGeocode(coordinates : Coordinates) : Promise<Address>
-}
+	 public abstract reverseGeocode(coordinates : Coordinates) : Promise<Address>
+  }

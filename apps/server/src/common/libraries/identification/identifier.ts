@@ -1,31 +1,37 @@
-export type UID = `${string}_${string}` | string
+export type UID =
+  `${string}_${string}`
+  | string
 
 
-export class UniqueIdentifier {
-	private _value : string | undefined
-	private _payloadHash : string | undefined
+export class UniqueIdentifier
+  {
+	 private _value : string | undefined
+	 private _payloadHash : string | undefined
 
 
-	constructor(configuration? : {
+	 constructor(configuration? : {
 		namespace? : string
-		strategy? : "uuid" | "cuid" | "ksuid" | "custom"
-	})
-	{}
+		strategy? : 'uuid' | 'cuid' | 'ksuid' | 'custom'
+	 })
+		{}
 
 
-	private _namespace : string | undefined
+	 private _namespace : string | undefined
 
-	get namespace() : string | undefined {
-		return this._namespace
-	}
-
-
-	static generate() : UniqueIdentifier {
-		return new UniqueIdentifier()
-	}
+	 get namespace() : string | undefined
+		{
+		  return this._namespace
+		}
 
 
-	static generateWithNamespace(namespace : string) : UniqueIdentifier {
-		return new UniqueIdentifier({namespace: namespace})
-	}
-}
+	 static generate() : UniqueIdentifier
+		{
+		  return new UniqueIdentifier()
+		}
+
+
+	 static generateWithNamespace(namespace : string) : UniqueIdentifier
+		{
+		  return new UniqueIdentifier( {namespace : namespace} )
+		}
+  }

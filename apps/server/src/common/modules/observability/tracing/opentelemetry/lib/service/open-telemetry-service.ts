@@ -25,9 +25,13 @@
 
 
 
-import {BeforeApplicationShutdown, Inject, Injectable} from "@nestjs/common";
-import {OPEN_TELEMETRY_SDK}                            from "../constant/OPEN_TELEMETRY_SDK.js";
-import {NodeSDK}                                       from "@opentelemetry/sdk-node";
+import {
+  BeforeApplicationShutdown,
+  Inject,
+  Injectable,
+}                             from '@nestjs/common'
+import { NodeSDK }            from '@opentelemetry/sdk-node'
+import { OPEN_TELEMETRY_SDK } from '../constant/OPEN_TELEMETRY_SDK.js'
 
 
 
@@ -36,11 +40,13 @@ import {NodeSDK}                                       from "@opentelemetry/sdk-
  */
 @Injectable()
 export class OpenTelemetryService
-	implements BeforeApplicationShutdown {
-	constructor(@Inject(OPEN_TELEMETRY_SDK) private readonly sdk : NodeSDK) {}
+  implements BeforeApplicationShutdown
+  {
+	 constructor(@Inject( OPEN_TELEMETRY_SDK ) private readonly sdk : NodeSDK) {}
 
 
-	async beforeApplicationShutdown() {
-		await this.sdk?.shutdown();
-	}
-}
+	 async beforeApplicationShutdown()
+		{
+		  await this.sdk?.shutdown()
+		}
+  }

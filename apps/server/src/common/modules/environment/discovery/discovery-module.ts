@@ -1,6 +1,9 @@
-import {Global, Module}   from '@nestjs/common';
-import {MetadataScanner}  from "@nestjs/core/metadata-scanner.js"
-import {DiscoveryService} from "./discovery-service.js"
+import {
+  Global,
+  Module,
+}                           from '@nestjs/common'
+import { MetadataScanner }  from '@nestjs/core/metadata-scanner.js'
+import { DiscoveryService } from './discovery-service.js'
 
 
 
@@ -10,11 +13,11 @@ import {DiscoveryService} from "./discovery-service.js"
  * @export
  * @class DiscoveryModule
  */
-@Global() @Module({
-	providers: [
-		DiscoveryService,
-		MetadataScanner,
-	],
-	exports  : [DiscoveryService],
-})
+@Global() @Module( {
+							providers : [
+							  DiscoveryService,
+							  MetadataScanner,
+							],
+							exports   : [ DiscoveryService ],
+						 } )
 export class DiscoveryModule {}

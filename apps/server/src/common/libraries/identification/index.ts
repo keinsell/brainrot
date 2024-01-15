@@ -1,8 +1,10 @@
-import {ULID} from "./ulid/ulid.js"
+import { ULID } from './ulid/ulid.js'
 
 
 
-export type TypeID<T extends string = string> = `${T}_${string}` | string;
+export type TypeID<T extends string = string> =
+  `${T}_${string}`
+  | string;
 export type CUID = string;
 
 export type UUIDV4 = `${string}-${string}-${string}-${string}-${string}`;
@@ -12,7 +14,19 @@ export const NIL_UUID = '00000000-0000-0000-0000-000000000000'
 
 export type KSUID = string;
 
-export type UUID = UUIDV4 | UUIDV5 | UUIDV7 | typeof NIL_UUID
+export type UUID =
+  UUIDV4
+  | UUIDV5
+  | UUIDV7
+  | typeof NIL_UUID
 
-export type UniqueIdentifier = string | number | bigint | TypeID | CUID | UUID | ULID | KSUID;
+export type UniqueIdentifier =
+  string
+  | number
+  | bigint
+  | TypeID
+  | CUID
+  | UUID
+  | ULID
+  | KSUID;
 

@@ -1,3 +1,3 @@
 export const ApplicationState = {
-	isDatabaseConnected: false,
+  isDatabaseConnected : false,
 }

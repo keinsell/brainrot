@@ -23,30 +23,38 @@
  *
  */
 
-import t                      from 'typia'
-import typia, {tags}          from 'typia'
-import {Opaque, UnwrapOpaque} from "../../opaque.js";
+import t               from 'typia'
+import typia, { tags } from 'typia'
+import {
+  Opaque,
+  UnwrapOpaque,
+}                      from '../../opaque.js'
 
 
 
-export type Longitude = Opaque<number & t.tags.Maximum<180> & t.tags.Minimum<-180> & tags.Type<"float">, "longitude">
+export type Longitude = Opaque<number & t.tags.Maximum<180> & t.tags.Minimum<-180> & tags.Type<'float'>, 'longitude'>
 
 const validateLongitude = typia.createValidate<UnwrapOpaque<Longitude>>()
 
-export function createLongitude(longitude: unknown): Longitude {
-	const validation = validateLongitude(longitude)
+export function createLongitude(longitude : unknown) : Longitude
+  {
+	 const validation = validateLongitude( longitude )
 
-	const messages: string[] = []
+	 const messages : string[] = []
 
-	if (validation.errors.length > 0) {
-		for (const error of validation.errors) {
-			const errorMessage = `Received input at ${error.path}, provided value: ${error.value}, expected: ${error.expected}`
-			messages.push(errorMessage)
+	 if ( validation.errors.length > 0 )
+		{
+		  for ( const error of validation.errors )
+			 {
+				const errorMessage = `Received input at ${error.path}, provided value: ${error.value}, expected: ${error.expected}`
+				messages.push( errorMessage )
+			 }
+
+		  throw new Error( messages.join( '\n' ) )
 		}
-
-		throw new Error(messages.join("\n"))
-	} else {
-		return longitude as Longitude
-	}
-}
+	 else
+		{
+		  return longitude as Longitude
+		}
+  }
 

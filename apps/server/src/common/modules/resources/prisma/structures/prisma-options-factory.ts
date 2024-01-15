@@ -1,7 +1,8 @@
-import {PrismaServiceOptions} from "./prisma-service-options.js"
+import { PrismaServiceOptions } from './prisma-service-options.js'
 
 
 
-export interface PrismaOptionsFactory {
-	createPrismaOptions(): Promise<PrismaServiceOptions> | PrismaServiceOptions;
-}
+export interface PrismaOptionsFactory
+  {
+	 createPrismaOptions() : Promise<PrismaServiceOptions> | PrismaServiceOptions;
+  }

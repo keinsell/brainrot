@@ -1,32 +1,40 @@
-import {Injectable}                                   from '@nestjs/common';
-import {Buffer}                                       from 'node:buffer';
-import Stripe                                         from 'stripe';
-import {InjectStripeClient, InjectStripeModuleConfig} from "../decorators/stripe-decorator.js"
-import type {StripeModuleConfig}                      from "../interfaces/stripe-interface.js"
+import { Injectable }              from '@nestjs/common'
+import { Buffer }                  from 'node:buffer'
+import Stripe                      from 'stripe'
+import {
+  InjectStripeClient,
+  InjectStripeModuleConfig,
+}                                  from '../decorators/stripe-decorator.js'
+import type { StripeModuleConfig } from '../interfaces/stripe-interface.js'
 
 
 
 @Injectable()
-export class StripePayloadService {
-	private readonly stripeWebhookSecret : string;
-	private readonly stripeConnectWebhookSecret : string;
+export class StripePayloadService
+  {
+	 private readonly stripeWebhookSecret : string
+	 private readonly stripeConnectWebhookSecret : string
 
 
-	constructor(
+	 constructor(
 		@InjectStripeModuleConfig() private readonly config : StripeModuleConfig,
 		@InjectStripeClient() private readonly stripeClient : Stripe,
-	)
-	{
-		this.stripeWebhookSecret        = this.config.webhookConfig?.stripeSecrets.account || '';
-		this.stripeConnectWebhookSecret = this.config.webhookConfig?.stripeSecrets.connect || '';
-	}
+	 )
+		{
+		  this.stripeWebhookSecret        = this.config.webhookConfig?.stripeSecrets.account || ''
+		  this.stripeConnectWebhookSecret = this.config.webhookConfig?.stripeSecrets.connect || ''
+		}
 
 
-	tryHydratePayload(signature : string, payload : Buffer) : { type : string } {
-		const decodedPayload = JSON.parse(Buffer.isBuffer(payload) ? payload.toString('utf8') : payload);
+	 tryHydratePayload(
+		signature : string,
+		payload : Buffer,
+	 ) : { type : string }
+		{
+		  const decodedPayload = JSON.parse( Buffer.isBuffer( payload ) ? payload.toString( 'utf8' ) : payload )
 
-		return this.stripeClient.webhooks.constructEvent(payload, signature, decodedPayload.account ?
-		                                                                     this.stripeConnectWebhookSecret :
-		                                                                     this.stripeWebhookSecret);
-	}
-}
+		  return this.stripeClient.webhooks.constructEvent( payload, signature, decodedPayload.account ?
+																										this.stripeConnectWebhookSecret :
+																										this.stripeWebhookSecret )
+		}
+  }

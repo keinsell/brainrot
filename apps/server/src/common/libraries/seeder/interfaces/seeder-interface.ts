@@ -1,3 +1,4 @@
-export interface Seeder {
-	seed(): Promise<any>;
-}
+export interface Seeder
+  {
+	 seed() : Promise<any>;
+  }

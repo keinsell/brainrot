@@ -1,6 +1,7 @@
 # 👾 Blobber
 
-Blobber is a library that provides a simple interface to store and retrieve files from a object storage services, such
+Blobber is a library that provides a simple interface to store and retrieve
+files from a object storage services, such
 as file system, AWS S3, Google Cloud Storage, Azure Blob Storage, etc.
 
 ## Drivers
@@ -24,10 +25,13 @@ as file system, AWS S3, Google Cloud Storage, Azure Blob Storage, etc.
 
 ## How it should work?
 
-- Blobber should be able to store and retrieve files from a object storage service.
+- Blobber should be able to store and retrieve files from a object storage
+  service.
 - Blobber should be able to generate a URL to access a file.
-- Blobber should be able to generate a URL to access a file with a expiration time.
-- Blobber should be able to generate a URL to access a file with a expiration time and a password.
+- Blobber should be able to generate a URL to access a file with a expiration
+  time.
+- Blobber should be able to generate a URL to access a file with a expiration
+  time and a password.
 - Blobber should be able to search for file.
 - Blobber should support strings, buffers and streams.
 - Blobber should de-duplicate objects basing on their `CRC32` checksum.

@@ -1,5 +1,6 @@
-import {Message} from "./message.js"
+import { Message } from './message.js'
 
 
 
-export class Task<BODY> extends Message<BODY> {}
+export class Task<BODY>
+  extends Message<BODY> {}

@@ -23,20 +23,21 @@
  *
  */
 
-enum CpuArchitecture {
-	ARM      = 'arm',
-	ARM64    = 'arm64',
-	ARMHF    = 'armhf',
-	AVR      = 'avr',
-	IA64     = 'ia64',
-	IRIX     = 'irix',
-	IRIX64   = 'irix64',
-	MIPS     = 'mips',
-	MIPS64   = 'mips64',
-	MOTO_68K = '68k',
-	PPC      = 'ppc',
-	SPARC    = 'sparc',
-	SPARC64  = 'sparc64',
-	X86      = 'ia32',
-	X86_64   = 'amd64'
-}
+enum CpuArchitecture
+  {
+	 ARM      = 'arm',
+	 ARM64    = 'arm64',
+	 ARMHF    = 'armhf',
+	 AVR      = 'avr',
+	 IA64     = 'ia64',
+	 IRIX     = 'irix',
+	 IRIX64   = 'irix64',
+	 MIPS     = 'mips',
+	 MIPS64   = 'mips64',
+	 MOTO_68K = '68k',
+	 PPC      = 'ppc',
+	 SPARC    = 'sparc',
+	 SPARC64  = 'sparc64',
+	 X86      = 'ia32',
+	 X86_64   = 'amd64'
+  }

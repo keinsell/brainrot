@@ -23,65 +23,75 @@
  *
  */
 
-import {Injectable, Logger}                             from "@nestjs/common";
-import {BaseTraceInjector}                              from "./base-trace-injector.js";
-import {ModulesContainer}                               from "@nestjs/core";
-import {RESOLVER_NAME_METADATA, RESOLVER_TYPE_METADATA} from "@nestjs/graphql";
-import {AutoTraceInjector}                              from "./auto-trace-injector.js";
+import {
+  Injectable,
+  Logger,
+}                            from '@nestjs/common'
+import { ModulesContainer }  from '@nestjs/core'
+import {
+  RESOLVER_NAME_METADATA,
+  RESOLVER_TYPE_METADATA,
+}                            from '@nestjs/graphql'
+import { AutoTraceInjector } from './auto-trace-injector.js'
+import { BaseTraceInjector } from './base-trace-injector.js'
 
 
 
 @Injectable()
 export class GraphQLResolverInjector
-	extends BaseTraceInjector
-	implements AutoTraceInjector
-{
-	private readonly loggerService = new Logger();
+  extends BaseTraceInjector
+  implements AutoTraceInjector
+  {
+	 private readonly loggerService = new Logger()
 
-	constructor(protected readonly modulesContainer : ModulesContainer) {
-		super(modulesContainer);
-	}
-
-	public inject() {
-		const providers = this.getProviders();
-		for (const provider of providers) {
-			const isGraphQlResolver = Reflect.hasMetadata(
-				RESOLVER_NAME_METADATA,
-				provider.metatype,
-			);
-			const keys              = this.metadataScanner.getAllMethodNames(
-				provider.metatype.prototype,
-			);
-
-			for (const key of keys) {
-				const resolverMeta = Reflect.getMetadata(
-					RESOLVER_TYPE_METADATA,
-					provider.metatype.prototype[key],
-				);
-
-				const isQueryMutationOrSubscription = [
-					'Query',
-					'Mutation',
-					'Subscription',
-				].includes(resolverMeta);
-				if (
-					isGraphQlResolver &&
-					isQueryMutationOrSubscription &&
-					!this.isAffected(provider.metatype.prototype[key])
-				)
-				{
-					const traceName = `Resolver->${provider.name}.${provider.metatype.prototype[key].name}`;
-
-					provider.metatype.prototype[key] = this.wrap(
-						provider.metatype.prototype[key],
-						traceName,
-					);
-					this.loggerService.log(
-						`Mapped ${provider.name}.${key}`,
-						this.constructor.name,
-					);
-				}
-			}
+	 constructor(protected readonly modulesContainer : ModulesContainer)
+		{
+		  super( modulesContainer )
 		}
-	}
-}
+
+	 public inject()
+		{
+		  const providers = this.getProviders()
+		  for ( const provider of providers )
+			 {
+				const isGraphQlResolver = Reflect.hasMetadata(
+				  RESOLVER_NAME_METADATA,
+				  provider.metatype,
+				)
+				const keys              = this.metadataScanner.getAllMethodNames(
+				  provider.metatype.prototype,
+				)
+
+				for ( const key of keys )
+				  {
+					 const resolverMeta = Reflect.getMetadata(
+						RESOLVER_TYPE_METADATA,
+						provider.metatype.prototype[ key ],
+					 )
+
+					 const isQueryMutationOrSubscription = [
+						'Query',
+						'Mutation',
+						'Subscription',
+					 ].includes( resolverMeta )
+					 if (
+						isGraphQlResolver &&
+						isQueryMutationOrSubscription &&
+						!this.isAffected( provider.metatype.prototype[ key ] )
+					 )
+						{
+						  const traceName = `Resolver->${provider.name}.${provider.metatype.prototype[ key ].name}`
+
+						  provider.metatype.prototype[ key ] = this.wrap(
+							 provider.metatype.prototype[ key ],
+							 traceName,
+						  )
+						  this.loggerService.log(
+							 `Mapped ${provider.name}.${key}`,
+							 this.constructor.name,
+						  )
+						}
+				  }
+			 }
+		}
+  }

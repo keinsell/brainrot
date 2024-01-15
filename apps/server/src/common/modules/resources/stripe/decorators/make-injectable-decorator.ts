@@ -1,4 +1,4 @@
-import {Inject} from '@nestjs/common';
+import { Inject } from '@nestjs/common'
 
 
 
@@ -10,4 +10,5 @@ import {Inject} from '@nestjs/common';
  * to consume
  * @param token
  */
-export const makeInjectableDecorator = (token: string | symbol): (() => ParameterDecorator) => () => Inject(token);
+export const makeInjectableDecorator = (token : string | symbol) : ( () => ParameterDecorator ) => () => Inject(
+  token )

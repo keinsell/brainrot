@@ -24,14 +24,15 @@
  */
 
 // TODO: https://logging.apache.org/log4j/2.x/manual/layouts.html#rfc5424-layout
-import {LogLevel} from "../log-level.js";
+import { LogLevel } from '../log-level.js'
 
 
 
-interface LogV2 {
-	id : string;
-	level : LogLevel;
-	message : string;
-	timestamp : Date;
-	metadata? : Record<string, any>;
-}
+interface LogV2
+  {
+	 id : string;
+	 level : LogLevel;
+	 message : string;
+	 timestamp : Date;
+	 metadata? : Record<string, any>;
+  }

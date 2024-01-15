@@ -24,18 +24,19 @@
  */
 
 
-import {CreateEmailMessagePayload} from "../dto/create-email-message-payload.js";
+import { CreateEmailMessagePayload } from '../dto/create-email-message-payload.js'
 
 
 
-export abstract class Mailer {
-	/**
-	 * # `send-email`
-	 *
-	 * Send email is an operation dedicated to sending emails.
-	 *
-	 * @param {EmailMessage} email
-	 * @returns {Promise<void>}
-	 */
-	abstract sendEmail(email : CreateEmailMessagePayload) : Promise<void>;
-}
+export abstract class Mailer
+  {
+	 /**
+	  * # `send-email`
+	  *
+	  * Send email is an operation dedicated to sending emails.
+	  *
+	  * @param {EmailMessage} email
+	  * @returns {Promise<void>}
+	  */
+	 abstract sendEmail(email : CreateEmailMessagePayload) : Promise<void>;
+  }

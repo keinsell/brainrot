@@ -1,8 +1,14 @@
-import {SeverityLevel} from '@sentry/node';
+import { SeverityLevel } from '@sentry/node'
 
 
 
-type LegacySeverityLevels = 'Debug' | 'Error' | 'Fatal' | 'Info' | 'Log' | 'Warning';
+type LegacySeverityLevels =
+  'Debug'
+  | 'Error'
+  | 'Fatal'
+  | 'Info'
+  | 'Log'
+  | 'Warning';
 
 /**
  * As of version 7.x, Sentry moved away from a defined Severity enum in favor of
@@ -11,10 +17,10 @@ type LegacySeverityLevels = 'Debug' | 'Error' | 'Fatal' | 'Info' | 'Log' | 'Warn
  * in a way that is compatible with Sentry 7 without requiring a cast.
  */
 export const Severity : Record<LegacySeverityLevels, SeverityLevel> = {
-	Fatal  : 'fatal',
-	Error  : 'error',
-	Warning: 'warning',
-	Log    : 'log',
-	Info   : 'info',
-	Debug  : 'debug',
-};
+  Fatal   : 'fatal',
+  Error   : 'error',
+  Warning : 'warning',
+  Log     : 'log',
+  Info    : 'info',
+  Debug   : 'debug',
+}

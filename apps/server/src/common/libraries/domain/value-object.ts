@@ -3,42 +3,53 @@
  * Represents a value object.
  * @template T - The type of value that the object holds.
  */
-export abstract class ValueObject<T> {
-	private readonly value: unknown
+export abstract class ValueObject<T>
+  {
+	 private readonly value : unknown
 
 
-	protected constructor(value: unknown) {
-		this.value = value
-	}
-
-
-	static wrap<T>(value: unknown): ValueObject<T> {
-		const valueObject      = value as ValueObject<T>
-		const validationResult = valueObject.validate()
-
-		if (!validationResult) {
-			throw new Error("Invalid value")
-		} else {
-			return valueObject
+	 protected constructor(value : unknown)
+		{
+		  this.value = value
 		}
-	}
 
 
-	public unwrap(): T {
-		const validationResult = this.validate()
+	 static wrap<T>(value : unknown) : ValueObject<T>
+		{
+		  const valueObject      = value as ValueObject<T>
+		  const validationResult = valueObject.validate()
 
-		if (!validationResult) {
-			throw new Error("Invalid value")
-		} else {
-			return this.value as T
+		  if ( !validationResult )
+			 {
+				throw new Error( 'Invalid value' )
+			 }
+		  else
+			 {
+				return valueObject
+			 }
 		}
-	}
 
 
-	abstract validate(): boolean
+	 public unwrap() : T
+		{
+		  const validationResult = this.validate()
+
+		  if ( !validationResult )
+			 {
+				throw new Error( 'Invalid value' )
+			 }
+		  else
+			 {
+				return this.value as T
+			 }
+		}
 
 
-	public equals(other: ValueObject<T>): boolean {
-		return this.unwrap() === other.unwrap()
-	}
-}
+	 abstract validate() : boolean
+
+
+	 public equals(other : ValueObject<T>) : boolean
+		{
+		  return this.unwrap() === other.unwrap()
+		}
+  }

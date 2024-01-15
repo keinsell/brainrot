@@ -25,29 +25,31 @@
 
 
 
-import * as Sentry            from "@sentry/node";
-import {Logger}               from "@nestjs/common";
-import {setupGlobalHub}       from "@sentry/opentelemetry";
-import {SENTRY_CONFIGURATION} from "../../configs/config-set/sentry-configuration.js";
-import {__config}             from "../../configs/global/__config.js";
+import { Logger }               from '@nestjs/common'
+import * as Sentry              from '@sentry/node'
+import { setupGlobalHub }       from '@sentry/opentelemetry'
+import { SENTRY_CONFIGURATION } from '../../configs/config-set/sentry-configuration.js'
+import { __config }             from '../../configs/global/__config.js'
 
 
 
-export function initializeSentry() : void {
-	new Logger().log(`Initializing Sentry... ${__config.get('SENTRY_DSN')}`);
+export function initializeSentry() : void
+  {
+	 new Logger().log( `Initializing Sentry... ${__config.get( 'SENTRY_DSN' )}` )
 
-	// Turn ON if integrating with OTEL
-	setupGlobalHub();
+	 // Turn ON if integrating with OTEL
+	 setupGlobalHub()
 
-	// OTEL Configuration
-	Sentry.init({
-		...SENTRY_CONFIGURATION,
-	})
+	 // OTEL Configuration
+	 Sentry.init( {
+						 ...SENTRY_CONFIGURATION,
+					  } )
 
-	new Logger().log(`Sentry initialized!`);
+	 new Logger().log( `Sentry initialized!` )
 
-	const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || [];
+	 const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || []
 
-	new Logger().log(`Sentry have initialized ${integrations.length} integrations: [${integrations.map(integration => integration.name)
-	                                                                                              .join(', ')}]`);
-}
+	 new Logger().log( `Sentry have initialized ${integrations.length} integrations: [${integrations.map(
+																																	  integration => integration.name )
+																																	.join( ', ' )}]` )
+  }

@@ -1,4 +1,4 @@
-import {Opaque} from "type-fest"
+import { Opaque } from 'type-fest'
 
 
 
@@ -6,4 +6,4 @@ import {Opaque} from "type-fest"
  *
  * @example "PL" // For "Poland"
  * */
-export type CountryCode = Opaque<string, "ISO_3166-1_alpha-2">
+export type CountryCode = Opaque<string, 'ISO_3166-1_alpha-2'>
