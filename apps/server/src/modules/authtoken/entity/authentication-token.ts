@@ -73,7 +73,7 @@ export class AuthenticationToken
 		{
 		  this.logger.debug( 'Issuing authentication token...' )
 		  this.status = AuthorizationTokenStatus.ISSUED
-		  const event = new AuthenticationTokenIssued( this, {signedToken} )
+		  const event = new AuthenticationTokenIssued( this )
 		  this.appendEvent( event )
 		  this.logger.log( 'Authentication token has been issued.' )
 		  return this

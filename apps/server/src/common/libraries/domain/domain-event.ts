@@ -23,10 +23,9 @@
  *
  */
 
-import type { SimplifyDeep } from 'type-fest/source/merge-deep.js'
-import { Event }             from '../message/event.js'
-import { MessageType }       from '../message/values/message-type.js'
-import { EntityBase }        from './entity/entity-base.js'
+import { Event }       from '../message/event.js'
+import { MessageType } from '../message/values/message-type.js'
+import { EntityBase }  from './entity/entity-base.js'
 
 
 
@@ -36,14 +35,13 @@ type ValueProperties<T> = Omit<T, {
 
 
 /** Domain Event is a type of message (event) that is happening from a specific aggregate, the aim of this abstraction is to provide simplified way of handling domain events. */
-export abstract class DomainEvent<T extends EntityBase<unknown>, PROPERTIES extends Record<any, any> = {}>
-  extends Event<SimplifyDeep<PROPERTIES & {
-	 aggregateId : T['id'], aggregateVersion : T['version']
-  } & ValueProperties<T>>>
+export abstract class DomainEvent<T extends EntityBase<unknown>>
+  extends Event<{
+						aggregateId : T['id'], aggregateVersion : T['version']
+					 } & ValueProperties<T>>
   {
 	 public constructor(
 		aggregateOrEntity : T,
-		additionalProperties? : PROPERTIES,
 		namespace? : string,
 	 )
 		{
@@ -52,7 +50,7 @@ export abstract class DomainEvent<T extends EntityBase<unknown>, PROPERTIES exte
 						 ...aggregateOrEntity.__clearEvents(),
 						 _events          : [],
 						 aggregateId      : aggregateOrEntity.id,
-						 aggregateVersion : aggregateOrEntity.version, ...additionalProperties,
+						 aggregateVersion : aggregateOrEntity.version,
 					  },
 					  type      : MessageType.EVENT,
 					  namespace : namespace,

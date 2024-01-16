@@ -4,6 +4,6 @@ import { AuthenticationToken } from '../entity/authentication-token.js'
 
 
 export class AuthenticationTokenIssued
-  extends DomainEvent<AuthenticationToken, { signedToken : string }>
+  extends DomainEvent<AuthenticationToken>
   {
   }

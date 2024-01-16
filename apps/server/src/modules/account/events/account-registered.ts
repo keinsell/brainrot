@@ -4,6 +4,6 @@ import type { Account } from '../entities/account.js'
 
 
 export class AccountRegistered
-  extends DomainEvent<Account, {}>
+  extends DomainEvent<Account>
   {
   }
