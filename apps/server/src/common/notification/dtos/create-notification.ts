@@ -23,22 +23,10 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
+import type { SetOptional }            from 'type-fest'
+import type { NotificationProperties } from '../entity/notification.js'
+import type { NotificationChannel }    from '../value-object/notification-channel.js'
 
 
 
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
-  {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
-		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
-		}
-  }
+export type CreateNotification<T extends NotificationChannel> = SetOptional<NotificationProperties<T>, 'sentAt' | 'id' | 'updatedAt' | 'createdAt' | 'sentBy' | 'priority' | 'type'>

@@ -36,12 +36,10 @@ export class EmailNotification
   {
 	 constructor(payload : Omit<NotificationProperties<NotificationChannel.EMAIL>, 'type'>)
 		{
-		  super(
-			 {
-				...payload,
-				type : NotificationChannel.EMAIL,
-			 },
-		  )
+		  super( {
+					  ...payload,
+					  type : NotificationChannel.EMAIL,
+					} )
 		}
   }
 

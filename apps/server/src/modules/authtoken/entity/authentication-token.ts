@@ -55,7 +55,9 @@ export class AuthenticationToken
 
 	 private constructor(payload : AuthenticationTokenProperties)
 		{
-		  super( payload.id )
+		  super( {
+					  id : payload.id,
+					} )
 		  this.status    = payload.status
 		  this.owner     = payload.owner
 		  this.issuedAt  = payload.issuedAt
@@ -67,10 +69,11 @@ export class AuthenticationToken
 		  return new AuthenticationToken( payload )
 		}
 
-	 public issue() : this
+	 public issue(signedToken : string) : this
 		{
+		  this.logger.debug( 'Issuing authentication token...' )
 		  this.status = AuthorizationTokenStatus.ISSUED
-		  const event = new AuthenticationTokenIssued( this )
+		  const event = new AuthenticationTokenIssued( this, {signedToken} )
 		  this.appendEvent( event )
 		  this.logger.log( 'Authentication token has been issued.' )
 		  return this

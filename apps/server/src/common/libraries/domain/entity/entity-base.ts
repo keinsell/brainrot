@@ -1,11 +1,22 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
 import { randomUUID }       from 'node:crypto'
+import { Prisma }           from '../../../../vendor/prisma/index.js'
 import { EventBus }         from '../../../modules/messaging/event-bus.js'
 import type { UUIDV4 }      from '../../identification/index.js'
 import { Repository }       from '../../storage/repository/repository.js'
 import { AggregateLogger }  from '../aggregate-logger.js'
 import type { DomainEvent } from '../domain-event.js'
+import Enumerable = Prisma.Enumerable
 
+
+
+export interface EntityBaseProperties<ID_TYPE>
+  {
+	 id? : ID_TYPE
+	 createdAt? : Date
+	 updatedAt? : Date
+	 version? : number
+  }
 
 
 export class EntityBase<ID_TYPE = UUIDV4>
@@ -20,16 +31,20 @@ export class EntityBase<ID_TYPE = UUIDV4>
 	  *
 	  * @type {Array<any>}
 	  */
-	 private _events : Array<any | DomainEvent<this, any>> = []
+	 private _events : Array<DomainEvent<this, any>> = []
 	 private readonly _id : ID_TYPE
 
-	 constructor(identifier : ID_TYPE)
+	 // TODO: Add ID Generation Strategy
+	 // TODO: Add Versioning Strategy
+	 // TODO: Add Timestamping Strategy
+	 // TODO: Add Auditing Strategy
+	 constructor(base? : EntityBaseProperties<ID_TYPE>)
 		{
-		  this._id        = identifier ?? randomUUID() as ID_TYPE
+		  this._id        = base?.id ?? randomUUID() as ID_TYPE
 		  this.logger     = new AggregateLogger( this )
-		  this._createdAt = new Date()
-		  this._updatedAt = new Date()
-		  this.logger.verbose( `Constructed Aggregate` )
+		  this._createdAt = base?.createdAt ?? new Date()
+		  this._updatedAt = base?.updatedAt ?? new Date()
+		  this._version   = base?.version ?? 1
 		}
 
 	 private _updatedAt : Date
@@ -81,13 +96,12 @@ export class EntityBase<ID_TYPE = UUIDV4>
 	  *
 	  * @returns {Array} An array containing the uncommitted events.
 	  */
-	 public getUncommittedEvents()
+	 public getUncommittedEvents() : DomainEvent<this, any>[]
 		{
+		  // Create a snapshot of events to prevent race conditions.
 		  const eventsSnapshot = this._events.slice()
-
 		  // Remove events from aggregate as we already have a copy of them.
-		  this._events = []
-
+		  this._events         = []
 		  // Filter snapshot to only include pending events.
 		  return eventsSnapshot
 		}
@@ -104,22 +118,78 @@ export class EntityBase<ID_TYPE = UUIDV4>
 		  return this
 		}
 
-	 protected bumpVersion()
+	 protected bumpVersion() : this
 		{
 		  this._version = this._version + 1
 		  this.logger   = new AggregateLogger( this )
+		  return this
 		}
 
-	 protected appendEvent(event : any)
+	 protected appendEvent(event : DomainEvent<this, any>) : this
 		{
 		  this.bumpVersion()
 		  this.bumpUpdateDate()
 		  this._events.push( event )
-		  this.logger.verbose( `${event.id} stored in aggregate.` )
+		  this.logger.verbose( `${event.id} has happened on entity.` )
+		  return this
 		}
 
-	 private bumpUpdateDate()
+	 protected postConstructorLoggerHook()
+		{
+		  const stringifiesAggregate = JSON.stringify( {
+																		 ...this,
+																		 _events : undefined,
+																	  } )
+		  const message              = `Created new aggregate => ${stringifiesAggregate}`
+		  this.logger.verbose( message )
+		}
+
+	 protected when<T extends Enumerable<any>>(
+		expected : T | T[],
+		actual : T,
+	 )
+		{
+		  if ( Array.isArray( expected ) )
+			 {
+				if ( !expected.includes( actual ) )
+				  {
+					 throw new Error( `Expected ${expected} but got ${actual}` )
+				  }
+			 }
+		  else
+			 {
+				if ( expected !== actual )
+				  {
+					 throw new Error( `Expected ${expected} but got ${actual}` )
+				  }
+			 }
+
+		}
+
+	 protected whenNot<T extends Enumerable<any>>(
+		expected : T | T[],
+		actual : T,
+	 )
+		{
+		  if ( Array.isArray( expected ) )
+			 {
+				if ( expected.includes( actual ) )
+				  {
+					 throw new Error( `Expected ${expected} but got ${actual}` )
+				  }
+			 }
+		  else
+			 {
+				if ( expected === actual )
+				  {
+					 throw new Error( `Expected ${expected} but got ${actual}` )
+				  }
+			 }
+		}
+
+	 private bumpUpdateDate() : this
 		{
 		  this._updatedAt = new Date()
+		  return this
 		}
   }

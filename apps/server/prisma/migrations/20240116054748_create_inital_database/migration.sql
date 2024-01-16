@@ -1,3 +1,18 @@
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "citext";
+
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "hstore";
+
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- CreateEnum
 CREATE TYPE "EmailVerificationStatus" AS ENUM ('VERIFIED', 'UNVERIFIED');
 
@@ -95,8 +110,10 @@ CREATE TABLE "VerificationRequest" (
     "token" TEXT NOT NULL,
     "issuedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expiresAt" TIMESTAMP(3) NOT NULL,
+    "isSolved" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "accountV2Id" TEXT,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "version" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "VerificationRequest_pkey" PRIMARY KEY ("id")
 );
@@ -110,11 +127,10 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT,
     "avatar" TEXT,
-    "billingAddress" JSONB,
-    "shippingAddress" JSONB,
     "about" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "version" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -122,6 +138,17 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "BillingAddress" (
     "id" TEXT NOT NULL,
+    "legalName" TEXT NOT NULL,
+    "taxIdentifier" TEXT NOT NULL,
+    "streetLine1" TEXT NOT NULL,
+    "streetLine2" TEXT,
+    "city" TEXT NOT NULL,
+    "state" TEXT,
+    "zipCode" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "version" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "BillingAddress_pkey" PRIMARY KEY ("id")
 );
@@ -129,6 +156,17 @@ CREATE TABLE "BillingAddress" (
 -- CreateTable
 CREATE TABLE "ShippingAddress" (
     "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
+    "streetLine1" TEXT NOT NULL,
+    "streetLine2" TEXT,
+    "city" TEXT NOT NULL,
+    "state" TEXT,
+    "zipCode" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "version" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "ShippingAddress_pkey" PRIMARY KEY ("id")
 );
@@ -162,6 +200,7 @@ CREATE TABLE "Order" (
     "userId" TEXT NOT NULL,
     "productId" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "shippingAddressId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -318,6 +357,9 @@ CREATE UNIQUE INDEX "Account_username_key" ON "Account"("username");
 CREATE UNIQUE INDEX "Account_email_key" ON "Account"("email");
 
 -- CreateIndex
+CREATE INDEX "idx_account_id" ON "Account" USING SPGIST ("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Group_name_key" ON "Group"("name");
 
 -- CreateIndex
@@ -351,25 +393,34 @@ CREATE INDEX "_AccountToRole_B_index" ON "_AccountToRole"("B");
 ALTER TABLE "AccountMetadata" ADD CONSTRAINT "AccountMetadata_id_fkey" FOREIGN KEY ("id") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Session" ADD CONSTRAINT "account_session_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TokenAudit" ADD CONSTRAINT "TokenAudit_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TokenAudit" ADD CONSTRAINT "account_token_audit_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VerificationRequest" ADD CONSTRAINT "VerificationRequest_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "VerificationRequest" ADD CONSTRAINT "account_verification_request_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserMetadata" ADD CONSTRAINT "UserMetadata_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "BillingAddress" ADD CONSTRAINT "BillingAddress_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ShippingAddress" ADD CONSTRAINT "ShippingAddress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserMetadata" ADD CONSTRAINT "user_metadata_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_shippingAddressId_fkey" FOREIGN KEY ("shippingAddressId") REFERENCES "ShippingAddress"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Cart" ADD CONSTRAINT "Cart_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

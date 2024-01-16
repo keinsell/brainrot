@@ -23,22 +23,38 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
+import { OnEvent }         from '@nestjs/event-emitter'
+import { ServiceAbstract } from '../../../common/libraries/services/service-abstract.js'
+import type { User }       from '../entity/user.js'
+import { UserCreated }     from '../event/user-created.js'
 
 
 
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
+export class UserService
+  extends ServiceAbstract<User>
   {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
+	 async create(user : any) : Promise<User>
 		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
+		  throw Error( 'Not implemented' )
+		}
+
+	 async getById(id : User['id']) : Promise<User>
+		{
+		  throw Error( 'Not implemented' )
+		}
+
+	 async update(user : User) : Promise<User>
+		{
+		  throw Error( 'Not implemented' )
+		}
+
+	 async delete(user : User) : Promise<User>
+		{
+		  throw Error( 'Not implemented' )
+		}
+
+	 @OnEvent( UserCreated.namespace ) onUserCreatedCreateStripeCustomer(event : UserCreated) : void
+		{
+		  // TODO: Create customer in Stripe.
 		}
   }

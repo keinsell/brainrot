@@ -23,22 +23,11 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
+import { User } from './user.js'
 
 
 
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
+export class Customer
+  extends User
   {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
-		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
-		}
   }

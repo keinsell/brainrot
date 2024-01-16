@@ -1,351 +1,389 @@
 generator client {
-  provider        = "prisma-client-js"
-  output          = "../src/vendor/prisma"
-  previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions"]
+	provider        = "prisma-client-js"
+	output          = "../src/vendor/prisma"
+	previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions", "nativeDistinct", "relationJoins"]
+	engineType      = "dataproxy"
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URI")
-  relationMode = "foreignKeys"
-  extensions   = []
-  // directUrl    = env("DATABASE_URL")
-  // shadowDatabaseUrl = env("DATABASE_URL")
+	provider     = "postgresql"
+	url          = env("DATABASE_URI")
+	relationMode = "foreignKeys"
+	//  TODO: Add postgis
+	extensions   = [hstore, pg_trgm, uuidOssp(map: "uuid-ossp"), pgcrypto, citext]
+	// directUrl    = env("DATABASE_URL")
+	// shadowDatabaseUrl = env("DATABASE_URL")
 }
 
 enum EmailVerificationStatus {
-  VERIFIED
-  UNVERIFIED
+	VERIFIED
+	UNVERIFIED
 }
 
 model Account {
-  id                      String                  @id @default(cuid())
-  // --------------------------------------------------
-  /// The user's family name.
-  family_name             String?
-  /// The user's given name.
-  given_name              String?
-  /// The user's locale.
-  locale                  String?                 @default("en")
-  /// URL pointing to the user's profile picture.
-  picture                 String?
-  /// The user's full name
-  name                    String?
-  /// The user's nickname.
-  nickname                String?
-  /// The user's phone number. Only valid for users with SMS connections.
-  phone_number            String?
-  /// Indicates whether the user has been verified their phone number.
-  phone_verified          Boolean                 @default(false)
-  /// The user's username. Must be unique.
-  username                String                  @unique
-  /// The user's email address. Must be unique.
-  email                   String                  @unique
-  /// Indicates whether the user has verified their email address.
-  emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
-  //   email_verified Boolean @default(false)
-  /// The user's password. Only valid for users with Database connections.
-  /// (It's argon2 hashed)
-  password                String
-  /// IP address associated with the user's last login.
-  last_ip                 String?
-  /// Timestamp indicating when the user last logged in.
-  last_login              DateTime?
-  // --------------------------------------------------
-  createdAt               DateTime                @default(now())
-  /// Timestamp indicating when the user's profile was last updated/modified.
-  /// Changes to last_login are considered updates, so most of the time,
-  /// updated_at will match last_login.
-  updatedAt               DateTime                @updatedAt
-  version                 Int                     @default(1)
-  // --------------------------------------------------
-  Sessions                Session[]
-  VerificationRequests    VerificationRequest[]
-  User                    User?
-  TokenAudit              TokenAudit[]
-  Group                   Group[]
-  Role                    Role[]
-  PaymentMethod           PaymentMethod[]
-  AccountMetadata         AccountMetadata[]
+	id                      String                  @id @default(cuid())
+	// --------------------------------------------------
+	/// The user's family name.
+	family_name             String?
+	/// The user's given name.
+	given_name              String?
+	/// The user's locale.
+	locale                  String?                 @default("en")
+	/// URL pointing to the user's profile picture.
+	picture                 String?
+	/// The user's full name
+	name                    String?
+	/// The user's nickname.
+	nickname                String?
+	/// The user's phone number. Only valid for users with SMS connections.
+	phone_number            String?
+	/// Indicates whether the user has been verified their phone number.
+	phone_verified          Boolean                 @default(false)
+	/// The user's username. Must be unique.
+	username                String                  @unique
+	/// The user's email address. Must be unique.
+	email                   String                  @unique
+	/// Indicates whether the user has verified their email address.
+	emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
+	//   email_verified Boolean @default(false)
+	/// The user's password. Only valid for users with Database connections.
+	/// (It's argon2 hashed)
+	password                String
+	/// IP address associated with the user's last login.
+	last_ip                 String?
+	/// Timestamp indicating when the user last logged in.
+	last_login              DateTime?
+	// --------------------------------------------------
+	createdAt               DateTime                @default(now())
+	/// Timestamp indicating when the user's profile was last updated/modified.
+	/// Changes to last_login are considered updates, so most of the time,
+	/// updated_at will match last_login.
+	updatedAt               DateTime                @updatedAt
+	version                 Int                     @default(1)
+	// --------------------------------------------------
+	Sessions                Session[]
+	User                    User?
+	TokenAudit              TokenAudit[]
+	Group                   Group[]
+	Role                    Role[]
+	PaymentMethod           PaymentMethod[]
+	AccountMetadata         AccountMetadata[]
+	VerificationRequest     VerificationRequest[]
+
+	@@index(fields: [id], map: "idx_account_id", type: SpGist)
 }
 
 /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
 model AccountMetadata {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  key       String
-  value     String
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  version   Int      @default(1)
-  // --------------------------------------------------
-  Account   Account  @relation(fields: [id], references: [id])
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	key       String
+	value     String
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+	version   Int      @default(1)
+	// --------------------------------------------------
+	Account   Account  @relation(fields: [id], references: [id])
 }
 
 model Group {
-  id        String    @id @default(cuid())
-  // --------------------------------------------------
-  name      String    @unique
-  // --------------------------------------------------
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  version   Int       @default(1)
-  // --------------------------------------------------
-  Members   Account[]
+	id        String    @id @default(cuid())
+	// --------------------------------------------------
+	name      String    @unique
+	// --------------------------------------------------
+	createdAt DateTime  @default(now())
+	updatedAt DateTime  @updatedAt
+	version   Int       @default(1)
+	// --------------------------------------------------
+	Members   Account[]
 }
 
 model Role {
-  id        String    @id @default(cuid())
-  // --------------------------------------------------
-  name      String    @unique
-  // --------------------------------------------------
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  version   Int       @default(1)
-  // --------------------------------------------------
-  Accounts  Account[]
+	id        String    @id @default(cuid())
+	// --------------------------------------------------
+	name      String    @unique
+	// --------------------------------------------------
+	createdAt DateTime  @default(now())
+	updatedAt DateTime  @updatedAt
+	version   Int       @default(1)
+	// --------------------------------------------------
+	Accounts  Account[]
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  accountId String
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  // --------------------------------------------------
-  Account   Account  @relation(fields: [accountId], references: [id])
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	accountId String
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	// --------------------------------------------------
+	Account   Account  @relation(fields: [accountId], references: [id], map: "account_session_fkey", onUpdate: Cascade, onDelete: Cascade)
 }
 
 model TokenAudit {
-  id         String    @id @default(cuid())
-  // --------------------------------------------------
-  /// ID of the user to whom the token belongs
-  accountId  String
-  /// The ID of the token (jti claim from JWT)
-  tokenId    String
-  /// The issue time of the token (iat claim from JWT)
-  issuedAt   DateTime
-  /// The expiration time of the token (exp claim from JWT)
-  expiresAt  DateTime
-  /// Indicates if the token is revoked
-  isRevoked  Boolean
-  /// The last time the token was used
-  lastUsedAt DateTime?
-  // --------------------------------------------------
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  version    Int       @default(1)
-  // --------------------------------------------------
-  Account    Account   @relation(fields: [accountId], references: [id])
+	id         String    @id @default(cuid())
+	// --------------------------------------------------
+	/// ID of the user to whom the token belongs
+	accountId  String
+	/// The ID of the token (jti claim from JWT)
+	tokenId    String
+	/// The issue time of the token (iat claim from JWT)
+	issuedAt   DateTime
+	/// The expiration time of the token (exp claim from JWT)
+	expiresAt  DateTime
+	/// Indicates if the token is revoked
+	isRevoked  Boolean
+	/// The last time the token was used
+	lastUsedAt DateTime?
+	// --------------------------------------------------
+	createdAt  DateTime  @default(now())
+	updatedAt  DateTime  @updatedAt
+	version    Int       @default(1)
+	// --------------------------------------------------
+	Account    Account   @relation(fields: [accountId], references: [id], map: "account_token_audit_fkey")
 }
 
 model VerificationRequest {
-  id          String   @id @default(cuid())
-  // --------------------------------------------------
-  accountId   String
-  email       String
-  token       String
-  issuedAt    DateTime @default(now())
-  expiresAt   DateTime
-  // --------------------------------------------------
-  createdAt   DateTime @default(now())
-  // --------------------------------------------------
-  Account     Account  @relation(fields: [accountId], references: [id])
-  accountV2Id String?
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	accountId String
+	email     String
+	token     String
+	issuedAt  DateTime @default(now())
+	expiresAt DateTime
+	isSolved  Boolean  @default(false)
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+	version   Int      @default(1)
+	// --------------------------------------------------
+	Account   Account  @relation(fields: [accountId], references: [id], map: "account_verification_request_fkey")
 }
 
 model User {
-  id              String         @id @default(cuid())
-  // --------------------------------------------------
-  accountId       String         @unique
-  firstName       String
-  lastName        String
-  email           String
-  phoneNumber     String?
-  avatar          String?
-  billingAddress  Json?
-  shippingAddress Json?
-  about           String?
-  // --------------------------------------------------
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  // --------------------------------------------------
-  Account         Account        @relation(fields: [accountId], references: [id])
-  Payments        Payment[]
-  Checkout        Checkout[]
-  Order           Order[]
-  Metadata        UserMetadata[]
-  Cart            Cart?
+	id                String            @id @default(cuid())
+	// --------------------------------------------------
+	accountId         String            @unique
+	firstName         String
+	lastName          String
+	email             String
+	phoneNumber       String?
+	avatar            String?
+	billingAddress    BillingAddress?
+	about             String?
+	// --------------------------------------------------
+	createdAt         DateTime          @default(now())
+	updatedAt         DateTime          @updatedAt
+	version           Int               @default(1)
+	// --------------------------------------------------
+	Account           Account           @relation(fields: [accountId], references: [id])
+	Payments          Payment[]
+	Checkout          Checkout[]
+	Order             Order[]
+	Metadata          UserMetadata[]
+	Cart              Cart?
+	ShippingAddresses ShippingAddress[]
 }
 
 model BillingAddress {
-  id String @id @default(cuid())
-  // --------------------------------------------------
+	id            String   @id @default(cuid())
+	// --------------------------------------------------
+	legalName     String
+	taxIdentifier String
+	streetLine1   String
+	streetLine2   String?
+	city          String
+	state         String?
+	zipCode       String
+	country       String
+	// --------------------------------------------------
+	createdAt     DateTime @default(now())
+	updatedAt     DateTime @updatedAt
+	version       Int      @default(1)
+	// --------------------------------------------------
+	User          User     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ShippingAddress {
-  id String @id @default(cuid())
-  // --------------------------------------------------
+	id          String   @id @default(cuid())
+	// --------------------------------------------------
+	userId      String
+	fullName    String
+	streetLine1 String
+	streetLine2 String?
+	city        String
+	state       String?
+	zipCode     String
+	country     String
+	// --------------------------------------------------
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+	version     Int      @default(1)
+	// --------------------------------------------------
+	User        User     @relation(fields: [userId], references: [id])
+	Order       Order[]
 }
 
 model UserMetadata {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  key       String
-  value     String
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // --------------------------------------------------
-  User      User     @relation(fields: [id], references: [id])
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	key       String
+	value     String
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+	// --------------------------------------------------
+	User      User     @relation(fields: [id], references: [id], map: "user_metadata_fkey", onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Product {
-  id        String     @id @default(cuid())
-  // --------------------------------------------------
-  name      String
-  price     Int
-  currency  String
-  // --------------------------------------------------
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  // --------------------------------------------------
-  Order     Order[]
-  CartItem  CartItem[]
+	id        String     @id @default(cuid())
+	// --------------------------------------------------
+	name      String
+	price     Int
+	currency  String
+	// --------------------------------------------------
+	createdAt DateTime   @default(now())
+	updatedAt DateTime   @updatedAt
+	// --------------------------------------------------
+	Order     Order[]
+	CartItem  CartItem[]
 }
 
 model Order {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  userId    String
-  productId String
-  quantity  Int
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // --------------------------------------------------
-  User      User     @relation(fields: [userId], references: [id])
-  Product   Product  @relation(fields: [productId], references: [id])
+	id                String          @id @default(cuid())
+	// --------------------------------------------------
+	userId            String
+	productId         String
+	quantity          Int
+	shippingAddressId String
+	// --------------------------------------------------
+	createdAt         DateTime        @default(now())
+	updatedAt         DateTime        @updatedAt
+	// --------------------------------------------------
+	User              User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	Product           Product         @relation(fields: [productId], references: [id])
+	ShippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
 }
 
 model Cart {
-  id        String     @id @default(cuid())
-  // --------------------------------------------------
-  profileId String?    @unique
-  // --------------------------------------------------
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  // --------------------------------------------------
-  Checkout  Checkout?
-  CartItem  CartItem[]
-  User      User?      @relation(fields: [profileId], references: [id])
+	id        String     @id @default(cuid())
+	// --------------------------------------------------
+	profileId String?    @unique
+	// --------------------------------------------------
+	createdAt DateTime   @default(now())
+	updatedAt DateTime   @updatedAt
+	// --------------------------------------------------
+	Checkout  Checkout?
+	CartItem  CartItem[]
+	User      User?      @relation(fields: [profileId], references: [id])
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  cartId    String
-  productId String
-  price     Int
-  quantity  Int
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // --------------------------------------------------
-  Cart      Cart     @relation(fields: [cartId], references: [id])
-  Product   Product  @relation(fields: [productId], references: [id])
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	cartId    String
+	productId String
+	price     Int
+	quantity  Int
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+	// --------------------------------------------------
+	Cart      Cart     @relation(fields: [cartId], references: [id])
+	Product   Product  @relation(fields: [productId], references: [id])
 }
 
 enum PaymentProcessor {
-  STRIPE
-  PAYPAL
+	STRIPE
+	PAYPAL
 }
 
 model Payment {
-  id              String        @id @default(cuid())
-  // --------------------------------------------------
-  payerId         String
-  currency        String
-  amount          Int
-  paymentMethodId String
-  // --------------------------------------------------
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  // --------------------------------------------------
-  Payer           User          @relation(fields: [payerId], references: [id])
-  PaymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-  Checkout        Checkout?
+	id              String        @id @default(cuid())
+	// --------------------------------------------------
+	payerId         String
+	currency        String
+	amount          Int
+	paymentMethodId String
+	// --------------------------------------------------
+	createdAt       DateTime      @default(now())
+	updatedAt       DateTime      @updatedAt
+	// --------------------------------------------------
+	Payer           User          @relation(fields: [payerId], references: [id])
+	PaymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+	Checkout        Checkout?
 }
 
 model PaymentMethod {
-  id        String               @id @default(cuid())
-  // --------------------------------------------------
-  accountId String
-  processor PaymentProcessor
-  // --------------------------------------------------
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
-  // --------------------------------------------------
-  Account   Account              @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Stripe    StripePaymentMethod?
-  Payment   Payment[]
+	id        String               @id @default(cuid())
+	// --------------------------------------------------
+	accountId String
+	processor PaymentProcessor
+	// --------------------------------------------------
+	createdAt DateTime             @default(now())
+	updatedAt DateTime             @updatedAt
+	// --------------------------------------------------
+	Account   Account              @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	Stripe    StripePaymentMethod?
+	Payment   Payment[]
 }
 
 model StripePaymentMethod {
-  id                    String        @id @default(cuid())
-  // --------------------------------------------------
-  stripeCustomerId      String
-  stripePaymentMethodId String
-  // --------------------------------------------------
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
-  // --------------------------------------------------
-  PaymentMethod         PaymentMethod @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	id                    String        @id @default(cuid())
+	// --------------------------------------------------
+	stripeCustomerId      String
+	stripePaymentMethodId String
+	// --------------------------------------------------
+	createdAt             DateTime      @default(now())
+	updatedAt             DateTime      @updatedAt
+	// --------------------------------------------------
+	PaymentMethod         PaymentMethod @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Checkout {
-  id           String         @id @default(cuid())
-  // --------------------------------------------------
-  userId       String
-  cartId       String         @unique
-  paymentId    String         @unique
-  // --------------------------------------------------
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  // --------------------------------------------------
-  Cart         Cart           @relation(fields: [cartId], references: [id])
-  Payment      Payment        @relation(fields: [paymentId], references: [id])
-  User         User           @relation(fields: [userId], references: [id])
-  CheckoutItem CheckoutItem[]
+	id           String         @id @default(cuid())
+	// --------------------------------------------------
+	userId       String
+	cartId       String         @unique
+	paymentId    String         @unique
+	// --------------------------------------------------
+	createdAt    DateTime       @default(now())
+	updatedAt    DateTime       @updatedAt
+	// --------------------------------------------------
+	Cart         Cart           @relation(fields: [cartId], references: [id])
+	Payment      Payment        @relation(fields: [paymentId], references: [id])
+	User         User           @relation(fields: [userId], references: [id])
+	CheckoutItem CheckoutItem[]
 }
 
 model CheckoutItem {
-  id         String   @id @default(cuid())
-  // --------------------------------------------------
-  checkoutId String
-  /// Total discount amount applied. If no discounts were applied, defaults to 0.
-  discount   Int      @default(0)
-  /// Total before any discounts or taxes are applied.
-  subtotal   Int
-  /// Total tax amount applied. If no tax was applied, defaults to 0.
-  tax        Int      @default(0)
-  /// Total after discounts and taxes.
-  total      Int
-  // --------------------------------------------------
-  Checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	id         String   @id @default(cuid())
+	// --------------------------------------------------
+	checkoutId String
+	/// Total discount amount applied. If no discounts were applied, defaults to 0.
+	discount   Int      @default(0)
+	/// Total before any discounts or taxes are applied.
+	subtotal   Int
+	/// Total tax amount applied. If no tax was applied, defaults to 0.
+	tax        Int      @default(0)
+	/// Total after discounts and taxes.
+	total      Int
+	// --------------------------------------------------
+	Checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Blob {
-  id        String   @id @default(cuid())
-  // --------------------------------------------------
-  checksum  String
-  type      String
-  size      Int
-  url       String
-  // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+	id        String   @id @default(cuid())
+	// --------------------------------------------------
+	checksum  String
+	type      String
+	size      Int
+	url       String
+	// --------------------------------------------------
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
 }
 
 ///  A coupon contains information about a percent-off or amount-off discount
@@ -353,41 +391,41 @@ model Blob {
 /// subscriptions, invoices, checkout sessions, quotes, and more. Coupons do not
 /// work with conventional one-off charges or payment intents.
 model Coupon {
-  id                       String           @id @default(cuid())
-  // --------------------------------------------------
-  amountOff                Int?
-  percentOff               Int?
-  duration                 Int?
-  durationInMonths         Int?
-  maxRedemptions           Int?
-  minimumAmount            Int?
-  minimumAmountCurrency    String?
-  firstTimeTransactionOnly Boolean?
-  timesRedeemed            BigInt
-  // --------------------------------------------------
-  createdAt                DateTime         @default(now())
-  updatedAt                DateTime         @updatedAt
-  metadata                 CouponMetadata[]
+	id                       String           @id @default(cuid())
+	// --------------------------------------------------
+	amountOff                Int?
+	percentOff               Int?
+	duration                 Int?
+	durationInMonths         Int?
+	maxRedemptions           Int?
+	minimumAmount            Int?
+	minimumAmountCurrency    String?
+	firstTimeTransactionOnly Boolean?
+	timesRedeemed            BigInt
+	// --------------------------------------------------
+	createdAt                DateTime         @default(now())
+	updatedAt                DateTime         @updatedAt
+	metadata                 CouponMetadata[]
 }
 
 /// Set of key-value pairs that you can attach to an object.
 /// This can be useful for storing additional information about the object in a
 /// structured format.
 model CouponMetadata {
-  id     String @id @default(cuid())
-  // --------------------------------------------------
-  key    String
-  value  String
-  // --------------------------------------------------
-  Coupon Coupon @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	id     String @id @default(cuid())
+	// --------------------------------------------------
+	key    String
+	value  String
+	// --------------------------------------------------
+	Coupon Coupon @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 /// A Promotion Code represents a customer-redeemable code for a coupon. It
 /// can be used to create multiple codes for a single coupon.
 
 model PromotionCode {
-  id     String  @id @default(cuid())
-  // --------------------------------------------------
-  code   String
-  active Boolean
+	id     String  @id @default(cuid())
+	// --------------------------------------------------
+	code   String
+	active Boolean
 }

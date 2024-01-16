@@ -23,22 +23,12 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
+import { DomainEvent } from '../../../common/libraries/domain/domain-event.js'
+import type { User }   from '../entity/user.js'
 
 
 
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
+export class UserDeleted
+  extends DomainEvent<User, any>
   {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
-		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
-		}
   }

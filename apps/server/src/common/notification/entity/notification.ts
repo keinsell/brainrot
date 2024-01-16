@@ -23,7 +23,12 @@
  *
  */
 
+import { randomUUID }          from 'node:crypto'
 import type { AccountId }      from '../../../modules/account/shared-kernel/account-id.js'
+import {
+  EntityBase,
+  type EntityBaseProperties,
+}                              from '../../libraries/domain/entity/entity-base.js'
 import type { EmailMessage }   from '../../mailer/entity/email-message.js'
 import {
   type EmailContent,
@@ -31,6 +36,7 @@ import {
 }                              from '../../mailer/value-object/email-content.js'
 import type { EmailReceipent } from '../../mailer/value-object/email-receipent.js'
 import { NotificationChannel } from '../value-object/notification-channel.js'
+import { NotificationStatus }  from '../value-object/notification-status.js'
 
 
 
@@ -42,47 +48,45 @@ type ChannelContentMap = {
 }
 
 type ReceipentByChannelMap = {
-  [ NotificationChannel.EMAIL ] : EmailReceipent,
-  [ NotificationChannel.SMS ] : unknown
+  [ NotificationChannel.EMAIL ] : EmailReceipent, [ NotificationChannel.SMS ] : unknown
   [ NotificationChannel.PUSH ] : unknown
   [ NotificationChannel.WEBHOOK ] : unknown
 }
 
 
 export interface NotificationProperties<T extends NotificationChannel>
+  extends EntityBaseProperties<string>
   {
-	 id : string
 	 type : NotificationChannel
 	 content : ChannelContentMap[T]
 	 receipent : ReceipentByChannelMap[T]
-	 status? : 'QUEUED' | 'SENT' | 'FAILED' | 'PENDING' | 'CANCELED' | 'PROCESSING' | 'RETRYING'
-	 createdAt? : Date
+	 status? : NotificationStatus
 	 sentAt? : Date
-	 updatedAt? : Date
 	 sentBy : AccountId
 	 priority? : 'LOW' | 'MEDIUM' | 'HIGH'
   }
 
 
 export class Notification<T extends NotificationChannel>
+  extends EntityBase<string>
   implements NotificationProperties<T>
   {
 	 content : ChannelContentMap[T]
-	 createdAt : Date
-	 id : string
 	 priority : 'LOW' | 'MEDIUM' | 'HIGH'
 	 receipent : ReceipentByChannelMap[T]
 	 sentAt : Date | undefined
 	 sentBy : AccountId
-	 status : 'QUEUED' | 'SENT' | 'FAILED' | 'PENDING' | 'CANCELED' | 'PROCESSING' | 'RETRYING'
+	 status : NotificationStatus
 	 type : NotificationChannel
-	 updatedAt : Date
 
-	 constructor(
-		payload : NotificationProperties<T>,
-	 )
+	 constructor(payload : NotificationProperties<T>)
 		{
-		  this.id   = payload.id
+		  super( {
+					  id        : payload.id ?? randomUUID(),
+					  updatedAt : payload.updatedAt,
+					  createdAt : payload.createdAt,
+					  version   : payload.version,
+					} )
 		  this.type = payload.type
 
 		  // Validate Content Type
@@ -99,12 +103,50 @@ export class Notification<T extends NotificationChannel>
 				this.content = payload.content as EmailMessage
 			 }
 
-		  this.status    = payload.status ?? 'QUEUED'
-		  this.createdAt = payload.createdAt ?? new Date()
+		  this.status    = payload.status ?? NotificationStatus.PENDING
 		  this.sentAt    = payload.sentAt
-		  this.updatedAt = payload.updatedAt ?? new Date()
 		  this.sentBy    = payload.sentBy
 		  this.priority  = payload.priority ?? 'MEDIUM'
 		  this.receipent = payload.receipent
+
+		  this.postConstructorLoggerHook()
+		}
+
+	 queue()
+		{
+		  this.when( NotificationStatus.FAILED, this.status )
+		  this.logger.debug( 'Queueing notification...' )
+		  this.status = NotificationStatus.PENDING
+		  // TODO: Append Event
+		  this.logger.debug( 'Queued notification.' )
+		  return this
+		}
+
+	 send()
+		{
+		  this.logger.debug( 'Sending notification...' )
+		  this.status = NotificationStatus.SENT
+		  // TODO: Append Event
+		  this.logger.log( 'Sent notification.' )
+		  return this
+		}
+
+	 cancel()
+		{
+		}
+
+	 retry()
+		{
+		}
+
+	 process()
+		{
+		  this.logger.debug( 'Processing notification...' )
+		  this.logger.debug( 'Actions on notification will be locked until it is processed.' )
+		  return this
+		}
+
+	 fail()
+		{
 		}
   }

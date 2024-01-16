@@ -23,22 +23,30 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
+import { Injectable }        from '@nestjs/common'
+import { OnEvent }           from '@nestjs/event-emitter'
+import { AccountRegistered } from '../../account/events/account-registered.js'
+import type { UserService }  from '../service/user-service.js'
 
 
 
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
+@Injectable()
+export class UserEventSubscriber
   {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
+	 private service : UserService
+
+	 constructor(service : UserService)
 		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
+		  this.service = service
+		}
+
+	 @OnEvent( AccountRegistered.namespace ) handleAccountRegistered(event : AccountRegistered)
+		{
+		  // Create a profile based on account information.
+		  // This is a sample implementation.
+		  this.service.create( {
+										 firstName : event.body,
+										 lastName  : event.body.username,
+									  } )
 		}
   }

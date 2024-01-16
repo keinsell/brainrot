@@ -23,22 +23,11 @@
  *
  */
 
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import {
-  Notification,
-  type NotificationProperties,
-}                              from './notification.js'
-
-
-
-export class SmsNotification
-  extends Notification<NotificationChannel.SMS>
+export enum NotificationStatus
   {
-	 constructor(payload : Omit<NotificationProperties<NotificationChannel.SMS>, 'type'>)
-		{
-		  super( {
-					  ...payload,
-					  type : NotificationChannel.SMS,
-					} )
-		}
+	 PENDING    = 'pending',
+	 SENT       = 'sent',
+	 FAILED     = 'failed',
+	 CANCELED   = 'canceled',
+	 PROCESSING = 'processing',
   }

@@ -45,7 +45,7 @@ export class Message<BODY = unknown>
 	  * @see [RailsEventStore](https://railseventstore.org/docs/v2/correlation_causation/)
 	  * @see [thenativeweb/commands-events/#1](https://github.com/thenativeweb/commands-events/issues/1#issuecomment-385862281)
 	  */
-	 readonly correlationId? : string | undefined
+	 public correlationId ? : string
 	 readonly headers? : Record<string, unknown> | undefined
 	 readonly metadata? : Record<string, unknown> | undefined
 	 readonly timestamp : Date   = new Date()
@@ -54,7 +54,7 @@ export class Message<BODY = unknown>
 												  .replace( /([A-Z])/g, (match) => `.${match.toLowerCase()}` )
 												  .replace( /^\./, '' )
 												  .toLowerCase()
-	 readonly body? : BODY | undefined
+	 readonly body : BODY
 	 readonly type : MessageType = MessageType.MESSAGE
 	 private readonly logger : Logger
 
@@ -69,13 +69,15 @@ export class Message<BODY = unknown>
 		  this.causationId   = payload.causationId
 		  this.correlationId = payload.correlationId
 		  this.timestamp     = payload.timestamp ?? new Date()
-		  this.body          = payload.body ?? undefined
+		  this.body          = payload.body
 		  this.headers       = payload.headers
 		  this.id            = this.generateIdWithNamespace( this.type )
 
 		  this.logger = new Logger( `${this.id}`.replace( '_', '::' ) )
 		  this.logger.verbose( `Created ${this.id} with ${JSON.stringify( this )}` )
 		}
+
+
 
 	 protected generateIdWithNamespace(namespace : MessageType) : TypeID<MessageType>
 		{
