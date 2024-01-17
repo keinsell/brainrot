@@ -27,7 +27,7 @@ setup() {
 
   # Now propagate any local changes from the working copy to the sandbox. This
   # provides a pretty nice dev experience: edit the files in the working copy,
-  # then run `DEBUG=1 some-test.sh` to leave the sandbox up for interactive
+  # then run `DEBUG=1 some-runtests.sh` to leave the sandbox up for interactive
   # dev/debugging.
   git status --porcelain | while read line; do
     # $line here is something like `M some-script.sh`.

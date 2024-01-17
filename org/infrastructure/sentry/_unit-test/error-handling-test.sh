@@ -61,7 +61,7 @@ export dc=':'
 echo "Test Logs" >"$log_file"
 CLEANUP_RESPONSE=$(cleanup ERROR) # the linenumber of this line must match just below
 rm "$log_file"
-test "$CLEANUP_RESPONSE" == 'Error in _unit-test/error-handling-test.sh:62.
+test "$CLEANUP_RESPONSE" == 'Error in _unit-test/error-handling-runtests.sh:62.
 '\''local cmd="${BASH_COMMAND}"'\'' exited with status 0
 
 Cleaning up...'
@@ -75,7 +75,7 @@ export MINIMIZE_DOWNTIME=1
 echo "Test Logs" >"$log_file"
 CLEANUP_RESPONSE=$(cleanup ERROR) # the linenumber of this line must match just below
 rm "$log_file"
-test "$CLEANUP_RESPONSE" == 'Error in _unit-test/error-handling-test.sh:76.
+test "$CLEANUP_RESPONSE" == 'Error in _unit-test/error-handling-runtests.sh:76.
 '\''local cmd="${BASH_COMMAND}"'\'' exited with status 0
 
 *NOT* cleaning up, to clean your environment run "docker compose stop".'

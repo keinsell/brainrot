@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  ~
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.folio</groupId>
+    <artifactId>folio-integration-tests</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>Folio integration tests</name>
+
+    <organization>
+        <name>The Open Library Foundation</name>
+        <url>https://dev.folio.org</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://spdx.org/licenses/Apache-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <cucumber.reporting.version>5.7.7</cucumber.reporting.version>
+        <maven.surefire.version>3.2.2</maven.surefire.version>
+        <karate.junit.version>1.4.1</karate.junit.version>
+        <junit.version>5.10.1</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>6.1.1</spring.version>
+        <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+    </properties>
+
+    <modules>
+        <module>common</module>
+        <module>acquisitions</module>
+        <module>mod-ldp</module>
+        <module>mod-oai-pmh</module>
+        <module>mod-quick-marc</module>
+        <module>data-import</module>
+        <module>mod-data-export</module>
+        <module>testrail-integration</module>
+        <module>edge-dematic</module>
+        <module>mod-feesfines</module>
+        <module>mod-patron-blocks</module>
+        <module>mod-email</module>
+        <module>mod-entities-links</module>
+        <module>mod-user-import</module>
+        <module>mod-calendar</module>
+        <module>mod-event-config</module>
+        <module>mod-notify</module>
+        <module>mod-sender</module>
+        <module>mod-template-engine</module>
+        <module>mod-search</module>
+        <module>mod-login-saml</module>
+        <module>edge-caiasoft</module>
+        <module>mod-audit</module>
+        <module>mod-bulk-edit</module>
+        <module>mod-source-record-storage</module>
+        <module>mod-notes</module>
+        <module>mod-kb-ebsco-java</module>
+        <module>mod-di-converter-storage</module>
+        <module>mod-source-record-manager</module>
+        <module>mod-password-validator</module>
+        <module>mod-users-bl</module>
+        <module>mod-permissions</module>
+        <module>mod-tags</module>
+        <module>mod-inventory</module>
+        <module>mod-users</module>
+        <module>mod-circulation</module>
+        <module>mod-circulation-storage</module>
+        <module>edge-patron</module>
+        <module>edge-rtac</module>
+        <module>mod-inn-reach</module>
+        <module>edge-oai-pmh</module>
+        <module>edge-inn-reach</module>
+        <module>mod-copycat</module>
+        <module>mod-bulk-operations</module>
+        <module>mod-consortia</module>
+        <module>mod-batch-print</module>
+        <!--    <module>mod-dcb</module>-->
+        <!--    <module>edge-dcb</module>-->
+        <module>mod-fqm-manager</module>
+        <module>mod-lists</module>
+        <module>edge-fqm</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>4.1.101.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.intuit.karate</groupId>
+            <artifactId>karate-junit5</artifactId>
+            <version>${karate.junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-junit5</artifactId>
+            <version>5.1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-log4j</artifactId>
+            <version>5.1.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-logback</artifactId>
+            <version>5.1.3</version>
+        </dependency>
+    </dependencies>
+</project>
