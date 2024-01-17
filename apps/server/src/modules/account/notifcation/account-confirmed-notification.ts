@@ -43,7 +43,7 @@ export class AccountConfirmedNotification
 						 subject : 'Account Verified',
 						 body    : `Account successfully verified`,
 					  },
-					  receipent : {to : email.address},
+					  recipient : {to : email.address},
 					} )
 		}
   }

@@ -42,5 +42,8 @@ export class NoopNotificationService
 	 public async sendNotification(notification : Notification<NotificationChannel>) : Promise<void>
 		{
 		  this.logger.log( `Noop sending Notification: ${JSON.stringify( notification )}` )
+		  notification.queue()
+		  notification.process()
+		  notification.send()
 		}
   }

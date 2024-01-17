@@ -21,7 +21,7 @@ export class Message<BODY = unknown>
 												.replace( /^\./, '' )
 												.toLowerCase()
 
-	 id : TypeID<MessageType>
+	 id : TypeID<this['type']>
 	 /** `causationId` is an identifier used in event-driven architectures to track
 	  * the causal relationship between events. It represents the ID of the
 	  * event that caused the current event to occur. This can be useful for
@@ -81,9 +81,9 @@ export class Message<BODY = unknown>
 
 
 
-	 protected generateIdWithNamespace(namespace : MessageType) : TypeID<MessageType>
+	 protected generateIdWithNamespace(namespace : MessageType) : TypeID<this['type']>
 		{
 		  // Generate random ID with namespace using random bytes
-		  return `${namespace}_${Math.random().toString( 36 ).slice( 2 )}`
+		  return `${namespace as this['type']}_${Math.random().toString( 36 ).slice( 2 )}` as TypeID<this['type']>
 		}
   }

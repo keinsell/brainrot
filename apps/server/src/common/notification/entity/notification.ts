@@ -35,6 +35,7 @@ import {
   isEmailContent,
 }                              from '../../mailer/value-object/email-content.js'
 import type { EmailReceipent } from '../../mailer/value-object/email-receipent.js'
+import { NotificationQueued }  from '../event/notification-queued.js'
 import { NotificationChannel } from '../value-object/notification-channel.js'
 import { NotificationStatus }  from '../value-object/notification-status.js'
 
@@ -59,7 +60,7 @@ export interface NotificationProperties<T extends NotificationChannel>
   {
 	 type : NotificationChannel
 	 content : ChannelContentMap[T]
-	 receipent : ReceipentByChannelMap[T]
+	 recipient : ReceipentByChannelMap[T]
 	 status? : NotificationStatus
 	 sentAt? : Date
 	 sentBy : AccountId
@@ -68,12 +69,12 @@ export interface NotificationProperties<T extends NotificationChannel>
 
 
 export class Notification<T extends NotificationChannel>
-  extends EntityBase<string>
+  extends EntityBase
   implements NotificationProperties<T>
   {
 	 content : ChannelContentMap[T]
 	 priority : 'LOW' | 'MEDIUM' | 'HIGH'
-	 receipent : ReceipentByChannelMap[T]
+	 recipient : ReceipentByChannelMap[T]
 	 sentAt : Date | undefined
 	 sentBy : AccountId
 	 status : NotificationStatus
@@ -107,7 +108,7 @@ export class Notification<T extends NotificationChannel>
 		  this.sentAt    = payload.sentAt
 		  this.sentBy    = payload.sentBy
 		  this.priority  = payload.priority ?? 'MEDIUM'
-		  this.receipent = payload.receipent
+		  this.recipient = payload.recipient
 
 		  this.postConstructorLoggerHook()
 		}
@@ -116,8 +117,9 @@ export class Notification<T extends NotificationChannel>
 		{
 		  this.when( NotificationStatus.FAILED, this.status )
 		  this.logger.debug( 'Queueing notification...' )
-		  this.status = NotificationStatus.PENDING
-		  // TODO: Append Event
+		  this.status                      = NotificationStatus.PENDING
+		  const event : NotificationQueued = new NotificationQueued( this )
+		  this.appendEvent( event )
 		  this.logger.debug( 'Queued notification.' )
 		  return this
 		}

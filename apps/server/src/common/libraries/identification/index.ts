@@ -1,11 +1,13 @@
 import type { ApiPropertyOptions } from '@nestjs/swagger'
+import type { TagContainer }       from '../opaque.js'
 import { ULID }                    from './ulid/ulid.js'
 
 
 
 export type TypeID<T extends string = string> =
   `${T}_${string}`
-  | string;
+  & TagContainer<T>
+
 export type CUID = string;
 
 export type UUIDV4 = `${string}-${string}-${string}-${string}-${string}`;

@@ -3,7 +3,7 @@ generator client {
 	output          = "../src/vendor/prisma"
 	// previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions", "nativeDistinct", "relationJoins"]
 	previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions"]
-	engineType      = "binary"
+	engineType      = "library"
 }
 
 datasource db {

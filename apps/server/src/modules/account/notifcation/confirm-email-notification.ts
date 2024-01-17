@@ -46,7 +46,7 @@ export class ConfirmEmailNotification
 						 subject : 'Account verification',
 						 body    : `${verificationCode}`,
 					  },
-					  receipent : {to : email.address},
+					  recipient : {to : email.address},
 					} )
 		}
   }

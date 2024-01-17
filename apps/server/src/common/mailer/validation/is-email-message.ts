@@ -45,10 +45,7 @@ export function isEmailMessage(value : unknown) : value is EmailMessage
 
 	 const message = value as EmailMessage
 
-	 const result = (
-		hasValidRecipient( message.recipient ) &&
-		hasValidSender( message.sender )
-	 )
+	 const result = ( hasValidRecipient( message.recipient ) && hasValidSender( message.sender ) )
 
 	 logger.debug( `Validated if ${JSON.stringify( value )} is an EmailMessage: ${result === true ? 'IS' : 'IS_NOT'}` )
 
@@ -62,20 +59,13 @@ function isObject(value : unknown) : value is object
 
 function hasValidRecipient(recipient : EmailMessage['recipient']) : boolean
   {
-	 return (
-		recipient !== undefined &&
-		hasValidEmailAddress( recipient.to ) &&
-		hasValidEmailAddressArray( recipient.cc ) &&
-		hasValidEmailAddressArray( recipient.bcc )
-	 )
+	 return ( recipient !== undefined && hasValidEmailAddress( recipient.to ) && hasValidEmailAddressArray(
+		recipient.cc ) && hasValidEmailAddressArray( recipient.bcc ) )
   }
 
 function hasValidSender(sender : EmailMessage['sender']) : boolean
   {
-	 return sender === undefined || (
-		sender.from !== undefined &&
-		hasValidEmailAddress( sender.from )
-	 )
+	 return sender === undefined || ( sender.from !== undefined && hasValidEmailAddress( sender.from ) )
   }
 
 function hasValidEmailAddress(email : EmailAddress | undefined) : boolean
@@ -85,7 +75,5 @@ function hasValidEmailAddress(email : EmailAddress | undefined) : boolean
 
 function hasValidEmailAddressArray(emails : EmailAddress[] | undefined) : boolean
   {
-	 return emails === undefined || (
-		Array.isArray( emails ) && emails.every( hasValidEmailAddress )
-	 )
+	 return emails === undefined || ( Array.isArray( emails ) && emails.every( hasValidEmailAddress ) )
   }

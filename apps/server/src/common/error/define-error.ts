@@ -23,25 +23,14 @@
  *
  */
 
-export interface AccountVerification
+export const defineError = <T = string>(
+  prefix : (msg? : T) => string,
+  suffix : (msg? : T) => string = (msg) => ( msg !== undefined ? ': ' + msg : '' ),
+) => class
+  extends Error
   {
-	 /**
-	  * # `verify-email`
-	  *
-	  * Verify email is an operation dedicated to verifying the email address of an account.
-	  *
-	  * @param {string} accountId
-	  * @returns {Promise<void>}
-	  */
-	 verifyEmail(accountId : string) : Promise<void>;
-
-	 /**
-	  * # `request-email-verification`
-	  *
-	  * Request email verification is an operation dedicated to requesting email verification.
-	  *
-	  * @param {string} accountId
-	  * @returns {Promise<void>}
-	  */
-	 requestEmailVerification(accountId : string) : Promise<void>;
+	 constructor(msg? : T)
+		{
+		  super( prefix( msg ) + suffix( msg ) )
+		}
   }

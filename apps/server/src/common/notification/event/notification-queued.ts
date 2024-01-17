@@ -23,25 +23,12 @@
  *
  */
 
-export interface AccountVerification
-  {
-	 /**
-	  * # `verify-email`
-	  *
-	  * Verify email is an operation dedicated to verifying the email address of an account.
-	  *
-	  * @param {string} accountId
-	  * @returns {Promise<void>}
-	  */
-	 verifyEmail(accountId : string) : Promise<void>;
+import { DomainEvent }   from '../../libraries/domain/domain-event.js'
+import { Notification } from '../entity/notification.js'
 
-	 /**
-	  * # `request-email-verification`
-	  *
-	  * Request email verification is an operation dedicated to requesting email verification.
-	  *
-	  * @param {string} accountId
-	  * @returns {Promise<void>}
-	  */
-	 requestEmailVerification(accountId : string) : Promise<void>;
+
+
+export class NotificationQueued
+  extends DomainEvent<Notification<any>>
+  {
   }
