@@ -23,85 +23,100 @@
  *
  */
 
-import {Injectable, Logger}            from "@nestjs/common";
-import {TokenManagement}               from "../contract/token-management.js";
-import {SignedAuthenticationToken}     from "../value-object/signed-authentication-token.js";
-import {AuthenticationTokenId}         from "../value-object/authentication-token-id.js";
-import {AuthenticationToken}           from "../entity/authentication-token.js";
-import {IssueAutheorizationToken}      from "../dto/issue-autheorization-token.js";
-import {randomUUID}                    from "node:crypto";
-import {JWTPayload, SignJWT}           from "jose";
-import {AuthenticationTokenRepository} from "../repository/authentication-token-repository.js";
-import {AuthorizationTokenStatus}      from "../value-object/authorization-token-status.js";
-import {__authConfig}                  from "../../../configs/global/__config.js";
-import {EventBus}                      from "../../../common/modules/messaging/event-bus.js";
+import {
+  Injectable,
+  Logger,
+}                                        from '@nestjs/common'
+import {
+  JWTPayload,
+  SignJWT,
+}                                        from 'jose'
+import { randomUUID }                    from 'node:crypto'
+import { EventBus }                      from '../../../common/modules/messaging/event-bus.js'
+import { __authConfig }                  from '../../../configs/global/__config.js'
+import { TokenManagement }               from '../contract/token-management.js'
+import { IssueAutheorizationToken }      from '../dto/issue-autheorization-token.js'
+import { AuthenticationToken }           from '../entity/authentication-token.js'
+import { AuthenticationTokenRepository } from '../repository/authentication-token-repository.js'
+import { AuthenticationTokenId }         from '../value-object/authentication-token-id.js'
+import { AuthorizationTokenStatus }      from '../value-object/authorization-token-status.js'
+import { SignedAuthenticationToken }     from '../value-object/signed-authentication-token.js'
 
 
 
 @Injectable()
 export class AuthorizationTokenService
-	implements TokenManagement {
-	private readonly tokenRepository : AuthenticationTokenRepository
-	private readonly eventBus : EventBus
-	private readonly logger : Logger = new Logger("authentication_token::service")
+  implements TokenManagement
+  {
+	 private readonly tokenRepository : AuthenticationTokenRepository
+	 private readonly eventBus : EventBus
+	 private readonly logger : Logger = new Logger( 'authentication_token::service' )
 
-	private AUDIENCE = "http://localhost:1337"
-	private ISSUER   = "http://localhost:1337"
+	 private AUDIENCE = 'http://localhost:1337'
+	 private ISSUER   = 'http://localhost:1337'
 
-	constructor(
+	 constructor(
 		tokenRepository : AuthenticationTokenRepository,
 		eventBus : EventBus,
-	)
-	{
-		this.tokenRepository = tokenRepository
-		this.eventBus        = eventBus
-	}
-
-	async decodeToken(token : SignedAuthenticationToken) : Promise<AuthenticationToken> {
-		throw new Error("Method not implemented.");
-	}
-
-	async issueToken(payload : IssueAutheorizationToken) : Promise<SignedAuthenticationToken> {
-		// Prepare jsonwebtoken from given payload and requested duration
-		const jwtPayload : JWTPayload = {
-			jti: randomUUID(), aud: this.AUDIENCE,
-			iss: this.ISSUER, sub: payload.owner,
+	 )
+		{
+		  this.tokenRepository = tokenRepository
+		  this.eventBus        = eventBus
 		}
 
-		this.logger.debug(`Signing jsonwebtoken with following payload: ${JSON.stringify(jwtPayload)}`)
+	 async decodeToken(token : SignedAuthenticationToken) : Promise<AuthenticationToken>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
 
-		const secret = new TextEncoder().encode(
-			__authConfig.JWT_SECRET,
-		)
+	 async issueToken(payload : IssueAutheorizationToken) : Promise<SignedAuthenticationToken>
+		{
+		  // Prepare jsonwebtoken from given payload and requested duration
+		  const jwtPayload : JWTPayload = {
+			 jti : randomUUID(),
+			 aud : this.AUDIENCE,
+			 iss : this.ISSUER,
+			 sub : payload.owner,
+		  }
 
-		const jsonwebtoken = await new SignJWT(jwtPayload)
-		.setExpirationTime(payload.duration).setProtectedHeader({b64: true, alg: "HS256"})
-		.sign(secret)
+		  this.logger.debug( `Signing jsonwebtoken with following payload: ${JSON.stringify( jwtPayload )}` )
 
-		this.logger.debug(`Signed jsonwebtoken: ${JSON.stringify(jsonwebtoken)}`)
+		  const secret = new TextEncoder().encode( __authConfig.JWT_SECRET )
 
-		let authorizationToken = AuthenticationToken.build({
-			...payload,
-			id        : jwtPayload.jti as AuthenticationTokenId,
-			issuedAt  : new Date(),
-			expiresAt : new Date(new Date().getTime() + payload.duration),
-			owner     : payload.owner,
-			lastUsedAt: new Date(),
-			status    : AuthorizationTokenStatus.ISSUED,
-		});
+		  const jsonwebtoken = await new SignJWT( jwtPayload )
+			 .setExpirationTime( payload.duration ).setProtectedHeader( {
+																							  b64 : true,
+																							  alg : 'HS256',
+																							} )
+			 .sign( secret )
 
-		authorizationToken.issue()
+		  this.logger.debug( `Signed jsonwebtoken: ${JSON.stringify( jsonwebtoken )}` )
 
-		await authorizationToken.commit(this.tokenRepository, this.eventBus)
+		  let authorizationToken = AuthenticationToken.build( {
+																				  ...payload,
+																				  id         : jwtPayload.jti as AuthenticationTokenId,
+																				  issuedAt   : new Date(),
+																				  expiresAt  : new Date(
+																					 new Date().getTime() + payload.duration ),
+																				  owner      : payload.owner,
+																				  lastUsedAt : new Date(),
+																				  status     : AuthorizationTokenStatus.ISSUED,
+																				} )
 
-		return jsonwebtoken as SignedAuthenticationToken
-	}
+		  authorizationToken.issue( jsonwebtoken )
 
-	async revokeToken(tokenId : AuthenticationTokenId) : Promise<void> {
-		throw new Error("Method not implemented.");
-	}
+		  await authorizationToken.commit( this.tokenRepository, this.eventBus )
 
-	async verifyToken(token : SignedAuthenticationToken) : Promise<any> {
-		throw new Error("Method not implemented.");
-	}
-}
+		  return jsonwebtoken as SignedAuthenticationToken
+		}
+
+	 async revokeToken(tokenId : AuthenticationTokenId) : Promise<void>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
+
+	 async verifyToken(token : SignedAuthenticationToken) : Promise<any>
+		{
+		  throw new Error( 'Method not implemented.' )
+		}
+  }

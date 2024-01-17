@@ -15,7 +15,6 @@ export class Event<BODY = unknown>
 		  super( {
 					  ...payload,
 					} )
-		  Object.assign( this, payload )
 		  this.id = this.generateIdWithNamespace( this.type )
 		}
   }

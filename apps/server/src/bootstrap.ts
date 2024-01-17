@@ -33,6 +33,8 @@ import { portAllocator }                 from './utilities/network-utils/port-al
 
 export async function bootstrap()
   {
+
+
 	 const app = await NestFactory.create( Container, {
 		abortOnError  : false,
 		autoFlushLogs : true,
@@ -111,8 +113,8 @@ export async function bootstrap()
 				  logger.verbose( `${'-'.repeat( 54 )}` )
 				  logger.verbose( `📄 Compodoc endpoint: ${applicationUrl + '/docs'}` )
 				  logger.verbose( `📄 Swagger endpoint: ${applicationUrl + '/api'}` )
-				  logger.verbose( `🩺 Healthcheck endpoint: ${applicationUrl
-																			+ __config.get( 'APPLICATION' ).HEALTHCHECK_ENDPOINT}` )
+				  logger.verbose(
+					 `🩺 Healthcheck endpoint: ${applicationUrl + __config.get( 'APPLICATION' ).HEALTHCHECK_ENDPOINT}` )
 
 				  if ( isDevelopment() && StaticFeatureFlags.shouldRunPrismaStudio )
 					 {
@@ -125,9 +127,7 @@ export async function bootstrap()
 			 }
 		  catch ( e )
 			 {
-				logger.error( `Error while trying to start application: ${(
-				  e as unknown as any
-				).message}` )
+				logger.error( `Error while trying to start application: ${( e as unknown as any ).message}` )
 				await delay( retryDelay )
 				openPort   = await portAllocator( PORT )
 				retryDelay = retryDelay * 2
@@ -149,29 +149,19 @@ export async function bootstrap()
 			 {
 				seeder( {
 							 imports   : [
-								DatabaseModule,
-								AccountModule,
+								DatabaseModule, AccountModule,
 							 ],
 							 providers : [
-								ProductSeeder,
-								AccountSeeder,
-								ProfileSeeder,
-								RoleSeeder,
+								ProductSeeder, AccountSeeder, ProfileSeeder, RoleSeeder,
 							 ],
 						  } )
 				  .run( [
-							 ProductSeeder,
-							 AccountSeeder,
-							 ProfileSeeder,
-							 CartSeeder,
-							 RoleSeeder,
+							 ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder, RoleSeeder,
 						  ] )
 			 }
 		  catch ( e )
 			 {
-				logger.error( `Error while trying to seed database: ${(
-				  e as unknown as any
-				).message}` )
+				logger.error( `Error while trying to seed database: ${( e as unknown as any ).message}` )
 			 }
 		}
 

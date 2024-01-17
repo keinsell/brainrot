@@ -1,16 +1,19 @@
-import { bootstrap }        from './bootstrap.js'
-import { isProduction }     from './configs/helper/is-production.js'
-import { initializeSentry } from './hooks/pre-start/initialize-sentry.js'
+import { bootstrap }          from './bootstrap.js'
+import { isProduction }       from './configs/helper/is-production.js'
+import { acquireProcessLock } from './hooks/post-start/acquire-process-lock.js'
+import { initializeSentry }   from './hooks/pre-start/initialize-sentry.js'
 import {
   prettyPrintServiceInformation,
   printSystemInfo,
-}                           from './utilities/console-utils/index.js'
+}                             from './utilities/console-utils/index.js'
 
 // TODO: Add check for minimal requirements to run server
 // TODO: Run warn if host machine is too small
 // Min. RAM = 512MB
 // Min. CPU = 1x
 // Recommended OS: Linux
+
+await acquireProcessLock()
 
 if ( isProduction() )
   {

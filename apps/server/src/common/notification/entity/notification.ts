@@ -27,7 +27,7 @@ import { randomUUID }          from 'node:crypto'
 import type { AccountId }      from '../../../modules/account/shared-kernel/account-id.js'
 import {
   EntityBase,
-  type EntityBaseProperties,
+  type EntityFoundation,
 }                              from '../../libraries/domain/entity/entity-base.js'
 import type { EmailMessage }   from '../../mailer/entity/email-message.js'
 import {
@@ -55,7 +55,7 @@ type ReceipentByChannelMap = {
 
 
 export interface NotificationProperties<T extends NotificationChannel>
-  extends EntityBaseProperties<string>
+  extends EntityFoundation<string>
   {
 	 type : NotificationChannel
 	 content : ChannelContentMap[T]

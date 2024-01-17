@@ -29,4 +29,4 @@ import type { NotificationChannel }    from '../value-object/notification-channe
 
 
 
-export type CreateNotification<T extends NotificationChannel> = SetOptional<NotificationProperties<T>, 'sentAt' | 'id' | 'updatedAt' | 'createdAt' | 'sentBy' | 'priority' | 'type'>
+export type CreateNotification<T extends NotificationChannel> = SetOptional<NotificationProperties<T>, 'sentAt' | 'sentBy' | 'priority' | 'type'>

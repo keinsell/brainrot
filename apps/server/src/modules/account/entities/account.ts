@@ -130,10 +130,7 @@ export class Account
 
 		  this.email = verifiedEmail
 
-		  const event = new AccountEmailConfirmed( {
-																	accountId : this.id,
-																	email     : this.email,
-																 } )
+		  const event = new AccountEmailConfirmed( this )
 
 		  this.appendEvent( event )
 

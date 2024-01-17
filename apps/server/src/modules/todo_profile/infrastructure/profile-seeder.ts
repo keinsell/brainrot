@@ -72,19 +72,45 @@ export class ProfileSeeder
 		  }
 
 		  return {
-			 Account         : {
+			 Account           : {
 				connect : {
 				  id : account.id,
 				},
 			 },
-			 firstName       : faker.person.firstName(),
-			 lastName        : faker.person.lastName(),
-			 about           : faker.person.bio(),
-			 shippingAddress : address,
-			 billingAddress  : address,
-			 avatar          : faker.image.avatar(),
-			 email           : faker.internet.email(),
-			 createdAt       : faker.date.past(),
+			 firstName         : faker.person.firstName(),
+			 lastName          : faker.person.lastName(),
+			 about             : faker.person.bio(),
+			 ShippingAddresses : {
+				create : {
+				  fullName    : faker.name.fullName(),
+				  streetLine1 : faker.location.streetAddress(),
+				  streetLine2 : undefined,
+				  city        : faker.location.city(),
+				  zipCode     : faker.location.zipCode(),
+				  state       : faker.location.state(),
+				  country     : faker.location.countryCode(),
+				},
+			 },
+			 billingAddress    : {
+				connectOrCreate : {
+				  create : {
+					 taxIdentifier : faker.finance.iban(),
+					 streetLine1   : faker.location.streetAddress(),
+					 streetLine2   : undefined,
+					 city          : faker.location.city(),
+					 zipCode       : faker.location.zipCode(),
+					 state         : faker.location.state(),
+					 country       : faker.location.countryCode(),
+					 legalName     : faker.company.name(),
+				  },
+				  where  : {
+					 id : account.id,
+				  },
+				},
+			 },
+			 avatar            : faker.image.avatar(),
+			 email             : faker.internet.email(),
+			 createdAt         : faker.date.past(),
 		  }
 		}
 

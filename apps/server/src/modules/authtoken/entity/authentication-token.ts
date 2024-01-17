@@ -81,6 +81,7 @@ export class AuthenticationToken
 
 	 public revoke() : this
 		{
+		  this.logger.debug( 'Revoke authentication token...' )
 		  this.status = AuthorizationTokenStatus.REVOKED
 		  const event = new AuthenticationTokenRevoked( this )
 		  this.appendEvent( event )
@@ -90,6 +91,7 @@ export class AuthenticationToken
 
 	 public expire() : this
 		{
+		  this.logger.debug( 'Expiring authentication token...' )
 		  this.status = AuthorizationTokenStatus.EXPIRED
 		  const event = new AuthenticationTokenRevoked( this )
 		  this.appendEvent( event )

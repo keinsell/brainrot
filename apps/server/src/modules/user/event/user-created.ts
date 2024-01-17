@@ -29,6 +29,6 @@ import type { User }   from '../entity/user.js'
 
 
 export class UserCreated
-  extends DomainEvent<User, any>
+  extends DomainEvent<User>
   {
   }

@@ -1,8 +1,9 @@
 generator client {
 	provider        = "prisma-client-js"
 	output          = "../src/vendor/prisma"
-	previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions", "nativeDistinct", "relationJoins"]
-	engineType      = "dataproxy"
+	// previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions", "nativeDistinct", "relationJoins"]
+	previewFeatures = ["tracing", "metrics", "fullTextSearch", "fullTextIndex", "views", "driverAdapters", "multiSchema", "postgresqlExtensions"]
+	engineType      = "binary"
 }
 
 datasource db {
@@ -70,12 +71,12 @@ model Account {
 	AccountMetadata         AccountMetadata[]
 	VerificationRequest     VerificationRequest[]
 
-	@@index(fields: [id], map: "idx_account_id", type: SpGist)
+	// @@index(fields: [id, email, username, phone_number], map: "account_idx", type: Hash)
 }
 
 /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
 model AccountMetadata {
-	id        String   @id @default(cuid())
+	id        String   @default(cuid())
 	// --------------------------------------------------
 	key       String
 	value     String
@@ -84,7 +85,9 @@ model AccountMetadata {
 	updatedAt DateTime @updatedAt
 	version   Int      @default(1)
 	// --------------------------------------------------
-	Account   Account  @relation(fields: [id], references: [id])
+	Account   Account  @relation(fields: [id], references: [id], map: "account_metadata_fk")
+
+	@@unique([id, key])
 }
 
 model Group {
@@ -203,10 +206,11 @@ model BillingAddress {
 	version       Int      @default(1)
 	// --------------------------------------------------
 	User          User     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	Order         Order[]
 }
 
 model ShippingAddress {
-	id          String   @id @default(cuid())
+	id          String   @default(cuid()) @unique
 	// --------------------------------------------------
 	userId      String
 	fullName    String
@@ -223,6 +227,8 @@ model ShippingAddress {
 	// --------------------------------------------------
 	User        User     @relation(fields: [userId], references: [id])
 	Order       Order[]
+
+	@@id(fields: [id, version], map: "versioned_shipping_address_pk", name: "vid")
 }
 
 model UserMetadata {
@@ -252,19 +258,22 @@ model Product {
 }
 
 model Order {
-	id                String          @id @default(cuid())
+	id                     String          @id @default(cuid())
 	// --------------------------------------------------
-	userId            String
-	productId         String
-	quantity          Int
-	shippingAddressId String
+	userId                 String
+	productId              String
+	quantity               Int
+	shippingAddressId      String
+	shippingAddressVersion Int
+	billingAddressId       String?
 	// --------------------------------------------------
-	createdAt         DateTime        @default(now())
-	updatedAt         DateTime        @updatedAt
+	createdAt              DateTime        @default(now())
+	updatedAt              DateTime        @updatedAt
 	// --------------------------------------------------
-	User              User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-	Product           Product         @relation(fields: [productId], references: [id])
-	ShippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+	User                   User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+	Product                Product         @relation(fields: [productId], references: [id])
+	ShippingAddress        ShippingAddress @relation(fields: [shippingAddressId, shippingAddressVersion], references: [id, version])
+	billingAddress         BillingAddress? @relation(fields: [billingAddressId], references: [id])
 }
 
 model Cart {
@@ -293,6 +302,9 @@ model CartItem {
 	// --------------------------------------------------
 	Cart      Cart     @relation(fields: [cartId], references: [id])
 	Product   Product  @relation(fields: [productId], references: [id])
+
+	// Disallow duplicate rows with same product as quantity exists
+	@@unique([cartId, productId])
 }
 
 enum PaymentProcessor {

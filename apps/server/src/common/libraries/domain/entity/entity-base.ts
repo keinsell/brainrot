@@ -1,25 +1,36 @@
 // TODO: https://linear.app/keinsell/issue/PROD-95/add-entity-base-class
-import { randomUUID }       from 'node:crypto'
-import { Prisma }           from '../../../../vendor/prisma/index.js'
-import { EventBus }         from '../../../modules/messaging/event-bus.js'
-import type { UUIDV4 }      from '../../identification/index.js'
-import { Repository }       from '../../storage/repository/repository.js'
-import { AggregateLogger }  from '../aggregate-logger.js'
-import type { DomainEvent } from '../domain-event.js'
+import { randomUUID }      from 'node:crypto'
+import { Prisma }          from '../../../../vendor/prisma/index.js'
+import { EventBus }        from '../../../modules/messaging/event-bus.js'
+import { Repository }      from '../../storage/repository/repository.js'
+import { AggregateLogger } from '../aggregate-logger.js'
 import Enumerable = Prisma.Enumerable
 
 
 
-export interface EntityBaseProperties<ID_TYPE>
+export interface EntityIdentificationProperties<T>
   {
-	 id? : ID_TYPE
+	 id? : T
+  }
+
+
+export interface EntityAuditingProperties
+  {
 	 createdAt? : Date
 	 updatedAt? : Date
 	 version? : number
   }
 
 
-export class EntityBase<ID_TYPE = UUIDV4>
+export interface EntityFoundation<ID_TYPE>
+  extends EntityIdentificationProperties<ID_TYPE>,
+			 EntityAuditingProperties
+  {
+  }
+
+
+
+export class EntityBase<ID_TYPE = string>
   {
 	 protected logger : AggregateLogger
 	 private readonly _createdAt : Date
@@ -31,20 +42,23 @@ export class EntityBase<ID_TYPE = UUIDV4>
 	  *
 	  * @type {Array<any>}
 	  */
-	 private _events : Array<DomainEvent<this, any>> = []
+				//	 private _events : DomainEvent<T>[] = []
+	 private _events : any[] = []
 	 private readonly _id : ID_TYPE
+
 
 	 // TODO: Add ID Generation Strategy
 	 // TODO: Add Versioning Strategy
 	 // TODO: Add Timestamping Strategy
 	 // TODO: Add Auditing Strategy
-	 constructor(base? : EntityBaseProperties<ID_TYPE>)
+	 constructor(foundationParameters? : EntityFoundation<ID_TYPE>)
 		{
-		  this._id        = base?.id ?? randomUUID() as ID_TYPE
-		  this.logger     = new AggregateLogger( this )
-		  this._createdAt = base?.createdAt ?? new Date()
-		  this._updatedAt = base?.updatedAt ?? new Date()
-		  this._version   = base?.version ?? 1
+		  this._id         = foundationParameters?.id ?? randomUUID() as ID_TYPE
+		  this.logger      = new AggregateLogger( this )
+		  this._createdAt  = foundationParameters?.createdAt ?? new Date()
+		  this._updatedAt  = foundationParameters?.updatedAt ?? new Date()
+		  this._version    = foundationParameters?.version ?? 1
+		  this.appendEvent = this.appendEvent.bind( this )
 		}
 
 	 private _updatedAt : Date
@@ -73,9 +87,9 @@ export class EntityBase<ID_TYPE = UUIDV4>
 
 	 /** Commits changes done on specific entity to the repository and publishes changes to other modules. */
 	 public async commit(
-		repository : Repository<this>,
+		repository : Repository<any>,
 		bus? : EventBus,
-	 ) : Promise<void>
+	 ) : Promise<this>
 		{
 		  this.bumpVersion()
 		  this.bumpUpdateDate()
@@ -85,10 +99,12 @@ export class EntityBase<ID_TYPE = UUIDV4>
 		  if ( !bus )
 			 {
 				console.warn( 'Event bus is not provided. Events will not be published.' )
-				return
+				return this
 			 }
 
 		  await bus.publishAll( this.getUncommittedEvents() )
+
+		  return this
 		}
 
 	 /**
@@ -96,7 +112,7 @@ export class EntityBase<ID_TYPE = UUIDV4>
 	  *
 	  * @returns {Array} An array containing the uncommitted events.
 	  */
-	 public getUncommittedEvents() : DomainEvent<this, any>[]
+	 public getUncommittedEvents() : any[]
 		{
 		  // Create a snapshot of events to prevent race conditions.
 		  const eventsSnapshot = this._events.slice()
@@ -125,7 +141,7 @@ export class EntityBase<ID_TYPE = UUIDV4>
 		  return this
 		}
 
-	 protected appendEvent(event : DomainEvent<this, any>) : this
+	 protected appendEvent(event : any) : this
 		{
 		  this.bumpVersion()
 		  this.bumpUpdateDate()

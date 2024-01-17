@@ -1,23 +1,9 @@
-import { Event }             from '../../../common/libraries/message/event.js'
-import type { AccountEmail } from '../value-objects/account-email.js'
+import { DomainEvent } from '../../../common/libraries/domain/domain-event.js'
+import { Account }     from '../entities/account.js'
 
-
-
-export interface AccountEmailConfirmedPayload
-  {
-	 accountId : string
-	 email : AccountEmail
-  }
 
 
 export class AccountEmailConfirmed
-  extends Event<AccountEmailConfirmedPayload>
+  extends DomainEvent<Account>
   {
-	 constructor(account : AccountEmailConfirmedPayload)
-		{
-		  super( {
-					  namespace : 'account.verification.completed',
-					  body      : account,
-					} )
-		}
   }

@@ -36,12 +36,8 @@ export class AccountConfirmedNotification
 	 constructor(email : AccountEmail)
 		{
 		  super( {
-					  id        : '',
 					  sentAt    : undefined,
-					  createdAt : new Date(),
-					  updatedAt : new Date(),
 					  sentBy    : '' as AccountId,
-					  status    : 'QUEUED',
 					  priority  : 'HIGH',
 					  content   : {
 						 subject : 'Account Verified',

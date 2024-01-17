@@ -16,6 +16,7 @@ export class EventBus
 				 OnApplicationBootstrap
   {
 	 private logger : Logger = new Logger( 'event_bus' )
+	 private eventNames : string[]
 
 
 	 constructor(private eventEmitter : EventEmitter2)
@@ -53,7 +54,6 @@ export class EventBus
 	 public onApplicationShutdown(signal? : string) : any
 		{
 		  this.logger.log( 'Received shutdown signal, unregistering all' + ' listeners...' )
-		  this.eventEmitter.removeAllListeners()
 		}
 
 	 public onApplicationBootstrap() : any

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,19 @@
  *
  */
 
-import { EntityBase }  from '../../../common/libraries/domain/entity/entity-base.js'
-import { GroupMember } from '../value-object/group-member.js'
+import process                from 'node:process'
+import { ProcessLockManager } from '../../common/process-lock.js'
 
 
 
-/** A group can consist of multiple users that all need similar levels of access to specific resources. By putting these users into a group, you can manage their access controls collectively rather than individually. This can significantly streamline the process of assigning and managing access permissions, especially in larger organizations. */
-export class Group
-  extends EntityBase<string>
+const processLocker = new ProcessLockManager()
+processLocker.initializeTerminationHandlers()
+
+
+
+export async function acquireProcessLock(lockName : string = process.env.SERVICE_NAME
+																				 || 'nodejs-application') : Promise<void>
   {
-	 name : string
-	 members : GroupMember[]
-	 roles : string[]
+	 await processLocker.checkLock()
+	 await processLocker.createLock()
   }

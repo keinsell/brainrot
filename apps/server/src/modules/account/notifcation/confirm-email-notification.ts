@@ -39,12 +39,8 @@ export class ConfirmEmailNotification
 	 )
 		{
 		  super( {
-					  id        : '',
 					  sentAt    : undefined,
-					  createdAt : new Date(),
-					  updatedAt : new Date(),
 					  sentBy    : '' as AccountId,
-					  status    : 'QUEUED',
 					  priority  : 'HIGH',
 					  content   : {
 						 subject : 'Account verification',

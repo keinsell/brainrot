@@ -23,6 +23,7 @@
  *
  */
 
+
 import { Event }       from '../message/event.js'
 import { MessageType } from '../message/values/message-type.js'
 import { EntityBase }  from './entity/entity-base.js'
@@ -42,18 +43,41 @@ export abstract class DomainEvent<T extends EntityBase<unknown>>
   {
 	 public constructor(
 		aggregateOrEntity : T,
-		namespace? : string,
+		namespace? : string | undefined,
 	 )
 		{
 		  super( {
 					  body      : {
-						 ...aggregateOrEntity.__clearEvents(),
-						 _events          : [],
+						 ...DomainEvent.processAggregate( aggregateOrEntity ),
 						 aggregateId      : aggregateOrEntity.id,
 						 aggregateVersion : aggregateOrEntity.version,
 					  },
 					  type      : MessageType.EVENT,
 					  namespace : namespace,
 					} )
+		}
+
+	 static processAggregate<T extends EntityBase<any>>(body : T) : ValueProperties<T>
+		{
+		  // Remove all functions and prepare just data from class
+		  const data = Object.assign( {}, body )
+
+		  // Remove all functions
+		  for ( const key in data )
+			 {
+				if ( typeof data[ key ] === typeof Function )
+				  {
+					 delete data[ key ]
+				  }
+
+				const keysToRemove : string[] = [ '_events', 'logger' ]
+
+				if ( keysToRemove.includes( key ) )
+				  {
+					 delete data[ key ]
+				  }
+			 }
+
+		  return data
 		}
   }

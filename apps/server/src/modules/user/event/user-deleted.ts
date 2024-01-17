@@ -29,6 +29,6 @@ import type { User }   from '../entity/user.js'
 
 
 export class UserDeleted
-  extends DomainEvent<User, any>
+  extends DomainEvent<User>
   {
   }

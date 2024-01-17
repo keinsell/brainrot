@@ -1,13 +1,9 @@
-import {Event}   from "../../../common/libraries/message/event.js"
-import {Account} from "../entities/account.js"
+import { DomainEvent } from '../../../common/libraries/domain/domain-event.js'
+import { Account }     from '../entities/account.js'
 
 
 
-export class AccountVerificationEmailRequested extends Event<{ accountId: string }> {
-	constructor(account: Account) {
-		super({
-			namespace: "account.verification.requested",
-			body:      {accountId: account.id},
-		})
-	}
-}
+export class AccountVerificationEmailRequested
+  extends DomainEvent<Account>
+  {
+  }

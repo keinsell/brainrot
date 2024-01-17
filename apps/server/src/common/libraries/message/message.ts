@@ -61,11 +61,13 @@ export class Message<BODY = unknown>
 	 constructor(payload : SetOptional<Message<BODY>, 'id' | 'timestamp' | 'type' | 'namespace'>)
 		{
 		  this.type          = payload.type ?? MessageType.MESSAGE
-		  this.namespace     = payload.namespace ?? this.constructor.name
-																		.replace( /Message$/, '' )
-																		.replace( /([A-Z])/g, (match) => `.${match.toLowerCase()}` )
-																		.replace( /^\./, '' )
-																		.toLowerCase()
+		  this.namespace     = payload.namespace ? payload.namespace : this.constructor.name
+																								 .replace( /Message$/, '' )
+																								 .replace( /([A-Z])/g,
+																											  (match) => `.${match.toLowerCase()}`,
+																								 )
+																								 .replace( /^\./, '' )
+																								 .toLowerCase()
 		  this.causationId   = payload.causationId
 		  this.correlationId = payload.correlationId
 		  this.timestamp     = payload.timestamp ?? new Date()

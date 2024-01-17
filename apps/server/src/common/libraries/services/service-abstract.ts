@@ -3,7 +3,7 @@ import { Repository } from '../storage/index.js'
 
 
 
-export class ServiceAbstract<T extends EntityBase | any>
+export class ServiceAbstract<T extends EntityBase<unknown> | any>
   {
 	 private serviceRepository : Repository<T>
 
