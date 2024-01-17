@@ -1,59 +1,63 @@
 import {
-	Injectable,
-	Logger,
-}                          from '@nestjs/common'
-import {randomUUID}        from 'node:crypto'
-import {ServiceAbstract}   from '../../../common/libraries/services/service-abstract.js'
-import {EventBus}          from '../../../common/modules/messaging/event-bus.js'
-import {CreateSession}     from '../commands/create-session.js'
-import {UserSession}       from '../entities/user-session.js'
-import {SessionRepository} from '../repositories/session-repository.js'
+  Injectable,
+  Logger,
+}                            from '@nestjs/common'
+import { randomUUID }        from 'node:crypto'
+import { ServiceAbstract }   from '../../../common/libraries/services/service-abstract.js'
+import { EventBus }          from '../../../common/modules/messaging/event-bus.js'
+import { CreateSession }     from '../commands/create-session.js'
+import { UserSession }       from '../entities/user-session.js'
+import { SessionRepository } from '../repositories/session-repository.js'
 
 
 
 @Injectable()
 export class SessionService
-	extends ServiceAbstract<UserSession> {
-	private logger: Logger = new Logger('session::service')
+  extends ServiceAbstract<UserSession>
+  {
+	 private logger : Logger = new Logger( 'session::service' )
 
-	constructor(
-		private sessionRepository: SessionRepository,
-		private eventbus: EventBus,
-	)
-	{
-		super(sessionRepository)
-	}
+	 constructor(
+		private sessionRepository : SessionRepository,
+		private eventbus : EventBus,
+	 )
+		{
+		  super( sessionRepository )
+		}
 
-	public async startSession(payload: CreateSession): Promise<UserSession> {
-		const session = UserSession.build({
-			...payload,
-			id       : randomUUID(),
-			startTime: new Date(),
-		})
+	 public async startSession(payload : CreateSession) : Promise<UserSession>
+		{
+		  const session = UserSession.build( {
+															...payload,
+															id        : randomUUID(),
+															startTime : new Date(),
+														 } )
 
-		session.startSession()
+		  session.startSession()
 
-		const events = session.getUncommittedEvents()
+		  const events = session.getUncommittedEvents()
 
-		await this.eventbus.publishAll(events)
+		  await this.eventbus.publishAll( events )
 
-		return this.sessionRepository.create(session)
-	}
+		  return this.sessionRepository.create( session )
+		}
 
-	public async refreshSession(
-		session: UserSession,
-		accessTokenJti: string,
-	): Promise<UserSession> {
-		session.refreshSession(accessTokenJti)
+	 public async refreshSession(
+		session : UserSession,
+		accessTokenJti : string,
+	 ) : Promise<UserSession>
+		{
+		  session.refreshSession( accessTokenJti )
 
-		const events = session.getUncommittedEvents()
+		  const events = session.getUncommittedEvents()
 
-		this.eventbus.publishAll(events)
+		  this.eventbus.publishAll( events )
 
-		return this.sessionRepository.update(session)
-	}
+		  return this.sessionRepository.update( session )
+		}
 
-	public async getByJti(jti: string): Promise<UserSession> {
-		return this.sessionRepository.getByJti(jti)
-	}
-}
+	 public async getByJti(jti : string) : Promise<UserSession>
+		{
+		  return this.sessionRepository.getByJti( jti )
+		}
+  }

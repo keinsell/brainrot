@@ -23,7 +23,9 @@
  *
  */
 
+import { SignJWT }                    from 'jose'
 import { EntityBase }                 from '../../../common/libraries/domain/entity/entity-base.js'
+import { __authConfig }               from '../../../configs/global/__config.js'
 import { AccountId }                  from '../../account/shared-kernel/account-id.js'
 import { AuthenticationTokenIssued }  from '../event/authentication-token-issued.js'
 import { AuthenticationTokenRevoked } from '../event/authentication-token-revoked.js'
@@ -36,7 +38,7 @@ export interface AuthenticationTokenProperties
   {
 	 id : AuthenticationTokenId
 	 status : AuthorizationTokenStatus
-	 owner : AccountId
+	 accountId : AccountId
 	 issuedAt : Date
 	 expiresAt : Date
 	 lastUsedAt? : Date
@@ -47,10 +49,10 @@ export class AuthenticationToken
   extends EntityBase<AuthenticationTokenId>
   implements AuthenticationTokenProperties
   {
+	 accountId : AccountId
 	 expiresAt : Date
 	 issuedAt : Date
 	 lastUsedAt? : Date
-	 owner : AccountId
 	 status : AuthorizationTokenStatus
 
 	 private constructor(payload : AuthenticationTokenProperties)
@@ -59,7 +61,7 @@ export class AuthenticationToken
 					  id : payload.id,
 					} )
 		  this.status    = payload.status
-		  this.owner     = payload.owner
+		  this.accountId = payload.accountId
 		  this.issuedAt  = payload.issuedAt
 		  this.expiresAt = payload.expiresAt
 		}
@@ -67,6 +69,26 @@ export class AuthenticationToken
 	 static build(payload : AuthenticationTokenProperties) : AuthenticationToken
 		{
 		  return new AuthenticationToken( payload )
+		}
+
+	 public async sign(secret : string) : Promise<string>
+		{
+		  this.logger.debug( `Signing jsonwebtoken with ${secret}` )
+		  const key = new TextEncoder().encode( __authConfig.JWT_SECRET )
+
+		  const jsonwebtoken = new SignJWT( {
+														  sub : this.accountId,
+														} )
+
+		  jsonwebtoken.setExpirationTime( this.expiresAt )
+
+		  
+		  jsonwebtoken.setProtectedHeader( {
+														 b64 : true,
+														 alg : 'HS256',
+													  } )
+
+		  return await jsonwebtoken.sign( key )
 		}
 
 	 public issue(signedToken : string) : this

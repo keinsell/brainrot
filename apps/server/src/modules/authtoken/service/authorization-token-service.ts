@@ -27,10 +27,7 @@ import {
   Injectable,
   Logger,
 }                                        from '@nestjs/common'
-import {
-  JWTPayload,
-  SignJWT,
-}                                        from 'jose'
+import { JWTPayload }                    from 'jose'
 import { randomUUID }                    from 'node:crypto'
 import { EventBus }                      from '../../../common/modules/messaging/event-bus.js'
 import { __authConfig }                  from '../../../configs/global/__config.js'
@@ -76,21 +73,8 @@ export class AuthorizationTokenService
 			 jti : randomUUID(),
 			 aud : this.AUDIENCE,
 			 iss : this.ISSUER,
-			 sub : payload.owner,
+			 sub : payload.accountId,
 		  }
-
-		  this.logger.debug( `Signing jsonwebtoken with following payload: ${JSON.stringify( jwtPayload )}` )
-
-		  const secret = new TextEncoder().encode( __authConfig.JWT_SECRET )
-
-		  const jsonwebtoken = await new SignJWT( jwtPayload )
-			 .setExpirationTime( payload.duration ).setProtectedHeader( {
-																							  b64 : true,
-																							  alg : 'HS256',
-																							} )
-			 .sign( secret )
-
-		  this.logger.debug( `Signed jsonwebtoken: ${JSON.stringify( jsonwebtoken )}` )
 
 		  let authorizationToken = AuthenticationToken.build( {
 																				  ...payload,
@@ -98,10 +82,12 @@ export class AuthorizationTokenService
 																				  issuedAt   : new Date(),
 																				  expiresAt  : new Date(
 																					 new Date().getTime() + payload.duration ),
-																				  owner      : payload.owner,
+																				  accountId  : payload.accountId,
 																				  lastUsedAt : new Date(),
 																				  status     : AuthorizationTokenStatus.ISSUED,
 																				} )
+
+		  const jsonwebtoken = await authorizationToken.sign( __authConfig.JWT_SECRET )
 
 		  authorizationToken.issue( jsonwebtoken )
 

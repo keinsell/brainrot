@@ -93,11 +93,11 @@ export class AuthenticationController
 																							  status    : SessionStatus.ACTIVE,
 																							} )
 
-		  await this.tokenManagement.issueToken( {
-																 owner    : authenticationResult.accountId as AccountId,
-																 duration : ms( '32h' ),
-																 metadata : {},
-															  } )
+		  const accessToken = await this.tokenManagement.issueToken( {
+																							accountId : authenticationResult.accountId as AccountId,
+																							duration  : ms( '32h' ),
+																							metadata  : {},
+																						 } )
 
 		  this.logger.log( `Issued session ${maybeSession.id}` )
 		  this.logger.verbose( JSON.stringify( maybeSession ) )
@@ -108,7 +108,7 @@ export class AuthenticationController
 
 		  return {
 			 id           : authenticationResult.accountId,
-			 accessToken  : authenticationResult.accessToken.signature,
+			 accessToken  : accessToken,
 			 refreshToken : authenticationResult.refreshToken.signature,
 			 mfa          : false,
 		  }
