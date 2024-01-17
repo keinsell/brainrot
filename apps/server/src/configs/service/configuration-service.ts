@@ -23,39 +23,44 @@
  *
  */
 
-import {Injectable, Logger}     from '@nestjs/common';
-import Convict                  from 'convict';
-import * as dotenv              from 'dotenv';
-import {ConfigurationSchema}    from "../schema/configuration-schema.js";
-import {ConfigurationContainer} from "../schema/configuration-container.js";
+import { Injectable }             from '@nestjs/common'
+import Convict                    from 'convict'
+import * as dotenv                from 'dotenv'
+import { ConfigurationContainer } from '../schema/configuration-container.js'
+import { ConfigurationSchema }    from '../schema/configuration-schema.js'
 
 
 
 @Injectable()
-export class ConfigurationService {
-	private config : Convict.Config<ConfigurationContainer>;
+export class ConfigurationService
+  {
+	 private config : Convict.Config<ConfigurationContainer>
 
-	constructor() {
-		this.config      = Convict(ConfigurationSchema);
-		const dotEnvFile = dotenv.config().parsed;
+	 constructor()
+		{
+		  this.config      = Convict( ConfigurationSchema )
+		  const dotEnvFile = dotenv.config().parsed
 
-		if (dotEnvFile) {
-			this.config.load(dotenv.config().parsed);
+		  if ( dotEnvFile )
+			 {
+				this.config.load( dotenv.config().parsed )
+			 }
+
+		  this.config.validate( {
+										  allowed : 'warn',
+										  output  : (message) => {
+											 // Disabled for noop logging
+											 //											 const chunks = message.split( '\n' )
+											 //											 chunks.forEach( (chunk) => {
+											 //												new Logger( 'config' ).verbose( chunk )
+											 //											 } )
+										  },
+										} )
 		}
 
-		this.config.validate({
-			allowed: "warn", output: (message) => {
-				// Disabled for noop logging
-				const chunks = message.split('\n');
-				chunks.forEach((chunk) => {
-					new Logger("config").verbose(chunk);
-				});
-			},
-		});
-	}
-
-	get<K extends keyof ConfigurationContainer>(key : K) {
-		return this.config.get(key);
-	}
-}
+	 get<K extends keyof ConfigurationContainer>(key : K)
+		{
+		  return this.config.get( key )
+		}
+  }
 

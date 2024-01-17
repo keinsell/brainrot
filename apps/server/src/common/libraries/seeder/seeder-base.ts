@@ -7,7 +7,7 @@ export abstract class SeederBase<INPUT = unknown>
   {
 	 private logger : Logger        = new Logger( 'seeder' )
 	 private inputStorage : INPUT[] = []
-	 private limit : number         = 300
+	 private limit : number         = 10
 
 
 	 protected constructor(logger : Logger)

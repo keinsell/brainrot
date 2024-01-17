@@ -1,11 +1,13 @@
-import { bootstrap }          from './bootstrap.js'
-import { isProduction }       from './configs/helper/is-production.js'
-import { acquireProcessLock } from './hooks/post-start/acquire-process-lock.js'
-import { initializeSentry }   from './hooks/pre-start/initialize-sentry.js'
+import { bootstrap }            from './bootstrap.js'
+import { __appConfig }          from './configs/global/__config.js'
+import { isProduction }         from './configs/helper/is-production.js'
+import { acquireProcessLock }   from './hooks/pre-start/acquire-process-lock.js'
+import { initializeSentry }     from './hooks/pre-start/initialize-sentry.js'
+import { ContainerEnvironment } from './hooks/pre-start/run-testcontainers.js'
 import {
   prettyPrintServiceInformation,
   printSystemInfo,
-}                             from './utilities/console-utils/index.js'
+}                               from './utilities/console-utils/index.js'
 
 // TODO: Add check for minimal requirements to run server
 // TODO: Run warn if host machine is too small
@@ -15,6 +17,8 @@ import {
 
 await acquireProcessLock()
 
+
+
 if ( isProduction() )
   {
 	 printSystemInfo()
@@ -22,6 +26,12 @@ if ( isProduction() )
 
 prettyPrintServiceInformation()
 
+if ( __appConfig.USE_TESTCONTAINERS )
+  {
+	 await ContainerEnvironment.run()
+  }
+
 initializeSentry()
+
 
 await bootstrap()

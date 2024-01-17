@@ -35,7 +35,7 @@ import { __config }             from '../../configs/global/__config.js'
 
 export function initializeSentry() : void
   {
-	 new Logger().log( `Initializing Sentry... ${__config.get( 'SENTRY_DSN' )}` )
+	 new Logger( 'sentry' ).log( `Initializing Sentry... ${__config.get( 'SENTRY_DSN' )}` )
 
 	 // Turn ON if integrating with OTEL
 	 setupGlobalHub()
@@ -45,11 +45,12 @@ export function initializeSentry() : void
 						 ...SENTRY_CONFIGURATION,
 					  } )
 
-	 new Logger().log( `Sentry initialized!` )
+	 new Logger( 'sentry' ).log( `Sentry initialized!` )
 
 	 const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || []
 
-	 new Logger().log( `Sentry have initialized ${integrations.length} integrations: [${integrations.map(
-																																	  integration => integration.name )
-																																	.join( ', ' )}]` )
+	 new Logger( 'sentry' ).log( `Sentry have initialized ${integrations.length} integrations: [${integrations.map(
+																																					integration => integration.name )
+																																				 .join(
+																																					', ' )}]` )
   }

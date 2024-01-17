@@ -11,12 +11,12 @@ import delay                    from 'delay'
 import ms                       from 'ms'
 import { StartedTestContainer } from 'testcontainers'
 
-import { isProduction }            from '../../../../../configs/helper/is-production.js'
+import { isProduction }           from '../../../../../configs/helper/is-production.js'
 import {
   Prisma,
   PrismaClient,
-}                                  from '../../../../../vendor/prisma/index.js'
-import { ApplicationState }        from '../../../../state.js'
+}                                 from '../../../../../vendor/prisma/index.js'
+import { ApplicationState }       from '../../../../state.js'
 import { PRISMA_SERVICE_OPTIONS } from '../constants/PRISMA_SERVICE_OPTIONS.js'
 import { PrismaServiceOptions }   from '../structures/prisma-service-options.js'
 
@@ -37,13 +37,14 @@ export class PrismaService
 		{
 		  super( {
 					  ...prismaServiceOptions.prismaOptions,
-					  log         : [
+					  log           : [
 						 {
 							emit  : 'event',
 							level : 'query',
 						 },
 					  ],
-					  errorFormat : 'minimal',
+					  errorFormat   : 'minimal',
+					  datasourceUrl : process.env.DATABASE_URI,
 					} )
 
 		  if ( this.prismaServiceOptions.middlewares )

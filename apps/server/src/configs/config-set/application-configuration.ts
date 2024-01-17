@@ -43,11 +43,16 @@ export interface IApplicationConfiguration
 	  */
 	 HEALTHCHECK_ENDPOINT : string
 	 PRISMA_ADMIN_PORT : number
+	 USE_TESTCONTAINERS : boolean
   }
 
 
 export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfiguration> = {
   RUN_SEED             : {
+	 default : isDevelopment(),
+	 format  : Boolean,
+  },
+  USE_TESTCONTAINERS   : {
 	 default : isDevelopment(),
 	 format  : Boolean,
   },
