@@ -8,7 +8,7 @@ import { PasswordHashing }        from '../../../common/libraries/unihash/index.
 import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
 import type { EmailAddress }      from '../../../common/mailer/value-object/email-address.js'
 import { EventBus }               from '../../../common/modules/messaging/event-bus.js'
-import { TraceService }           from '../../../common/modules/observability/tracing/opentelemetry/lib/service/trace-service.js'
+import { TraceService }           from '../../../common/modules/observability/tracing/opentelemetry/service/trace-service.js'
 import { RegisterAccountCommand } from '../commands/register-account-command.js'
 import { AccountSelfService }     from '../contract/account-self-service.js'
 import { Account }                from '../entities/account.js'
@@ -59,8 +59,7 @@ export class AccountService
 															address    : registerAccount.email.toLowerCase() as EmailAddress,
 														 } )
 
-		  const password = await Password.fromPlain(
-			 registerAccount.password, this.hashing.use( KdfAlgorithm.Argon2id ) )
+		  const password = await Password.fromPlain( registerAccount.password, this.hashing.use( KdfAlgorithm.Argon2id ) )
 
 		  this.logger.debug( 'Running policy...' )
 

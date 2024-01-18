@@ -12,6 +12,13 @@ import { PrismaErrorCodesStatusMapping } from '../structures/prisma-error-codes-
 
 
 
+interface IPrismaStatusMap
+  {
+	 [ key : string ] : HttpStatus;
+  }
+
+
+
 /**
  * {@link PrismaClientExceptionFilter} catches {@link Prisma.PrismaClientKnownRequestError} exceptions.
  */
@@ -25,7 +32,7 @@ export class PrismaClientExceptionFilter
 	  * Error codes definition for Prisma Client (Query Engine)
 	  * @see https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
 	  */
-	 private readonly defaultMapping = {
+	 private readonly defaultMapping : IPrismaStatusMap = {
 		P2000 : HttpStatus.BAD_REQUEST,
 		P2002 : HttpStatus.CONFLICT,
 		P2025 : HttpStatus.NOT_FOUND,
@@ -143,11 +150,9 @@ export class PrismaClientExceptionFilter
 	 private defaultExceptionMessage(exception : Prisma.PrismaClientKnownRequestError) : string
 		{
 		  const shortMessage = exception.message.substring( exception.message.indexOf( '→' ) )
-		  return (
-			 `[${exception.code}]: ` + shortMessage
-				.substring( shortMessage.indexOf( '\n' ) )
-				.replace( /\n/g, '' )
-				.trim()
-		  )
+		  return ( `[${exception.code}]: ` + shortMessage
+			 .substring( shortMessage.indexOf( '\n' ) )
+			 .replace( /\n/g, '' )
+			 .trim() )
 		}
   }

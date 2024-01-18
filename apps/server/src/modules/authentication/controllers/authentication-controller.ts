@@ -102,7 +102,7 @@ export class AuthenticationController
 		  this.logger.log( `Issued session ${maybeSession.id}` )
 		  this.logger.verbose( JSON.stringify( maybeSession ) )
 
-		  request.session[ 'data' ] = maybeSession
+		  //		  request.session[ 'data' ] = maybeSession
 
 		  this.logger.log( `Session ${JSON.stringify( request.session )} saved` )
 

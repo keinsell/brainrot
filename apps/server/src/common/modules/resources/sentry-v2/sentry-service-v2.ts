@@ -35,7 +35,7 @@ import {
   SpanContext,
 }                       from '@sentry/types'
 import { Request }      from 'express'
-import { TraceService } from '../../observability/tracing/opentelemetry/lib/service/trace-service.js'
+import { TraceService } from '../../observability/tracing/opentelemetry/service/trace-service.js'
 
 
 

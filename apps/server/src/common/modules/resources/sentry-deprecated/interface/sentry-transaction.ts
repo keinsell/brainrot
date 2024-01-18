@@ -1,5 +1,0 @@
-export type SentryTransaction =
-  boolean
-  | 'path'
-  | 'methodPath'
-  | 'handler';

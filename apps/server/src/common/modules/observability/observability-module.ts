@@ -25,8 +25,8 @@
 
 
 
-import { Module }             from '@nestjs/common'
-import { OpenTelemetryModule } from './tracing/opentelemetry/lib/open-telemetry-module.js'
+import { Module }              from '@nestjs/common'
+import { OpenTelemetryModule } from './tracing/opentelemetry/open-telemetry-module.js'
 
 
 

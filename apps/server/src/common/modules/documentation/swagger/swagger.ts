@@ -72,6 +72,7 @@ function experimentalAddApiModelFunctionality(document : OpenAPIObject) : void
 		{
 		  for ( const methodKey in document.paths[ pathKey ] )
 			 {
+				// @ts-ignore
 				const operation = document.paths[ pathKey ][ methodKey ]
 
 				if ( operation?.parameters )

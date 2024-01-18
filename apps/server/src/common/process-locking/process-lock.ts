@@ -23,10 +23,11 @@
  *
  */
 
-import fs      from 'fs/promises'
-import path    from 'path'
-import process from 'process'
-import ps      from 'ps-node'
+import fs           from 'fs/promises'
+import path         from 'path'
+import process      from 'process'
+import ps           from 'ps-node'
+import type { PID } from './PID.js'
 
 
 
@@ -105,8 +106,8 @@ export class ProcessLockManager
 		{
 		  try
 			 {
-				const lockData  = await fs.readFile( this.lockFilePath, 'utf8' )
-				const storedPid = parseInt( lockData.trim(), 10 )
+				const lockData = await fs.readFile( this.lockFilePath, 'utf8' )
+				let storedPid  = parseInt( lockData.trim(), 10 ) as PID
 
 				if ( isNaN( storedPid ) )
 				  {
@@ -239,7 +240,7 @@ export class ProcessLockManager
 			* @param {string} signal - The termination signal received.
 			* @returns {void}
 			*/
-		  function handleTermination(signal)
+		  function handleTermination(signal : string)
 			 {
 				console.info( `Received ${signal}, handling termination...` )
 				// Check if the lock should be removed based on the current instance state.
@@ -287,7 +288,7 @@ export class ProcessLockManager
 	  * @param {string} question - The question to prompt the user.
 	  * @returns {Promise<string>} - Resolves with the user's input.
 	  */
-	 async promptUser(question)
+	 async promptUser(question : string)
 		{
 		  const readline = require( 'readline' ).createInterface( {
 																						input  : process.stdin,
@@ -295,7 +296,7 @@ export class ProcessLockManager
 																					 } )
 
 		  return new Promise( resolve => {
-			 readline.question( question, answer => {
+			 readline.question( question, (answer : string) => {
 				readline.close()
 				resolve( answer.trim() )
 			 } )
@@ -308,7 +309,7 @@ export class ProcessLockManager
 	  * @param {number} storedPid - The PID of the other process.
 	  * @returns {Promise<void>} - Resolves when the other process exits.
 	  */
-	 async waitForOtherProcessExit(storedPid)
+	 async waitForOtherProcessExit(storedPid : PID)
 		{
 		  const timeout  = this.waitForExitTimeout
 		  const interval = this.checkInterval
@@ -353,10 +354,10 @@ export class ProcessLockManager
 	  * @returns {Promise<string>} - Resolves with the user's input or the default answer.
 	  */
 	 async promptUserWithTimeout(
-		question,
-		timeout,
-		defaultAnswer,
-	 )
+		question : string,
+		timeout : number,
+		defaultAnswer : string,
+	 ) : Promise<unknown>
 		{
 
 		  return Promise.race( [
@@ -371,15 +372,15 @@ export class ProcessLockManager
 	  * @param {number} pid - The PID of the process to check.
 	  * @returns {Promise<boolean>} - Resolves with a boolean indicating whether the process is running.
 	  */
-	 isProcessRunning(pid)
+	 isProcessRunning(pid : PID)
 		{
 		  return new Promise( (
 										resolve,
 										reject,
 									 ) => {
 			 ps.lookup( {pid : pid}, (
-				err,
-				resultList,
+				err : NodeJS.ErrnoException | null,
+				resultList : ps.Program[],
 			 ) => {
 				if ( err )
 				  {

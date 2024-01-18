@@ -2,14 +2,14 @@ import {
   Logger,
   Module,
   OnModuleInit,
-}                                               from '@nestjs/common'
+}                                              from '@nestjs/common'
 import { PATH_METADATA }                       from '@nestjs/common/constants.js'
 import { ExternalContextCreator }              from '@nestjs/core'
 import {
   flatten,
   groupBy,
-}                                               from 'ramda'
-import Stripe                                   from 'stripe'
+}                                              from 'ramda'
+import Stripe                                  from 'stripe'
 import { DiscoveryModule }                     from '../../environment/discovery/discovery-module.js'
 import { DiscoveryService }                    from '../../environment/discovery/discovery-service.js'
 import {
@@ -17,7 +17,7 @@ import {
   STRIPE_MODULE_CONFIG_TOKEN,
   STRIPE_WEBHOOK_HANDLER,
   STRIPE_WEBHOOK_SERVICE,
-}                                               from './constraints/stripe-constraints.js'
+}                                              from './constraints/stripe-constraints.js'
 import { StripeWebhookController }             from './controllers/stripe-webhook-controller.js'
 import { InjectStripeModuleConfig }            from './decorators/stripe-decorator.js'
 import { createConfigurableDynamicRootModule } from './interfaces/dynamic-module.js'
@@ -45,8 +45,7 @@ export class StripeModule
 			 } )
 		  },
 		  inject     : [ STRIPE_MODULE_CONFIG_TOKEN ],
-		},
-		{
+		}, {
 		  provide    : STRIPE_CLIENT_TOKEN,
 		  useFactory : ({
 								apiKey,
@@ -61,13 +60,10 @@ export class StripeModule
 			 } )
 		  },
 		  inject     : [ STRIPE_MODULE_CONFIG_TOKEN ],
-		},
-		StripeWebhookService,
-		StripePayloadService,
+		}, StripeWebhookService, StripePayloadService,
 	 ],
 	 exports   : [
-		STRIPE_MODULE_CONFIG_TOKEN,
-		STRIPE_CLIENT_TOKEN,
+		STRIPE_MODULE_CONFIG_TOKEN, STRIPE_CLIENT_TOKEN,
 	 ],
   } )
   implements OnModuleInit
@@ -106,16 +102,12 @@ export class StripeModule
 
 		  this.logger.log( 'Initializing Stripe Module for webhooks' )
 
-		  const [ stripeWebhookService ] = (
-			 (
-				// @ts-ignore
-				await this.discover.providersWithMetaAtKey<boolean>( STRIPE_WEBHOOK_SERVICE as any )
-			 ) || []
-		  ).map( (x) => x.discoveredClass.instance )
+		  const [ stripeWebhookService ] = ( ( // @ts-ignore
+															await this.discover.providersWithMetaAtKey<boolean>(
+															  STRIPE_WEBHOOK_SERVICE as any ) ) || [] ).map(
+			 (x) => x.discoveredClass.instance )
 
-		  if ( !stripeWebhookService || !(
-			 stripeWebhookService instanceof StripeWebhookService
-		  ) )
+		  if ( !stripeWebhookService || !( stripeWebhookService instanceof StripeWebhookService ) )
 			 {
 				throw new Error( 'Could not find instance of Stripe Webhook Service' )
 			 }
@@ -129,27 +121,23 @@ export class StripeModule
 		  const webhookHandlers = flatten( Object.keys( grouped ).map( (x) => {
 			 this.logger.log( `Registering Stripe webhook handlers from ${x}` )
 
-			 return (
-				grouped[ x ] as any
-			 ).map( ({
-						  discoveredMethod,
-						  meta : eventType,
-						}) => (
-				{
+			 return ( grouped[ x ] as { discoveredMethod : any, eventType : string, meta : string }[] ).map( ({
+																																				 discoveredMethod : discoveredMethod,
+																																				 meta             : eventType,
+																																			  }) => {
+				return ( {
 				  key     : eventType,
-				  handler : this.externalContextCreator.create(
-					 discoveredMethod.parentClass.instance,
-					 discoveredMethod.handler,
-					 discoveredMethod.methodName,
-					 undefined, // metadataKey
-					 undefined, // paramsFactory
-					 undefined, // contextId
-					 undefined, // inquirerId
-					 undefined, // options
-					 'stripe_webhook', // contextType
+				  handler : this.externalContextCreator.create( discoveredMethod.parentClass.instance,
+																				discoveredMethod.handler, discoveredMethod.methodName,
+																				undefined, // metadataKey
+																				undefined, // paramsFactory
+																				undefined, // contextId
+																				undefined, // inquirerId
+																				undefined, // options
+																				'stripe_webhook', // contextType
 				  ),
-				}
-			 ) )
+				} )
+			 } )
 		  } ) )
 		  const handleWebhook   = async (webhookEvent : { type : string }) => {
 			 const {type}   = webhookEvent

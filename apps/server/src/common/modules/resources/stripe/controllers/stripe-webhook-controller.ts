@@ -15,7 +15,6 @@ import { StripeWebhookService }     from '../services/stripe-webhook-service.js'
 @Controller( '/stripe' )
 export class StripeWebhookController
   {
-	 private readonly requestBodyProperty : string
 
 
 	 constructor(
@@ -24,7 +23,6 @@ export class StripeWebhookController
 		private readonly stripeWebhookService : StripeWebhookService,
 	 )
 		{
-		  this.requestBodyProperty = config.webhookConfig?.requestBodyProperty || 'body'
 		}
 
 
@@ -38,7 +36,7 @@ export class StripeWebhookController
 			 {
 				throw new Error( 'Missing stripe-signature header' )
 			 }
-		  const rawBody = request[ this.requestBodyProperty ]
+		  const rawBody = request.body
 
 		  const event = this.stripePayloadService.tryHydratePayload( sig, rawBody )
 

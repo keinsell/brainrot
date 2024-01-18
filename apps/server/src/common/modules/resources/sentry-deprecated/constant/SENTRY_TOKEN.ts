@@ -1,1 +1,0 @@
-export const SENTRY_TOKEN = Symbol( 'SentryToken' )

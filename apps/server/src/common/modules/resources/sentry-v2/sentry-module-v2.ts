@@ -26,9 +26,9 @@
 import { Module }                from '@nestjs/common'
 import { APP_INTERCEPTOR }       from '@nestjs/core'
 import Sentry                    from '@sentry/node'
-import { SENTRY_MODULE_OPTIONS } from '../sentry-deprecated/constant/SENTRY_MODULE_OPTIONS.js'
 import { SentryInterceptorV2 }   from './sentry-interceptor-v2.js'
 import { SentryServiceV2 }       from './sentry-service-v2.js'
+import { SENTRY_MODULE_OPTIONS } from './SENTRY_MODULE_OPTIONS.js'
 import { getSentry }             from './utils/get-sentry.js'
 
 
@@ -52,9 +52,7 @@ export class SentryModuleV2
 				{
 				  provide  : SENTRY_MODULE_OPTIONS,
 				  useValue : options,
-				},
-				SentryServiceV2,
-				{
+				}, SentryServiceV2, {
 				  provide  : APP_INTERCEPTOR,
 				  useClass : SentryInterceptorV2,
 				},

@@ -5,6 +5,7 @@ import {
 }                                        from '@nestjs/core'
 import Sentry                            from '@sentry/node'
 import delay                             from 'delay'
+import type { NextFunction }             from 'express'
 import ms                                from 'ms'
 import process                           from 'node:process'
 import { seeder }                        from './common/libraries/seeder/seeder.js'
@@ -27,6 +28,10 @@ import { RoleSeeder }                    from './modules/role/seeder/role-seeder
 import { CartSeeder }                    from './modules/todo_cart/cart-seeder.js'
 import { ProductSeeder }                 from './modules/todo_product/seed/product-seeder.js'
 import { ProfileSeeder }                 from './modules/todo_profile/infrastructure/profile-seeder.js'
+import type {
+  ExpressRequest,
+  ExpressResponse,
+}                                        from './types/express-response.js'
 import { portAllocator }                 from './utilities/network-utils/port-allocator.js'
 
 
@@ -69,13 +74,13 @@ export async function bootstrap()
 
 	 // Optional fallthrough error handler
 	 app.use( function onError(
-		err,
-		req,
-		res,
-		next,
+		_err : Error,
+		_req : ExpressRequest,
+		res : ExpressResponse,
+		_next : NextFunction,
 	 ) {
 		res.statusCode = 500
-		res.end( res.sentry + '\n' )
+		res.end( ( res as any ).sentry + '\n' )
 	 } )
 
 	 const PORT = __config.get( 'PORT' )

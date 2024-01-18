@@ -47,15 +47,14 @@ export class ZxcvbnPasswordStrengthEstimator
 
 	 private mapZxcvbnScoreToPasswordSecurityReportScore(score : 0 | 1 | 2 | 3 | 4) : PasswordSecurityLevel
 		{
-		  // Map ZXCBN Score to PasswordSecurityReport Score
-		  let passwordSecurityReportScore : PasswordSecurityLevel = PasswordSecurityLevel.WEAK
+		  // Cast score to correspond PasswordSecurityLevel value
+		  let passwordSecurityReportScore : PasswordSecurityLevel = score as PasswordSecurityLevel
 
-		  Object.keys( PasswordSecurityLevel ).forEach( (key : string) => {
-			 if ( PasswordSecurityLevel[ key ] === score )
-				{
-				  passwordSecurityReportScore = PasswordSecurityLevel[ key ]
-				}
-		  } )
+		  // Validation to ensure provided score exists within the enumeration
+		  if ( !Object.values( PasswordSecurityLevel ).includes( passwordSecurityReportScore ) )
+			 {
+				throw new Error( 'Invalid score provided. Expected a number between 0 and 4 inclusive.' )
+			 }
 
 		  return passwordSecurityReportScore
 		}

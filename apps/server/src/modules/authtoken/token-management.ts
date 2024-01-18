@@ -26,17 +26,18 @@
 import {
   Injectable,
   Logger,
-}                        from '@nestjs/common'
+} from '@nestjs/common'
 import {
   JwtService,
   JwtSignOptions,
-}                        from '@nestjs/jwt'
+} from '@nestjs/jwt'
+
 import { __authConfig } from '../../configs/global/__config.js'
-import { SingedJwt }     from '../authentication/value-objects/singed-jwt.js'
-import { AccessToken }   from '../authentication/value-objects/tokens/access-token.js'
-import { RefreshToken }  from '../authentication/value-objects/tokens/refresh-token.js'
-import { jsonwebtoken }  from './dto/jsonwebtoken.js'
-import { JsonWebToken }  from './entity/jsonwebtoken.js'
+import { SingedJwt }    from '../authentication/value-objects/singed-jwt.js'
+import { AccessToken }  from '../authentication/value-objects/tokens/access-token.js'
+import { RefreshToken } from '../authentication/value-objects/tokens/refresh-token.js'
+import { jsonwebtoken } from './dto/jsonwebtoken.js'
+import { JsonWebToken } from './entity/jsonwebtoken.js'
 
 
 

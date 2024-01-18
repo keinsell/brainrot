@@ -48,14 +48,11 @@ export abstract class ErrorInterceptor
 		next : CallHandler,
 	 ) : Observable<any>
 		{
-		  return next.handle().pipe(
-			 catchError( (error) => {
-				this.capture( error )
-				return throwError( () => error )
-			 } ),
-			 finalize( () => {
-				// ...
-			 } ),
-		  )
+		  return next.handle().pipe( catchError( (error) => {
+			 this.capture( error )
+			 return throwError( () => error )
+		  } ), finalize( () => {
+			 // ...
+		  } ) )
 		}
   }

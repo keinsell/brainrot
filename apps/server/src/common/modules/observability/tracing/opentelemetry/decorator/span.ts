@@ -23,29 +23,9 @@
  *
  */
 
-import {
-  DynamicModule,
-  Module,
-}                               from '@nestjs/common'
-import { ConfigurationService } from './service/configuration-service.js'
+import { SetMetadata }                   from '@nestjs/common'
+import { OPEN_TELEMETRY_TRACE_METADATA } from '../constant/OPEN_TELEMETRY_TRACE_METADATA.js'
 
 
 
-@Module( {
-			  providers : [ ConfigurationService ],
-			  exports   : [ ConfigurationService ],
-			} )
-export class ConfigModule
-  {
-
-	 static forRoot(
-		entities = [],
-		options? : {},
-	 ) : DynamicModule
-		{
-		  return {
-			 module : ConfigModule,
-			 global : true,
-		  }
-		}
-  }
+export const Span = (name? : string) => SetMetadata( OPEN_TELEMETRY_TRACE_METADATA, name )

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,35 @@
  *
  */
 
-import {
-  DynamicModule,
-  Module,
-}                               from '@nestjs/common'
-import { ConfigurationService } from './service/configuration-service.js'
+
+
+import { Logger }       from '@nestjs/common'
+import { ExportResult } from '@opentelemetry/core'
+import { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.js'
+import { SpanExporter } from '../../contract/span-exporter.js'
 
 
 
-@Module( {
-			  providers : [ ConfigurationService ],
-			  exports   : [ ConfigurationService ],
-			} )
-export class ConfigModule
+export class NestLoggerSpanExporter
+  implements SpanExporter
   {
+	 private logger = new Logger( 'otel' )
 
-	 static forRoot(
-		entities = [],
-		options? : {},
-	 ) : DynamicModule
+
+	 public export(
+		spans : ReadableSpan[],
+		resultCallback : (result : ExportResult) => void,
+	 ) : void
 		{
-		  return {
-			 module : ConfigModule,
-			 global : true,
-		  }
+		  for ( const span of spans )
+			 {
+				this.logger.verbose( `[${span.name}] ${JSON.stringify( span.spanContext() )}` )
+			 }
+		}
+
+
+	 public async shutdown() : Promise<void>
+		{
+		  return
 		}
   }

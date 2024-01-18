@@ -1,30 +1,41 @@
-import {SetMetadata} from '@nestjs/common';
+import { SetMetadata } from '@nestjs/common'
+
+
+
+interface IMetadata
+  {
+	 name : string;
+	 description : string;
+  }
+
 
 // This store will keep each DTO's custom metadata in a { DTOName: metadata } format.
-const modelMetadataStore = {};
+const modelMetadataStore : Record<string, IMetadata> = {}
 
 export const ApiModel = ({
-	name,
-	description,
-}: { name?: string; description?: string } = {}): ClassDecorator => {
-	return (target: Function) => {
+									name,
+									description,
+								 } : { name? : string; description? : string } = {}) : ClassDecorator => {
+  return (target : Function) => {
+	 if ( !name || !description )
+		{
+		  return
+		}
 
-		// Use NestJS built-in `SetMetadata` to store your metadata as usual.
-		SetMetadata('API_MODEL_METADATA', {
-			name,
-			description,
-		})(target);
+	 const metadata : IMetadata = {
+		name,
+		description,
+	 }
 
-		// Also store the metadata to `modelMetadataStore` for later usage.
-		modelMetadataStore[target.name] = {
-			name,
-			description,
-		};
-	};
-};
+	 SetMetadata( 'API_MODEL_METADATA', metadata )( target )
+	 
+	 modelMetadataStore[ target.name ] = metadata
+  }
+}
 
 
 // Export this function, we will use it later.
-export function getMetadataStore() {
-	return modelMetadataStore;
-}
+export function getMetadataStore()
+  {
+	 return modelMetadataStore
+  }
