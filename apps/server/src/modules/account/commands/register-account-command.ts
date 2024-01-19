@@ -46,6 +46,7 @@ export class RegisterAccountCommand
 						  description : 'The domain\'s email address',
 						  example     : AccountFixture.email,
 						  examples    : AccountFixture._examples.emails,
+						  type        : String,
 						} ) email : string
 
 	 /**

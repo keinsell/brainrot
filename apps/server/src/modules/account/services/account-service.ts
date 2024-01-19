@@ -10,7 +10,7 @@ import {
 import { ServiceAbstract }        from '../../../common/libraries/services/service-abstract.js'
 import { PasswordHashing }        from '../../../common/libraries/unihash/index.js'
 import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
-import type { EmailAddress }      from '../../../common/mailer/value-object/email-address.js'
+import { createEmailAddress }     from '../../../common/mailer/value-object/email-address.js'
 import { EventBus }               from '../../../common/modules/messaging/event-bus.js'
 import { _startInactiveSpan }     from '../../../common/modules/observability/tracing/contract/globs.js'
 import { TraceService }           from '../../../common/modules/observability/tracing/opentelemetry/service/trace-service.js'
@@ -21,6 +21,7 @@ import { AccountPolicy }          from '../policies/account-policy.js'
 import { AccountRepository }      from '../repositories/account-repository.js'
 import { AccountEmail }           from '../value-objects/account-email.js'
 import { Password }               from '../value-objects/password.js'
+import { createUsername }         from '../value-objects/username.js'
 
 
 
@@ -64,35 +65,52 @@ export class AccountService
 														 attributes : {},
 													  } )
 
+		  this.logger.debug( 'Validating inputs...' )
+		  const emailResult    = createEmailAddress( registerAccount.email )
+		  const usernameResult = createUsername( registerAccount.username )
+
+
+		  if ( emailResult.isErr() )
+			 {
+				throw emailResult.error
+			 }
+
+		  if ( usernameResult.isErr() )
+			 {
+				throw usernameResult.error
+			 }
+
+		  const username = usernameResult._unsafeUnwrap()
+		  const email    = emailResult._unsafeUnwrap()
 
 
 		  this.logger.debug( 'Registering account...' )
 
-		  const email = AccountEmail.create( {
-															isVerified : false,
-															address    : registerAccount.email.toLowerCase() as EmailAddress,
-														 } )
+		  const accountEmail = AccountEmail.create( {
+																	 isVerified : false,
+																	 address    : email,
+																  } )
 
 		  const password = await Password.fromPlain( registerAccount.password, this.hashing.use( KdfAlgorithm.Argon2id ) )
 
 		  setUser( {
-						 email    : registerAccount.email.toLowerCase(),
-						 username : registerAccount.username.toLowerCase(),
+						 email    : email,
+						 username : username,
 					  } )
 
 		  this.logger.debug( 'Running policy...' )
 
 		  await this.policy.canRegisterAccount( {
-																email    : email.address,
+																email    : accountEmail.address,
 																password : registerAccount.password,
-																username : registerAccount.username.toLowerCase(),
+																username : username,
 															 } )
 
 		  this.logger.debug( 'Creating aggregate...' )
 
 		  let identity = Account.RegisterAccount( {
-																  username : registerAccount.username.toLowerCase(),
-																  email    : email,
+																  username : username,
+																  email    : accountEmail,
 																  password : password,
 																  groups   : [],
 																} )
