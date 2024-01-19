@@ -233,6 +233,16 @@
           "account-recovery"
         ],
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoverAccount"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -248,7 +258,16 @@
         "tags": [
           "account-recovery"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": ""
@@ -296,8 +315,10 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Raoul.Franey31@yahoo.com",
-            "schema": {}
+            "example": "Hope_Quigley92@gmail.com",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -383,6 +404,16 @@
           "session"
         ],
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshSession"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -433,7 +464,7 @@
         }
       },
       "patch": {
-        "operationId": "ProductController_method",
+        "operationId": "ProductController_updateProduct",
         "parameters": [],
         "responses": {
           "200": {
@@ -442,7 +473,7 @@
         }
       },
       "delete": {
-        "operationId": "ProductController_method",
+        "operationId": "ProductController_deleteProduct",
         "parameters": [],
         "responses": {
           "200": {
@@ -456,7 +487,16 @@
         "operationId": "get-cart",
         "summary": "Get a Cart",
         "description": "Retrieve a Cart's details. This includes recalculating its totals.",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -464,7 +504,7 @@
         }
       },
       "put": {
-        "operationId": "CartController_method",
+        "operationId": "CartController_updateCart",
         "parameters": [],
         "responses": {
           "200": {
@@ -473,7 +513,7 @@
         }
       },
       "post": {
-        "operationId": "CartController_method",
+        "operationId": "CartController_deleteCart",
         "parameters": [],
         "responses": {
           "201": {
@@ -484,7 +524,7 @@
     },
     "/cart/{id}/checkout": {
       "post": {
-        "operationId": "CartController_method",
+        "operationId": "CartController_checkoutCart",
         "parameters": [],
         "responses": {
           "201": {
@@ -493,7 +533,7 @@
         }
       },
       "delete": {
-        "operationId": "CartController_method",
+        "operationId": "CartController_cancelCheckoutCart",
         "parameters": [],
         "responses": {
           "200": {
@@ -507,7 +547,16 @@
         "operationId": "get-region",
         "summary": "Get a Region",
         "description": "Retrieve a Region's details.",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -537,7 +586,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Raoul.Franey31@yahoo.com",
+            "example": "Hope_Quigley92@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -557,7 +606,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Larissa.Sawayn",
+            "example": "Gus64",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -570,6 +619,21 @@
           "password",
           "username"
         ]
+      },
+      "RecoverAccount": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Username of account",
+            "example": ""
+          },
+          "method": {
+            "type": "string",
+            "description": "Recovery Method",
+            "example": ""
+          }
+        }
       },
       "AuthenticationResponse": {
         "type": "object",
@@ -589,11 +653,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njc5MzQyfQ.hMqliUlFYy3rb5vJwpW614Vgd3T-O8_qtvqGSY-Y_Uw",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njc5MzQyfQ.hMqliUlFYy3rb5vJwpW614Vgd3T-O8_qtvqGSY-Y_Uw",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njc5MzQyfQ.hMqliUlFYy3rb5vJwpW614Vgd3T-O8_qtvqGSY-Y_Uw",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njc5MzQyfQ.hMqliUlFYy3rb5vJwpW614Vgd3T-O8_qtvqGSY-Y_Uw"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q"
             ]
           }
         },
@@ -601,6 +665,24 @@
           "id",
           "mfa",
           "accessToken",
+          "refreshToken"
+        ]
+      },
+      "RefreshSession": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "...",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+            "examples": [
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q"
+            ]
+          }
+        },
+        "required": [
           "refreshToken"
         ]
       },
@@ -615,7 +697,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Raoul.Franey31@yahoo.com",
+            "example": "Hope_Quigley92@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -630,7 +712,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Larissa.Sawayn",
+            "example": "Gus64",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -652,11 +734,11 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Larissa.Sawayn",
+            "example": "Gus64",
             "examples": [
-              "Toby_Mohr90",
-              "Issac_Dibbert",
-              "Effie_OKeefe-Kiehn"
+              "Chase83",
+              "Koby_Emmerich95",
+              "Salvador.Grady"
             ]
           },
           "password": {
@@ -664,9 +746,9 @@
             "description": "The domain's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "J5MHecRUMt0w51i",
-              "xewCeVBktKWkc7p",
-              "6zIwiltuE8iG5hg"
+              "zYdamz0LQrvjlaT",
+              "WUBRlGsHq9fyopd",
+              "pzoHb9oqVF2mUkh"
             ]
           }
         },

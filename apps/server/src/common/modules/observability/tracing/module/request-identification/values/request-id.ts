@@ -23,19 +23,8 @@
  *
  */
 
-
-
-import { Module } from '@nestjs/common'
+import type { UniqueIdentifier } from '../../../../../../libraries/identification/index.js'
 
 
 
-@Module( {
-			  imports : [
-				 //				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
-			  ],
-			  exports : [],
-			} )
-export class ObservabilityModule
-  {
-  }
-
+export type RequestId = UniqueIdentifier

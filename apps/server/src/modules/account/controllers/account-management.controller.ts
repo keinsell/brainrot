@@ -16,22 +16,20 @@ export class AccountManagementController
   {
 
 	 // TODO: List all accounts of system
-	 @Get()
-	 @ApiOperation( {
-							operationId : 'list-accounts',
-							tags        : [ OpenapiTags.ACCOUNT_MANAGEMENT ],
-						 } )
-	 @ApiQuery( {
-					  type            : String,
-					  enum            : AccountStatus,
-					  name            : 'status',
-					  allowEmptyValue : false,
-					  required        : false,
-					  description     : 'Filter accounts by status',
-					} )
+	 @Get() @ApiOperation( {
+									 operationId : 'list-accounts',
+									 tags        : [ OpenapiTags.ACCOUNT_MANAGEMENT ],
+								  } ) @ApiQuery( {
+														 type            : String,
+														 enum            : AccountStatus,
+														 name            : 'status',
+														 allowEmptyValue : false,
+														 required        : false,
+														 description     : 'Filter accounts by status',
+													  } )
 	 public async getAccounts()
-		{}
-
+		{
+		}
 
 
 	 // TODO: Get single account by ID

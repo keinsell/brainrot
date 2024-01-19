@@ -320,6 +320,9 @@ importers:
       multer:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
+      nanoid:
+        specifier: ^5.0.4
+        version: 5.0.4
       nats:
         specifier: ^2.18.0
         version: 2.18.0

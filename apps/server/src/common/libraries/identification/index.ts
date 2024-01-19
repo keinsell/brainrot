@@ -26,7 +26,6 @@ export type UUID =
 export type UniqueIdentifier =
   string
   | number
-  | bigint
   | TypeID
   | CUID
   | UUID
