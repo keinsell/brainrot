@@ -315,7 +315,7 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Hope_Quigley92@gmail.com",
+            "example": "Carol55@gmail.com",
             "schema": {
               "type": "string"
             }
@@ -586,7 +586,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Hope_Quigley92@gmail.com",
+            "example": "Carol55@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -606,7 +606,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Gus64",
+            "example": "Madeline_Crooks80",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -653,11 +653,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws"
             ]
           }
         },
@@ -674,11 +674,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5MTMwfQ.ufhSnggFpCU6mE6Z2ntcDcX1NR8zu01T5tOP8LVAz4Q"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1Njg5OTAxfQ.YsaU7FP7G-xFhV1fh7KAKGjewCPF14nL573eiLJECws"
             ]
           }
         },
@@ -697,7 +697,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Hope_Quigley92@gmail.com",
+            "example": "Carol55@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -712,7 +712,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Gus64",
+            "example": "Madeline_Crooks80",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -734,11 +734,11 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Gus64",
+            "example": "Madeline_Crooks80",
             "examples": [
-              "Chase83",
-              "Koby_Emmerich95",
-              "Salvador.Grady"
+              "Shirley_Ortiz",
+              "Christopher_Bashirian",
+              "Ismael31"
             ]
           },
           "password": {
@@ -746,9 +746,9 @@
             "description": "The domain's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "zYdamz0LQrvjlaT",
-              "WUBRlGsHq9fyopd",
-              "pzoHb9oqVF2mUkh"
+              "QoKj3evk0vab_pf",
+              "JmGib5C7SkvC2X7",
+              "Q7vUBzhvUZDcUPt"
             ]
           }
         },
