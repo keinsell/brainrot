@@ -23,12 +23,12 @@
  *
  */
 
-import Sentry from '@sentry/node'
+import {
+  startInactiveSpan,
+  startSpan,
+} from '@sentry/opentelemetry'
 
 
 
-export function getSentry()
-  {
-	 const hub = Sentry.getCurrentHub()
-	 return hub.getClient()
-  }
+export const _startInactiveSpan = startInactiveSpan
+export const _startActiveSpan   = startSpan

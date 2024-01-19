@@ -34,7 +34,6 @@ import { AsyncLocalStorageContextManager }  from '@opentelemetry/context-async-h
 import { NodeSDK }                          from '@opentelemetry/sdk-node'
 import { Tracer }                           from '@opentelemetry/sdk-trace-node'
 import {
-  getClient,
   SentryPropagator,
   SentrySampler,
   SentrySpanProcessor,
@@ -42,6 +41,7 @@ import {
   setupEventContextTrace,
   wrapContextManagerClass,
 }                                           from '@sentry/opentelemetry'
+import { __sentryClient }                   from '../../../resources/sentry-v2/global/get-sentry.js'
 import { OpenTelemetryModuleDefaultConfig } from './config/opentelemetry-module-default-config.js'
 import { OPEN_TELEMETRY_SDK }               from './constant/OPEN_TELEMETRY_SDK.js'
 import { OPEN_TELEMETRY_SDK_CONFIG }        from './constant/OPEN_TELEMETRY_SDK_CONFIG.js'
@@ -201,27 +201,30 @@ export class OpenTelemetryModule
 			 useFactory : async () => {
 
 
-				const sentryClient = getClient()
-				setupEventContextTrace( sentryClient! )
+				let conf = {...OpenTelemetryModuleDefaultConfig, ...configuration}
 
+				if ( __sentryClient )
+				  {
+					 setupEventContextTrace( __sentryClient )
 
-				const SentryContextManager = wrapContextManagerClass( AsyncLocalStorageContextManager )
+					 const SentryContextManager = wrapContextManagerClass( AsyncLocalStorageContextManager )
 
-				configuration = {
-				  ...configuration, // traceExporter    : new OTLPTraceExporter(),
-				  spanProcessor     : new SentrySpanProcessor(),
-				  contextManager    : new SentryContextManager(),
-				  textMapPropagator : new SentryPropagator(),
-				  sampler           : new SentrySampler( sentryClient! ),
-				}
+					 conf = {
+						...configuration, // traceExporter    : new OTLPTraceExporter(),
+						spanProcessor     : new SentrySpanProcessor(),
+						contextManager    : new SentryContextManager(),
+						textMapPropagator : new SentryPropagator(),
+						sampler           : new SentrySampler( __sentryClient ),
+					 }
+				  }
 
-				const sdk = new NodeSDK( configuration )
+				const sdk = new NodeSDK( conf )
 
-				// Ensure OpenTelemetry Context & Sentry Hub/Scope is synced
-				setOpenTelemetryContextAsyncContextStrategy()
-
-
-				otelApi.propagation.setGlobalPropagator( new SentryPropagator() )
+				if ( __sentryClient )
+				  {
+					 setOpenTelemetryContextAsyncContextStrategy()
+					 otelApi.propagation.setGlobalPropagator( new SentryPropagator() )
+				  }
 
 				sdk.start()
 

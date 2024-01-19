@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,47 @@
  *
  */
 
-import convict           from 'convict'
-import { ConfigSet }     from '../contract/config-set.js'
-import { isDevelopment } from '../helper/is-development.js'
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  Scope,
+}                  from '@nestjs/common'
+import * as Sentry from '@sentry/node'
+import {
+  catchError,
+  finalize,
+  Observable,
+  throwError,
+}                  from 'rxjs'
 
 
 
-export interface IApplicationConfiguration
-  extends ConfigSet
+/**
+ * We must be in Request scope as we inject SentryService
+ */
+@Injectable( {scope : Scope.REQUEST} )
+export class SentryInterceptor
+  implements NestInterceptor
   {
-	 /** Defines if application should ensure seed in a database */
-	 RUN_SEED : boolean
-	 /** Defines endpoint on which OpenAPI 3.0 Specification/UI should be exposed */
-	 OPENAPI_ENDPOINT : string
-	 /**
-	  * Represents the HTTP endpoint for health check.
-	  *
-	  * @type {string}
-	  */
-	 HEALTHCHECK_ENDPOINT : string
-	 PRISMA_ADMIN_PORT : number
-	 USE_TESTCONTAINERS : boolean
+	 intercept(
+		context : ExecutionContext,
+		next : CallHandler,
+	 ) : Observable<any>
+		{
+		  //		  const span = this.sentryService.startChild( {op : `route handler`} )
+
+
+		  function exceptionCatcher(error : Error)
+			 {
+				Sentry.captureException( error )
+				return throwError( () => error )
+			 }
+
+		  return next.handle().pipe( catchError( exceptionCatcher ), finalize( () => {
+			 //			 span.finish()
+			 //			 this.sentryService.span.finish()
+		  } ) )
+		}
   }
-
-
-export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfiguration> = {
-  RUN_SEED             : {
-	 default : isDevelopment(),
-	 format  : Boolean,
-  },
-  USE_TESTCONTAINERS   : {
-	 default : true,
-	 format  : Boolean,
-  },
-  OPENAPI_ENDPOINT     : {
-	 default : '/api',
-  },
-  HEALTHCHECK_ENDPOINT : {
-	 default : '/health',
-  },
-  PRISMA_ADMIN_PORT    : {
-	 format  : 'port',
-	 default : 5555,
-  },
-}

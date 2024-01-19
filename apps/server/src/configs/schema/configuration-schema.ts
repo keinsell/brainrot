@@ -23,66 +23,63 @@
  *
  */
 
-import convict                          from 'convict';
-import {ApplicationConfigurationSchema} from "../config-set/application-configuration.js";
-import {ConfigurationContainer}         from "./configuration-container.js";
-import {AuthroizationConfiguration}     from "../config-set/authorization-configuration.js";
+import convict                            from 'convict'
+import { ApplicationConfigurationSchema } from '../config-set/application-configuration.js'
+import { AuthroizationConfiguration }     from '../config-set/authorization-configuration.js'
+import { ConfigurationContainer }         from './configuration-container.js'
 
 
 
 export const ConfigurationSchema : convict.Schema<ConfigurationContainer> = {
-	PROTOCOL           : {
-		doc    : 'Defines the protocol used by the application. Options are \'http\' or \'https\'. Default is \'http\'.',
-		default: "http",
-		env    : 'PROTOCOL',
-	},
-	HOST               : {
-		doc    : 'Defines the host on which the application runs. Default for development is \'localhost\'.',
-		default: 'localhost',
-		env    : 'HOST',
-	},
-	PORT               : {
-		doc    : 'Defines the port on which the application listens. Default for development is 1337, otherwise it\'s 80.',
-		default: 1337,
-		env    : 'PORT',
-		format : 'port',
-	},
-	SERVICE_NAME       : {
-		doc    : 'Defines the name of the service. Default is \'methylphenidate\'.',
-		default: 'methylphenidate',
-		env    : 'SERVICE_NAME',
-	},
-	SERVICE_DESCRIPTION: {
-		doc    : 'Provides a brief description of the service. Default description is set.',
-		default: 'Methylphenidate is a boilerplate for Nest.js applications with batteries included.',
-		env    : 'SERVICE_DESCRIPTION',
-	},
-	NODE_ENV           : {
-		doc    : 'Sets the application environment. Can be one of \'development\', \'test\', \'production\', or \'staging\'. Default is \'development\'.',
-		default: 'development',
-		env    : 'NODE_ENV',
-		format : [
-			'development',
-			'test',
-			'production',
-			'staging',
-		],
-	},
-	TRACING            : {
-		doc    : 'Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.',
-		default: true,
-		env    : 'TRACING',
-	},
-	SENTRY_DSN         : {
-		doc    : 'Defines the Sentry DSN. Default is empty.',
-		default: '',
-		env    : 'SENTRY_DSN',
-	},
-	DEBUG              : {
-		doc    : 'Enables or disables debug mode. Default is disabled.',
-		default: false,
-		env    : 'DEBUG',
-	},
-	APPLICATION        : ApplicationConfigurationSchema,
-	AUTH               : AuthroizationConfiguration,
-};
+  PROTOCOL            : {
+	 doc     : 'Defines the protocol used by the application. Options are \'http\' or \'https\'. Default is \'http\'.',
+	 default : 'http',
+	 env     : 'PROTOCOL',
+  },
+  HOST                : {
+	 doc     : 'Defines the host on which the application runs. Default for development is \'localhost\'.',
+	 default : 'localhost',
+	 env     : 'HOST',
+  },
+  PORT                : {
+	 doc     : 'Defines the port on which the application listens. Default for development is 1337, otherwise it\'s 80.',
+	 default : 1337,
+	 env     : 'PORT',
+	 format  : 'port',
+  },
+  SERVICE_NAME        : {
+	 doc     : 'Defines the name of the service. Default is \'methylphenidate\'.',
+	 default : 'methylphenidate',
+	 env     : 'SERVICE_NAME',
+  },
+  SERVICE_DESCRIPTION : {
+	 doc     : 'Provides a brief description of the service. Default description is set.',
+	 default : 'Methylphenidate is a boilerplate for Nest.js applications with batteries included.',
+	 env     : 'SERVICE_DESCRIPTION',
+  },
+  NODE_ENV            : {
+	 doc     : 'Sets the application environment. Can be one of \'development\', \'test\', \'production\', or \'staging\'. Default is \'development\'.',
+	 default : 'development',
+	 env     : 'NODE_ENV',
+	 format  : [
+		'development', 'test', 'production', 'staging',
+	 ],
+  },
+  TRACING             : {
+	 doc     : 'Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.',
+	 default : true,
+	 env     : 'TRACING',
+  },
+  SENTRY_DSN          : {
+	 doc     : 'Defines the Sentry DSN. Default is empty.',
+	 default : '',
+	 env     : 'SENTRY_DSN',
+  },
+  DEBUG               : {
+	 doc     : 'Enables or disables debug mode. Default is disabled.',
+	 default : false,
+	 env     : 'DEBUG',
+  },
+  APPLICATION         : ApplicationConfigurationSchema,
+  AUTH                : AuthroizationConfiguration,
+}

@@ -23,9 +23,17 @@
  *
  */
 
-import {Body, Controller, Delete, Get, Param, Post, Put} from "@nestjs/common";
-import {ApiResponse}                                     from "@nestjs/swagger";
-import {Group}                                           from "../entities/group.js";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+}                      from '@nestjs/common'
+import { ApiResponse } from '@nestjs/swagger'
+import { Group }       from '../entities/group.js'
 
 
 
@@ -36,32 +44,52 @@ import {Group}                                           from "../entities/group
  * @controller
  * @param {string} path - The base URL path for all group endpoints.
  */
-@Controller("group")
-export class GroupController {
-	@Post()
-	@ApiResponse({status: 201, description: 'The group has been successfully created.'})
-	async create(@Body() createGroupDto : any) {
-	}
+@Controller( 'group' )
+export class GroupController
+  {
+	 @Post() @ApiResponse( {
+									 status      : 201,
+									 description : 'The group has been successfully created.',
+								  } )
+	 async create(@Body() createGroupDto : any)
+		{
+		}
 
-	@Get()
-	@ApiResponse({status: 200, type: Group, isArray: true})
-	async findAll() {
+	 @Get() @ApiResponse( {
+									status  : 200,
+									type    : Group,
+									isArray : true,
+								 } )
+	 async findAll()
+		{
 
-	}
+		}
 
-	@Get(':id')
-	@ApiResponse({status: 200, type: Group})
-	async findOne(@Param('id') id : string) {
+	 @Get( ':id' ) @ApiResponse( {
+											 status : 200,
+											 type   : Group,
+										  } )
+	 async findOne(@Param( 'id' ) id : string)
+		{
 
-	}
+		}
 
-	@Put(':id')
-	@ApiResponse({status: 200, description: 'The group has been successfully updated'})
-	async update(@Param('id') id : string, @Body() updateGroupDto : any) {
-	}
+	 @Put( ':id' ) @ApiResponse( {
+											 status      : 200,
+											 description : 'The group has been successfully updated',
+										  } )
+	 async update(
+		@Param( 'id' ) id : string,
+		@Body() updateGroupDto : any,
+	 )
+		{
+		}
 
-	@Delete(':id')
-	@ApiResponse({status: 200, description: 'The group has been successfully deleted'})
-	async delete(@Param('id') id : string) {
-	}
-}
+	 @Delete( ':id' ) @ApiResponse( {
+												 status      : 200,
+												 description : 'The group has been successfully deleted',
+											  } )
+	 async delete(@Param( 'id' ) id : string)
+		{
+		}
+  }

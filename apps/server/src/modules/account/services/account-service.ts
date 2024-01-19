@@ -3,11 +3,16 @@ import {
   Injectable,
   Logger,
 }                                 from '@nestjs/common'
+import {
+  getCurrentScope,
+  setUser,
+}                                 from '@sentry/node'
 import { ServiceAbstract }        from '../../../common/libraries/services/service-abstract.js'
 import { PasswordHashing }        from '../../../common/libraries/unihash/index.js'
 import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
 import type { EmailAddress }      from '../../../common/mailer/value-object/email-address.js'
 import { EventBus }               from '../../../common/modules/messaging/event-bus.js'
+import { _startInactiveSpan }     from '../../../common/modules/observability/tracing/contract/globs.js'
 import { TraceService }           from '../../../common/modules/observability/tracing/opentelemetry/service/trace-service.js'
 import { RegisterAccountCommand } from '../commands/register-account-command.js'
 import { AccountSelfService }     from '../contract/account-self-service.js'
@@ -52,6 +57,15 @@ export class AccountService
 	  */
 	 async register(registerAccount : RegisterAccountCommand) : Promise<Account>
 		{
+		  const span = _startInactiveSpan( {
+														 name       : 'register-account',
+														 source     : 'task',
+														 scope      : getCurrentScope(),
+														 attributes : {},
+													  } )
+
+
+
 		  this.logger.debug( 'Registering account...' )
 
 		  const email = AccountEmail.create( {
@@ -60,6 +74,11 @@ export class AccountService
 														 } )
 
 		  const password = await Password.fromPlain( registerAccount.password, this.hashing.use( KdfAlgorithm.Argon2id ) )
+
+		  setUser( {
+						 email    : registerAccount.email.toLowerCase(),
+						 username : registerAccount.username.toLowerCase(),
+					  } )
 
 		  this.logger.debug( 'Running policy...' )
 
@@ -89,6 +108,14 @@ export class AccountService
 		  await this.eventbus.publishAll( events )
 
 		  this.logger.log( `Account ${identity.id} was successfully registered.` )
+
+		  setUser( {
+						 email    : identity.email.address,
+						 username : identity.username,
+						 id       : identity.id,
+					  } )
+
+		  span.end()
 
 		  return identity
 		}

@@ -6,6 +6,7 @@ import {
   type StartedTestContainer,
 }                          from 'testcontainers'
 import { LogWaitStrategy } from 'testcontainers/build/wait-strategies/log-wait-strategy.js'
+import { __appConfig }     from '../../configs/global/__config.js'
 
 
 
@@ -45,7 +46,10 @@ export class ContainerEnvironment
 
 	 static async run()
 		{
-		  await new ContainerEnvironment().startContainers()
+		  if ( __appConfig.USE_TESTCONTAINERS )
+			 {
+				await new ContainerEnvironment().startContainers()
+			 }
 		}
 
 	 private async startContainers()

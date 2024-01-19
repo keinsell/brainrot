@@ -23,47 +23,8 @@
  *
  */
 
-import convict           from 'convict'
-import { ConfigSet }     from '../contract/config-set.js'
-import { isDevelopment } from '../helper/is-development.js'
-
-
-
-export interface IApplicationConfiguration
-  extends ConfigSet
-  {
-	 /** Defines if application should ensure seed in a database */
-	 RUN_SEED : boolean
-	 /** Defines endpoint on which OpenAPI 3.0 Specification/UI should be exposed */
-	 OPENAPI_ENDPOINT : string
-	 /**
-	  * Represents the HTTP endpoint for health check.
-	  *
-	  * @type {string}
-	  */
-	 HEALTHCHECK_ENDPOINT : string
-	 PRISMA_ADMIN_PORT : number
-	 USE_TESTCONTAINERS : boolean
-  }
-
-
-export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfiguration> = {
-  RUN_SEED             : {
-	 default : isDevelopment(),
-	 format  : Boolean,
-  },
-  USE_TESTCONTAINERS   : {
-	 default : true,
-	 format  : Boolean,
-  },
-  OPENAPI_ENDPOINT     : {
-	 default : '/api',
-  },
-  HEALTHCHECK_ENDPOINT : {
-	 default : '/health',
-  },
-  PRISMA_ADMIN_PORT    : {
-	 format  : 'port',
-	 default : 5555,
+export const TRACE_OPERATION = {
+  'http' : {
+	 'server' : 'http.server',
   },
 }

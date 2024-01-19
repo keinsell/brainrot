@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,41 +23,10 @@
  *
  */
 
-import { Module }                from '@nestjs/common'
-import { APP_INTERCEPTOR }       from '@nestjs/core'
-import Sentry                    from '@sentry/node'
-import { SentryInterceptorV2 }   from './sentry-interceptor-v2.js'
-import { SentryServiceV2 }       from './sentry-service-v2.js'
-import { SENTRY_MODULE_OPTIONS } from './SENTRY_MODULE_OPTIONS.js'
-import { getSentry }             from './utils/get-sentry.js'
+import Sentry        from '@sentry/node'
+import { getClient } from '@sentry/opentelemetry'
 
 
 
-@Module( {
-			  providers : [ SentryServiceV2 ],
-			} )
-export class SentryModuleV2
-  {
-	 static forRoot(options : Sentry.NodeOptions)
-		{
-		  // Initialize Sentry if was not initialized before.
-		  if ( !getSentry() )
-			 {
-				Sentry.init( options )
-			 }
-
-		  return {
-			 module    : SentryModuleV2,
-			 providers : [
-				{
-				  provide  : SENTRY_MODULE_OPTIONS,
-				  useValue : options,
-				}, SentryServiceV2, {
-				  provide  : APP_INTERCEPTOR,
-				  useClass : SentryInterceptorV2,
-				},
-			 ],
-			 exports   : [ SentryServiceV2 ],
-		  }
-		}
-  }
+export const __sentry       = Sentry.getCurrentHub()
+export const __sentryClient = getClient()

@@ -25,14 +25,16 @@
 
 
 
-import { Module }              from '@nestjs/common'
-import { OpenTelemetryModule } from './tracing/opentelemetry/open-telemetry-module.js'
+import { Module }               from '@nestjs/common'
+import { SENTRY_CONFIGURATION } from '../../../configs/config-set/sentry-configuration.js'
+import { SentryModule }         from '../resources/sentry-v2/sentry-module.js'
+import { OpenTelemetryModule }  from './tracing/opentelemetry/open-telemetry-module.js'
 
 
 
 @Module( {
 			  imports : [
-				 OpenTelemetryModule.forRoot(),
+				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
 			  ],
 			  exports : [],
 			} )

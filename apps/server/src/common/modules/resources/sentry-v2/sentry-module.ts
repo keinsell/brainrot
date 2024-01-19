@@ -23,53 +23,41 @@
  *
  */
 
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-  Scope,
-}                          from '@nestjs/common'
-import * as Sentry         from '@sentry/node'
-import {
-  catchError,
-  finalize,
-  Observable,
-  throwError,
-}                          from 'rxjs'
-import { SentryServiceV2 } from './sentry-service-v2.js'
+import { Module }                from '@nestjs/common'
+import { APP_INTERCEPTOR }       from '@nestjs/core'
+import Sentry                    from '@sentry/node'
+import { __sentryClient }        from './global/get-sentry.js'
+import { SentryInterceptor }     from './sentry-interceptor.js'
+import { SentryService }         from './sentry-service.js'
+import { SENTRY_MODULE_OPTIONS } from './SENTRY_MODULE_OPTIONS.js'
 
 
 
-/**
- * We must be in Request scope as we inject SentryService
- */
-@Injectable( {scope : Scope.REQUEST} )
-export class SentryInterceptorV2
-  implements NestInterceptor
+@Module( {
+			  providers : [ SentryService ],
+			} )
+export class SentryModule
   {
-	 constructor(private sentryService : SentryServiceV2) {}
-
-	 intercept(
-		context : ExecutionContext,
-		next : CallHandler,
-	 ) : Observable<any>
+	 static forRoot(options : Sentry.NodeOptions)
 		{
-		  // start a child span for performance tracing
-		  const span = this.sentryService.startChild( {op : `route handler`} )
+		  // Initialize Sentry if was not initialized before.
+		  if ( !__sentryClient )
+			 {
+				Sentry.init( options )
+			 }
 
-		  return next.handle().pipe(
-			 catchError( (error) => {
-				// capture the error, you can filter out some errors here
-				Sentry.captureException( error, this.sentryService.span.getTraceContext() as any )
-
-				// throw again the error
-				return throwError( () => error )
-			 } ),
-			 finalize( () => {
-				span.finish()
-				this.sentryService.span.finish()
-			 } ),
-		  )
+		  return {
+			 module    : SentryModule,
+			 providers : [
+				{
+				  provide  : SENTRY_MODULE_OPTIONS,
+				  useValue : options,
+				}, SentryService, {
+				  provide  : APP_INTERCEPTOR,
+				  useClass : SentryInterceptor,
+				},
+			 ],
+			 exports   : [ SentryService ],
+		  }
 		}
   }
