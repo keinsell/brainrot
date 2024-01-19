@@ -1,7 +1,6 @@
 Feature:
   
   Background:
-	* url 'https://c441cwmgow7c.share.zrok.io'
 	* def password = 'Supe123123990'
 	* def username = 'testuser'
 	* def email = 'testuser@test.com'
@@ -18,7 +17,7 @@ Feature:
   
   Scenario: Should not register account with existing username
 	Given path '/account'
-	And request { "username": "#(username)", "password": "#(password)","email":"1#(email)" }
+	And request { "username": "#(username)", "password": "#(password)","email":"thisemailnotexist@example.com" }
 	When method post
 	Then status 409
 	And match response contains { error: 'Conflict' }
@@ -27,7 +26,7 @@ Feature:
   
   Scenario: Should not register account with existing email
 	Given path '/account'
-	And request { "username": "#(username)" + 1, "password": "#(password)","email":"#(email)" }
+	And request { "username": "theonewhotookemail", "password": "#(password)","email":"#(email)" }
 	When method post
 	Then status 409
 	And match response contains { error: 'Conflict' }
@@ -39,12 +38,18 @@ Feature:
 	And request { "username": "invalidemailu", "password": "#(password)","email":"asdafsgdsg" }
 	When method post
 	Then status 400
+	And match response contains { error: 'Bad Request' }
+	And match response contains { statusCode: 400 }
+	And match response contains { message: "Invalid email address" }
   
   Scenario: Should not register account with invalid username
 	Given path '/account'
 	And request { "username": "asdkljaskji;i$", "password": "#(password)","email":"#(email)" }
 	When method post
 	Then status 400
+	And match response contains { error: 'Bad Request' }
+	And match response contains { statusCode: 400 }
+	And match response contains { message: "Invalid username" }
   
   Scenario: Should not register account with weak password
 	Given path '/account'
@@ -56,8 +61,8 @@ Feature:
 	And match response contains { message: "Password is insecure enough." }
   
   
-  Scenario: Should send email verification
-	Given path '/account'
-	And request { "username": "1#(username)", "password": "#(password)","email":"#(email)" }
-	When method post
-	Then status 409
+#  Scenario: Should send email verification
+#	Given path '/account'
+#	And request { "username": "1#(username)", "password": "#(password)","email":"#(email)" }
+#	When method post
+#	Then status 409

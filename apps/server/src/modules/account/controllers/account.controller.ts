@@ -68,9 +68,6 @@ export class AccountController
 								  ip_address : request.ip,
 								} )
 
-		  // TODO: Normalize Email
-		  // TODO: Normalize Username
-
 		  const result = await this.service.register( {
 																		username : registerAccountBody.username,
 																		email    : registerAccountBody.email,

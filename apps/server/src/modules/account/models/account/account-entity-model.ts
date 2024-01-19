@@ -5,6 +5,7 @@ import { Account }           from '../../entities/account.js'
 import { AccountEmail }      from '../../value-objects/account-email.js'
 import { AccountStatus }     from '../../value-objects/account-status.js'
 import { Password }          from '../../value-objects/password.js'
+import { type Username }    from '../../value-objects/username.js'
 
 
 
@@ -46,7 +47,7 @@ export class AccountEntityModel
 		{
 		  return Account.build( {
 										  id        : this.id,
-										  username  : this.username,
+										  username  : this.username as Username,
 										  email     : AccountEmail.create( {
 																						 isVerified : this.emailVerificationStatus
 																										  === 'VERIFIED',

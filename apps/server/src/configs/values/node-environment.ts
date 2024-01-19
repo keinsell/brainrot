@@ -26,22 +26,23 @@
 /**
  * Represents the available environments for a node application.
  */
-export enum NodeEnvironment {
+export enum NodeEnvironment
+  {
 
-	/**
-	 * Represents the current production environment.
-	 *
-	 * @constant {string} PRODUCTION - The value representing the production environment.
-	 */
-	PRODUCTION  = "production",
-	/**
-	 * This variable represents the current development environment.
-	 * It is used to differentiate between different stages of software development.
-	 *
-	 * @type {string}
-	 */
-	DEVELOPMENT = "development",
-	TESTING     = "testing",
-	INTEGRATION = "integration",
-	DEBUG       = "debug",
-}
+	 /**
+	  * Represents the current production environment.
+	  *
+	  * @constant {string} PRODUCTION - The value representing the production environment.
+	  */
+	 PRODUCTION  = 'production',
+	 /**
+	  * This variable represents the current development environment.
+	  * It is used to differentiate between different stages of software development.
+	  *
+	  * @type {string}
+	  */
+	 DEVELOPMENT = 'development',
+	 TESTING     = 'test',
+	 INTEGRATION = 'integration',
+	 DEBUG       = 'debug',
+  }
