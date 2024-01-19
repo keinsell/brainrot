@@ -23,19 +23,15 @@
  *
  */
 
-
-
-import { Module } from '@nestjs/common'
+import type { Account } from '../../modules/account/entities/account.js'
 
 
 
-@Module( {
-			  imports : [
-				 //				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
-			  ],
-			  exports : [],
-			} )
-export class ObservabilityModule
+declare namespace Express
   {
+	 export interface Request
+		{
+		  user : Account
+		  requestId : string
+		}
   }
-

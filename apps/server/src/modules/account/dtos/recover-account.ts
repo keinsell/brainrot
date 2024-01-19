@@ -23,24 +23,23 @@
  *
  */
 
-import {ApiProperty} from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger'
 
 
 
-export class RecoverAccount {
-	@ApiProperty({
-		name       : "username",
-		description: "Username of account",
-		example    : "",
-		required   : false,
-	})
-	username : string
-	
-	@ApiProperty({
-		name       : "method",
-		description: "Recovery Method",
-		example    : "",
-		required   : false,
-	})
-	method : "sms" | "pgp" | "email"
-}
+export class RecoverAccount
+  {
+	 @ApiProperty( {
+						  name        : 'username',
+						  description : 'Username of account',
+						  example     : '',
+						  required    : false,
+						} ) username : string
+
+	 @ApiProperty( {
+						  name        : 'method',
+						  description : 'Recovery Method',
+						  example     : '',
+						  required    : false,
+						} ) method : 'sms' | 'pgp' | 'email'
+  }

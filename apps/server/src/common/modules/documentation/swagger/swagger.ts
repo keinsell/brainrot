@@ -123,7 +123,21 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 
 	 logger.verbose( `Swagger documentation base built for ${__config.get( 'SERVICE_NAME' )} service.` )
 
-	 const document = SwaggerModule.createDocument( app, swaggerConfig )
+
+
+	 const document = SwaggerModule.createDocument( app, swaggerConfig,
+
+																	new DocumentBuilder()
+																	  // https://stackoverflow.com/questions/59376717/global-headers-for-all-controllers-nestjs-swagger
+																	  //  .addGlobalParameters( { in          : 'header', required    :
+																	  // true, name        : 'x-request-id', description : 'A unique
+																	  // identifier assigned to the request. Clients can include this
+																	  // header' + ' to trace and correlate requests across different
+																	  // services and systems.', schema      : {type : 'string'},
+																	  // deprecated  : true, example : nanoid( 128 ), } )
+																	  .build() as any,
+	 )
+
 
 	 logger.verbose( `Swagger documentation document built for ${__config.get( 'SERVICE_NAME' )} service.` )
 

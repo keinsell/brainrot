@@ -33,5 +33,4 @@ if ( __appConfig.USE_TESTCONTAINERS )
 
 initializeSentry()
 
-
 await bootstrap()

@@ -24,18 +24,14 @@
  */
 
 
-
-import { Module } from '@nestjs/common'
-
+import type { RequestId } from '../values/request-id.js'
 
 
-@Module( {
-			  imports : [
-				 //				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
-			  ],
-			  exports : [],
-			} )
-export class ObservabilityModule
+
+declare module 'nestjs-cls'
   {
+	 interface ClsStore
+		{
+		  requestId? : RequestId;
+		}
   }
-

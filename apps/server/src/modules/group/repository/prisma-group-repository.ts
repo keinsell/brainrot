@@ -23,32 +23,38 @@
  *
  */
 
-import {GroupRepository} from "./group-repository.js";
-import {Group}           from "../entities/group.js";
-import {Injectable}      from "@nestjs/common";
+import { Injectable }      from '@nestjs/common'
+import { Group }           from '../entities/group.js'
+import { GroupRepository } from './group-repository.js'
 
 
 
 @Injectable()
 export class PrismaGroupRepository
-	extends GroupRepository {
-	create(entity : Group) : Promise<Group> {
-		throw Error("Not implemented")
-	}
+  extends GroupRepository
+  {
+	 create(entity : Group) : Promise<Group>
+		{
+		  throw Error( 'Not implemented' )
+		}
 
-	delete(entity : Group) : Promise<void> {
-		throw Error("Not implemented")
-	}
+	 delete(entity : Group) : Promise<void>
+		{
+		  throw Error( 'Not implemented' )
+		}
 
-	exists(entity : Group) : Promise<boolean> {
-		throw Error("Not implemented")
-	}
+	 exists(entity : Group) : Promise<boolean>
+		{
+		  throw Error( 'Not implemented' )
+		}
 
-	findById(id : string) : Promise<Group | null> {
-		throw Error("Not implemented")
-	}
+	 findById(id : string) : Promise<Group | null>
+		{
+		  throw Error( 'Not implemented' )
+		}
 
-	update(entity : Group) : Promise<Group> {
-		throw Error("Not implemented")
-	}
-}
+	 update(entity : Group) : Promise<Group>
+		{
+		  throw Error( 'Not implemented' )
+		}
+  }

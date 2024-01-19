@@ -23,19 +23,4 @@
  *
  */
 
-
-
-import { Module } from '@nestjs/common'
-
-
-
-@Module( {
-			  imports : [
-				 //				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
-			  ],
-			  exports : [],
-			} )
-export class ObservabilityModule
-  {
-  }
-
+export * from './module/request-identification-module.js'

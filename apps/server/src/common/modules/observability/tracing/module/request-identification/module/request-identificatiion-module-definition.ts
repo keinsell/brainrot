@@ -23,19 +23,19 @@
  *
  */
 
+import { ConfigurableModuleBuilder }   from '@nestjs/common'
+import type { RequestIdModuleOptions } from '../config/request-id.config.js'
 
 
-import { Module } from '@nestjs/common'
 
+const moduleDefinition = new ConfigurableModuleBuilder<RequestIdModuleOptions>().build()
 
+const {
+		  ConfigurableModuleClass : RequestIdModuleClass,
+		  MODULE_OPTIONS_TOKEN    : REQUEST_ID_MODULE_OPTIONS_TOKEN,
+		} = moduleDefinition
 
-@Module( {
-			  imports : [
-				 //				 SentryModule.forRoot( SENTRY_CONFIGURATION ), OpenTelemetryModule.forRoot(),
-			  ],
-			  exports : [],
-			} )
-export class ObservabilityModule
-  {
-  }
-
+export {
+  RequestIdModuleClass,
+  REQUEST_ID_MODULE_OPTIONS_TOKEN,
+}
