@@ -15,6 +15,9 @@ import {
 // Min. CPU = 1x
 // Recommended OS: Linux
 
+
+export var __rootDir__ = process.cwd()
+
 await acquireProcessLock()
 
 

@@ -23,12 +23,16 @@
  *
  */
 
-import {
-  startInactiveSpan,
-  startSpan,
-} from '@sentry/opentelemetry'
-
-
-
-export const _startInactiveSpan = startInactiveSpan
-export const _startActiveSpan   = startSpan
+// This allows TypeScript to detect our global value and properly assign maps for sentry
+// See more here: https://docs.sentry.io/platforms/node/typescript/
+declare global
+  {
+	 // eslint-disable-next-line @typescript-eslint/no-namespace
+	 namespace NodeJS
+		{
+		  interface Global
+			 {
+				__rootdir__ : string;
+			 }
+		}
+  }

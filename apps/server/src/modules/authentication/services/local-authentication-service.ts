@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 }                                from '@nestjs/common'
+import { setUser }               from '@sentry/node'
 import {
   ok,
   Result,
@@ -53,11 +54,19 @@ export class LocalAuthenticationService
 	 }, NotFoundException | ForbiddenException>>
 		{
 		  const isValid = await this.credentialValidator.validateCredentials( username, password )
+
 		  if ( isValid.isErr() )
 			 {
 				throw isValid.error
 			 }
+
 		  const account = isValid.value
+
+		  setUser( {
+						 id       : account.id,
+						 username : account.username,
+						 email    : account.email.address,
+					  } )
 
 		  const tokenPayload : Omit<jsonwebtoken, 'exp' | 'iat' | 'nbf' | 'jti'> & {
 			 jti? : string, nbf? : number, iat? : number, exp? : number

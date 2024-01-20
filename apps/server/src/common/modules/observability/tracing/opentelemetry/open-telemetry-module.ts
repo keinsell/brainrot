@@ -41,7 +41,7 @@ import {
   setupEventContextTrace,
   wrapContextManagerClass,
 }                                           from '@sentry/opentelemetry'
-import { __sentryClient }                   from '../../../resources/sentry-v2/global/get-sentry.js'
+import { __sentryHub }                      from '../../../resources/sentry-v2/global/get-sentry.js'
 import { OpenTelemetryModuleDefaultConfig } from './config/opentelemetry-module-default-config.js'
 import { OPEN_TELEMETRY_SDK }               from './constant/OPEN_TELEMETRY_SDK.js'
 import { OPEN_TELEMETRY_SDK_CONFIG }        from './constant/OPEN_TELEMETRY_SDK_CONFIG.js'
@@ -51,7 +51,7 @@ import { OpentelemetryModuleAsyncOptions }  from './interfaces/opentelemetry-mod
 import { OpenTelemetryModuleConfig }        from './interfaces/opentelemetry-module-config.js'
 import { DecoratorInjector }                from './provider/automatic-tracer/decorator-injector.js'
 import { OpenTelemetryService }             from './service/open-telemetry-service.js'
-import { TraceService }                     from './service/trace-service.js'
+import { OpenTelemetryTraceService }        from './service/open-telemetry-trace-service.js'
 
 
 
@@ -138,7 +138,7 @@ export class OpenTelemetryModule
 			 imports   : [ EventEmitterModule.forRoot() ],
 			 providers : [
 				...injectors,
-				TraceService,
+				OpenTelemetryTraceService,
 				OpenTelemetryService,
 				DecoratorInjector,
 				this.buildProvider( configuration ),
@@ -150,7 +150,7 @@ export class OpenTelemetryModule
 				},
 			 ],
 			 exports   : [
-				TraceService, Tracer,
+				OpenTelemetryTraceService, Tracer,
 			 ],
 		  }
 		}
@@ -171,7 +171,7 @@ export class OpenTelemetryModule
 				...configuration?.imports as any, EventEmitterModule.forRoot(),
 			 ],
 			 providers : [
-				TraceService,
+				OpenTelemetryTraceService,
 				OpenTelemetryService,
 				this.buildAsyncProvider(),
 				this.buildAsyncInjectors(),
@@ -183,7 +183,7 @@ export class OpenTelemetryModule
 				},
 			 ],
 			 exports   : [
-				TraceService, Tracer,
+				OpenTelemetryTraceService, Tracer,
 			 ],
 		  }
 		}
@@ -203,9 +203,9 @@ export class OpenTelemetryModule
 
 				let conf = {...OpenTelemetryModuleDefaultConfig, ...configuration}
 
-				if ( __sentryClient )
+				if ( __sentryHub?.getClient() )
 				  {
-					 setupEventContextTrace( __sentryClient )
+					 setupEventContextTrace( __sentryHub.getClient() as any )
 
 					 const SentryContextManager = wrapContextManagerClass( AsyncLocalStorageContextManager )
 
@@ -214,13 +214,13 @@ export class OpenTelemetryModule
 						spanProcessor     : new SentrySpanProcessor(),
 						contextManager    : new SentryContextManager(),
 						textMapPropagator : new SentryPropagator(),
-						sampler           : new SentrySampler( __sentryClient ),
+						sampler           : new SentrySampler( __sentryHub.getClient() as any ),
 					 }
 				  }
 
 				const sdk = new NodeSDK( conf )
 
-				if ( __sentryClient )
+				if ( __sentryHub.getClient() as any )
 				  {
 					 setOpenTelemetryContextAsyncContextStrategy()
 					 otelApi.propagation.setGlobalPropagator( new SentryPropagator() )
@@ -304,8 +304,8 @@ export class OpenTelemetryModule
 		{
 		  return {
 			 provide    : Tracer,
-			 useFactory : (traceService : TraceService) => traceService.getTracer(),
-			 inject     : [ TraceService ],
+			 useFactory : (traceService : OpenTelemetryTraceService) => traceService.getTracer(),
+			 inject     : [ OpenTelemetryTraceService ],
 		  }
 		}
   }

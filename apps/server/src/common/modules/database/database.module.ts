@@ -1,5 +1,6 @@
 import { Module }                  from '@nestjs/common'
 import { prismaLoggingMiddleware } from '../resources/prisma/middleware/prisma-logging-middleware.js'
+import { prismaTracingMiddleware } from '../resources/prisma/middleware/prisma-tracing-middleware.js'
 import { PrismaModule }            from '../resources/prisma/prisma-module.js'
 
 
@@ -8,7 +9,7 @@ import { PrismaModule }            from '../resources/prisma/prisma-module.js'
 			  imports     : [
 				 PrismaModule.forRoot( {
 												 prismaServiceOptions : {
-													middlewares : [ prismaLoggingMiddleware() ],
+													middlewares : [ prismaLoggingMiddleware(), prismaTracingMiddleware() ],
 												 },
 											  } ),
 			  ],
@@ -16,4 +17,6 @@ import { PrismaModule }            from '../resources/prisma/prisma-module.js'
 			  providers   : [],
 			  exports     : [ PrismaModule ],
 			} )
-export class DatabaseModule {}
+export class DatabaseModule
+  {
+  }

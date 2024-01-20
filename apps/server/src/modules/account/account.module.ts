@@ -5,7 +5,7 @@ import { UnihashModule }                 from '../../common/libraries/unihash/in
 import { MailerModule }                  from '../../common/mailer/mailer-module.js'
 import { DatabaseModule }                from '../../common/modules/database/database.module.js'
 import { EventBusModule }                from '../../common/modules/messaging/event-bus-module.js'
-import { TraceService }                  from '../../common/modules/observability/tracing/opentelemetry/service/trace-service.js'
+import { OpenTelemetryTraceService }     from '../../common/modules/observability/tracing/opentelemetry/service/open-telemetry-trace-service.js'
 import { NotificationModule }            from '../../common/notification/notification-module.js'
 import { AccountRecoveryController }     from './controllers/account-recovery.controller.js'
 import { AccountVerificationController } from './controllers/account-verification.controller.js'
@@ -38,7 +38,7 @@ import { AccountVerification }           from './services/account-verification.j
 					useClass : PrismaAccountRepository,
 				 }, AccountVerification, AccountRecovery, // Workaround for crashing seeder which is using AccountService
 				 // class which is dependent on TraceService.
-				 TraceService,
+				 OpenTelemetryTraceService,
 			  ],
 			  exports     : [
 				 AccountService, AccountRepository,

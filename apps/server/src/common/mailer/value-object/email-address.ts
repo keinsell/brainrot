@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common'
+import { SpanStatusCode }      from '@opentelemetry/api'
 import { startInactiveSpan }   from '@sentry/opentelemetry'
 import {
   err,
@@ -53,6 +54,10 @@ export function createEmailAddress(value : string) : Result<EmailAddress, Error>
 		}
 	 catch ( e )
 		{
+		  span.setStatus( {
+								  code    : SpanStatusCode.ERROR,
+								  message : e.message,
+								} )
 		  span.end()
 		  return err( new InvalidEmailAddressError() )
 		}

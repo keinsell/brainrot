@@ -28,6 +28,7 @@
 import { Logger }               from '@nestjs/common'
 import * as Sentry              from '@sentry/node'
 import { setupGlobalHub }       from '@sentry/opentelemetry'
+import { __sentry }            from '../../common/modules/resources/sentry-v2/global/get-sentry.js'
 import { SENTRY_CONFIGURATION } from '../../configs/config-set/sentry-configuration.js'
 import { __config }             from '../../configs/global/__config.js'
 
@@ -38,12 +39,24 @@ export function initializeSentry() : void
 	 new Logger( 'sentry' ).log( `Initializing Sentry... ${__config.get( 'SENTRY_DSN' )}` )
 
 	 // Turn ON if integrating with OTEL
-	 setupGlobalHub()
+	 if ( SENTRY_CONFIGURATION.instrumenter === 'otel' )
+		{
+		  setupGlobalHub()
+		}
+
 
 	 // OTEL Configuration
-	 Sentry.init( {
-						 ...SENTRY_CONFIGURATION,
-					  } )
+	 try
+		{
+		  __sentry?.init( {
+								  ...SENTRY_CONFIGURATION,
+								} )
+		}
+	 catch
+		{
+		}
+
+
 
 	 new Logger( 'sentry' ).log( `Sentry initialized!` )
 

@@ -4,6 +4,7 @@ import {
   Logger,
 }                                     from '@nestjs/common'
 import { PassportStrategy }           from '@nestjs/passport'
+import { setUser }                    from '@sentry/node'
 import {
   ExtractJwt,
   Strategy,
@@ -46,6 +47,12 @@ export class JwtAuthorizationStrategy
 
 		  // Fetch profile associated with token
 		  const account = await this.accountService.getById( payload.sub )
+
+		  setUser( {
+						 id       : account.id,
+						 username : account.username,
+						 email    : account.email.address,
+					  } )
 
 		  // TODO: Fetch session associated with token
 		  // TODO: Check if session is valid (not blacklisted and existing)

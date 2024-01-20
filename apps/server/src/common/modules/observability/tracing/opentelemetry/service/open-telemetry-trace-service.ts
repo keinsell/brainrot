@@ -25,8 +25,9 @@
 
 import { Injectable } from '@nestjs/common'
 import {
-  context,
+  type Context,
   Span,
+  type SpanOptions,
   trace,
 }                     from '@opentelemetry/api'
 
@@ -39,7 +40,7 @@ import {
  * @Injectable()
  */
 @Injectable()
-export class TraceService
+export class OpenTelemetryTraceService
   {
 	 public getTracer()
 		{
@@ -48,12 +49,16 @@ export class TraceService
 
 	 public getSpan() : Span
 		{
-		  return trace.getSpan( context.active() ) as Span
+		  return trace.getActiveSpan() as Span
 		}
 
-	 public startSpan(name : string) : Span
+	 public startSpan(
+		name : string,
+		options? : SpanOptions,
+		context? : Context,
+	 ) : Span
 		{
 		  const tracer = trace.getTracer( 'default' )
-		  return tracer.startSpan( name )
+		  return tracer.startSpan( name, options, context )
 		}
   }

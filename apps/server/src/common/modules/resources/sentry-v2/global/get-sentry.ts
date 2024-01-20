@@ -23,10 +23,10 @@
  *
  */
 
-import Sentry        from '@sentry/node'
-import { getClient } from '@sentry/opentelemetry'
+import Sentry from '@sentry/node'
 
 
 
-export const __sentry       = Sentry.getCurrentHub()
-export const __sentryClient = getClient()
+export var __sentry       = Sentry
+export var __sentryHub    = Sentry.getCurrentHub()
+export var __sentryClient = __sentryHub.getClient()

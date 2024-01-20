@@ -1,7 +1,3 @@
-import {
-  Global,
-  Module,
-}                    from '@nestjs/common'
 import { ClsModule } from 'nestjs-cls'
 
 
@@ -21,24 +17,17 @@ import { ClsModule } from 'nestjs-cls'
  *
  *   https://papooch.github.io/nestjs-cls/
  */
-@Global() @Module( {
-							imports : [
-							  ClsModule.forRoot( {
-														  global      : true,
-														  interceptor : {mount : true},
-														  guard       : {mount : true},
-														  middleware  : {
-															 mount        : true,
-															 generateId   : true,
-															 saveReq      : true,
-															 saveRes      : true,
-															 useEnterWith : true,
-															 idGenerator  : () => Math.random().toString( 36 ).slice( 2 ),
-														  },
-														} ),
-							],
-							exports : [
-							  ClsModule,
-							],
-						 } )
-export class ContinuationLocalStorageModule {}
+export const ContinuationLocalStorageModule = ClsModule.forRoot( {
+																						 global      : true,
+																						 interceptor : {mount : true},
+																						 guard       : {mount : true},
+																						 middleware  : {
+																							mount        : true,
+																							generateId   : true,
+																							saveReq      : true,
+																							saveRes      : true,
+																							useEnterWith : true,
+																							idGenerator  : () => Math.random().toString( 36 )
+																															 .slice( 2 ),
+																						 },
+																					  } )

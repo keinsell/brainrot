@@ -23,10 +23,9 @@
  *
  */
 
-import convict           from 'convict'
-import { ConfigSet }     from '../contract/config-set.js'
-import { isDevelopment } from '../helper/is-development.js'
-import { isTesting }     from '../helper/is-testing.js'
+import convict       from 'convict'
+import { ConfigSet } from '../contract/config-set.js'
+import { isTesting } from '../helper/is-testing.js'
 
 
 
@@ -50,7 +49,7 @@ export interface IApplicationConfiguration
 
 export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfiguration> = {
   RUN_SEED             : {
-	 default : isDevelopment() || isTesting(),
+	 default : false,
 	 format  : Boolean,
   },
   USE_TESTCONTAINERS   : {

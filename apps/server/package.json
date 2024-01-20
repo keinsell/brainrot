@@ -38,7 +38,9 @@
     "db:studio": "prisma studio",
     "postinstall": "pnpm run db:generate & pnpm docs:compodoc && typesync",
     "prepare": "ts-patch install && typia patch -s",
-    "docs:compodoc": "compodoc -p tsconfig.compodoc.json --output src/vendor/compodoc --theme laravel"
+    "docs:compodoc": "compodoc -p tsconfig.compodoc.json --output src/vendor/compodoc --theme laravel",
+    "sentry:sm:inject": "sentry-cli sourcemaps inject dist",
+    "sentry:sm:upload": "sentry-cli sourcemaps upload dist"
   },
   "type": "module",
   "dependencies": {
@@ -94,6 +96,7 @@
     "argon2": "^0.31.2",
     "bcrypt": "^5.1.1",
     "bytes": "^3.1.2",
+    "class-validator": "^0.14.1",
     "convict": "^6.2.4",
     "cookie-session": "^2.0.0",
     "copyfiles": "^2.4.1",
@@ -147,6 +150,7 @@
     "@nestjs/cli": "^10.3.0",
     "@nestjs/schematics": "^10.1.0",
     "@nestjs/testing": "^10.3.0",
+    "@sentry/cli": "^2.25.3",
     "@sentry/types": "^7.93.0",
     "@types/bcrypt": "^5.0.2",
     "@types/bytes": "~3.1.4",

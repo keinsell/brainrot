@@ -1,8 +1,5 @@
 import { Logger }                        from '@nestjs/common'
-import {
-  HttpAdapterHost,
-  NestFactory,
-}                                        from '@nestjs/core'
+import { NestFactory }                   from '@nestjs/core'
 import Sentry                            from '@sentry/node'
 import delay                             from 'delay'
 import type { NextFunction }             from 'express'
@@ -12,7 +9,6 @@ import { seeder }                        from './common/libraries/seeder/seeder.
 import { DatabaseModule }                from './common/modules/database/database.module.js'
 import { buildCompodocDocumentation }    from './common/modules/documentation/compodoc/compodoc.js'
 import { buildSwaggerDocumentation }     from './common/modules/documentation/swagger/swagger.js'
-import { PrismaClientExceptionFilter }   from './common/modules/resources/prisma/filters/prisma-client-exception-filter.js'
 import { executePrismaRelatedProcesses } from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
 import {
   __appConfig,
@@ -38,18 +34,13 @@ import { portAllocator }                 from './utilities/network-utils/port-al
 
 export async function bootstrap()
   {
-
-
+	 // Bootstrap application
 	 const app = await NestFactory.create( Container, {
 		abortOnError  : false,
 		autoFlushLogs : true,
 		bufferLogs    : true,
 		snapshot      : isDevelopment(),
 	 } )
-
-	 // Enable Prisma Exception Filter for Http Service
-	 const {httpAdapter} = app.get( HttpAdapterHost )
-	 app.useGlobalFilters( new PrismaClientExceptionFilter( httpAdapter ) )
 
 	 // Implement logger used for bootstrapping and notifying about application state
 	 const logger = new Logger( 'Bootstrap' )
@@ -71,6 +62,8 @@ export async function bootstrap()
 
 	 // The error handler must be before any other error middleware and after all controllers
 	 app.use( Sentry.Handlers.errorHandler() )
+
+	 //	 app.useGlobalFilters( new HttpExceptionFilter() )
 
 	 // Optional fallthrough error handler
 	 app.use( function onError(

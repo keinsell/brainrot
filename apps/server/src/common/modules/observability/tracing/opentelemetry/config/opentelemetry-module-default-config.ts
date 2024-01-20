@@ -27,9 +27,11 @@ import { Provider }                        from '@nestjs/common'
 import {
   getNodeAutoInstrumentations,
   getResourceDetectors,
+  InstrumentationConfigMap,
 }                                          from '@opentelemetry/auto-instrumentations-node'
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks'
 import { W3CTraceContextPropagator }       from '@opentelemetry/core'
+import { OTLPTraceExporter }               from '@opentelemetry/exporter-trace-otlp-grpc'
 import { Resource }                        from '@opentelemetry/resources'
 import {
   AggregationTemporality,
@@ -37,7 +39,10 @@ import {
   PeriodicExportingMetricReader,
 }                                          from '@opentelemetry/sdk-metrics'
 import { NodeSDKConfiguration }            from '@opentelemetry/sdk-node'
-import { SimpleSpanProcessor }             from '@opentelemetry/sdk-trace-base'
+import {
+  BatchSpanProcessor,
+  TraceIdRatioBasedSampler,
+}                                          from '@opentelemetry/sdk-trace-base'
 
 import PrismaInstrumentation       from '@prisma/instrumentation'
 import { __config }                from '../../../../../../configs/global/__config.js'
@@ -50,7 +55,6 @@ import { GuardInjector }           from '../provider/automatic-tracer/guard-inje
 import { LoggerInjector }          from '../provider/automatic-tracer/logger-injector.js'
 import { PipeInjector }            from '../provider/automatic-tracer/pipe-injector.js'
 import { ScheduleInjector }        from '../provider/automatic-tracer/schedule-injector.js'
-import { NestLoggerSpanExporter }  from '../provider/span-exporter/nest-logger-span-exporter.js'
 
 
 
@@ -88,10 +92,14 @@ export const OpenTelemetryModuleDefaultConfig = {
 													 lib : '@mph/opentelemetry',
 												  } ),
   instrumentations    : [
-	 getNodeAutoInstrumentations(), prismaInstrumentation,
+	 getNodeAutoInstrumentations( {
+											  '@opentelemetry/instrumentation-fs'  : {enabled : false},
+											  '@opentelemetry/instrumentation-dns' : {enabled : false},
+											} as InstrumentationConfigMap ), prismaInstrumentation,
   ],
-  traceExporter       : new NestLoggerSpanExporter(),
-  spanProcessor       : new SimpleSpanProcessor( new NestLoggerSpanExporter() ),
+  sampler             : new TraceIdRatioBasedSampler(),
+  traceExporter       : new OTLPTraceExporter(),
+  spanProcessor       : new BatchSpanProcessor( new OTLPTraceExporter() ),
   textMapPropagator   : new W3CTraceContextPropagator(),
   metricReader        : new PeriodicExportingMetricReader( {
 																				 exporter : new InMemoryMetricExporter(
