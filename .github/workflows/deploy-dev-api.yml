@@ -35,14 +35,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: ⚙️ Setup Runner
-        uses: ./.github/actions/setup-machine
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: ⚙️ Setup Repository
-        uses: ./.github/actions/setup-project
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
