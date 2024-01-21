@@ -28,6 +28,8 @@
     "rootDir": "./",
     "incremental": true,
     "skipLibCheck": true,
+    "strict": false,
+    "useDefineForClassFields": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,

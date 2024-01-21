@@ -30,6 +30,4 @@ import { EntityBase } from '../../../common/libraries/domain/entity/entity-base.
 export class User
   extends EntityBase<string>
   {
-	 displayName : string
-	 biography : string
   }

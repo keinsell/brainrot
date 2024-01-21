@@ -78,10 +78,10 @@ export const OPENTELEMTRY_CONFIGURATION : OpentelemetryConfiguration = {
   ],
   sampler             : new TraceIdRatioBasedSampler(),
   traceExporter       : new OTLPTraceExporter(),
-  spanProcessor       : new BatchSpanProcessor( new OTLPTraceExporter() ),
+  spanProcessor       : new BatchSpanProcessor( new OTLPTraceExporter() as any ) as any,
   textMapPropagator   : new W3CTraceContextPropagator(),
   metricReader        : new PeriodicExportingMetricReader( {
 																				 exporter : new InMemoryMetricExporter(
 																					AggregationTemporality.CUMULATIVE ),
-																			  } ),
+																			  } ) as any,
 }

@@ -1,16 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="Build Docker Image methylphenidate/server" type="docker-deploy"
-                   factoryName="dockerfile" server-name="Docker Rootless">
-        <deployment type="dockerfile">
-            <settings>
-                <option name="imageTag" value="latest"/>
-                <option name="buildKitEnabled" value="true"/>
-                <option name="containerName" value="methylphenidate-server"/>
-                <option name="contextFolderPath" value="apps/server"/>
-                <option name="publishAllPorts" value="true"/>
-                <option name="sourceFilePath" value="apps/server/build/Dockerfile"/>
-            </settings>
-        </deployment>
-        <method v="2"/>
-    </configuration>
+  <configuration default="false" name="Build Docker Image methylphenidate/server" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="latest" />
+        <option name="containerName" value="methylphenidate-server" />
+        <option name="contextFolderPath" value="apps/server" />
+        <option name="publishAllPorts" value="true" />
+        <option name="sourceFilePath" value="apps/server/build/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
 </component>

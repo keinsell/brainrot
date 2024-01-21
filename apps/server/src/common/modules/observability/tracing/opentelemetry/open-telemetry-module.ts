@@ -209,8 +209,8 @@ export class OpenTelemetryModule
 					 const SentryContextManager = wrapContextManagerClass( AsyncLocalStorageContextManager )
 
 					 conf = {
-						...configuration, // traceExporter    : new OTLPTraceExporter(),
-						spanProcessor     : new SentrySpanProcessor(),
+						...configuration,
+						spanProcessor     : new SentrySpanProcessor() as any,
 						contextManager    : new SentryContextManager(),
 						textMapPropagator : new SentryPropagator(),
 						sampler           : new SentrySampler( __sentryHub.getClient() as any ),

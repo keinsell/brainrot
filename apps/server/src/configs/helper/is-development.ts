@@ -23,8 +23,13 @@
  *
  */
 
-import {NodeEnvironment} from "../values/node-environment.js";
+import { NodeEnvironment } from '../values/node-environment.js'
 
 
 
-export const isDevelopment = () => process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT;
+export const isDevelopment = () => process.env.NODE_ENV
+											  === NodeEnvironment.DEVELOPMENT
+											  || process.env.NODE_ENV
+											  === undefined
+											  || process.env.NODE_ENV
+											  === null

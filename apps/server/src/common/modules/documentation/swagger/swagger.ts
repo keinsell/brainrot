@@ -8,7 +8,6 @@ import {
   SwaggerModule,
 }                           from '@nestjs/swagger'
 import fs                   from 'node:fs'
-import process              from 'node:process'
 import prettier             from 'prettier'
 import tildify              from 'tildify'
 import { __config }         from '../../../../configs/global/__config.js'
@@ -129,7 +128,7 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 
 																	new DocumentBuilder()
 																	  // https://stackoverflow.com/questions/59376717/global-headers-for-all-controllers-nestjs-swagger
-																	  //  .addGlobalParameters( { in          : 'header', required    :
+																	  // .addGlobalParameters( { in          : 'header', required    :
 																	  // true, name        : 'x-request-id', description : 'A unique
 																	  // identifier assigned to the request. Clients can include this
 																	  // header' + ' to trace and correlate requests across different
@@ -154,7 +153,7 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	 //	},
 	 //}))
 
-	 const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`
+	 const documentationObjectPath = `./public/api/openapi3.json`
 
 
 

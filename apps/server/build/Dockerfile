@@ -4,7 +4,7 @@ WORKDIR /tmp
 
 # RUN apk update && apk upgrade
 
-RUN npm install -g pnpm@8.10.3 && mkdir -p /usr/.pnpm-store
+RUN npm install -g pnpm && mkdir -p /usr/.pnpm-store
 
 COPY ./package.json pnpm-lock.yaml ./
 
@@ -16,7 +16,7 @@ RUN pnpm install --cache /usr/.pnpm-store
 COPY . .
 
 RUN pnpm run db:generate
-RUN pnpm run build:tsc
+RUN pnpm run build
 
 # ---------------------------------------------------------
 
@@ -32,7 +32,7 @@ RUN addgroup --system appgroup && \
 WORKDIR /usr/bin/application
 
 COPY --from=BUILD /tmp/node_modules /usr/bin/application/node_modules
-COPY --from=BUILD /tmp/dist /usr/bin/application/dist
+COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
 COPY --from=BUILD /tmp/package.json /usr/bin/application/package.json
 
 USER appuser
@@ -40,4 +40,4 @@ USER appuser
 EXPOSE 80
 EXPOSE 443
 
-CMD ["node", "/usr/bin/application/dist/main.js"]
+CMD ["node", "/usr/bin/application/src/main.js"]
