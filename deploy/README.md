@@ -5,7 +5,6 @@ ln --relative .env ./src/infrastructure/database/prisma/.env
 
 ### Development
 
-
 #### `/etc/hosts`
 
 ```
@@ -17,3 +16,8 @@ code /etc/hosts
 127.0.0.1 jaeger.local
 # End of Development Services
 ```
+
+- [ ] Docker Compose Deployment
+- [ ] Docker Swarm Deployment
+- [ ] Kubernetes Deployment
+- [ ] Localhost Deployment
