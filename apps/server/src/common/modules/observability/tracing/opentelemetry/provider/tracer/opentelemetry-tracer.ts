@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,42 @@
  *
  */
 
-export interface ConfigSet
+import { Injectable } from '@nestjs/common'
+import {
+  type Context,
+  Span,
+  type SpanOptions,
+  trace,
+}                     from '@opentelemetry/api'
+
+
+
+/**
+ * The TraceService class provides methods to interact with tracing functionality.
+ * @class
+ * @public
+ * @Injectable()
+ */
+@Injectable()
+export class OpentelemetryTracer
   {
-	 [ key : string ] : string | number | boolean | object;
+	 public getTracer()
+		{
+		  return trace.getTracer( 'default' )
+		}
+
+	 public getSpan() : Span
+		{
+		  return trace.getActiveSpan() as Span
+		}
+
+	 public startSpan(
+		name : string,
+		options? : SpanOptions,
+		context? : Context,
+	 ) : Span
+		{
+		  const tracer = trace.getTracer( 'default' )
+		  return tracer.startSpan( name, options, context )
+		}
   }

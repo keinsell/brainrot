@@ -13,6 +13,7 @@ import {
   createAssert,
   createIs,
   tags,
+  TypeGuardError,
 }                              from 'typia'
 import type {
   Opaque,
@@ -78,8 +79,10 @@ export function createUsername(value : unknown) : Result<Username, InvalidUserna
 		  span.end()
 		  return ok( username.toLowerCase() as Username )
 		}
-	 catch ( e )
+	 catch ( e : unknown )
 		{
+		  const error = e as TypeGuardError
+
 		  span.setStatus( {
 								  code    : SpanStatusCode.ERROR,
 								  message : 'Username is invalid.',

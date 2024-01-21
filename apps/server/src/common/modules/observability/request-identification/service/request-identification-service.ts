@@ -23,7 +23,28 @@
  *
  */
 
-export interface ConfigSet
+import { Injectable }              from '@nestjs/common'
+import { ClsService }              from 'nestjs-cls'
+import type { UniqueIdentifier }   from '../../../../libraries/identification/index.js'
+import type { RequestIdDataStore } from '../config/request-id.config.js'
+
+
+
+@Injectable()
+export class RequestIdentificationService
   {
-	 [ key : string ] : string | number | boolean | object;
+	 constructor(private readonly clsService : ClsService<RequestIdDataStore>)
+		{
+		  this.clsService.enter()
+		}
+
+	 get requestId() : UniqueIdentifier
+		{
+		  return this.clsService.get().requestId
+		}
+
+	 set requestId(value : UniqueIdentifier)
+		{
+		  this.clsService.set( 'requestId', value )
+		}
   }

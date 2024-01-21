@@ -23,7 +23,11 @@
  *
  */
 
-export interface ConfigSet
+import type { DiagLogger } from '@opentelemetry/api'
+
+
+
+export interface DiagnosticLogger
+  extends DiagLogger
   {
-	 [ key : string ] : string | number | boolean | object;
   }

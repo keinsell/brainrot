@@ -6,7 +6,6 @@ import { AsyncLocalStorageModule }        from './modules/environment/local-stor
 import { ContinuationLocalStorageModule } from './modules/environment/local-storage/continuation-local-storage-module.js'
 import { EventBusModule }                 from './modules/messaging/event-bus-module.js'
 import { ObservabilityModule }            from './modules/observability/observability-module.js'
-import { RequestIdentificationModule }    from './modules/observability/tracing/module/request-identification/index.js'
 
 
 
@@ -18,7 +17,6 @@ import { RequestIdentificationModule }    from './modules/observability/tracing/
 				 ObservabilityModule,
 				 DatabaseModule,
 				 EventBusModule,
-				 RequestIdentificationModule.register( {} ),
 				 SessionMiddlewareModule.forRoot( {
 																session : {
 																  secret            : 'secretomitted',

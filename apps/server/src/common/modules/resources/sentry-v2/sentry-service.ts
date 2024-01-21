@@ -6,8 +6,8 @@ import {
 import { REQUEST }         from '@nestjs/core'
 import { SpanKind }        from '@opentelemetry/api'
 import { startSpan }       from '@sentry/opentelemetry'
-import type { Span }       from '../../observability/tracing/entity/span.js'
-import { TRACE_OPERATION } from '../../observability/tracing/trace-operation.js'
+import type { Span }       from '../../observability/tracing/opentelemetry/span.js'
+import { TRACE_OPERATION } from '../../observability/tracing/value/trace-operation.js'
 
 
 

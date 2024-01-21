@@ -23,7 +23,35 @@
  *
  */
 
-export interface ConfigSet
+
+
+import { Logger }       from '@nestjs/common'
+import { ExportResult } from '@opentelemetry/core'
+import { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan.js'
+import { SpanExporter } from '../../../contract/span-exporter/span-exporter.js'
+
+
+
+export class ConsoleSpanExporter
+  implements SpanExporter
   {
-	 [ key : string ] : string | number | boolean | object;
+	 private logger = new Logger( 'otel' )
+
+
+	 public export(
+		spans : ReadableSpan[],
+		resultCallback : (result : ExportResult) => void,
+	 ) : void
+		{
+		  for ( const span of spans )
+			 {
+				this.logger.verbose( `[${span.name}] ${JSON.stringify( span.spanContext() )}` )
+			 }
+		}
+
+
+	 public async shutdown() : Promise<void>
+		{
+		  return
+		}
   }

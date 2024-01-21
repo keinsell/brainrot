@@ -6,9 +6,8 @@ export class Exception
   {
 	 public readonly namespace : ExceptionNamespace
 	 public readonly code : string
-	 public readonly message : string
 	 public readonly metadata : Record<string, any>
-
+	 public readonly message : string
 
 	 constructor(
 		namespace : ExceptionNamespace,
@@ -24,4 +23,10 @@ export class Exception
 		  this.message   = message
 		  this.metadata  = metadata
 		}
+  }
+
+
+export class AggregateException
+  extends AggregateError
+  {
   }

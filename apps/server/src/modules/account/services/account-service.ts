@@ -2,23 +2,23 @@ import {
   Inject,
   Injectable,
   Logger,
-}                                    from '@nestjs/common'
-import { SpanKind }                  from '@opentelemetry/api'
-import { setUser }                   from '@sentry/node'
-import { ServiceAbstract }           from '../../../common/libraries/services/service-abstract.js'
-import { PasswordHashing }           from '../../../common/libraries/unihash/index.js'
-import { KdfAlgorithm }              from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
-import { createEmailAddress }        from '../../../common/mailer/value-object/email-address.js'
-import { EventBus }                  from '../../../common/modules/messaging/event-bus.js'
-import { OpenTelemetryTraceService } from '../../../common/modules/observability/tracing/opentelemetry/service/open-telemetry-trace-service.js'
-import { RegisterAccountCommand }    from '../commands/register-account-command.js'
-import { AccountSelfService }        from '../contract/account-self-service.js'
-import { Account }                   from '../entities/account.js'
-import { AccountPolicy }             from '../policies/account-policy.js'
-import { AccountRepository }         from '../repositories/account-repository.js'
-import { AccountEmail }              from '../value-objects/account-email.js'
-import { Password }                  from '../value-objects/password.js'
-import { createUsername }            from '../value-objects/username.js'
+}                                 from '@nestjs/common'
+import { SpanKind }               from '@opentelemetry/api'
+import { setUser }                from '@sentry/node'
+import { ServiceAbstract }        from '../../../common/libraries/services/service-abstract.js'
+import { PasswordHashing }        from '../../../common/libraries/unihash/index.js'
+import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
+import { createEmailAddress }     from '../../../common/mailer/value-object/email-address.js'
+import { EventBus }               from '../../../common/modules/messaging/event-bus.js'
+import { OpentelemetryTracer }    from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import { RegisterAccountCommand } from '../commands/register-account-command.js'
+import { AccountSelfService }     from '../contract/account-self-service.js'
+import { Account }                from '../entities/account.js'
+import { AccountPolicy }          from '../policies/account-policy.js'
+import { AccountRepository }      from '../repositories/account-repository.js'
+import { AccountEmail }           from '../value-objects/account-email.js'
+import { Password }               from '../value-objects/password.js'
+import { createUsername }         from '../value-objects/username.js'
 
 
 
@@ -27,7 +27,7 @@ export class AccountService
   extends ServiceAbstract<Account>
   implements AccountSelfService
   {
-	 @Inject( OpenTelemetryTraceService ) tracer : OpenTelemetryTraceService
+	 @Inject( OpentelemetryTracer ) tracer : OpentelemetryTracer
 	 private logger : Logger = new Logger( 'account::service' )
 
 	 constructor(
@@ -55,11 +55,10 @@ export class AccountService
 	  */
 	 async register(registerAccount : RegisterAccountCommand) : Promise<Account>
 		{
-		  const span = new OpenTelemetryTraceService().startSpan( 'con.methylphenidate.account.register', {
+		  const span = new OpentelemetryTracer().startSpan( 'com.methylphenidate.account.register', {
 			 kind       : SpanKind.INTERNAL,
 			 attributes : {
-				op      : 'function',
-				db      : 'prisma',
+				'op'    : 'function',
 				request : JSON.stringify( RegisterAccountCommand ),
 			 },
 		  } )
@@ -71,11 +70,13 @@ export class AccountService
 
 		  if ( emailResult.isErr() )
 			 {
+				span.end()
 				throw emailResult.error
 			 }
 
 		  if ( usernameResult.isErr() )
 			 {
+				span.end()
 				throw usernameResult.error
 			 }
 

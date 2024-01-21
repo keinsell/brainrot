@@ -1,9 +1,11 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   Logger,
 }                                from '@nestjs/common'
+import { SpanStatusCode }        from '@opentelemetry/api'
 import {
   err,
   ok,
@@ -11,6 +13,7 @@ import {
 import { BasePolicy }            from '../../../common/libraries/domain/policy/base-policy.js'
 import { Pwnproc }               from '../../../common/libraries/pwnproc/pwnproc.js'
 import { PasswordSecurityLevel } from '../../../common/libraries/pwnproc/report/password-security-level.js'
+import { OpentelemetryTracer }   from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import { AccountRepository }     from '../repositories/account-repository.js'
 
 
@@ -19,8 +22,8 @@ import { AccountRepository }     from '../repositories/account-repository.js'
 export class AccountPolicy
   extends BasePolicy
   {
+	 @Inject( OpentelemetryTracer ) tracer : OpentelemetryTracer
 	 private logger : Logger = new Logger( 'account::policy' )
-
 
 	 constructor(
 		private readonly accountRepository : AccountRepository,
@@ -35,6 +38,9 @@ export class AccountPolicy
 		email : string, username : string, password : string,
 	 })
 		{
+		  const span = this.tracer.startSpan( 'account::policy::canRegisterAccount' )
+
+
 		  this.logger.debug( `Validating 'canRegisterAccount' policy for: ${JSON.stringify( registerAccount )}` )
 
 		  const isUniqueUsername = await this.isUniqueUsername( registerAccount.username )
@@ -47,10 +53,15 @@ export class AccountPolicy
 
 		  if ( maybePolicy.isErr() )
 			 {
+				span.setStatus( {code : SpanStatusCode.ERROR} )
+				span.recordException( maybePolicy.error )
+				span.end()
 				throw maybePolicy.error
 			 }
 		  else
 			 {
+				span.setStatus( {code : SpanStatusCode.OK} )
+				span.end()
 				return maybePolicy.value
 			 }
 		}

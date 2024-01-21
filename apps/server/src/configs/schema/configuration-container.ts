@@ -23,37 +23,38 @@
  *
  */
 
-import {IApplicationConfiguration}   from "../config-set/application-configuration.js";
-import {IAuthorizationConfiguration} from "../config-set/authorization-configuration.js";
+import { IApplicationConfiguration }   from '../config-set/application-configuration.js'
+import { IAuthorizationConfiguration } from '../config-set/authorization-configuration.js'
 
 
 
-export interface ConfigurationContainer {
-	/** Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'. */
-	PROTOCOL : 'http' | 'https';
+export interface ConfigurationContainer
+  {
+	 /** Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'. */
+	 PROTOCOL : 'http' | 'https';
 
-	/** Defines the host on which the application runs. Default for development is 'localhost'. */
-	HOST : string | 'localhost';
+	 /** Defines the host on which the application runs. Default for development is 'localhost'. */
+	 HOST : string | 'localhost';
 
-	/** Defines the port on which the application listens. Default for development is 1337, otherwise it's 80. */
-	PORT : number;
+	 /** Defines the port on which the application listens. Default for development is 1337, otherwise it's 80. */
+	 PORT : number;
 
-	/** Defines the name of the service. Default is 'methylphenidate'. */
-	SERVICE_NAME : string;
+	 /** Defines the name of the service. Default is 'methylphenidate'. */
+	 SERVICE_NAME : string;
 
-	/** Provides a brief description of the service. Default description is set. */
-	SERVICE_DESCRIPTION : string;
+	 /** Provides a brief description of the service. Default description is set. */
+	 SERVICE_DESCRIPTION : string;
 
-	/** Sets the application environment. Can be one of 'development', 'test', 'production', or 'staging'. Default is 'development'. */
-	NODE_ENV : 'development' | 'test' | 'production' | 'staging';
+	 /** Sets the application environment. Can be one of 'development', 'test', 'production', or 'staging'. Default is 'development'. */
+	 NODE_ENV : 'development' | 'test' | 'production' | 'staging';
 
-	/** Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled. */
-	TRACING : boolean;
+	 /** Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled. */
+	 TRACING : boolean;
 
-	/** Defines the Sentry DSN. Default is empty. */
-	SENTRY_DSN : string;
-	DEBUG : boolean;
+	 /** Defines the Sentry DSN. Default is empty. */
+	 SENTRY_DSN : string;
+	 DEBUG : boolean;
 
-	APPLICATION : IApplicationConfiguration
-	AUTH : IAuthorizationConfiguration
-}
+	 APPLICATION : IApplicationConfiguration
+	 AUTH : IAuthorizationConfiguration
+  }

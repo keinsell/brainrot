@@ -23,7 +23,10 @@
  *
  */
 
-export interface ConfigSet
-  {
-	 [ key : string ] : string | number | boolean | object;
-  }
+
+
+import type { UniqueIdentifier } from '../../../../libraries/identification/index.js'
+
+
+
+export type RequestId = UniqueIdentifier

@@ -1,14 +1,14 @@
 import {
   Injectable,
   Logger,
-}                                    from '@nestjs/common'
-import { PassportStrategy }          from '@nestjs/passport'
-import { setUser }                   from '@sentry/node'
-import { Strategy }                  from 'passport-local'
-import { OpenTelemetryTraceService } from '../../../../common/modules/observability/tracing/opentelemetry/service/open-telemetry-trace-service.js'
-import { censorString }              from '../../../../utilities/console-utils/censor-string.js'
-import { CredentialValidator }       from '../../../account/shared-kernel/credential-validator/credential-validator.js'
-import { AuthenticationStrategy }    from '../../contract/authentication-strategy/authentication-strategy.js'
+}                                 from '@nestjs/common'
+import { PassportStrategy }       from '@nestjs/passport'
+import { setUser }                from '@sentry/node'
+import { Strategy }               from 'passport-local'
+import { OpentelemetryTracer }    from '../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import { censorString }           from '../../../../utilities/console-utils/censor-string.js'
+import { CredentialValidator }    from '../../../account/shared-kernel/credential-validator/credential-validator.js'
+import { AuthenticationStrategy } from '../../contract/authentication-strategy/authentication-strategy.js'
 
 
 
@@ -31,7 +31,7 @@ export class LocalAuthorizationStrategy
 		password : string,
 	 ) : Promise<any>
 		{
-		  const span = new OpenTelemetryTraceService().startSpan( 'con.methylphenidate.authentication.local', {
+		  const span = new OpentelemetryTracer().startSpan( 'con.methylphenidate.authentication.local', {
 			 attributes : {
 				'op'   : 'function',
 				'name' : 'LocalAuthorizationStrategy.validate',

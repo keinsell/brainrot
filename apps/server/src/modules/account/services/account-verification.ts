@@ -12,10 +12,10 @@ import {
   Result,
 }                                       from 'neverthrow'
 import { randomUUID }                   from 'node:crypto'
-import { CacheManager }                 from '../../../common/libraries/cache-manager/contract/cache-manager.js'
 import { Mailer }                       from '../../../common/mailer/contract/mailer.js'
 import { CreateEmailMessagePayload }    from '../../../common/mailer/dto/create-email-message-payload.js'
 import { EventBus }                     from '../../../common/modules/messaging/event-bus.js'
+import { CacheManager }                 from '../../../common/modules/storage/cache-manager/contract/cache-manager.js'
 import { NotificationService }          from '../../../common/notification/contract/notification-service.js'
 import { StaticFeatureFlags }           from '../../../configs/static-feature-flags.js'
 import { AccountEmailConfirmed }        from '../events/account-email-confirmed.js'

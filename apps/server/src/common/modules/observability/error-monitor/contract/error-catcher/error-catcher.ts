@@ -23,7 +23,7 @@
  *
  */
 
-export interface ConfigSet
+export abstract class ErrorCatcher
   {
-	 [ key : string ] : string | number | boolean | object;
+	 public abstract captureException(error : unknown) : void;
   }

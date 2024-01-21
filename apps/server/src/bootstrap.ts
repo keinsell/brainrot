@@ -62,7 +62,6 @@ export async function bootstrap()
 
 	 // The error handler must be before any other error middleware and after all controllers
 	 app.use( Sentry.Handlers.errorHandler() )
-
 	 //	 app.useGlobalFilters( new HttpExceptionFilter() )
 
 	 // Optional fallthrough error handler
@@ -140,7 +139,7 @@ export async function bootstrap()
 		  retryCount--
 		}
 
-	 // If application is running in development mode, try to seed the database
+	 // If the application is running in development mode, try to seed the database
 	 if ( isDevelopment() && __config.get( 'APPLICATION' ).RUN_SEED )
 		{
 		  try

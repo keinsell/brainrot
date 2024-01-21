@@ -23,7 +23,7 @@
  *
  */
 
-import { getActiveSpan }            from '@sentry/opentelemetry'
+import { startInactiveSpan }        from '@sentry/opentelemetry'
 import { Prisma }                   from '../../../../../vendor/prisma/index.js'
 import { LoggingMiddlewareOptions } from '../structures/prisma-logging-middleware-options.js'
 
@@ -52,19 +52,14 @@ export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
 		  args,
 		}
 
-		const span = getActiveSpan()
-
-		console.log( span )
-
-		if ( span )
-		  {
-			 span.setAttributes( data )
-			 span.setAttribute( 'op', 'db.query' )
-			 span.setAttribute( 'description', description )
-		  }
-
-		console.log( span )
-
+		const span = startInactiveSpan( {
+													 startTime  : Date.now(),
+													 name       : description.toLowerCase(),
+													 op         : 'db.prisma.query',
+													 attributes : {
+														'op' : 'db.prisma.query',
+													 },
+												  } )
 		// optional but nice
 		//  scope?.addBreadcrumb( {
 		//								  category : 'db',
@@ -72,16 +67,23 @@ export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
 		//								  data,
 		//								} )
 
-		span?.end()
+
 
 		const before = Date.now()
 		const result = await next( params )
-		const after  = Date.now()
+
+
+		const after = Date.now()
 
 		const executionTime = after - before
 
 		// eslint-disable-next-line no-console
 		console.log( `Prisma query: ${params.model}.${params.action}() in ${executionTime}ms` )
+
+		span.setAttribute( 'query', description )
+		span.setAttribute( 'model', params.model || '' )
+		span.setAttribute( 'execution_time', executionTime )
+		span.end()
 
 		return result
 	 }

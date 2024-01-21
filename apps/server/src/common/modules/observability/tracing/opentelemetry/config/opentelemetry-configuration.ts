@@ -23,7 +23,12 @@
  *
  */
 
-export interface ConfigSet
+import type { NodeSDKConfiguration } from '@opentelemetry/sdk-node'
+
+
+
+export interface OpentelemetryConfiguration
+  extends Partial<NodeSDKConfiguration>
   {
-	 [ key : string ] : string | number | boolean | object;
+	 traceAutoInjectors? : any[];
   }

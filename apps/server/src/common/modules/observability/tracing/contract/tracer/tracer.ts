@@ -23,7 +23,15 @@
  *
  */
 
-export interface ConfigSet
+import { Span } from '../../opentelemetry/span.js'
+
+
+
+export abstract class Tracer
   {
-	 [ key : string ] : string | number | boolean | object;
+	 abstract startSpan(name : string) : Span;
+
+	 abstract getCurrentSpan() : Span;
+
+	 abstract setSpan(span : Span) : void;
   }
