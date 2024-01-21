@@ -4,7 +4,10 @@ import {
   Logger,
 }                                 from '@nestjs/common'
 import { SpanKind }               from '@opentelemetry/api'
-import { setUser }                from '@sentry/node'
+import {
+  getCurrentScope,
+  setUser,
+}                                 from '@sentry/node'
 import { ServiceAbstract }        from '../../../common/libraries/services/service-abstract.js'
 import { PasswordHashing }        from '../../../common/libraries/unihash/index.js'
 import { KdfAlgorithm }           from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
@@ -55,7 +58,7 @@ export class AccountService
 	  */
 	 async register(registerAccount : RegisterAccountCommand) : Promise<Account>
 		{
-		  const span = new OpentelemetryTracer().startSpan( 'com.methylphenidate.account.register', {
+		  const span = new OpentelemetryTracer().startSpan( 'com.methylphenidate.account_service.register', {
 			 kind       : SpanKind.INTERNAL,
 			 attributes : {
 				'op'    : 'function',
@@ -71,22 +74,25 @@ export class AccountService
 		  if ( emailResult.isErr() )
 			 {
 				span.end()
+				span.recordException( emailResult.error )
 				throw emailResult.error
 			 }
 
 		  if ( usernameResult.isErr() )
 			 {
 				span.end()
+				span.recordException( usernameResult.error )
 				throw usernameResult.error
 			 }
 
+		  getCurrentScope()?.setUser( {
+												  email    : emailResult._unsafeUnwrap(),
+												  username : usernameResult._unsafeUnwrap(),
+												} )
+
 		  const username = usernameResult._unsafeUnwrap()
 		  const email    = emailResult._unsafeUnwrap()
-
-		  setUser( {
-						 email    : email,
-						 username : username,
-					  } )
+		  
 		  this.logger.debug( 'Registering account...' )
 
 		  const accountEmail = AccountEmail.create( {

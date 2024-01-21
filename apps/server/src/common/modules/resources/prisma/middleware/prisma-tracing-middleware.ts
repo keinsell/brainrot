@@ -23,6 +23,7 @@
  *
  */
 
+import { getCurrentScope }          from '@sentry/node'
 import { startInactiveSpan }        from '@sentry/opentelemetry'
 import { Prisma }                   from '../../../../../vendor/prisma/index.js'
 import { LoggingMiddlewareOptions } from '../structures/prisma-logging-middleware-options.js'
@@ -45,7 +46,8 @@ export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
 				  args,
 				}           = params
 		const description = [ model, action ].filter( Boolean ).join( '.' )
-		const data        = {
+
+		const data = {
 		  model,
 		  action,
 		  runInTransaction,
@@ -60,14 +62,12 @@ export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
 														'op' : 'db.prisma.query',
 													 },
 												  } )
-		// optional but nice
-		//  scope?.addBreadcrumb( {
-		//								  category : 'db',
-		//								  message  : description,
-		//								  data,
-		//								} )
 
-
+		getCurrentScope()?.addBreadcrumb( {
+														category : 'db',
+														message  : description,
+														data,
+													 } )
 
 		const before = Date.now()
 		const result = await next( params )
@@ -83,7 +83,7 @@ export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
 		span.setAttribute( 'query', description )
 		span.setAttribute( 'model', params.model || '' )
 		span.setAttribute( 'execution_time', executionTime )
-		span.end()
+		span.end( after )
 
 		return result
 	 }

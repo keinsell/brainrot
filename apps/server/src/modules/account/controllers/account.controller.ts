@@ -11,7 +11,7 @@ import {
   ApiOkResponse,
   ApiOperation,
 }                                 from '@nestjs/swagger'
-import Sentry                     from '@sentry/node'
+import { getCurrentScope }        from '@sentry/node'
 import { Request }                from 'express'
 import { readFileSync }           from 'node:fs'
 import { dirname }                from 'path'
@@ -64,9 +64,11 @@ export class AccountController
 		@Body() registerAccountBody : RegisterAccountCommand,
 	 ) : Promise<AccountViewModel>
 		{
-		  Sentry.setUser( {
-								  ip_address : request.ip,
-								} )
+		  getCurrentScope().setUser( {
+												 username   : registerAccountBody.username,
+												 email      : registerAccountBody.email,
+												 ip_address : request.ip,
+											  } )
 
 		  const result = await this.service.register( {
 																		username : registerAccountBody.username,
@@ -74,11 +76,11 @@ export class AccountController
 																		password : registerAccountBody.password,
 																	 } )
 
-		  Sentry.setUser( {
-								  username   : result.username,
-								  email      : result.email.address,
-								  ip_address : request.ip,
-								} )
+		  getCurrentScope().setUser( {
+												 username   : result.username,
+												 email      : result.email.address,
+												 ip_address : request.ip,
+											  } )
 
 		  return {
 			 id            : result.id,

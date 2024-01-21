@@ -38,8 +38,7 @@ export class AccountPolicy
 		email : string, username : string, password : string,
 	 })
 		{
-		  const span = this.tracer.startSpan( 'account::policy::canRegisterAccount' )
-
+		  const span = this.tracer.startSpan( 'com.methylphenidate.account.policy.can_register_account' )
 
 		  this.logger.debug( `Validating 'canRegisterAccount' policy for: ${JSON.stringify( registerAccount )}` )
 
@@ -69,16 +68,23 @@ export class AccountPolicy
 
 	 private async isUniqueUsername(username : string)
 		{
+		  const span = this.tracer.startSpan( 'com.methylphenidate.account.policy.is_unique_username' )
 		  this.logger.debug( `Validating username uniqueness for: ${username}` )
 		  const identity = await this.accountRepository.findByUsername( username )
 
 		  if ( identity )
 			 {
+				span.setStatus( {code : SpanStatusCode.ERROR} )
+				span.recordException(
+				  new BadRequestException( 'Username is already in use in system, try logging in instead.' ) )
+				span.end()
 				this.logger.verbose( `Username ${username} is already in use in system, try logging in instead.` )
 				return err( new ConflictException( 'Username is already in use in system, try logging in instead.' ) )
 			 }
 
 		  this.logger.verbose( `Username ${username} is unique.` )
+		  span.setStatus( {code : SpanStatusCode.OK} )
+		  span.end()
 		  return ok( true )
 		}
 

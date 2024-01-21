@@ -42,7 +42,7 @@ export function isEmailAddress(value : unknown) : value is EmailAddress
 export function createEmailAddress(value : string) : Result<EmailAddress, Error>
   {
 	 const span = startInactiveSpan( {
-												  name : 'email.address.createEmailAddress',
+												  name : 'create-email-address',
 												  op   : 'function',
 												} )
 
@@ -58,6 +58,7 @@ export function createEmailAddress(value : string) : Result<EmailAddress, Error>
 								  code    : SpanStatusCode.ERROR,
 								  message : e.message,
 								} )
+		  span.recordException( e )
 		  span.end()
 		  return err( new InvalidEmailAddressError() )
 		}

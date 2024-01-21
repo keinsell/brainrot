@@ -24,7 +24,7 @@ import type {
 // The Username should be from 4 to 32 characters.
 // It should only contain letters, numbers, and underscores.
 
-export type Username = Opaque<string & tags.Pattern<'^[A-Za-z0-9_]{4,32}$'>, 'username'>
+export type Username = Opaque<string & tags.Pattern<'^[A-Za-z0-9_.]+$'> & tags.MaxLength<32> & tags.MinLength<4>, 'username'>
 
 
 export class InvalidUsername
@@ -60,7 +60,7 @@ export function assertUsername(value : unknown) : asserts value is Username
 export function createUsername(value : unknown) : Result<Username, InvalidUsername>
   {
 	 const span = startInactiveSpan( {
-												  name       : 'account.username.createUsername',
+												  name       : 'create-account-username',
 												  op         : 'function',
 												  kind       : SpanKind.INTERNAL,
 												  attributes : {
@@ -82,11 +82,12 @@ export function createUsername(value : unknown) : Result<Username, InvalidUserna
 	 catch ( e : unknown )
 		{
 		  const error = e as TypeGuardError
-
 		  span.setStatus( {
 								  code    : SpanStatusCode.ERROR,
 								  message : 'Username is invalid.',
 								} )
+		  span.setAttribute( 'error', error.message )
+		  span.recordException( error )
 		  span.end()
 		  return err( new InvalidUsername() )
 		}

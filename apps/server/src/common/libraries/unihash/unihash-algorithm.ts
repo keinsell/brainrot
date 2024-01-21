@@ -27,7 +27,7 @@ export class UnihashAlgorithm
 		salt? : Salt,
 	 ) : Promise<SerializedPhcString>
 		{
-		  const span = this.tracer.startSpan( `${this.kdf.name}::hash` )
+		  const span = this.tracer.startSpan( `unihash.${this.kdf.name}.hash` )
 		  this.preHash( plain )
 		  const phcString = await this.kdf.deriveKey( plain, salt as any )
 		  this.postHash( plain, phcString.serialize() )
