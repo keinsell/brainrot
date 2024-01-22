@@ -8,14 +8,18 @@ import {
 }                                 from '@nestjs/common'
 import {
   ApiBody,
+  ApiConflictResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
+  getSchemaPath,
 }                                 from '@nestjs/swagger'
 import { getCurrentScope }        from '@sentry/node'
 import { Request }                from 'express'
 import { readFileSync }           from 'node:fs'
 import { dirname }                from 'path'
 import { fileURLToPath }          from 'url'
+import { Problem }                from '../../../common/error/problem-details/problem.js'
 import { JwtAuthorizationGuard }  from '../../authentication/guards/jwt-authorization-guard.js'
 import { RegisterAccountCommand } from '../commands/register-account-command.js'
 import { AccountService }         from '../services/account-service.js'
@@ -58,17 +62,54 @@ export class AccountController
 						 } ) @ApiBody( {type : RegisterAccountCommand} ) @ApiOkResponse( {
 																												 type        : AccountViewModel,
 																												 description : 'Account was successfully registered in system.',
-																											  } ) @Post()
+																											  } ) @Post() @ApiConflictResponse( {
+																																							  type        : Problem,
+																																							  description : 'Account already exists.',
+																																							  content     : {
+																																								 example : {
+																																									type   : 'https://httpstatuses.com/409',
+																																									title  : 'Conflict',
+																																									status : 409,
+																																									detail : 'Account already exists.',
+																																								 } as any,
+																																							  },
+																																							} ) @ApiResponse(
+		{
+		  status      : 400,
+		  description : 'Provided Invalid Data',
+		  content     : {
+			 'application/json' : {
+				schema : {
+				  $ref     : getSchemaPath( Problem ),
+				  type     : 'object',
+				  example  : {
+					 type   : 'com.methylphenidate.account.invalid-username',
+					 title  : 'Invalid Username',
+					 status : 400,
+				  },
+				  examples : [
+					 {
+						type   : 'com.methylphenidate.account.invalid-email',
+						title  : 'Invalid Email',
+						status : 400,
+					 },
+				  ],
+				},
+			 },
+		  },
+		} )
+
 	 async register(
 		@Req() request : Request,
 		@Body() registerAccountBody : RegisterAccountCommand,
 	 ) : Promise<AccountViewModel>
 		{
-		  getCurrentScope().setUser( {
-												 username   : registerAccountBody.username,
-												 email      : registerAccountBody.email,
-												 ip_address : request.ip,
-											  } )
+		  getCurrentScope()
+		  .setUser( {
+						  username   : registerAccountBody.username,
+						  email      : registerAccountBody.email,
+						  ip_address : request.ip,
+						} )
 
 		  const result = await this.service.register( {
 																		username : registerAccountBody.username,
@@ -76,11 +117,12 @@ export class AccountController
 																		password : registerAccountBody.password,
 																	 } )
 
-		  getCurrentScope().setUser( {
-												 username   : result.username,
-												 email      : result.email.address,
-												 ip_address : request.ip,
-											  } )
+		  getCurrentScope()
+		  .setUser( {
+						  username   : result.username,
+						  email      : result.email.address,
+						  ip_address : request.ip,
+						} )
 
 		  return {
 			 id            : result.id,

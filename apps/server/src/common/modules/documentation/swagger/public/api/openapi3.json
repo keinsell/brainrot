@@ -190,6 +190,39 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Provided Invalid Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem",
+                  "type": "object",
+                  "example": {
+                    "type": "com.methylphenidate.account.invalid-username",
+                    "title": "Invalid Username",
+                    "status": 400
+                  },
+                  "examples": [
+                    {
+                      "type": "com.methylphenidate.account.invalid-email",
+                      "title": "Invalid Email",
+                      "status": 400
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Account already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         }
       },
@@ -315,7 +348,7 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Carleton.Wisozk99@yahoo.com",
+            "example": "Rusty.Runolfsdottir@gmail.com",
             "schema": {
               "type": "string"
             }
@@ -579,6 +612,15 @@
   ],
   "servers": [],
   "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Bearer Token",
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer <token>\""
+      }
+    },
     "schemas": {
       "RegisterAccountCommand": {
         "type": "object",
@@ -586,7 +628,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Carleton.Wisozk99@yahoo.com",
+            "example": "Rusty.Runolfsdottir@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -606,7 +648,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Colten_Corwin1",
+            "example": "Electa_Blick",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -618,6 +660,56 @@
           "email",
           "password",
           "username"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "A URI reference that uniquely identifies the problem type only in the context of the provided API. Opposed to the specification in RFC-7807, it is neither recommended to be dereferencable and point to a human-readable documentation nor globally unique for the problem type.",
+            "example": "com.methylphenidate.account.already-exists"
+          },
+          "title": {
+            "type": "string",
+            "description": "A short, human-readable summary of the problem type.",
+            "example": "Account Already Exists"
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              100,
+              101,
+              200,
+              201,
+              202,
+              203,
+              204,
+              205,
+              206,
+              300,
+              301,
+              302,
+              303,
+              304,
+              305,
+              307,
+              400
+            ],
+            "description": "cyz",
+            "example": 400
+          },
+          "instance": {
+            "type": "string",
+            "description": "A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.",
+            "example": "https://jakubolan.eu.auth0.com/oauth/token"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "instance"
         ]
       },
       "RecoverAccount": {
@@ -653,11 +745,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk"
             ]
           }
         },
@@ -674,11 +766,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODA3MjMxfQ.NVMBvGn_0H5mxvcAw4GVKNm9NnEDH6Pymkmx66szhlA"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk"
             ]
           }
         },
@@ -697,7 +789,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Carleton.Wisozk99@yahoo.com",
+            "example": "Rusty.Runolfsdottir@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -712,7 +804,7 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Colten_Corwin1",
+            "example": "Electa_Blick",
             "examples": [
               "Raul_Marks",
               "Buddy.Schulist",
@@ -734,11 +826,11 @@
           "username": {
             "type": "string",
             "description": "The domain's username",
-            "example": "Colten_Corwin1",
+            "example": "Electa_Blick",
             "examples": [
-              "Elyse.Toy-Mills",
-              "Marisol12",
-              "Salma.Mann"
+              "Odessa18",
+              "Brant.Gibson-Considine",
+              "Maiya_Koepp"
             ]
           },
           "password": {
@@ -746,9 +838,9 @@
             "description": "The domain's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "90A1GX7nExidgOP",
-              "dHEvzMM_s7SBprq",
-              "H9AsXyc1Zg_eWVe"
+              "MnYwoieyCHUa3XF",
+              "Y6q55vxndN2sfTi",
+              "zi1o2lRWN1rCWzR"
             ]
           }
         },

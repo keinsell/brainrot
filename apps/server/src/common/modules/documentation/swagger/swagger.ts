@@ -118,6 +118,13 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 		.setDescription( __config.get( 'SERVICE_DESCRIPTION' ) )
 		.setVersion( '1.0' )
 		.addTag( 'api' )
+		.addBearerAuth( {
+								name         : 'Bearer Token',
+								type         : 'http',
+								scheme       : 'bearer',
+								bearerFormat : 'JWT',
+								description  : 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer <token>"',
+							 } )
 		.build()
 
 	 logger.verbose( `Swagger documentation base built for ${__config.get( 'SERVICE_NAME' )} service.` )
@@ -153,7 +160,7 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	 //	},
 	 //}))
 
-	 const documentationObjectPath = `./public/api/openapi3.json`
+	 const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`
 
 
 
