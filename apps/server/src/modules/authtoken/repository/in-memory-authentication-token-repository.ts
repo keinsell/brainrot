@@ -23,43 +23,50 @@
  *
  */
 
-import {AuthenticationTokenRepository} from "./authentication-token-repository.js";
-import {AuthenticationToken}           from "../entity/authentication-token.js";
-import {Injectable}                    from "@nestjs/common";
+import { Injectable }                    from '@nestjs/common'
+import { AuthenticationToken }           from '../entity/authentication-token.js'
+import { AuthenticationTokenRepository } from './authentication-token-repository.js'
 
 
 
 @Injectable()
 export class InMemoryAuthenticationTokenRepository
-	extends AuthenticationTokenRepository {
-	private repository : AuthenticationToken[] = [];
+  extends AuthenticationTokenRepository
+  {
+	 private repository : AuthenticationToken[] = []
 
-	create(entity : AuthenticationToken) : Promise<AuthenticationToken> {
-		this.repository.push(entity);
-		return Promise.resolve(entity);
-	}
-
-	delete(entity : AuthenticationToken) : Promise<void> {
-		this.repository = this.repository.filter(token => token.id !== entity.id);
-		return Promise.resolve();
-	}
-
-	exists(entity : AuthenticationToken) : Promise<boolean> {
-		const exists = this.repository.some(token => token.id === entity.id);
-		return Promise.resolve(exists);
-	}
-
-	findById(id : string) : Promise<AuthenticationToken | null> {
-		const token = this.repository.find(token => token.id === id) || null;
-		return Promise.resolve(token);
-	}
-
-	update(entity : AuthenticationToken) : Promise<AuthenticationToken> {
-		const index = this.repository.findIndex(token => token.id === entity.id);
-		if (index >= 0) {
-			this.repository[index] = entity;
-			return Promise.resolve(entity);
+	 create(entity : AuthenticationToken) : Promise<AuthenticationToken>
+		{
+		  this.repository.push( entity )
+		  return Promise.resolve( entity )
 		}
-		return Promise.reject(new Error("Entity not found"));
-	}
-}
+
+	 delete(entity : AuthenticationToken) : Promise<void>
+		{
+		  this.repository = this.repository.filter( token => token.id !== entity.id )
+		  return Promise.resolve()
+		}
+
+	 exists(entity : AuthenticationToken) : Promise<boolean>
+		{
+		  const exists = this.repository.some( token => token.id === entity.id )
+		  return Promise.resolve( exists )
+		}
+
+	 findById(id : string) : Promise<AuthenticationToken | null>
+		{
+		  const token = this.repository.find( token => token.id === id ) || null
+		  return Promise.resolve( token )
+		}
+
+	 update(entity : AuthenticationToken) : Promise<AuthenticationToken>
+		{
+		  const index = this.repository.findIndex( token => token.id === entity.id )
+		  if ( index >= 0 )
+			 {
+				this.repository[ index ] = entity
+				return Promise.resolve( entity )
+			 }
+		  return Promise.reject( new Error( 'Entity not found' ) )
+		}
+  }

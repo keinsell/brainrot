@@ -26,18 +26,24 @@
 import {
   Injectable,
   Logger,
-}                       from '@nestjs/common'
-import { CacheManager } from '../../contract/cache-manager.js'
+}                                 from '@nestjs/common'
+import { CacheManager }           from '../../contract/cache-manager.js'
+import { CacheReplacementPolicy } from '../../contract/cache-replacement-policy.js'
 
+
+
+CacheReplacementPolicy
 
 
 @Injectable()
 export class InMemoryCacheManager
   extends CacheManager
   {
-	 private logger : Logger                                                   = new Logger( 'cache_manager::memory' )
+	 private logger : Logger = new Logger( 'cache_manager::memory' )
+
 	 //noinspection LocalVariableNamingConventionJS
-	 private _cache : Map<string, unknown>                                     = new Map<string, unknown>()
+	 private _cache : Map<string, unknown> = new Map<string, unknown>()
+
 	 //noinspection LocalVariableNamingConventionJS
 	 private _ttl : Map<string, { expiry : number, timeout : NodeJS.Timeout }> = new Map<string, {
 		expiry : number, timeout : NodeJS.Timeout

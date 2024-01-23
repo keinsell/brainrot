@@ -5,10 +5,11 @@ import {
   OnModuleDestroy,
   OnModuleInit,
   Optional,
-}             from '@nestjs/common'
-import Sentry from '@sentry/node'
-import delay  from 'delay'
-import ms     from 'ms'
+}                        from '@nestjs/common'
+import Sentry            from '@sentry/node'
+import { getActiveSpan } from '@sentry/opentelemetry'
+import delay             from 'delay'
+import ms                from 'ms'
 
 import { isProduction }           from '../../../../../configs/helper/is-production.js'
 import {
@@ -83,7 +84,8 @@ export class PrismaService
 	 async onModuleDestroy()
 		{
 		  this.logger.debug( 'Closing prisma connection...' )
-		  await this.$disconnect().then( () => {
+		  await this.$disconnect()
+		  .then( () => {
 			 ApplicationState.isDatabaseConnected = false
 			 this.logger.log( 'Prisma connection was closed successfully.' )
 		  } )
@@ -109,7 +111,9 @@ export class PrismaService
 					 this.logger.error(
 						`Server failed to connect to database, retrying in ${ms( connectionRetryDelay )}...` )
 					 this.logger.error( `${JSON.stringify( error )}` )
-					 console.error( error )
+					 getActiveSpan()
+					 ?.recordException( error )
+
 					 await delay( connectionRetryDelay )
 					 connectionRetryDelay = connectionRetryDelay * 2
 

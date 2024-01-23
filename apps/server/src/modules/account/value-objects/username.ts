@@ -1,4 +1,6 @@
+import { faker }               from '@faker-js/faker'
 import { BadRequestException } from '@nestjs/common'
+import { ApiProperty }         from '@nestjs/swagger'
 import {
   SpanKind,
   SpanStatusCode,
@@ -19,7 +21,20 @@ import type {
   Opaque,
   UnwrapOpaque,
 }                              from '../../../common/libraries/opaque.js'
+import { AccountFixture }      from '../../../utilities/fixtures/account-fixture.js'
 
+
+
+export const ApiPropertyAccountUsername = ApiProperty( {
+																			name        : 'username',
+																			description : 'The account\'s username',
+																			example     : AccountFixture.username,
+																			examples    : [
+																			  faker.internet.userName(),
+																			  faker.internet.userName(),
+																			  faker.internet.userName(),
+																			],
+																		 } )
 
 // The Username should be from 4 to 32 characters.
 // It should only contain letters, numbers, and underscores.

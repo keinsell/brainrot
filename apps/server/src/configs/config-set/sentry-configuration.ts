@@ -23,12 +23,15 @@
  *
  */
 
-import Sentry                   from '@sentry/node'
-import { ProfilingIntegration } from '@sentry/profiling-node'
-import type { Integration }     from '@sentry/types'
-import { __config }             from '../global/__config.js'
-import { isDebug }              from '../helper/is-debug.js'
-import { isDevelopment }        from '../helper/is-development.js'
+import Sentry, { type EventHint } from '@sentry/node'
+import { ProfilingIntegration }   from '@sentry/profiling-node'
+import type {
+  Integration,
+  TransactionEvent,
+}                                 from '@sentry/types'
+import { __config }               from '../global/__config.js'
+import { isDebug }                from '../helper/is-debug.js'
+import { isDevelopment }          from '../helper/is-development.js'
 
 
 
@@ -44,15 +47,15 @@ export const SENTRY_CONFIGURATION : ISentryConfiguration = {
 										// production where traffic is higher, meanwhile it's recommened to drop traces and
 										// transactions after delivery which can be setupped at [Project] > Settings > Client
 										// Keys (DSN) at Sentry dashboard.
-  tracesSampleRate   : isDevelopment() ? 1 : 0.1,
-  profilesSampleRate : isDevelopment() ? 1 : 0.1,
-  sampleRate         : 1,
-  enabled            : true,
-  enableTracing      : true,
-  debug              : ( isDevelopment() || isDebug() ),
-  instrumenter       : 'otel',
-  environment        : __config.get( 'NODE_ENV' ),
-  integrations       : [
+  tracesSampleRate      : isDevelopment() ? 1 : 0.1,
+  profilesSampleRate    : isDevelopment() ? 1 : 0.1,
+  sampleRate            : 1,
+  enabled               : true,
+  enableTracing         : true,
+  debug                 : ( isDevelopment() || isDebug() ),
+  instrumenter          : 'otel',
+  environment           : __config.get( 'NODE_ENV' ),
+  integrations          : [
 	 ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
 	 new ProfilingIntegration(),
 	 // new Sentry.Integrations.Anr({captureStackTrace: true, anrThreshold: 2_000}),
@@ -85,6 +88,17 @@ export const SENTRY_CONFIGURATION : ISentryConfiguration = {
 	 //								 root : __rootDir__,
 	 //							  } ),
   ].filter( (x : Integration) => x.name !== 'Prisma' ),
-  attachStacktrace   : true, //  includeLocalVariables : true,
-  ignoreErrors       : [ 'ServerException', 'ApiException' ],
+  attachStacktrace      : true, //  includeLocalVariables : true,
+  ignoreErrors          : [ 'ServerException', 'ApiException' ],
+  beforeSendTransaction : (
+	 event : TransactionEvent,
+	 hint : EventHint,
+  ) => {
+	 if ( !event.transaction )
+		{
+		  return null
+		}
+
+	 return event
+  },
 }

@@ -1,8 +1,25 @@
+import type { CacheReplacementPolicy } from './cache-replacement-policy.js'
+import type { ICache }                 from './cache.js'
+
+
+
 /**
  * Represents an abstract class for managing cache.
  */
 export abstract class CacheManager
   {
+	 public cache : ICache
+
+	 constructor(
+		cache : ICache,
+		configuration? : {
+		  replacementPolicy : CacheReplacementPolicy
+		},
+	 )
+		{
+		  this.cache = cache
+		}
+
 	 //noinspection FunctionNamingConventionJS
 	 /**
 	  * Retrieves the value associated with the given key.

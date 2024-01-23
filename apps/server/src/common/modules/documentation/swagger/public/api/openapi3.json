@@ -348,7 +348,7 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Rusty.Runolfsdottir@gmail.com",
+            "example": "Annie22@gmail.com",
             "schema": {
               "type": "string"
             }
@@ -628,7 +628,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Rusty.Runolfsdottir@gmail.com",
+            "example": "Annie22@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -647,12 +647,12 @@
           },
           "username": {
             "type": "string",
-            "description": "The domain's username",
-            "example": "Electa_Blick",
+            "description": "The account's username",
+            "example": "Hans_Gibson55",
             "examples": [
-              "Raul_Marks",
-              "Buddy.Schulist",
-              "Anibal_Pouros"
+              "Joshua61",
+              "Freida_Kuvalis",
+              "Jordi_Willms"
             ]
           }
         },
@@ -717,15 +717,23 @@
         "properties": {
           "username": {
             "type": "string",
-            "description": "Username of account",
-            "example": ""
+            "description": "The account's username",
+            "example": "Hans_Gibson55",
+            "examples": [
+              "Joshua61",
+              "Freida_Kuvalis",
+              "Jordi_Willms"
+            ]
           },
           "method": {
             "type": "string",
             "description": "Recovery Method",
             "example": ""
           }
-        }
+        },
+        "required": [
+          "username"
+        ]
       },
       "AuthenticationResponse": {
         "type": "object",
@@ -745,11 +753,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4"
             ]
           }
         },
@@ -766,11 +774,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1ODk0MzY0fQ.n5Kb5GSMLH39HvodmN4ZDNZyG82oomJ6nsegw8SL5hk"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2MDMxNzQzfQ.arcaPB1kI9juTiy6kUABhKxtt7k-sqTZSi0cssl14x4"
             ]
           }
         },
@@ -789,7 +797,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Rusty.Runolfsdottir@gmail.com",
+            "example": "Annie22@gmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -803,12 +811,12 @@
           },
           "username": {
             "type": "string",
-            "description": "The domain's username",
-            "example": "Electa_Blick",
+            "description": "The account's username",
+            "example": "Hans_Gibson55",
             "examples": [
-              "Raul_Marks",
-              "Buddy.Schulist",
-              "Anibal_Pouros"
+              "Joshua61",
+              "Freida_Kuvalis",
+              "Jordi_Willms"
             ]
           }
         },
@@ -825,22 +833,22 @@
         "properties": {
           "username": {
             "type": "string",
-            "description": "The domain's username",
-            "example": "Electa_Blick",
+            "description": "The account's username",
+            "example": "Hans_Gibson55",
             "examples": [
-              "Odessa18",
-              "Brant.Gibson-Considine",
-              "Maiya_Koepp"
+              "Joshua61",
+              "Freida_Kuvalis",
+              "Jordi_Willms"
             ]
           },
           "password": {
             "type": "string",
-            "description": "The domain's password",
+            "description": "The account's password",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "MnYwoieyCHUa3XF",
-              "Y6q55vxndN2sfTi",
-              "zi1o2lRWN1rCWzR"
+              "6xqZvXIX21jwN7K",
+              "CqxFDaTfTGvT5LF",
+              "muofsWZYRJDx_Kc"
             ]
           }
         },

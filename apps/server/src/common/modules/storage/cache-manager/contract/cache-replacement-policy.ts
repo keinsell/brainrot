@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,23 @@
  *
  */
 
-import { ApiProperty }                from '@nestjs/swagger'
-import { ApiPropertyAccountUsername } from '../value-objects/username.js'
 
 
-
-export class RecoverAccount
+export abstract class CacheReplacementPolicy
   {
-	 @ApiPropertyAccountUsername username : string
+	 /**
+	  * This method inserts a new key-value pair into the cache. It is responsible for finding the appropriate location
+	  * for the new entry and updating the cache's metadata, such as access counters or time-to-live (TTL) values.
+	  * @param {string} key
+	  * @param value
+	  * @returns {Promise<void>}
+	  */
+	 abstract insert(
+		key : string,
+		value : unknown,
+	 ) : Promise<void>
 
-	 @ApiProperty( {
-						  name        : 'method',
-						  description : 'Recovery Method',
-						  example     : '',
-						  required    : false,
-						} ) method : 'sms' | 'pgp' | 'email'
+
+
+	 abstract evict() : Promise<any>
   }

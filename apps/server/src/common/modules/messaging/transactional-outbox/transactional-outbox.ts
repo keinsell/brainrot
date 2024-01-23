@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jakub Olan <keinsell@protonmail.com>
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,11 @@
  *
  */
 
-import { ApiProperty }                from '@nestjs/swagger'
-import { ApiPropertyAccountUsername } from '../value-objects/username.js'
+import type { Message } from '../../../libraries/message/message.js'
 
 
 
-export class RecoverAccount
+export abstract class TransactionalOutbox
   {
-	 @ApiPropertyAccountUsername username : string
-
-	 @ApiProperty( {
-						  name        : 'method',
-						  description : 'Recovery Method',
-						  example     : '',
-						  required    : false,
-						} ) method : 'sms' | 'pgp' | 'email'
+	 abstract send(message : Message) : Promise<void>
   }

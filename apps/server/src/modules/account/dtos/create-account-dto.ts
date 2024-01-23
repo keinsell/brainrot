@@ -1,6 +1,7 @@
-import { faker }          from '@faker-js/faker'
-import { ApiProperty }    from '@nestjs/swagger'
-import { AccountFixture } from '../../../utilities/fixtures/account-fixture.js'
+import { faker }                      from '@faker-js/faker'
+import { ApiProperty }                from '@nestjs/swagger'
+import { AccountFixture }             from '../../../utilities/fixtures/account-fixture.js'
+import { ApiPropertyAccountUsername } from '../value-objects/username.js'
 
 
 
@@ -56,10 +57,5 @@ export class CreateAccountDto
 	  * Represents a username.
 	  * @typedef {string} username
 	  */
-	 @ApiProperty( {
-						  name        : 'username',
-						  description : 'The domain\'s username',
-						  example     : AccountFixture.username,
-						  examples    : AccountFixture._examples.usernames,
-						} ) username : string
+	 @ApiPropertyAccountUsername username : string
   }
