@@ -3,10 +3,12 @@ import {
   Logger,
   type OnApplicationBootstrap,
   type OnApplicationShutdown,
-}                        from '@nestjs/common'
-import { EventEmitter2 } from '@nestjs/event-emitter'
-import { Event }         from '../../libraries/message/event.js'
-import { Message }       from '../../libraries/message/message.js'
+  Optional,
+}                                   from '@nestjs/common'
+import { EventEmitter2 }            from '@nestjs/event-emitter'
+import { Event }                    from '../../libraries/message/event.js'
+import { Message }                  from '../../libraries/message/message.js'
+import type { TransactionalOutbox } from './transactional-outbox/transactional-outbox.js'
 
 
 
@@ -16,16 +18,25 @@ export class EventBus
 				 OnApplicationBootstrap
   {
 	 private logger : Logger = new Logger( 'event_bus' )
+
 	 private eventNames : string[]
 
 
-	 constructor(private eventEmitter : EventEmitter2)
+	 constructor(
+		private eventEmitter : EventEmitter2,
+		@Optional() private transactionalOutbox : TransactionalOutbox,
+	 )
 		{
 		}
 
 
 	 publish(event : Event)
 		{
+		  if ( this.transactionalOutbox )
+			 {
+				this.transactionalOutbox.inbound( event )
+			 }
+
 		  this.logger.debug(
 			 `Publishing ${event.id} to namespace ${event.namespace} (${event.id}) => ${JSON.stringify( event )}` )
 
@@ -36,9 +47,19 @@ export class EventBus
 				this.logger.warn( `No listeners registered for ${event.namespace}` )
 			 }
 
-		  this.eventEmitter.emitAsync( event.namespace, event ).then( () => {
+
+
+		  this.eventEmitter.emitAsync( event.namespace, event )
+		  .then( () => {
 			 this.logger.verbose( `Published ${event.id} to ${event.namespace}` )
+
+			 if ( this.transactionalOutbox )
+				{
+				  this.transactionalOutbox.outbound( event )
+				}
 		  } )
+
+
 
 		}
 

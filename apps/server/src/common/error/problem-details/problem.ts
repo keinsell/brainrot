@@ -40,17 +40,20 @@ export class Problem
 						  example     : 'com.methylphenidate.account.already-exists',
 						} ) /** A URI reference [RFC3986](https://tools.ietf.org/html/rfc3986) that identifies the problem type. */
 							 type : string
+
 	 @ApiProperty( {
 						  type        : String,
 						  description : 'A short, human-readable summary of the problem type.',
 						  example     : 'Account Already Exists',
 						} ) title : string
+
 	 @ApiProperty( {
 						  type        : 'int',
 						  enum        : HttpStatus,
 						  description : 'cyz',
 						  example     : HttpStatus.BAD_REQUEST,
 						} ) status : HttpStatus
+
 	 //	 @ApiProperty( {
 	 //						  type        : String,
 	 //						  description : 'A human-readable explanation specific to this occurrence of the problem.',

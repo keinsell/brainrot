@@ -10,6 +10,7 @@ import {
 import { APP_FILTER }              from '@nestjs/core'
 import Sentry                      from '@sentry/node'
 import { HttpExceptionFilter }     from './common/filters/exception-filter/http-exception-filter.js'
+import { GraphqlModule }           from './common/graphql/graphql-module.js'
 import { DocumentationModule }     from './common/modules/documentation/documentation-module.js'
 import { DeveloperToolsModule }    from './common/modules/environment/dev-tools/developer-tools.module.js'
 import { HealthModule }            from './common/modules/observability/healthcheck/health-module.js'
@@ -22,6 +23,7 @@ import { RegionModule }            from './modules/todo_regions/region-module.js
 
 @Module( {
 			  imports     : [
+				 GraphqlModule,
 				 SharedModule,
 				 DocumentationModule,
 				 HealthModule,
@@ -46,14 +48,16 @@ export class Container
 
 	 configure(consumer : MiddlewareConsumer)
 		{
-		  consumer.apply( Sentry.Handlers.requestHandler() ).forRoutes( {
-																								path   : '*',
-																								method : RequestMethod.ALL,
-																							 } )
-		  consumer.apply( Sentry.Handlers.tracingHandler() ).forRoutes( {
-																								path   : '*',
-																								method : RequestMethod.ALL,
-																							 } )
+		  consumer.apply( Sentry.Handlers.requestHandler() )
+		  .forRoutes( {
+							 path   : '*',
+							 method : RequestMethod.ALL,
+						  } )
+		  consumer.apply( Sentry.Handlers.tracingHandler() )
+		  .forRoutes( {
+							 path   : '*',
+							 method : RequestMethod.ALL,
+						  } )
 		}
 
 	 async onModuleInit()

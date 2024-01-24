@@ -22,14 +22,19 @@
  * SOFTWARE.
  *
  */
+import {
+  Query,
+  Resolver,
+} from '@nestjs/graphql'
 
-import type { Message } from '../../../libraries/message/message.js'
 
 
-
-export abstract class TransactionalOutbox
+@Resolver()
+export class FooResolver
   {
-	 abstract inbound(message : Message) : Promise<void>
 
-	 abstract outbound(message : Message) : Promise<void>
+	 @Query( () => String ) sayHello() : string
+		{
+		  return 'Hello World!'
+		}
   }

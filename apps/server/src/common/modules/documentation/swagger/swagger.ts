@@ -114,18 +114,18 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	 const logger = new Logger( 'doc:swagger' )
 
 	 const swaggerConfig = new DocumentBuilder()
-		.setTitle( __config.get( 'SERVICE_NAME' ) )
-		.setDescription( __config.get( 'SERVICE_DESCRIPTION' ) )
-		.setVersion( '1.0' )
-		.addTag( 'api' )
-		.addBearerAuth( {
-								name         : 'Bearer Token',
-								type         : 'http',
-								scheme       : 'bearer',
-								bearerFormat : 'JWT',
-								description  : 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer <token>"',
-							 } )
-		.build()
+	 .setTitle( __config.get( 'SERVICE_NAME' ) )
+	 .setDescription( __config.get( 'SERVICE_DESCRIPTION' ) )
+	 .setVersion( '1.0' )
+	 .addTag( 'api' )
+	 .addBearerAuth( {
+							 name         : 'Bearer Token',
+							 type         : 'http',
+							 scheme       : 'bearer',
+							 bearerFormat : 'JWT',
+							 description  : 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer <token>"',
+						  } )
+	 .build()
 
 	 logger.verbose( `Swagger documentation base built for ${__config.get( 'SERVICE_NAME' )} service.` )
 
@@ -134,14 +134,14 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	 const document = SwaggerModule.createDocument( app, swaggerConfig,
 
 																	new DocumentBuilder()
-																	  // https://stackoverflow.com/questions/59376717/global-headers-for-all-controllers-nestjs-swagger
-																	  // .addGlobalParameters( { in          : 'header', required    :
-																	  // true, name        : 'x-request-id', description : 'A unique
-																	  // identifier assigned to the request. Clients can include this
-																	  // header' + ' to trace and correlate requests across different
-																	  // services and systems.', schema      : {type : 'string'},
-																	  // deprecated  : true, example : nanoid( 128 ), } )
-																	  .build() as any,
+																	// https://stackoverflow.com/questions/59376717/global-headers-for-all-controllers-nestjs-swagger
+																	// .addGlobalParameters( { in          : 'header', required    :
+																	// true, name        : 'x-request-id', description : 'A unique
+																	// identifier assigned to the request. Clients can include this
+																	// header' + ' to trace and correlate requests across different
+																	// services and systems.', schema      : {type : 'string'},
+																	// deprecated  : true, example : nanoid( 128 ), } )
+																	.build() as any,
 	 )
 
 

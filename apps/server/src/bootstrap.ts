@@ -51,7 +51,10 @@ export async function bootstrap()
 																			  tracing     : true,
 																			  breadcrumbs : true,
 																			} ) )
-	 Sentry.addIntegration( new Sentry.Integrations.Express( {app : app.getHttpAdapter().getInstance()} ) )
+	 Sentry.addIntegration( new Sentry.Integrations.Express( {
+																				  app : app.getHttpAdapter()
+																				  .getInstance(),
+																				} ) )
 
 	 // Enable graceful shutdown hooks
 	 app.enableShutdownHooks()
@@ -107,9 +110,14 @@ export async function bootstrap()
 				await app.listen( openPort.port, () => {
 				  logger.verbose( `${'-'.repeat( 54 )}` )
 				  logger.log( `🚀 Application started on ${applicationUrl} in ${NODE_ENV} mode` )
+
 				  logger.verbose( `${'-'.repeat( 54 )}` )
 				  logger.verbose( `📄 Compodoc endpoint: ${applicationUrl + '/docs'}` )
 				  logger.verbose( `📄 Swagger endpoint: ${applicationUrl + '/api'}` )
+				  if ( StaticFeatureFlags.isGraphQLRunning )
+					 {
+						logger.verbose( `🧩 GraphQL is running on: ${applicationUrl + '/graphql'}` )
+					 }
 				  logger.verbose(
 					 `🩺 Healthcheck endpoint: ${applicationUrl + __config.get( 'APPLICATION' ).HEALTHCHECK_ENDPOINT}` )
 
@@ -152,9 +160,9 @@ export async function bootstrap()
 								ProductSeeder, AccountSeeder, ProfileSeeder, RoleSeeder,
 							 ],
 						  } )
-				  .run( [
-							 ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder, RoleSeeder,
-						  ] )
+				.run( [
+						  ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder, RoleSeeder,
+						] )
 			 }
 		  catch ( e )
 			 {
