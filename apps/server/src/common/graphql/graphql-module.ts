@@ -29,9 +29,15 @@ import {
   ApolloDriver,
   type ApolloDriverConfig,
 }                                                    from '@nestjs/apollo'
-import { Module }                                    from '@nestjs/common'
+import {
+  Module,
+  OnModuleDestroy,
+  OnModuleInit,
+}                                                    from '@nestjs/common'
 import { GraphQLModule }                             from '@nestjs/graphql'
 import { join }                                      from 'node:path'
+import process                                       from 'node:process'
+import { StaticFeatureFlags }                        from '../../configs/static-feature-flags.js'
 import { FooResolver }                               from './hello-world-resolver.js'
 
 
@@ -58,5 +64,15 @@ import { FooResolver }                               from './hello-world-resolve
 			  providers : [ FooResolver ],
 			} )
 export class GraphqlModule
+  implements OnModuleInit,
+				 OnModuleDestroy
   {
+	 public onModuleDestroy() : any
+		{
+		}
+
+	 public onModuleInit() : any
+		{
+		  StaticFeatureFlags.isGraphQLRunning = true
+		}
   }
