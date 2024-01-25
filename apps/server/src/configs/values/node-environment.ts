@@ -42,7 +42,7 @@ export enum NodeEnvironment
 	  * @type {string}
 	  */
 	 DEVELOPMENT = 'development',
-	 TESTING     = 'test',
+	 TESTING     = 'testing',
 	 INTEGRATION = 'integration',
 	 DEBUG       = 'debug',
   }

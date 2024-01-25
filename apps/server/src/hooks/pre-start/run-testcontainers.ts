@@ -48,6 +48,17 @@ export class ContainerEnvironment
 		{
 		  if ( __appConfig.USE_TESTCONTAINERS )
 			 {
+				 new Logger("environment").debug("Application is running in"
+				                                 + " 'testing' environment"
+				                                 + " which means there will"
+				                                 + " be mocked up"
+				                                 + " dependencies such as"
+				                                 + " databases. Please a"
+				                                 + " wait a longer while to"
+				                                 + " let application setup"
+				                                 + " everything.")
+
+
 				await new ContainerEnvironment().startContainers()
 			 }
 		}

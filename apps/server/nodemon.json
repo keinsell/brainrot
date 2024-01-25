@@ -3,7 +3,9 @@
   "delay": 2000,
   "signal": "SIGQUIT",
   "watch": [
-    "src"
+    "src",
+    ".env",
+    "dist/.env"
   ],
   "ext": ".ts,.js",
   "ignore": [

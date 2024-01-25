@@ -53,7 +53,7 @@ export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfigu
 	 format  : Boolean,
   },
   USE_TESTCONTAINERS   : {
-	 default : isTesting(),
+	 default : true,
 	 format  : Boolean,
   },
   OPENAPI_ENDPOINT     : {

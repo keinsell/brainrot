@@ -1,1 +1,2 @@
 sentry_install_log*
+!.env
