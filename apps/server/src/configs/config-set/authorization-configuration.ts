@@ -41,7 +41,7 @@ export interface IAuthorizationConfiguration
 
 export const AuthroizationConfiguration : Convict.Schema<IAuthorizationConfiguration> = {
   JWT_SECRET             : {
-	 default   : isDevelopment() || isTesting() ? randomBytes( 32 ).toString( 'hex' ) : null,
+	 default   : randomBytes( 32 ).toString( 'hex' ),
 	 format    : String,
 	 env       : 'JWT_SECRET',
 	 sensitive : true,

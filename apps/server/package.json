@@ -142,7 +142,7 @@
     "tildify": "^3.0.0",
     "tslib": "^2.6.2",
     "type-fest": "^4.9.0",
-    "typia": "^5.3.10",
+    "typia": "^5.4.1",
     "untildify": "^5.0.0"
   },
   "devDependencies": {

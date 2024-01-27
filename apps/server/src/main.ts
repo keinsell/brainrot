@@ -1,5 +1,5 @@
-import { bootstrap }            from './bootstrap.js'
-import { __appConfig }          from './configs/global/__config.js'
+import { bootstrap }   from './bootstrap.js'
+import { __appConfig } from './configs/global/__config.js'
 import { isProduction }         from './configs/helper/is-production.js'
 import { acquireProcessLock }   from './hooks/pre-start/acquire-process-lock.js'
 import { initializeSentry }     from './hooks/pre-start/initialize-sentry.js'
