@@ -18,6 +18,8 @@ env:
   TF_WORKSPACE: keinsell-dev
   CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
   CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
   deploy_dev_api:
@@ -39,6 +41,14 @@ jobs:
         uses: "./.github/actions/setup-node"
       - name: 🐳 Setup Docker
         uses: "./.github/actions/setup-docker"
+        with:
+          docker_username: ${{ env.DOCKER_USERNAME }}
+          docker_password: ${{ env.DOCKER_TOKEN }}
+
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_TOKEN }}
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
