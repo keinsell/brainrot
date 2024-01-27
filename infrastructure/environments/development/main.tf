@@ -21,6 +21,9 @@ terraform {
     koyeb = {
       source = "koyeb/koyeb"
     }
+    infisical = {
+      source = "infisical/infisical"
+    }
   }
   required_version = ">= 1.0"
 }
@@ -79,6 +82,63 @@ variable "application_http_port" {
 
 resource "random_pet" "service_name" {}
 
+resource "infisical_secret" "DATABASE_URI" {
+  name        = "DATABASE_URI"
+  value       = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+  ]
+}
+
+resource "infisical_secret" "DATABASE_HOST" {
+  name        = "DATABASE_HOST"
+  value       = "${neon_project.default.branch.endpoint.host}"
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+  ]
+}
+
+
+resource "infisical_secret" "DATABASE_PORT" {
+  name        = "DATABASE_PORT"
+  value       = "5432"
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+  ]
+}
+
+
+resource "infisical_secret" "DATABASE_USER" {
+  name        = "DATABASE_USER"
+  value       = neon_role.db_owner.name
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+  ]
+}
+
+resource "infisical_secret" "DATABASE_PASSWORD" {
+  name        = "DATABASE_PASSWORD"
+  value       = neon_role.db_owner.password
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+        neon_project.default,
+        neon_role.db_owner,
+    ]
+}
+
 resource "koyeb_service" "methylophenidate-server" {
   app_name = koyeb_app.methyphenidate-server.name
   definition {
@@ -110,9 +170,7 @@ resource "koyeb_service" "methylophenidate-server" {
     env {
       key   = "DATABASE_URI"
       value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
-      #      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
     }
-
 
     # Exposure
     routes {
@@ -126,12 +184,12 @@ resource "koyeb_service" "methylophenidate-server" {
     }
 
     # Health checks
-    #    health_checks {
-    #      http {
-    #        port = var.application_http_port
-    #        path = "/health"
-    #      }
-    #    }
+    health_checks {
+          http {
+            port = var.application_http_port
+            path = "/health"
+          }
+        }
 
 
     # Regions
