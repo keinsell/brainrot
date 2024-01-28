@@ -8,18 +8,19 @@ on:
     branches:
       - next
       - main
-    paths:
-      - 'package.json'
-      - 'yarn.lock'
-      - 'apps/server/**'
-      - 'packages/**'
-      - 'libs/shared/**'
+#    paths:
+#      - 'package.json'
+#      - 'yarn.lock'
+#      - 'apps/server/**'
+#      - 'packages/**'
+#      - 'libs/shared/**'
+
 env:
   TF_WORKSPACE: keinsell-dev
   CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
   CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 jobs:
   deploy_dev_api:
@@ -47,8 +48,8 @@ jobs:
 
       - uses: docker/login-action@v1
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
