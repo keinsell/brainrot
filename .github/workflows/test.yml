@@ -46,16 +46,4 @@ jobs:
         run: cd apps/server && CI='' pnpm build:tsc
       - shell: bash
         run: cp example.env apps/server/.env
-      - shell: bash
-        run: cd apps/server && pnpm db:push
-      - name: Start API
-        shell: bash
-        run: cd apps/server && nohup pnpm dev &
-      - name: Wait on API
-        shell: bash
-        run: wait-on --timeout=180000 http://localhost:1337/health
-      - name: Run E2E tests
-        run: |
-          cd apps/server && pnpm test:e2e
-      - name: Kill port for server 1337 for unit tests
-        run: sudo kill -9 $(sudo lsof -t -i:1337)
+      # TODO: Add container environment
