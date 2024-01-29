@@ -36,6 +36,9 @@ COPY --from=BUILD /tmp/node_modules /usr/bin/application/node_modules
 COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
 COPY --from=BUILD /tmp/package.json /usr/bin/application/package.json
 
+RUN chown -R appuser:appgroup /usr/bin/application/src && \
+    chmod -R 755 /usr/bin/application/src
+
 USER appuser
 
 EXPOSE 80
