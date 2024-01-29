@@ -65,6 +65,10 @@ jobs:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
           github_token: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Build and deploy the application
+        shell: bash
+        run: koyeb services redeploy -a methylphenidate --use-cache
+
       # TODO: Deploy Terraform
       # TODO: Deploy Pulumi
       # TODO: Create Sentry Version
