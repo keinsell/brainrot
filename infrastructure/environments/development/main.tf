@@ -104,6 +104,14 @@ resource "infisical_secret" "DATABASE_HOST" {
   ]
 }
 
+resource "infisical_secret" "DATABASE_HOST" {
+  name        = "KOYEB_TOKEN"
+  value       = var.koyeb_token
+  env_slug    = "dev"
+  folder_path = "/"
+}
+
+
 resource "infisical_secret" "TF_CLOUD_ORGANIZATION" {
   name        = "TF_CLOUD_ORGANIZATION"
   value       = "keinsell"
