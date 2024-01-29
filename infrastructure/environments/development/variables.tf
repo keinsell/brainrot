@@ -16,6 +16,7 @@ variable "infisical_service_token" {
     description = "Developer Token dedicated to interact with Infisical Platform.\n https://app.infisical.com/project/65b52b18d18e1b9f52830831/members"
 }
 
+
 variable "dockerhub_username" {
   description = "Username to Dockerhub.\n https://hub.docker.com/settings/security"
 }
