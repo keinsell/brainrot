@@ -104,7 +104,7 @@ resource "infisical_secret" "DATABASE_HOST" {
   ]
 }
 
-resource "infisical_secret" "DATABASE_HOST" {
+resource "infisical_secret" "KOYEB_TOKEN" {
   name        = "KOYEB_TOKEN"
   value       = var.koyeb_token
   env_slug    = "dev"
