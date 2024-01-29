@@ -69,3 +69,18 @@ jobs:
       - name: Build and deploy the application
         shell: bash
         run: koyeb services redeploy -a methylphenidate picked-swan
+
+      - name: Check service health
+        run: |
+          end=$((SECONDS+180))
+          while [ $SECONDS -lt $end ]; do
+            SERVICE_STATUS=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.status')
+            if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
+              echo "Service is healthy."
+              exit 0
+            fi
+            echo "Service is not healthy. Waiting..."
+            sleep 10
+          done
+          echo "Service did not become healthy within the expected time. Aborting redeployment."
+          exit 1
