@@ -27,7 +27,8 @@ FROM node:18 as RUNTIME
 RUN addgroup --system appgroup && \
     adduser --system --ingroup appgroup appuser && \
     mkdir /usr/bin/application && \
-    chown -R appuser:appgroup /usr/bin/application
+    chown -R appuser:appgroup /usr/bin/application && \
+    chmod -R 755 /usr/bin/application
 
 WORKDIR /usr/bin/application
 
