@@ -68,4 +68,4 @@ jobs:
 
       - name: Build and deploy the application
         shell: bash
-        run: koyeb services redeploy -a methylphenidate
+        run: koyeb services redeploy -a methylphenidate picked-swan
