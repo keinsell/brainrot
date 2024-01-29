@@ -41,6 +41,7 @@ jobs:
 
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
+
       - name: 🐳 Setup Docker
         uses: "./.github/actions/setup-docker"
         with:
@@ -67,8 +68,4 @@ jobs:
 
       - name: Build and deploy the application
         shell: bash
-        run: koyeb services redeploy -a methylphenidate --use-cache
-
-      # TODO: Deploy Terraform
-      # TODO: Deploy Pulumi
-      # TODO: Create Sentry Version
+        run: koyeb services redeploy -a methylphenidate
