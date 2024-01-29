@@ -5,6 +5,12 @@ on:
     branches:
       - main
       - next
+    paths:
+      - 'package.json'
+      - 'yarn.lock'
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'libs/shared/**'
   push:
     branches:
       - next
@@ -15,8 +21,6 @@ on:
       - 'apps/server/**'
       - 'packages/**'
       - 'libs/shared/**'
-env:
-  TF_WORKSPACE: keinsell-dev
 
 jobs:
   # Pre-build is a quality-control step, dedicated for checking code formatting,
