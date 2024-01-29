@@ -81,7 +81,8 @@ jobs:
             DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.latest_deployment_id | select(.!=null)')
             koyeb deployments logs $DEPLOYMENT_ID &
             while [ $SECONDS -lt $end ] && [ $attempts -lt $max_attempts ]; do
-              SERVICE_STATUS=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.status')
+              SERVICE_STATUS=$(koyeb services describe -a methylphenidate 
+          picked-swan -o json | jq -r '.status | select(.!=null)')
               if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
                 echo "Service is healthy."
                 exit 0
