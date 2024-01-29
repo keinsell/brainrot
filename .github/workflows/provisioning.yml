@@ -1,4 +1,4 @@
-name: "Infrastructure Provisioning"
+name: "🌐 Provisioning"
 
 on:
   pull_request:
