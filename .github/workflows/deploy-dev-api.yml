@@ -39,6 +39,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup OS
+        uses: "./.github/actions/setup-os"
+
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
 
@@ -79,7 +82,9 @@ jobs:
               echo "Service is healthy."
               exit 0
             fi
-            echo "Service is not healthy. Waiting..."
+            DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.latest_deployment_id')
+            echo "Service is not healthy. Fetching logs for deployment $DEPLOYMENT_ID..."
+            koyeb deployments logs $DEPLOYMENT_ID
             sleep 10
           done
           echo "Service did not become healthy within the expected time. Aborting redeployment."
