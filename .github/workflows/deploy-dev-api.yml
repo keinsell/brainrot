@@ -8,6 +8,7 @@ on:
     branches:
       - next
       - main
+      - 121-add-manual-deployment-of-docker-image-to-koyeb
 #    paths:
 #      - 'package.json'
 #      - 'yarn.lock'
@@ -45,11 +46,6 @@ jobs:
         with:
           docker_username: ${{ env.DOCKER_USERNAME }}
           docker_password: ${{ env.DOCKER_TOKEN }}
-
-#      - uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
