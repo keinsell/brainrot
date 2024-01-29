@@ -104,6 +104,26 @@ resource "infisical_secret" "DATABASE_HOST" {
   ]
 }
 
+resource "infisical_secret" "TF_CLOUD_ORGANIZATION" {
+  name        = "TF_CLOUD_ORGANIZATION"
+  value       = "keinsell"
+  env_slug    = "dev"
+  folder_path = "/"
+}
+
+resource "infisical_secret" "TF_WORKSPACE" {
+  name        = "TF_WORKSPACE"
+  value       = "methylphenidate"
+  env_slug    = "dev"
+  folder_path = "/"
+}
+
+resource "infisical_secret" "TF_API_TOKEN" {
+  name        = "TF_API_TOKEN"
+  value       = var.tf_access_token
+  env_slug    = "dev"
+  folder_path = "/"
+}
 
 resource "infisical_secret" "DATABASE_PORT" {
   name        = "DATABASE_PORT"
@@ -137,6 +157,21 @@ resource "infisical_secret" "DATABASE_PASSWORD" {
         neon_project.default,
         neon_role.db_owner,
     ]
+}
+
+resource "infisical_secret" "DOCKERHUB_USERNAME" {
+  name        = "DOCKERHUB_USERNAME"
+  env_slug    = "dev"
+  folder_path = "/"
+  value      = var.dockerhub_username
+}
+
+
+resource "infisical_secret" "DOCKERHUB_TOKEN" {
+  name        = "DOCKERHUB_TOKEN"
+  value       = var.dockerhub_token
+  env_slug    = "dev"
+  folder_path = "/"
 }
 
 resource "koyeb_service" "methylophenidate-server" {
@@ -197,7 +232,7 @@ resource "koyeb_service" "methylophenidate-server" {
 
     # Configuration of docker deployment
     docker {
-      image = "keinsell/methylphenidate-server:latest"
+      image = "keinsell/methylphenidate-server:dev"
     }
   }
 
