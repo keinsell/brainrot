@@ -25,6 +25,7 @@
 
 import convict       from 'convict'
 import { ConfigSet } from '../contract/config-set.js'
+import {isDevelopment} from '../helper/is-development.js'
 import { isTesting } from '../helper/is-testing.js'
 
 
@@ -53,7 +54,7 @@ export const ApplicationConfigurationSchema : convict.Schema<IApplicationConfigu
 	 format  : Boolean,
   },
   USE_TESTCONTAINERS   : {
-	 default : true,
+	 default : isTesting(),
 	 format  : Boolean,
   },
   OPENAPI_ENDPOINT     : {

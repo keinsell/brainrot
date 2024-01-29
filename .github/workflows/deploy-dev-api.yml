@@ -8,6 +8,7 @@ on:
     branches:
       - next
       - main
+      - 121-add-manual-deployment-of-docker-image-to-koyeb
 #    paths:
 #      - 'package.json'
 #      - 'yarn.lock'
@@ -38,18 +39,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup OS
+        uses: "./.github/actions/setup-os"
+
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
+
       - name: 🐳 Setup Docker
         uses: "./.github/actions/setup-docker"
         with:
           docker_username: ${{ env.DOCKER_USERNAME }}
           docker_password: ${{ env.DOCKER_TOKEN }}
-
-#      - uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
@@ -63,6 +63,33 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # TODO: Deploy Terraform
-      # TODO: Deploy Pulumi
-      # TODO: Create Sentry Version
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/install-koyeb-cli@v2
+        with:
+          api_token: "${{ secrets.KOYEB_TOKEN }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Build and deploy the application
+        shell: bash
+        run: koyeb services redeploy -a methylphenidate obliging-mustang
+
+      - name: Check service health
+        run: |
+            end=$((SECONDS+180))
+            attempts=0
+            max_attempts=20
+            DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate obliging-mustang -o json | jq -r '.latest_deployment_id | select(.!=null)')
+            koyeb deployments logs $DEPLOYMENT_ID &
+            while [ $SECONDS -lt $end ] && [ $attempts -lt $max_attempts ]; do
+              SERVICE_STATUS=$(koyeb services describe -a methylphenidate obliging-mustang -o json | jq -r '.status | select(.!=null)')
+              if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
+                echo "Service is healthy."
+                exit 0
+              fi
+              echo $SERVICE_STATUS
+              echo "Service is not healthy. Waiting 10 seconds before retrying."
+              sleep 10
+              attempts=$((attempts+1))
+            done
+            echo "Service did not become healthy within the expected time or maximum attempts reached. Aborting redeployment."
+            exit 1

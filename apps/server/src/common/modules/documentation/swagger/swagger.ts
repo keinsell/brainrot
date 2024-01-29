@@ -7,9 +7,12 @@ import {
   OpenAPIObject,
   SwaggerModule,
 }                           from '@nestjs/swagger'
+import filedirname          from 'filedirname'
 import fs                   from 'node:fs'
+import path                 from 'path'
 import prettier             from 'prettier'
 import tildify              from 'tildify'
+import {fileURLToPath}      from 'url'
 import { __config }         from '../../../../configs/global/__config.js'
 import { getMetadataStore } from '../../../../utilities/docs-utils/swagger-api-model.js'
 
@@ -160,9 +163,15 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 	 //	},
 	 //}))
 
-	 const documentationObjectPath = `${process.cwd()}/src/common/modules/documentation/swagger/public/api/openapi3.json`
+	  const __filename = fileURLToPath(import.meta.url);
+	  const __dirname = path.dirname(__filename);
 
+	  const absoluteDir = path.resolve(__dirname);
+	  const documentationDirectoryPath = path.join(absoluteDir, 'public', 'api');
 
+	  fs.mkdirSync(documentationDirectoryPath, { recursive: true })
+
+	  const documentationObjectPath = path.join(documentationDirectoryPath, "openapi3.json");
 
 	 const formattedDocument = await prettier.format( JSON.stringify( document ), {
 		parser   : 'json-stringify',
@@ -171,6 +180,7 @@ export async function buildSwaggerDocumentation(app : INestApplication) : Promis
 
 	 // Save Swagger Documentation to File
 	 fs.writeFileSync( documentationObjectPath, formattedDocument )
+	  fs.writeFileSync( "./openapi3.json", formattedDocument )
 
 	 logger.verbose( `Swagger documentation was snapshot into ${tildify( documentationObjectPath )}` )
   }

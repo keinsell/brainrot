@@ -10,7 +10,7 @@ runs:
       run: sudo rm -f /var/lib/man-db/auto-update
 
     - name: 🧩 Install System Packages
-      run: sudo apt update && sudo apt-get install -y curl lsof unzip
+      run: sudo apt update && sudo apt-get install -y curl lsof unzip jq zip
       shell: bash
 
     - name: ⚛️ Setup kernel for react native, increase watchers
