@@ -75,17 +75,20 @@ jobs:
 
       - name: Check service health
         run: |
-          end=$((SECONDS+180))
-          while [ $SECONDS -lt $end ]; do
-            SERVICE_STATUS=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.status')
-            if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
-              echo "Service is healthy."
-              exit 0
-            fi
-            DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.latest_deployment_id | select(.!=null)' &)
-            echo "Service is not healthy. Fetching logs for deployment $DEPLOYMENT_ID..."
-            koyeb deployments logs $DEPLOYMENT_ID
-            sleep 10
-          done
-          echo "Service did not become healthy within the expected time. Aborting redeployment."
-          exit 1
+            end=$((SECONDS+180))
+            attempts=0
+            max_attempts=20
+            while [ $SECONDS -lt $end ] && [ $attempts -lt $max_attempts ]; do
+              SERVICE_STATUS=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.status')
+              if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
+                echo "Service is healthy."
+                exit 0
+              fi
+              DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.latest_deployment_id | select(.!=null)' &)
+              echo "Service is not healthy. Fetching logs for deployment $DEPLOYMENT_ID..."
+              koyeb deployments logs $DEPLOYMENT_ID
+              sleep 10
+              attempts=$((attempts+1))
+            done
+            echo "Service did not become healthy within the expected time or maximum attempts reached. Aborting redeployment."
+            exit 1
