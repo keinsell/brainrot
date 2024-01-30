@@ -8,7 +8,7 @@ on:
     branches:
       - next
       - main
-      - 121-add-manual-deployment-of-docker-image-to-koyeb
+      - add-database-migration
 #    paths:
 #      - 'package.json'
 #      - 'yarn.lock'
@@ -17,11 +17,9 @@ on:
 #      - 'libs/shared/**'
 
 env:
-  TF_WORKSPACE: keinsell-dev
-  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
-  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
   DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  DATABASE_URI: ${{ secrets.DATABASE_URI }}
 
 jobs:
   deploy_dev_api:
@@ -74,22 +72,8 @@ jobs:
         run: koyeb services redeploy -a methylphenidate picked-swan
 
       - name: Check service health
+        run: ./scripts/ci/check_api_service_health.sh
+
+      - name: Migrate Database
         run: |
-            end=$((SECONDS+180))
-            attempts=0
-            max_attempts=20
-            DEPLOYMENT_ID=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.latest_deployment_id | select(.!=null)')
-            koyeb deployments logs $DEPLOYMENT_ID &
-            while [ $SECONDS -lt $end ] && [ $attempts -lt $max_attempts ]; do
-              SERVICE_STATUS=$(koyeb services describe -a methylphenidate picked-swan -o json | jq -r '.status | select(.!=null)')
-              if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
-                echo "Service is healthy."
-                exit 0
-              fi
-              echo $SERVICE_STATUS
-              echo "Service is not healthy. Waiting 10 seconds before retrying."
-              sleep 10
-              attempts=$((attempts+1))
-            done
-            echo "Service did not become healthy within the expected time or maximum attempts reached. Aborting redeployment."
-            exit 1
+          cd apps/server && pnpm run db:migrate:deploy
