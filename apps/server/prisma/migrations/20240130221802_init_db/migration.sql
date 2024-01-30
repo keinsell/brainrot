@@ -50,9 +50,7 @@ CREATE TABLE "AccountMetadata" (
     "value" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "version" INTEGER NOT NULL DEFAULT 1,
-
-    CONSTRAINT "AccountMetadata_pkey" PRIMARY KEY ("id")
+    "version" INTEGER NOT NULL DEFAULT 1
 );
 
 -- CreateTable
@@ -168,7 +166,7 @@ CREATE TABLE "ShippingAddress" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "version" INTEGER NOT NULL DEFAULT 1,
 
-    CONSTRAINT "ShippingAddress_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "versioned_shipping_address_pk" PRIMARY KEY ("id","version")
 );
 
 -- CreateTable
@@ -201,6 +199,8 @@ CREATE TABLE "Order" (
     "productId" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "shippingAddressId" TEXT NOT NULL,
+    "shippingAddressVersion" INTEGER NOT NULL,
+    "billingAddressId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -357,7 +357,7 @@ CREATE UNIQUE INDEX "Account_username_key" ON "Account"("username");
 CREATE UNIQUE INDEX "Account_email_key" ON "Account"("email");
 
 -- CreateIndex
-CREATE INDEX "idx_account_id" ON "Account" USING SPGIST ("id");
+CREATE UNIQUE INDEX "AccountMetadata_id_key_key" ON "AccountMetadata"("id", "key");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_name_key" ON "Group"("name");
@@ -369,7 +369,13 @@ CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
 CREATE UNIQUE INDEX "User_accountId_key" ON "User"("accountId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ShippingAddress_id_key" ON "ShippingAddress"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Cart_profileId_key" ON "Cart"("profileId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CartItem_cartId_productId_key" ON "CartItem"("cartId", "productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Checkout_cartId_key" ON "Checkout"("cartId");
@@ -390,7 +396,7 @@ CREATE UNIQUE INDEX "_AccountToRole_AB_unique" ON "_AccountToRole"("A", "B");
 CREATE INDEX "_AccountToRole_B_index" ON "_AccountToRole"("B");
 
 -- AddForeignKey
-ALTER TABLE "AccountMetadata" ADD CONSTRAINT "AccountMetadata_id_fkey" FOREIGN KEY ("id") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AccountMetadata" ADD CONSTRAINT "account_metadata_fk" FOREIGN KEY ("id") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "account_session_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -420,7 +426,10 @@ ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "Order" ADD CONSTRAINT "Order_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_shippingAddressId_fkey" FOREIGN KEY ("shippingAddressId") REFERENCES "ShippingAddress"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Order" ADD CONSTRAINT "Order_shippingAddressId_shippingAddressVersion_fkey" FOREIGN KEY ("shippingAddressId", "shippingAddressVersion") REFERENCES "ShippingAddress"("id", "version") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_billingAddressId_fkey" FOREIGN KEY ("billingAddressId") REFERENCES "BillingAddress"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Cart" ADD CONSTRAINT "Cart_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
