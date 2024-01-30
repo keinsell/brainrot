@@ -9,7 +9,6 @@ on:
       - next
       - main
       - add-database-migration
-
 #    paths:
 #      - 'package.json'
 #      - 'yarn.lock'
@@ -21,6 +20,7 @@ env:
   DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   DATABASE_URI: ${{ secrets.DATABASE_URI }}
+  KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
 
 jobs:
   deploy_dev_api:
@@ -70,10 +70,10 @@ jobs:
 
       - name: Build and deploy the application
         shell: bash
-        run: koyeb services redeploy -a methylphenidate obliging-mustang
-
+        run: koyeb services redeploy $KOYEB_SERVICE_ID
+  
       - name: Check service health
-        run: ./scripts/ci/check_api_service_health.sh
+        run: ./scripts/ci/api-healthcheck.sh $KOYEB_SERVICE_ID
 
       - name: Migrate Database
         run: |
