@@ -15,8 +15,8 @@ terraform {
       version = "3.4.3"
     }
     neon = {
-      source  = "terraform-community-providers/neon"
-      version = "0.1.5"
+      source = "kislerdm/neon"
+      version = "0.4.0"
     }
     koyeb = {
       source = "koyeb/koyeb"
@@ -29,7 +29,7 @@ terraform {
 }
 
 
-resource "koyeb_app" "methyphenidate-server" {
+resource "koyeb_app" "this" {
   # This name stands for top-tier naming under which services are placed
   # Preferably this should be related to our project name
   name = var.project_name
@@ -49,28 +49,6 @@ variable "application_http_port" {
 }
 
 resource "random_pet" "service_name" {}
-
-resource "infisical_secret" "DATABASE_URI" {
-  name        = "DATABASE_URI"
-  value       = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.this.branch.endpoint.host}:5432"
-  env_slug    = "dev"
-  folder_path = "/"
-  depends_on = [
-    neon_project.this,
-    neon_role.db_owner,
-  ]
-}
-
-resource "infisical_secret" "DATABASE_HOST" {
-  name        = "DATABASE_HOST"
-  value       = "${neon_project.this.branch.endpoint.host}"
-  env_slug    = "dev"
-  folder_path = "/"
-  depends_on = [
-    neon_project.this,
-    neon_role.db_owner,
-  ]
-}
 
 resource "infisical_secret" "KOYEB_TOKEN" {
   name        = "KOYEB_TOKEN"
@@ -101,40 +79,6 @@ resource "infisical_secret" "TF_API_TOKEN" {
   folder_path = "/"
 }
 
-resource "infisical_secret" "DATABASE_PORT" {
-  name        = "DATABASE_PORT"
-  value       = "5432"
-  env_slug    = "dev"
-  folder_path = "/"
-  depends_on = [
-    neon_project.this,
-    neon_role.db_owner,
-  ]
-}
-
-
-resource "infisical_secret" "DATABASE_USER" {
-  name        = "DATABASE_USER"
-  value       = neon_role.db_owner.name
-  env_slug    = "dev"
-  folder_path = "/"
-  depends_on = [
-    neon_project.this,
-    neon_role.db_owner,
-  ]
-}
-
-resource "infisical_secret" "DATABASE_PASSWORD" {
-  name        = "DATABASE_PASSWORD"
-  value       = neon_role.db_owner.password
-  env_slug    = "dev"
-  folder_path = "/"
-  depends_on = [
-        neon_project.this,
-        neon_role.db_owner,
-    ]
-}
-
 resource "infisical_secret" "DOCKERHUB_USERNAME" {
   name        = "DOCKERHUB_USERNAME"
   env_slug    = "dev"
@@ -151,12 +95,12 @@ resource "infisical_secret" "DOCKERHUB_TOKEN" {
 }
 
 resource "koyeb_service" "methylophenidate-server" {
-  app_name = koyeb_app.methyphenidate-server.name
+  app_name = koyeb_app.this.name
   definition {
     # This name stands for the name of the service
     # Preferably this should be related to our project name
     # Random pet is used to generate a random name
-    name = random_pet.service_name.id
+    name = "server"
 
     # Instance types
     instance_types {
@@ -172,7 +116,7 @@ resource "koyeb_service" "methylophenidate-server" {
     # Environment variables
     env {
       key   = "SERVICE_NAME"
-      value = random_pet.service_name.id
+      value = "methylophenidate"
     }
     env {
       key   = "NODE_ENV"
@@ -180,7 +124,7 @@ resource "koyeb_service" "methylophenidate-server" {
     }
     env {
       key   = "DATABASE_URI"
-      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.this.branch.endpoint.host}:5432"
+      value = "postgres://${neon_project.this.database_user}:${neon_project.this.database_password}@${neon_project.this.database_host}:5432/${neon_project.this.database_name}"
     }
 
     # Exposure
@@ -214,6 +158,6 @@ resource "koyeb_service" "methylophenidate-server" {
 
   depends_on = [
     neon_project.this,
-    koyeb_app.methyphenidate-server
+    koyeb_app.this
   ]
 }

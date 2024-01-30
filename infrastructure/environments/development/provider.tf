@@ -2,7 +2,7 @@ provider "random" {
 }
 
 provider "neon" {
-  token = var.neon_token
+  api_key = var.neon_token
 }
 
 provider "koyeb" {
