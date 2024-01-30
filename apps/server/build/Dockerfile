@@ -22,10 +22,10 @@ RUN pnpm run build
 
 FROM node:18 as RUNTIME
 
-RUN addgroup --system appgroup && \
-    adduser --system --ingroup appgroup appuser && \
+RUN addgroup --system application_users && \
+    adduser --system --ingroup application_users application_user && \
     mkdir /usr/bin/application && \
-    chown -R appuser:appgroup /usr/bin/application && \
+    chown -R application_user:application_users /usr/bin/application && \
     chmod -R 755 /usr/bin/application
 
 WORKDIR /usr/bin/application
@@ -33,12 +33,11 @@ WORKDIR /usr/bin/application
 COPY --from=BUILD /tmp/node_modules /usr/bin/application/node_modules
 COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
 COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
-COPY --from=BUILD /tmp/prisma /usr/bin/application/prisma
 
-RUN chown -R appuser:appgroup /usr/bin/application/src && \
+RUN chown -R application_user:application_users /usr/bin/application/src && \
     chmod -R 755 /usr/bin/application/src
 
-USER appuser
+USER application_user
 
 EXPOSE 80
 EXPOSE 443

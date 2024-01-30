@@ -9,6 +9,7 @@ on:
       - next
       - main
       - add-database-migration
+
 #    paths:
 #      - 'package.json'
 #      - 'yarn.lock'
@@ -69,7 +70,7 @@ jobs:
 
       - name: Build and deploy the application
         shell: bash
-        run: koyeb services redeploy -a methylphenidate picked-swan
+        run: koyeb services redeploy -a methylphenidate obliging-mustang
 
       - name: Check service health
         run: ./scripts/ci/check_api_service_health.sh

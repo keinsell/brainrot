@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "run": "tsx src/scratchpad.ts",
     "build:nest": "nest build",
@@ -43,7 +44,6 @@
     "sentry:sm:inject": "sentry-cli sourcemaps inject dist",
     "sentry:sm:upload": "sentry-cli sourcemaps upload dist"
   },
-  "type": "module",
   "dependencies": {
     "@apollo/server": "^4.10.0",
     "@automapper/classes": "^8.7.7",
