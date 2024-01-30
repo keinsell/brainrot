@@ -32,7 +32,7 @@ WORKDIR /usr/bin/application
 
 COPY --from=BUILD /tmp/node_modules /usr/bin/application/node_modules
 COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
-COPY --from=BUILD /tmp/package.json /usr/bin/application/package.json
+COPY --from=BUILD /tmp/dist/src /usr/bin/application/src
 
 RUN chown -R application_user:application_users /usr/bin/application/src && \
     chmod -R 755 /usr/bin/application/src

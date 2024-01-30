@@ -35,7 +35,9 @@ resource "koyeb_service" "server" {
     }
     env {
       key   = "DATABASE_URI"
-      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
+      .password}@${neon_project.default.branch.endpoint
+      .host}:5432/${neon_database.this.name}"
     }
 
     # Exposure

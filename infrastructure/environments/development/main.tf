@@ -48,7 +48,7 @@ resource "neon_role" "db_owner" {
   project_id = neon_project.default.id
 }
 
-resource "neon_database" "postgres" {
+resource "neon_database" "this" {
   name       = random_pet.database_name.id
   owner_name = neon_role.db_owner.name
   project_id = neon_project.default.id
@@ -80,12 +80,15 @@ resource "random_pet" "service_name" {}
 
 resource "infisical_secret" "DATABASE_URI" {
   name        = "DATABASE_URI"
-  value       = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+  value       = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
+  .password}@${neon_project.default.branch.endpoint
+  .host}:5432/${neon_database.this.name}"
   env_slug    = "dev"
   folder_path = "/"
   depends_on = [
     neon_project.default,
     neon_role.db_owner,
+    neon_database.this
   ]
 }
 
@@ -139,6 +142,19 @@ resource "infisical_secret" "DATABASE_PORT" {
     neon_role.db_owner,
   ]
 }
+
+resource "infisical_secret" "DATABASE_NAME" {
+  name        = "DATABASE_NAME"
+  value       = neon_database.this.name
+  env_slug    = "dev"
+  folder_path = "/"
+  depends_on = [
+    neon_project.default,
+    neon_role.db_owner,
+    neon_database.this
+  ]
+}
+
 
 
 resource "infisical_secret" "DATABASE_USER" {
