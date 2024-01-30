@@ -61,11 +61,7 @@ resource "neon_database" "postgres" {
 }
 
 
-resource "koyeb_app" "methyphenidate-server" {
-  # This name stands for top-tier naming under which services are placed
-  # Preferably this should be related to our project name
-  name = var.project_name
-}
+
 
 #resource "koyeb_secret" "secret_dockerhub_registry_configuration" {
 #  name = var.secret_dockerhub_registry_configuration_name
@@ -182,70 +178,3 @@ resource "infisical_secret" "DOCKERHUB_TOKEN" {
   folder_path = "/"
 }
 
-resource "koyeb_service" "methylophenidate-server" {
-  app_name = koyeb_app.methyphenidate-server.name
-  definition {
-    # This name stands for the name of the service
-    # Preferably this should be related to our project name
-    # Random pet is used to generate a random name
-    name = random_pet.service_name.id
-
-    # Instance types
-    instance_types {
-      type = "free"
-    }
-
-    # Scaling
-    scalings {
-      min = 1
-      max = 1
-    }
-
-    # Environment variables
-    env {
-      key   = "SERVICE_NAME"
-      value = random_pet.service_name.id
-    }
-    env {
-      key   = "NODE_ENV"
-      value = "production"
-    }
-    env {
-      key   = "DATABASE_URI"
-      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
-    }
-
-    # Exposure
-    routes {
-      path = "/"
-      port = var.application_http_port
-    }
-    # Ports
-    ports {
-      port     = var.application_http_port
-      protocol = "http"
-    }
-
-    # Health checks
-    health_checks {
-          http {
-            port = var.application_http_port
-            path = "/health"
-          }
-        }
-
-
-    # Regions
-    regions = ["fra"]
-
-    # Configuration of docker deployment
-    docker {
-      image = "keinsell/methylphenidate-server:dev"
-    }
-  }
-
-  depends_on = [
-    neon_project.default,
-    koyeb_app.methyphenidate-server
-  ]
-}
