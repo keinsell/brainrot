@@ -28,38 +28,6 @@ terraform {
   required_version = ">= 1.0"
 }
 
-resource "random_pet" "database_name" {}
-
-resource "neon_project" "default" {
-  name       = var.project_name
-  region_id  = "aws-us-west-2"
-  pg_version = 16
-  branch     = {
-    endpoint = {
-      suspend_timeout = 0
-    }
-    name = "main"
-  }
-}
-
-resource "neon_role" "db_owner" {
-  name       = "owner"
-  branch_id  = neon_project.default.branch.id
-  project_id = neon_project.default.id
-}
-
-resource "neon_database" "postgres" {
-  name       = random_pet.database_name.id
-  owner_name = neon_role.db_owner.name
-  project_id = neon_project.default.id
-  branch_id  = neon_project.default.branch.id
-
-  depends_on = [
-    neon_project.default,
-    neon_role.db_owner,
-  ]
-}
-
 
 resource "koyeb_app" "methyphenidate-server" {
   # This name stands for top-tier naming under which services are placed
