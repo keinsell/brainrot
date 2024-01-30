@@ -1,6 +1,6 @@
 output "database_host" {
   sensitive = false
-  value     = neon_project.default.branch.endpoint.host
+  value     = neon_project.this.branch.endpoint.host
 }
 
 output "database_password" {
@@ -10,7 +10,7 @@ output "database_password" {
 
 output "database_url" {
   sensitive = true
-  value     = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.default.branch.endpoint.host}:5432"
+  value     = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner.password}@${neon_project.this.branch.endpoint.host}:5432"
 }
 
 output "server_host" {
