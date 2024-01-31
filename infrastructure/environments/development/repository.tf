@@ -27,7 +27,7 @@ resource "github_repository" "this" {
   has_issues                  = true
   has_projects                = true
   has_wiki                    = true
-  homepage_url                = "https://methylophenidate-keinsell.koyeb.app/api/"
+  homepage_url                = "${koyeb_app.this.domains[0].name}/api"
   is_template                 = true
   merge_commit_message        = "PR_BODY"
   merge_commit_title          = "PR_TITLE"
