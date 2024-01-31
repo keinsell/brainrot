@@ -13,7 +13,7 @@ variable "koyeb_token" {
 }
 
 variable "infisical_service_token" {
-    description = "Developer Token dedicated to interact with Infisical Platform.\n https://app.infisical.com/project/65b52b18d18e1b9f52830831/members"
+  description = "Developer Token dedicated to interact with Infisical Platform.\n https://app.infisical.com/project/65b52b18d18e1b9f52830831/members"
 }
 
 
@@ -22,23 +22,33 @@ variable "dockerhub_username" {
 }
 
 variable "dockerhub_token" {
-    description = "Access Token to Dockerhub.\n https://hub.docker.com/settings/security"
+  description = "Access Token to Dockerhub.\n https://hub.docker.com/settings/security"
 }
 
 variable "tf_access_token" {
-    description = "Access Token to Terraform Cloud.\nhttps://app.terraform.io/app/settings/tokens"
+  description = "Access Token to Terraform Cloud.\nhttps://app.terraform.io/app/settings/tokens"
 }
 
 variable "aws_region" {
-  default = "eu-west-1"
+  default     = "eu-west-1"
   description = "AWS region"
   type        = string
 }
 
 variable "aws_access_key" {
-  type        = string
+  type = string
 }
 
 variable "aws_secret_key" {
   type = string
+}
+
+variable "github_token" {
+  description = "Access Token to Github.\nhttps://github.com/settings/tokens"
+  type        = string
+}
+
+variable "github_owner" {
+  default     = "keinsell"
+  description = "Github owner"
 }
