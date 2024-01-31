@@ -9,6 +9,8 @@ jobs:
   deploy:
     name: "deploy"
     runs-on: methylphenidate-runner-set
+    container :
+      image : ubuntu:latest
     permissions:
       contents: read
       packages: write

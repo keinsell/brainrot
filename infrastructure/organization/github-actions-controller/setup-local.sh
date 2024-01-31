@@ -3,14 +3,7 @@
 INSTALLATION_NAME="methylphenidate-runner-set"
 NAMESPACE="methylphenidate-runners"
 GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
-
-op read "op://dev/arc_4b7a43a2/token" > /tmp/gh-pat-arc-runner.token
-
-GITHUB_PAT=$(cat /tmp/gh-pat-arc-runner.token)
-
-# Start Minikube with signle-node configuration
-#minikube start -p local-arc
-#kind create cluster --name local-arc
+GITHUB_PAT=$(op read op://dev/arc_4b7a43a2/token)
 
 # Install ARC
 helm install arc \
@@ -28,12 +21,3 @@ helm install "${INSTALLATION_NAME}" \
     --set maxRunners=3 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 
-# Upgrade Runner Set
-helm upgrade "${INSTALLATION_NAME}" \
-    --namespace "${NAMESPACE}" \
-    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
-    --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-    --set containerMode.type=dind \
-    --set minRunners=0 \
-    --set maxRunners=10 \
-    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set

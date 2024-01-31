@@ -25,7 +25,7 @@ env:
 jobs:
   deploy_dev_api:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x2
     timeout-minutes: 80
     #    environment: Development
     permissions:
