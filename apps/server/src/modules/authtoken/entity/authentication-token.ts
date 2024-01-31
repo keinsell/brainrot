@@ -23,101 +23,120 @@
  *
  */
 
-import { SignJWT }                    from 'jose'
-import { EntityBase }                 from '../../../common/libraries/domain/entity/entity-base.js'
-import { __authConfig }               from '../../../configs/global/__config.js'
-import { AccountId }                  from '../../account/shared-kernel/account-id.js'
-import { AuthenticationTokenIssued }  from '../event/authentication-token-issued.js'
-import { AuthenticationTokenRevoked } from '../event/authentication-token-revoked.js'
-import { AuthenticationTokenId }      from '../value-object/authentication-token-id.js'
-import { AuthorizationTokenStatus }   from '../value-object/authorization-token-status.js'
+import {
+	jwtDecrypt,
+	SignJWT,
+}                                   from 'jose'
+import {EntityBase}                 from '../../../common/libraries/domain/entity/entity-base.js'
+import {AccountId}                  from '../../account/shared-kernel/account-id.js'
+import type {jsonwebtoken}          from '../dto/jsonwebtoken.js'
+import {AuthenticationTokenIssued}  from '../event/authentication-token-issued.js'
+import {AuthenticationTokenRevoked} from '../event/authentication-token-revoked.js'
+import {AuthenticationTokenId}      from '../value-object/authentication-token-id.js'
+import {AuthorizationTokenStatus}   from '../value-object/authorization-token-status.js'
+import {SignedAuthenticationToken}  from '../value-object/signed-authentication-token.js'
 
 
 
 export interface AuthenticationTokenProperties
-  {
-	 id : AuthenticationTokenId
-	 status : AuthorizationTokenStatus
-	 accountId : AccountId
-	 issuedAt : Date
-	 expiresAt : Date
-	 lastUsedAt? : Date
-  }
+	{
+		id: AuthenticationTokenId
+		status: AuthorizationTokenStatus
+		accountId: AccountId
+		issuedAt: Date
+		expiresAt: Date
+		lastUsedAt?: Date
+	}
 
 
 export class AuthenticationToken
-  extends EntityBase<AuthenticationTokenId>
-  implements AuthenticationTokenProperties
-  {
-	 accountId : AccountId
-	 expiresAt : Date
-	 issuedAt : Date
-	 lastUsedAt? : Date
-	 status : AuthorizationTokenStatus
+	extends EntityBase<AuthenticationTokenId>
+	implements AuthenticationTokenProperties
+	{
 
-	 private constructor(payload : AuthenticationTokenProperties)
-		{
-		  super( {
-					  id : payload.id,
-					} )
-		  this.status    = payload.status
-		  this.accountId = payload.accountId
-		  this.issuedAt  = payload.issuedAt
-		  this.expiresAt = payload.expiresAt
-		}
+		accountId: AccountId
+		expiresAt: Date
+		issuedAt: Date
+		lastUsedAt?: Date
+		status: AuthorizationTokenStatus
 
-	 static build(payload : AuthenticationTokenProperties) : AuthenticationToken
-		{
-		  return new AuthenticationToken( payload )
-		}
+		private constructor(payload: AuthenticationTokenProperties)
+			{
+				super({
+					      id: payload.id,
+				      })
+				this.status    = payload.status
+				this.accountId = payload.accountId
+				this.issuedAt  = payload.issuedAt
+				this.expiresAt = payload.expiresAt
+			}
 
-	 public async sign(secret : string) : Promise<string>
-		{
-		  this.logger.debug( `Signing jsonwebtoken with ${secret}` )
-		  const key = new TextEncoder().encode( __authConfig.JWT_SECRET )
+		static build(payload: AuthenticationTokenProperties): AuthenticationToken
+			{
+				return new AuthenticationToken(payload)
+			}
 
-		  const jsonwebtoken = new SignJWT( {
-														  sub : this.accountId,
-														} )
+		static async decode(
+			token: SignedAuthenticationToken,
+			key: Uint8Array,
+		)
+			{
+				const jwt = await jwtDecrypt<jsonwebtoken>(
+					token,
+					key,
+				)
 
-		  jsonwebtoken.setExpirationTime( this.expiresAt )
+				return jwt.payload
+			}
 
-		  
-		  jsonwebtoken.setProtectedHeader( {
-														 b64 : true,
-														 alg : 'HS256',
-													  } )
+		public async sign(key: Uint8Array): Promise<string>
+			{
+				this.logger.debug(`Signing jsonwebtoken with ${key}`)
 
-		  return await jsonwebtoken.sign( key )
-		}
+				const jsonwebtoken = new SignJWT({
+					                                 jti: this.id,
+					                                 iat: this.issuedAt.getSeconds(),
+					                                 sub: this.accountId,
+				                                 })
 
-	 public issue(signedToken : string) : this
-		{
-		  this.logger.debug( 'Issuing authentication token...' )
-		  this.status = AuthorizationTokenStatus.ISSUED
-		  const event = new AuthenticationTokenIssued( this )
-		  this.appendEvent( event )
-		  this.logger.log( 'Authentication token has been issued.' )
-		  return this
-		}
+				jsonwebtoken.setExpirationTime(this.expiresAt)
 
-	 public revoke() : this
-		{
-		  this.logger.debug( 'Revoke authentication token...' )
-		  this.status = AuthorizationTokenStatus.REVOKED
-		  const event = new AuthenticationTokenRevoked( this )
-		  this.appendEvent( event )
-		  this.logger.log( 'Authentication token has been revoked.' )
-		  return this
-		}
 
-	 public expire() : this
-		{
-		  this.logger.debug( 'Expiring authentication token...' )
-		  this.status = AuthorizationTokenStatus.EXPIRED
-		  const event = new AuthenticationTokenRevoked( this )
-		  this.appendEvent( event )
-		  this.logger.log( 'Authentication token has expired.' )
-		  return this
-		}
-  }
+				jsonwebtoken.setProtectedHeader({
+					                                b64: true,
+					                                alg: 'HS256',
+				                                })
+
+				return await jsonwebtoken.sign(key)
+			}
+
+		public issue(signed: string): this
+			{
+				this.logger.debug('Issuing authentication token...')
+				this.status = AuthorizationTokenStatus.ISSUED
+				const event = new AuthenticationTokenIssued(this)
+				this.appendEvent(event)
+				this.logger.log('Authentication token has been issued.')
+				return this
+			}
+
+		public revoke(): this
+			{
+				this.logger.debug('Revoke authentication token...')
+				this.status = AuthorizationTokenStatus.REVOKED
+				const event = new AuthenticationTokenRevoked(this)
+				this.appendEvent(event)
+				this.logger.log('Authentication token has been revoked.')
+				return this
+			}
+
+		public expire(): this
+			{
+				this.logger.debug('Expiring authentication token...')
+				this.status = AuthorizationTokenStatus.EXPIRED
+				const event = new AuthenticationTokenRevoked(this)
+				this.appendEvent(event)
+				this.logger.log('Authentication token has expired.')
+				return this
+			}
+	}

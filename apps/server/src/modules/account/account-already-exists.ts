@@ -24,17 +24,19 @@
  */
 
 
-import { ApiProperty }     from '@nestjs/swagger'
-import { Problem }         from '../../common/error/problem-details/problem.js'
-import type { HttpStatus } from '../../common/http-status.js'
+import {HttpProblem} from '../../common/error/problem-details/http-problem.js'
 
 
 
 export class AccountAlreadyExists
-  implements Problem
-  {
-	 public instance : string
-	 @ApiProperty( {example : 'https://jakubolan.eu.auth0.com/oauth/token'} ) public status : HttpStatus
-	 public title : string
-	 public type : string
-  }
+	extends HttpProblem
+	{
+		constructor()
+			{
+				super(
+					'account',
+					'already-exists',
+					'Account already exists.',
+				)
+			}
+	}

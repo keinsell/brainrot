@@ -1,120 +1,120 @@
 import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-}                                from '@nestjs/common'
-import { setUser }               from '@sentry/node'
+	ForbiddenException,
+	Injectable,
+	NotFoundException,
+}                                       from '@nestjs/common'
+import {setUser}                        from '@sentry/node'
+import ms                               from 'ms'
 import {
-  ok,
-  Result,
-}                                from 'neverthrow'
-import type { AccountId }        from '../../account/shared-kernel/account-id.js'
-import { CredentialValidator }   from '../../account/shared-kernel/credential-validator/credential-validator.js'
-import { jsonwebtoken }          from '../../authtoken/dto/jsonwebtoken.js'
-import { TokenManagement }       from '../../authtoken/token-management.js'
-import { AuthenticationService } from '../contract/authentication-service.js'
-import { SingedJwt }             from '../value-objects/singed-jwt.js'
-import { AccessToken }           from '../value-objects/tokens/access-token.js'
-import { RefreshToken }          from '../value-objects/tokens/refresh-token.js'
+	ok,
+	Result,
+}                                       from 'neverthrow'
+import type {PlainText}                 from '../../../common/mailer/value-object/plain-text.js'
+import type {AccountId}                 from '../../account/shared-kernel/account-id.js'
+import {CredentialValidator}            from '../../account/shared-kernel/credential-validator/credential-validator.js'
+import type {Username}                  from '../../account/value-objects/username.js'
+import {TokenManagement}                from '../../authtoken/contract/token-management.js'
+import type {SignedAuthenticationToken} from '../../authtoken/value-object/signed-authentication-token.js'
+import {AuthenticationService}          from '../contract/authentication-service.js'
 
 
 
 @Injectable()
 export class LocalAuthenticationService
-  extends AuthenticationService
-  {
+	extends AuthenticationService
+	{
 
-	 constructor(
-		private credentialValidator : CredentialValidator,
-		private tokenManagement : TokenManagement,
-	 )
-		{
-		  super()
-		}
+		constructor(
+			private credentialValidator: CredentialValidator,
+			private tokenManagement: TokenManagement,
+		)
+			{
+				super()
+			}
 
 
-	 /**
-	  * Authenticates a user with their username and password.
-	  *
-	  * @param {string} username - The username of the user.
-	  * @param {string} password - The password of the user.
-	  * @param {Object} [metadata] - Additional metadata for the authentication.
-	  * @param {string} [metadata.userAgent] - The user agent of the client.
-	  * @param {string} [metadata.ipAddress] - The IP address of the client.
-	  * @returns {Promise<Result<{accountId: string, accessToken: string,
-	  *     refreshToken: string}, any>>} - The result of the authentication. If
-	  *     successful, it contains the domain ID, access token, and refresh
-	  *     token. If unsuccessful, it contains the error.
-	  */
-	 public async authenticate(
-		username : string,
-		password : string,
-	 ) : Promise<Result<{
-		accessToken : SingedJwt, refreshToken : SingedJwt, accountId : AccountId
-	 }, NotFoundException | ForbiddenException>>
-		{
-		  const isValid = await this.credentialValidator.validateCredentials( username, password )
+		/**
+		 * Authenticates a user with their username and password.
+		 *
+		 * @param {string} username - The username of the user.
+		 * @param {string} password - The password of the user.
+		 * @param {Object} [metadata] - Additional metadata for the
+		 *     authentication.
+		 * @param {string} [metadata.userAgent] - The user agent of the client.
+		 * @param {string} [metadata.ipAddress] - The IP address of the client.
+		 * @returns {Promise<Result<{accountId: string, accessToken: string,
+		 *     refreshToken: string}, any>>} - The result of the
+		 *     authentication. If successful, it contains the domain ID, access
+		 *     token, and refresh token. If unsuccessful, it contains the
+		 *     error.
+		 */
+		public async authenticate(
+			username: Username,
+			password: PlainText,
+		): Promise<Result<{
+			accessToken: SignedAuthenticationToken,
+			refreshToken: SignedAuthenticationToken,
+			accountId: AccountId
+		}, NotFoundException | ForbiddenException>>
+			{
+				const accountOrException = await this.credentialValidator.validateCredentials(
+					username,
+					password,
+				)
 
-		  if ( isValid.isErr() )
-			 {
-				throw isValid.error
-			 }
+				if (accountOrException.isErr())
+					{
+						throw accountOrException.error
+					}
 
-		  const account = isValid.value
+				const account = accountOrException.value
 
-		  setUser( {
-						 id       : account.id,
-						 username : account.username,
-						 email    : account.email.address,
-					  } )
+				setUser({
+					        id      : account.id,
+					        username: account.username,
+					        email   : account.email.address,
+				        })
 
-		  const tokenPayload : Omit<jsonwebtoken, 'exp' | 'iat' | 'nbf' | 'jti'> & {
-			 jti? : string, nbf? : number, iat? : number, exp? : number
-		  }                  = {
-			 sub      : account.id,
-			 aud      : 'http://localhost:1337',
-			 metadata : {
-				username : account.username,
-				email    : account.email.address,
-			 },
-		  }
-		  const accessToken  = new AccessToken( {
-																...tokenPayload,
-															 }, '1h' )
-		  const refreshToken = new AccessToken( {
-																...tokenPayload,
-															 }, '3w' )
+				const signedAccessToken = await this.tokenManagement.issueToken({
+					                                                                accountId: account.id,
+					                                                                duration : ms('4h'),
+					                                                                metadata : {},
+				                                                                })
 
-		  const signedAccessToken  = await this.tokenManagement.sign( accessToken )
-		  const signedRefreshToken = await this.tokenManagement.sign( refreshToken )
+				const signedRefreshToken = await this.tokenManagement.issueToken({
+					                                                                 accountId: account.id,
+					                                                                 duration : ms('3w'),
+					                                                                 metadata : {},
+				                                                                 })
 
-		  return ok( {
-							accountId    : account.id,
-							accessToken  : signedAccessToken,
-							refreshToken : signedRefreshToken,
-						 } )
-		}
+				return ok({
+					          accountId   : account.id,
+					          accessToken : signedAccessToken.signature,
+					          refreshToken: signedRefreshToken.signature,
+				          })
+			}
 
-	 public async logout() : Promise<void>
-		{
-		  return Promise.resolve( undefined )
-		}
+		public async logout(): Promise<void>
+			{
+				return Promise.resolve(undefined)
+			}
 
-	 public async refreshToken(refreshToken : string) : Promise<{
-		refreshToken : RefreshToken, accessToken : SingedJwt
-	 }>
-		{
-		  const decodedRefreshToken = await this.tokenManagement.decode( refreshToken )
-		  const refreshTokenObject  = new RefreshToken( decodedRefreshToken )
-		  const accessTokn          = new AccessToken( {
-																		 ...decodedRefreshToken,
-																		 iat : new Date().getTime(),
-																		 exp : new Date().getTime() + 1000 * 60 * 60,
-																	  }, '1h' )
-		  const signedAccessToken   = await this.tokenManagement.sign( accessTokn )
-		  return {
-			 refreshToken : refreshTokenObject,
-			 accessToken  : signedAccessToken,
-		  }
-		}
-  }
+		public async refreshToken(refreshToken: string): Promise<{
+			refreshToken: SignedAuthenticationToken,
+			accessToken: SignedAuthenticationToken
+		}>
+			{
+				const decodedRefreshToken = await this.tokenManagement.decodeToken(refreshToken as SignedAuthenticationToken)
+
+				const issuedAccessToken = await this.tokenManagement.issueToken({
+					                                                                accountId: decodedRefreshToken.sub as AccountId,
+					                                                                duration : ms('4h'),
+					                                                                metadata : {},
+				                                                                })
+
+				return {
+					refreshToken: refreshToken as SignedAuthenticationToken,
+					accessToken : issuedAccessToken.signature,
+				}
+			}
+	}
