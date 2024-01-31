@@ -17,3 +17,8 @@ output "server_host" {
   sensitive = false
   value     = koyeb_app.this.domains[0].name
 }
+
+output "region" {
+  description = "AWS region"
+  value       = var.aws_region
+}

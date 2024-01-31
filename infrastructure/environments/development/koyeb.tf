@@ -15,7 +15,7 @@ resource "koyeb_service" "server" {
 
     # Instance types
     instance_types {
-      type = "free"
+      type = "nano"
     }
 
     # Scaling
@@ -80,7 +80,7 @@ resource "infisical_secret" "KOYEB_SERVICE_ID" {
   value       = koyeb_service.server.id
   env_slug    = "dev"
   folder_path = "/"
-  depends_on = [
-  koyeb_service.server
+  depends_on  = [
+    koyeb_service.server
   ]
 }
