@@ -15,7 +15,7 @@ resource "koyeb_service" "server" {
 
     # Instance types
     instance_types {
-      type = "free"
+      type = "enano"
     }
 
     # Scaling

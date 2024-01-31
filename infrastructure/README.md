@@ -1,6 +1,7 @@
-# `infrastructure`
+# Infrastructure
 
-There will be `pulumi` deployment to Kubernetes.
+This directory contains all the infrastructure code for project and 
+organization, and is organized through Terraform and Pulumi.
 
 - `Terraform`
 - `Pulumi`

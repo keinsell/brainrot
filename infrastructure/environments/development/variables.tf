@@ -28,3 +28,17 @@ variable "dockerhub_token" {
 variable "tf_access_token" {
     description = "Access Token to Terraform Cloud.\nhttps://app.terraform.io/app/settings/tokens"
 }
+
+variable "aws_region" {
+  default = "eu-west-1"
+  description = "AWS region"
+  type        = string
+}
+
+variable "aws_access_key" {
+  type        = string
+}
+
+variable "aws_secret_key" {
+  type = string
+}
