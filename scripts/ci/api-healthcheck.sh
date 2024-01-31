@@ -2,31 +2,58 @@
 
 # Variables
 KOYEB_SERVICE_ID=$1
-end=$((SECONDS+180))
+end=$((SECONDS+360))
 attempts=0
 max_attempts=20
 
-# Build and deploy the application
-koyeb services redeploy $KOYEB_SERVICE_ID
+# Wait for the new deployment to start
+echo "Waiting for the new deployment to start..."
+#sleep 15
+
+LATEST_DEPLOYMENT_JSON=$(koyeb deployments list -o json | jq '.deployments | sort_by(.created_at) | last')
 
 # Get deployment ID
-DEPLOYMENT_ID=$(koyeb services describe $KOYEB_SERVICE_ID -o json| jq -r '.latest_deployment_id | select(.!=null)')
+DEPLOYMENT_ID=$(echo $LATEST_DEPLOYMENT_JSON | jq -r '.id')
 
-# Start logging deployment
+echo "Waiting for deployment: ${DEPLOYMENT_ID}"
+
+# Start logging deployment and get its PID
 koyeb deployments logs $DEPLOYMENT_ID &
+LOGS_PID=$!
 
-# Check service health
+# Check deployment health
 while [ $SECONDS -lt $end ] && [ $attempts -lt $max_attempts ]; do
-  SERVICE_STATUS=$(koyeb services describe $KOYEB_SERVICE_ID -o json | jq -r '.status | select(.!=null)')
-  if [ "$SERVICE_STATUS" = "HEALTHY" ]; then
-    echo "Service is healthy."
+LATEST_DEPLOYMENT_JSON=$(koyeb deployments list -o json | jq '.deployments | sort_by(.created_at) | last')
+  DEPLOYMENT_STATUS=$(echo $LATEST_DEPLOYMENT_JSON | jq -r '.status | select(.!=null)')
+
+  if [ "$DEPLOYMENT_STATUS" = "HEALTHY" ]; then
+    echo "Deployment ${DEPLOYMENT_ID} is healthy."
+    kill $LOGS_PID
     exit 0
   fi
-  echo $SERVICE_STATUS
-  echo "Service is not healthy. Waiting 10 seconds before retrying."
+
+  if [ "$DEPLOYMENT_STATUS" = "PENDING" ]; then
+      echo "Deployment ${DEPLOYMENT_ID} is pending."
+      sleep 1;
+      continue
+  fi
+
+  if [ "$DEPLOYMENT_STATUS" = "ERROR" ]; then
+      echo "Deployment ${DEPLOYMENT_ID} failed."
+      koyeb deployments logs $DEPLOYMENT_ID
+      kill $LOGS_PID
+      exit 1
+  fi
+
+  echo $DEPLOYMENT_STATUS
+  echo "Deployment is not healthy. Waiting 10 seconds before retrying."
   sleep 10
   attempts=$((attempts+1))
 done
 
-echo "Service did not become healthy within the expected time or maximum attempts reached. Aborting redeployment."
+echo "Deployment did not become healthy within the expected time or maximum attempts reached. Aborting redeployment."
+
+koyeb deployments cancel $DEPLOYMENT_ID
+
+kill $LOGS_PID
 exit 1
