@@ -26,8 +26,8 @@
 import { Injectable }             from '@nestjs/common'
 import Convict                    from 'convict'
 import * as dotenv                from 'dotenv'
+import {MainConfiguration}        from '../config-set/main-configuration.js'
 import { ConfigurationContainer } from '../schema/configuration-container.js'
-import { ConfigurationSchema }    from '../schema/configuration-schema.js'
 
 
 
@@ -38,7 +38,7 @@ export class ConfigurationService
 
 	 constructor()
 		{
-		  this.config      = Convict( ConfigurationSchema )
+		  this.config      = Convict(MainConfiguration )
 		  const dotEnvFile = dotenv.config().parsed
 
 		  if ( dotEnvFile )

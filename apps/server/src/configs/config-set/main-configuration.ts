@@ -26,11 +26,13 @@
 import convict                            from 'convict'
 import { ApplicationConfigurationSchema } from '../config-set/application-configuration.js'
 import { AuthroizationConfiguration }     from '../config-set/authorization-configuration.js'
-import { ConfigurationContainer }         from './configuration-container.js'
+import {isTest}                           from '../helper/is-test.js'
+import  {ConfigurationContainer}      from '../schema/configuration-container.js'
+import {NodeEnvironment}                  from '../values/node-environment.js'
 
 
 
-export const ConfigurationSchema : convict.Schema<ConfigurationContainer> = {
+export const MainConfiguration : convict.Schema<ConfigurationContainer> = {
   PROTOCOL            : {
 	 doc     : 'Defines the protocol used by the application. Options are \'http\' or \'https\'. Default is \'http\'.',
 	 default : 'http',
@@ -61,9 +63,7 @@ export const ConfigurationSchema : convict.Schema<ConfigurationContainer> = {
 	 doc     : 'Sets the application environment. Can be one of \'development\', \'test\', \'production\', or \'staging\'. Default is \'development\'.',
 	 default : 'development',
 	 env     : 'NODE_ENV',
-	 format  : [
-		'development', 'test', 'production', 'staging',
-	 ],
+	 format  :Object.values(NodeEnvironment),
   },
   TRACING             : {
 	 doc     : 'Enables or disables OpenTelemetry tracing, which traces requests and responses between services and applications. Default is enabled.',
@@ -82,4 +82,11 @@ export const ConfigurationSchema : convict.Schema<ConfigurationContainer> = {
   },
   APPLICATION         : ApplicationConfigurationSchema,
   AUTH                : AuthroizationConfiguration,
+	PRE_LAUNCH          : {
+	  		deployTestContainers: {
+			doc: 'Defines if testcontainers should be deployed before application launch',
+			default: isTest(),
+			env: 'PRE_LAUNCH_DEPLOY_TESTCONTAINERS'
+		}
+	}
 }
