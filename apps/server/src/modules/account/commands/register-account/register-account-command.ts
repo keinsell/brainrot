@@ -23,9 +23,9 @@
  *
  */
 
-import { ApiProperty }                from '@nestjs/swagger'
-import { AccountFixture }             from '../../../utilities/fixtures/account-fixture.js'
-import { ApiPropertyAccountUsername } from '../value-objects/username.js'
+import {ApiPropertyAccountEmail}    from '../value-objects/account-email.js'
+import {ApiPropertyAccountPassword} from '../value-objects/password.js'
+import {ApiPropertyAccountUsername} from '../value-objects/username.js'
 
 
 
@@ -37,35 +37,24 @@ import { ApiPropertyAccountUsername } from '../value-objects/username.js'
 //
 
 export class RegisterAccountCommand
-  {
-	 /**
-	  * Represents an email address.
-	  * @typedef {string} email
-	  */
-	 @ApiProperty( {
-						  name        : 'email',
-						  description : 'The domain\'s email address',
-						  example     : AccountFixture.email,
-						  examples    : AccountFixture._examples.emails,
-						  type        : String,
-						} ) email : string
+	{
+		/**
+		 * Represents an email address.
+		 * @typedef {string} email
+		 */
+		@ApiPropertyAccountEmail email: string
 
-	 /**
-	  * The password variable is a string that represents a user's password.
-	  *
-	  * @type {string}
-	  */
-	 @ApiProperty( {
-						  name        : 'password',
-						  description : 'The domain\'s password',
-						  example     : AccountFixture.password,
-						  examples    : AccountFixture._examples.passwords,
-						} ) password : string
+		/**
+		 * The password variable is a string that represents a user's password.
+		 *
+		 * @type {string}
+		 */
+		@ApiPropertyAccountPassword password: string
 
-	 /**
-	  * Represents a username.
-	  * @typedef {string} username
-	  */
-	 @ApiPropertyAccountUsername username : string
-  }
+		/**
+		 * Represents a username.
+		 * @typedef {string} username
+		 */
+		@ApiPropertyAccountUsername username: string
+	}
 

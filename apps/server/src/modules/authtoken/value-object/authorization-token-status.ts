@@ -23,8 +23,10 @@
  *
  */
 
-export enum AuthorizationTokenStatus {
-	ISSUED  = "ISSUED",
-	EXPIRED = "EXPIRED",
-	REVOKED = "REVOKED",
-}
+export enum AuthorizationTokenStatus
+	{
+		ISSUED  = 'ISSUED',
+		EXPIRED = 'EXPIRED',
+		REVOKED = 'REVOKED',
+		DRAFT   = 'DRAFT'
+	}

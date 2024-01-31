@@ -6,7 +6,10 @@ import {
   type StartedTestContainer,
 }                          from 'testcontainers'
 import { LogWaitStrategy } from 'testcontainers/build/wait-strategies/log-wait-strategy.js'
-import { __appConfig }     from '../../configs/global/__config.js'
+import {
+	__appConfig,
+	__config,
+} from '../../configs/global/__config.js'
 
 
 
@@ -46,7 +49,7 @@ export class ContainerEnvironment
 
 	 static async run()
 		{
-		  if ( __appConfig.USE_TESTCONTAINERS )
+		  if ( __config.get("PRE_LAUNCH").deployTestContainers )
 			 {
 				 new Logger("environment").debug("Application is running in"
 				                                 + " 'testing' environment"

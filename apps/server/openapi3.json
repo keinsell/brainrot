@@ -196,7 +196,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem",
+                  "$ref": "#/components/schemas/HttpProblem",
                   "type": "object",
                   "example": {
                     "type": "com.methylphenidate.account.invalid-username",
@@ -219,7 +219,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "$ref": "#/components/schemas/HttpProblem"
                 }
               }
             }
@@ -348,7 +348,7 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Litzy.Morissette@hotmail.com",
+            "example": "Kasey33@hotmail.com",
             "schema": {
               "type": "string"
             }
@@ -392,7 +392,14 @@
             }
           },
           "404": {
-            "description": "The user could not be found."
+            "description": "The user could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -627,8 +634,8 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "The domain's email address",
-            "example": "Litzy.Morissette@hotmail.com",
+            "description": "The account's email address",
+            "example": "Kasey33@hotmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -637,7 +644,7 @@
           },
           "password": {
             "type": "string",
-            "description": "The domain's password",
+            "description": "The account's username",
             "example": "SuperSecretPassword123!",
             "examples": [
               "LaW1KVuo69FG5Pf",
@@ -648,11 +655,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Tomasa.Jerde-Raynor",
+            "example": "Cristopher.Ziemann11",
             "examples": [
-              "Tracy54",
-              "Cedrick_Armstrong",
-              "Norene_Dickens16"
+              "Toby47",
+              "Hortense.Bednar",
+              "Cydney_Luettgen"
             ]
           }
         },
@@ -662,7 +669,7 @@
           "username"
         ]
       },
-      "Problem": {
+      "HttpProblem": {
         "type": "object",
         "properties": {
           "type": {
@@ -677,6 +684,8 @@
           },
           "status": {
             "type": "number",
+            "minimum": 100,
+            "maximum": 599,
             "enum": [
               100,
               101,
@@ -718,11 +727,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Tomasa.Jerde-Raynor",
+            "example": "Cristopher.Ziemann11",
             "examples": [
-              "Tracy54",
-              "Cedrick_Armstrong",
-              "Norene_Dickens16"
+              "Toby47",
+              "Hortense.Bednar",
+              "Cydney_Luettgen"
             ]
           },
           "method": {
@@ -753,11 +762,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM"
             ]
           }
         },
@@ -774,11 +783,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NTY2NDg3fQ.MTgc45W41eOkesH34n89aplcGn95EYuAtuxgQPSOcPE"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA2NzM5MTU1fQ.cYuwpk0lQhH4L8kAA3DxYu8gGu1TjI7BL1j6NQ3NUPM"
             ]
           }
         },
@@ -797,7 +806,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Litzy.Morissette@hotmail.com",
+            "example": "Kasey33@hotmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -812,11 +821,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Tomasa.Jerde-Raynor",
+            "example": "Cristopher.Ziemann11",
             "examples": [
-              "Tracy54",
-              "Cedrick_Armstrong",
-              "Norene_Dickens16"
+              "Toby47",
+              "Hortense.Bednar",
+              "Cydney_Luettgen"
             ]
           }
         },
@@ -834,21 +843,21 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Tomasa.Jerde-Raynor",
+            "example": "Cristopher.Ziemann11",
             "examples": [
-              "Tracy54",
-              "Cedrick_Armstrong",
-              "Norene_Dickens16"
+              "Toby47",
+              "Hortense.Bednar",
+              "Cydney_Luettgen"
             ]
           },
           "password": {
             "type": "string",
-            "description": "The account's password",
+            "description": "The account's username",
             "example": "SuperSecretPassword123!",
             "examples": [
-              "M_zVrvVtrtSnXls",
-              "0oB4xlM2dwM4lGX",
-              "16p9rGdYxrdhxAF"
+              "LaW1KVuo69FG5Pf",
+              "9srQfkporSDhU76",
+              "74ETrfy3OQCdUzs"
             ]
           }
         },

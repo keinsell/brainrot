@@ -23,34 +23,32 @@
  *
  */
 
-import Convict           from 'convict'
-import ms                from 'ms'
-import { randomBytes }   from 'node:crypto'
-import { isDevelopment } from '../helper/is-development.js'
-import { isTesting }     from '../helper/is-testing.js'
+import Convict       from 'convict'
+import ms            from 'ms'
+import {randomBytes} from 'node:crypto'
 
 
 
 export interface IAuthorizationConfiguration
-  {
-	 JWT_SECRET : string,
-	 ACCESS_TOKEN_DURATION : number
-	 REFRESH_TOKEN_DURATION : number
-  }
+	{
+		JWT_SECRET: string,
+		ACCESS_TOKEN_DURATION: number
+		REFRESH_TOKEN_DURATION: number
+	}
 
 
-export const AuthroizationConfiguration : Convict.Schema<IAuthorizationConfiguration> = {
-  JWT_SECRET             : {
-	 default   : randomBytes( 32 ).toString( 'hex' ),
-	 format    : String,
-	 env       : 'JWT_SECRET',
-	 sensitive : true,
-	 nullable  : false,
-  },
-  ACCESS_TOKEN_DURATION  : {
-	 default : ms( '24h' ),
-  },
-  REFRESH_TOKEN_DURATION : {
-	 default : ms( '32w' ),
-  },
+export const AuthroizationConfiguration: Convict.Schema<IAuthorizationConfiguration> = {
+	JWT_SECRET            : {
+		default  : randomBytes(32).toString('hex'),
+		format   : String,
+		env      : 'JWT_SECRET',
+		sensitive: true,
+		nullable : false,
+	},
+	ACCESS_TOKEN_DURATION : {
+		default: ms('24h'),
+	},
+	REFRESH_TOKEN_DURATION: {
+		default: ms('32w'),
+	},
 }
