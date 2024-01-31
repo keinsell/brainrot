@@ -1,6 +1,6 @@
 # Preview workflow is dedicated for spinning off a development environments on terraform, for example for every PR opened to main there will be real-world environment setted up on infrastructure which will be destroyed after merge.
 
-name: 👨‍💻 Deploy
+name: 👨‍💻Deploy
 
 on:
   workflow_call:
@@ -19,3 +19,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+  # Push infrastructure
+  # Deploy application
+  # Migrate database

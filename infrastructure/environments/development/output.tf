@@ -15,5 +15,5 @@ output "database_url" {
 
 output "server_host" {
   sensitive = false
-  value     = koyeb_app.methyphenidate-server.domains[0].name
+  value     = koyeb_app.this.domains[0].name
 }

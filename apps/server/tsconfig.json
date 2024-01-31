@@ -10,7 +10,7 @@
     "target": "ESNext",
     "sourceMap": true,
     "inlineSources": true,
-    "sourceRoot": "/",
+    "sourceRoot": "./",
     //    "traceResolution": true,
     //    "assumeChangesOnlyAffectDirectDependencies": true,
     //    // TODO: Migrate codebase to verbatimModuleSyntax in future
@@ -116,7 +116,6 @@
     "src/**/*"
   ],
   "exclude": [
-    "",
     "node_modules",
     "dist",
     "coverage",

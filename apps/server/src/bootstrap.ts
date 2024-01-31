@@ -147,29 +147,6 @@ export async function bootstrap()
 		  retryCount--
 		}
 
-	 // If the application is running in development mode, try to seed the database
-	 if ( isDevelopment() && __config.get( 'APPLICATION' ).RUN_SEED )
-		{
-		  try
-			 {
-				seeder( {
-							 imports   : [
-								DatabaseModule, AccountModule,
-							 ],
-							 providers : [
-								ProductSeeder, AccountSeeder, ProfileSeeder, RoleSeeder,
-							 ],
-						  } )
-				.run( [
-						  ProductSeeder, AccountSeeder, ProfileSeeder, CartSeeder, RoleSeeder,
-						] )
-			 }
-		  catch ( e )
-			 {
-				logger.error( `Error while trying to seed database: ${( e as unknown as any ).message}` )
-			 }
-		}
-
 	 await migrateDatabase()
 
 	 return app

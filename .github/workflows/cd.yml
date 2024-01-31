@@ -3,7 +3,7 @@ name: 🚚 Continuous Delivery
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ "🔁 Continuous Integration" ]
+    workflows: [ "./.github/workflows/ci.yml" ]
     branches: [ main ]
     types:
       - completed
@@ -25,18 +25,12 @@ jobs:
       # Publish Docker Image
       # Publish Artifacts on Github Releases
   deploy:
-    runs-on: methylphenidate-runner-set
     concurrency:
       group: "deploy"
       cancel-in-progress: false
-    steps:
-      - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      # Push infrastructure
-      # Deploy application
-      # Migrate database
+    needs: [ release ]
+    uses: ./.github/workflows/deploy.yml
+
   rollback:
     runs-on: methylphenidate-runner-set
     steps:

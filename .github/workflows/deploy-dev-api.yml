@@ -8,16 +8,19 @@ on:
     branches:
       - next
       - main
-    paths:
-      - 'package.json'
-      - 'yarn.lock'
-      - 'apps/server/**'
-      - 'packages/**'
-      - 'libs/shared/**'
+      - add-database-migration
+#    paths:
+#      - 'package.json'
+#      - 'yarn.lock'
+#      - 'apps/server/**'
+#      - 'packages/**'
+#      - 'libs/shared/**'
+
 env:
-  TF_WORKSPACE: keinsell-dev
-  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
-  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
+  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  DATABASE_URI: ${{ secrets.DATABASE_URI }}
+  KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
 
 jobs:
   deploy_dev_api:
@@ -35,10 +38,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup OS
+        uses: "./.github/actions/setup-os"
+
       - name: ✳️ Setup Node.js
         uses: "./.github/actions/setup-node"
+
       - name: 🐳 Setup Docker
         uses: "./.github/actions/setup-docker"
+        with:
+          docker_username: ${{ env.DOCKER_USERNAME }}
+          docker_password: ${{ env.DOCKER_TOKEN }}
 
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
@@ -52,6 +62,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # TODO: Deploy Terraform
-      # TODO: Deploy Pulumi
-      # TODO: Create Sentry Version
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/install-koyeb-cli@v2
+        with:
+          api_token: "${{ secrets.KOYEB_TOKEN }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Build and deploy the application
+        shell: bash
+        run: koyeb services redeploy $KOYEB_SERVICE_ID
+  
+      - name: Check service health
+        run: ./scripts/ci/api-healthcheck.sh $KOYEB_SERVICE_ID
+
+      - name: Migrate Database
+        run: |
+          cd apps/server && pnpm run db:migrate:deploy
