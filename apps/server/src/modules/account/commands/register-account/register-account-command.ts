@@ -23,10 +23,6 @@
  *
  */
 
-import {ApiPropertyAccountEmail}    from '../value-objects/account-email.js'
-import {ApiPropertyAccountPassword} from '../value-objects/password.js'
-import {ApiPropertyAccountUsername} from '../value-objects/username.js'
-
 
 
 // export interface RegisterAccount2 {
@@ -35,6 +31,12 @@ import {ApiPropertyAccountUsername} from '../value-objects/username.js'
 // 	password : string & tags.Pattern<string>
 // }
 //
+
+import {ApiPropertyAccountEmail}    from '../../value-objects/account-email.js'
+import {ApiPropertyAccountPassword} from '../../value-objects/password.js'
+import {ApiPropertyAccountUsername} from '../../value-objects/username.js'
+
+
 
 export class RegisterAccountCommand
 	{
