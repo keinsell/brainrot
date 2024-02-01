@@ -1,4 +1,7 @@
-import { WriteRepository } from './write-repository.js'
+import {
+	 type EntityLike,
+	 WriteRepository,
+} from './write-repository.js'
 
 
 
@@ -28,5 +31,5 @@ import { WriteRepository } from './write-repository.js'
  *
  * @class
  */
-export abstract class Repository<T>
-  extends WriteRepository<T> {}
+export abstract class Repository<T extends EntityLike>
+	 extends WriteRepository<T> {}

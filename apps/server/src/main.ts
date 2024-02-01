@@ -1,13 +1,11 @@
 import { bootstrap }            from './bootstrap.js'
 import { __appConfig }          from './configs/global/__config.js'
 import { isProduction }         from './configs/helper/is-production.js'
-import {isTest}                 from './configs/helper/is-test.js'
-import { acquireProcessLock }   from './hooks/pre-start/acquire-process-lock.js'
 import { initializeSentry }     from './hooks/pre-start/initialize-sentry.js'
 import { ContainerEnvironment } from './hooks/pre-start/run-testcontainers.js'
 import {
-  prettyPrintServiceInformation,
-  printSystemInfo,
+	 helloMessage,
+	 printSystemInfo,
 }                               from './utilities/console-utils/index.js'
 
 // TODO: Add check for minimal requirements to run server
@@ -16,23 +14,19 @@ import {
 // Min. CPU = 1x
 // Recommended OS: Linux
 
-console.log(__appConfig.USE_TESTCONTAINERS)
-
-await acquireProcessLock()
-
-
+console.log( __appConfig.USE_TESTCONTAINERS )
 
 if ( isProduction() )
-  {
-	 printSystemInfo()
-  }
+	 {
+		  printSystemInfo()
+	 }
 
-prettyPrintServiceInformation()
+helloMessage()
 
 if ( __appConfig.USE_TESTCONTAINERS )
-  {
-	 await ContainerEnvironment.run()
-  }
+	 {
+		  await ContainerEnvironment.run()
+	 }
 
 initializeSentry()
 
