@@ -1,9 +1,3 @@
-resource "koyeb_app" "this" {
-  # This name stands for top-tier naming under which services are placed
-  # Preferably this should be related to our project name
-  name = var.project_name
-}
-
 resource "koyeb_service" "server" {
   app_name = koyeb_app.this.name
 
@@ -26,6 +20,11 @@ resource "koyeb_service" "server" {
 
     # Environment variables
     env {
+      key   = "PORT"
+      value = var.application_http_port
+    }
+
+    env {
       key   = "SERVICE_NAME"
       value = var.project_name
     }
@@ -36,7 +35,7 @@ resource "koyeb_service" "server" {
     env {
       key   = "DATABASE_URI"
       value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
-      .password}@${neon_project.default.branch.endpoint
+      .password}@${neon_project.this.branch.endpoint
       .host}:5432/${neon_database.this.name}"
     }
 
@@ -65,12 +64,13 @@ resource "koyeb_service" "server" {
 
     # Configuration of docker deployment
     docker {
-      image = "keinsell/methylphenidate-server:dev"
+      image                 = "keinsell/methylphenidate-server:dev"
+      image_registry_secret = var.koyeb_dockerhub_registry_secret
     }
   }
 
   depends_on = [
-    neon_project.default,
+    neon_project.this,
     koyeb_app.this
   ]
 }
