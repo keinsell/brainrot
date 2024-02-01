@@ -23,27 +23,28 @@
  *
  */
 
-import { RegisterAccountCommand } from '../commands/register-account-command.js'
-import { Account }                from '../entities/account.js'
+import type {RegisterAccountCommand} from '../commands/register-account/register-account-command.js'
+import {Account}                     from '../entities/account.js'
 
 
 
 export interface AccountSelfService
-  {
-	 /**
-	  * # `register-account`
-	  *
-	  * Register account is an operation dedicated to creating new accounts in codebase.
-	  *
-	  * @param {RegisterAccountCommand} registerAccount
-	  * @returns {Promise<Account>}
-	  */
-	 register(registerAccount : RegisterAccountCommand) : Promise<Account>;
+	{
+		/**
+		 * # `register-account`
+		 *
+		 * Register account is an operation dedicated to creating new accounts
+		 * in codebase.
+		 *
+		 * @param {RegisterAccountCommand} registerAccount
+		 * @returns {Promise<Account>}
+		 */
+		register(registerAccount: RegisterAccountCommand): Promise<Account>;
 
-	 closeAccount(accountId : string) : Promise<void>;
+		closeAccount(accountId: string): Promise<void>;
 
-	 updateAccount(
-		accountId : string,
-		updateAccount : RegisterAccountCommand,
-	 ) : Promise<Account>;
-  }
+		updateAccount(
+			accountId: string,
+			updateAccount: RegisterAccountCommand,
+		): Promise<Account>;
+	}
