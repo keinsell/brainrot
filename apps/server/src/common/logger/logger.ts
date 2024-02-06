@@ -5,11 +5,17 @@ import {pino}       from "pino"
 
 
 export enum LogLevel {
+	/** For tracing purposes. */
 	TRACE = 'trace',
+	/** For debugging purposes. */
 	DEBUG = 'debug',
+	/** For informational messages. */
 	INFO  = 'info',
+	/** For warnings. */
 	WARN  = 'warn',
+	/** For errors. */
 	ERROR = 'error',
+	/** For fatal errors. */
 	FATAL = 'fatal',
 }
 
@@ -33,19 +39,19 @@ export type LogMetadata = Record<LogMetadataKey, any> | undefined;
 
 
 export class Logger {
-	private context: LogMetadata     = {context: 'default'};
-	private appenders: LogAppender[] = [];
+	private context: LogMetadata           = {context: 'default'};
+	private logAppenderList: LogAppender[] = [];
 
 
-	protected constructor(context?: LogMetadata, appenders?: LogAppender[]) {
+	protected constructor(context?: LogMetadata, logAppenderList?: LogAppender[]) {
 		if (context) {
 			this.context = {
 				context: context.context,
 			}
 		}
 
-		if (appenders) {
-			this.appenders = appenders;
+		if (logAppenderList) {
+			this.logAppenderList = logAppenderList;
 		}
 	}
 
@@ -117,19 +123,19 @@ export class Logger {
 
 
 	protected log(log: Log): void {
-		for (const appender of this.appenders) {
+		for (const appender of this.logAppenderList) {
 			appender.append(log);
 		}
 	}
 
 
 	protected registerAppender(appender: LogAppender): void {
-		this.appenders.push(appender);
+		this.logAppenderList.push(appender);
 	}
 
 
 	protected unregisterAppender(appender: LogAppender): void {
-		this.appenders = this.appenders.filter(a => a !== appender);
+		this.logAppenderList = this.logAppenderList.filter(a => a !== appender);
 	}
 
 
@@ -146,29 +152,6 @@ export class PrettyConsoleAppender extends LogAppender {
 	}
 }
 
-
-//export class RotationalFileAppender extends LogAppender {
-//	private logger: pino.Logger;
-//
-//
-//	constructor() {
-//		super();
-//		let dest    = rotate.default({
-//			filename: 'logs/',
-//			e
-//			rotate:   3,
-//			compress: true,
-//		});
-//		this.logger = pino(dest);
-//	}
-//
-//
-//	public append(log: Log): Promise<void> | void {
-//		// Convert Log type to pino.LogEntry type if needed
-//		this.logger.info(log);
-//		return;
-//	}
-//}
 
 export class ErrorFileAppender extends LogAppender {
 	private logger: pino.Logger;
