@@ -1,32 +1,12 @@
-import {Injectable} from "@nestjs/common"
-import {nanoid}     from "nanoid"
-import {pino}       from "pino"
+import {Injectable}       from "@nestjs/common"
+import {nanoid}           from "nanoid"
+import {pino}             from "pino"
+import signale, {Signale} from "signale"
+import {isDevelopment}    from "../../configs/helper/is-development.js"
+import {isTest}           from "../../configs/helper/is-test.js"
+import {LogLevel}         from "./log-level.js"
+import {Log}              from "./log.js"
 
-
-
-export enum LogLevel {
-	/** For tracing purposes. */
-	TRACE = 'trace',
-	/** For debugging purposes. */
-	DEBUG = 'debug',
-	/** For informational messages. */
-	INFO  = 'info',
-	/** For warnings. */
-	WARN  = 'warn',
-	/** For errors. */
-	ERROR = 'error',
-	/** For fatal errors. */
-	FATAL = 'fatal',
-}
-
-
-export interface Log {
-	id: string;
-	timestamp: Date;
-	level: LogLevel;
-	message: string;
-	metadata?: LogMetadata | undefined;
-}
 
 
 export abstract class LogAppender {
@@ -34,7 +14,7 @@ export abstract class LogAppender {
 }
 
 
-export type LogMetadataKey = "request-id" | "error" | "error-message" | "context" | string
+export type LogMetadataKey = "request-id" | "error" | "error-message" | "context" | "data" | string
 export type LogMetadata = Record<LogMetadataKey, any> | undefined;
 
 
@@ -147,8 +127,75 @@ export class Logger {
 
 
 export class PrettyConsoleAppender extends LogAppender {
+	private dld: Signale = signale
+
+
 	append(log: Log): void {
-		console.log(JSON.stringify(log, null, 2));
+		if (!isDevelopment() || !isTest()) {}
+
+		this.dld.config({
+			displayBadge:     true,
+			displayDate:      true,
+			displayScope:     true,
+			displayLabel:     true,
+			displayTimestamp: true,
+			underlineLabel:   true,
+		})
+
+		if (log?.metadata?.context) {
+			this.dld.scope(log.metadata.context);
+		}
+
+		switch (log.level) {
+			case LogLevel.TRACE:
+
+				if (log?.metadata?.data) {
+					this.dld.info(log.message, log?.metadata?.data);
+				} else {
+					this.dld.info(log.message);
+				}
+
+				break;
+			case LogLevel.DEBUG:
+				this.dld.debug(log.message);
+				break;
+			case LogLevel.INFO:
+
+				if (log?.metadata?.data) {
+					this.dld.success(log.message, log?.metadata?.data);
+				} else {
+					this.dld.success(log.message);
+				}
+
+				break;
+			case LogLevel.WARN:
+
+				if (log?.metadata?.data) {
+					this.dld.warn(log.message, log?.metadata?.data);
+				} else {
+					this.dld.warn(log.message);
+				}
+
+				break;
+			case LogLevel.ERROR:
+
+				if (log?.metadata?.data) {
+					this.dld.error(log.message, log?.metadata?.data);
+				} else {
+					this.dld.error(log.message);
+				}
+
+				break;
+			case LogLevel.FATAL:
+
+				if (log?.metadata?.data) {
+					this.dld.fatal(log.message, log?.metadata?.data);
+				} else {
+					this.dld.fatal(log.message);
+				}
+
+				break;
+		}
 	}
 }
 

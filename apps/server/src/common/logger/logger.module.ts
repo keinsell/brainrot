@@ -1,5 +1,6 @@
 import {Module}                 from "@nestjs/common"
 import {CombinedLogger, Logger} from "./logger.js"
+import {NestjsLogger}           from "./nestjs-logger-proxy.js"
 
 
 
@@ -8,8 +9,11 @@ import {CombinedLogger, Logger} from "./logger.js"
 		{
 			provide:  Logger,
 			useClass: CombinedLogger,
+		}, {
+			provide:  "LoggerService",
+			useValue: new NestjsLogger(),
 		},
 	],
-	exports:   [Logger],
+	exports:   [Logger, "LoggerService"],
 })
 export class LoggerModule {}

@@ -13,8 +13,6 @@ import {prettyPrintServiceInformation, printSystemInfo} from './utilities/consol
 // Min. CPU = 1x
 // Recommended OS: Linux
 
-console.log(__appConfig.USE_TESTCONTAINERS)
-
 await acquireProcessLock()
 
 if (isProduction()) {
@@ -23,14 +21,14 @@ if (isProduction()) {
 
 prettyPrintServiceInformation()
 
-if (__appConfig.USE_TESTCONTAINERS) {
+if (__appConfig.FEATURE_USE_DOCKER_TESTCONTAINERS) {
 	await ContainerEnvironment.run()
 }
 
 initializeSentry()
 
 for (let i = 0; i < 100; i++) {
-	new CombinedLogger('main').info("Kurwa...")
+	new CombinedLogger('main').info("Kurwa...", {"a": "b"})
 }
 
 await bootstrap()

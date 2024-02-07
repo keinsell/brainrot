@@ -23,47 +23,35 @@
  *
  */
 
-
-
-import { Logger }               from '@nestjs/common'
-import * as Sentry              from '@sentry/node'
-import { setupGlobalHub }       from '@sentry/opentelemetry'
-import { __sentry }            from '../../common/modules/resources/sentry-v2/global/get-sentry.js'
-import { SENTRY_CONFIGURATION } from '../../configs/config-set/sentry-configuration.js'
-import { __config }             from '../../configs/global/__config.js'
+import {setupGlobalHub}       from '@sentry/opentelemetry'
+import {CombinedLogger}       from "../../common/logger/logger.js"
+import {__sentry}             from '../../common/modules/resources/sentry-v2/global/get-sentry.js'
+import {SENTRY_CONFIGURATION} from '../../configs/config-set/sentry-configuration.js'
+import {__config}             from '../../configs/global/__config.js'
 
 
 
-export function initializeSentry() : void
-  {
-	 new Logger( 'sentry' ).log( `Initializing Sentry... ${__config.get( 'SENTRY_DSN' )}` )
+export function initializeSentry(): void {
+	const logger = new CombinedLogger("sentry")
 
-	 // Turn ON if integrating with OTEL
-	 if ( SENTRY_CONFIGURATION.instrumenter === 'otel' )
-		{
-		  setupGlobalHub()
-		}
+	if (SENTRY_CONFIGURATION.enabled) {
+		logger.debug(`Initializing Sentry... ${__config.get('SENTRY_DSN')}`)
+	}
 
+	// Turn ON if integrating with OTEL
+	if (SENTRY_CONFIGURATION.instrumenter === 'otel') {
+		setupGlobalHub()
+	}
 
-	 // OTEL Configuration
-	 try
-		{
-		  __sentry?.init( {
-								  ...SENTRY_CONFIGURATION,
-								} )
-		}
-	 catch
-		{
-		}
+	// OTEL Configuration
+	try {
+		__sentry?.init({
+			...SENTRY_CONFIGURATION,
+		})
+	} catch {
+	}
 
-
-
-	 new Logger( 'sentry' ).log( `Sentry initialized!` )
-
-	 const integrations = Sentry.getCurrentHub()?.getClient()?.getOptions()?.integrations || []
-
-	 new Logger( 'sentry' ).log( `Sentry have initialized ${integrations.length} integrations: [${integrations.map(
-																																					integration => integration.name )
-																																				 .join(
-																																					', ' )}]` )
-  }
+	if (SENTRY_CONFIGURATION.enabled) {
+		logger.info(`Sentry initialized!`)
+	}
+}
