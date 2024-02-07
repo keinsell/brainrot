@@ -1,6 +1,8 @@
-import {Injectable} from "@nestjs/common"
-import {nanoid}     from "nanoid"
-import {pino}       from "pino"
+import {Injectable}       from "@nestjs/common"
+import {Request}          from "express"
+import {nanoid}           from "nanoid"
+import {pino}             from "pino"
+import signale, {Signale} from "signale"
 
 
 
@@ -26,6 +28,8 @@ export interface Log {
 	level: LogLevel;
 	message: string;
 	metadata?: LogMetadata | undefined;
+	request?: Request | undefined;
+	response?: Response | undefined;
 }
 
 
@@ -34,7 +38,7 @@ export abstract class LogAppender {
 }
 
 
-export type LogMetadataKey = "request-id" | "error" | "error-message" | "context" | string
+export type LogMetadataKey = "request-id" | "error" | "error-message" | "context" | "data" | string
 export type LogMetadata = Record<LogMetadataKey, any> | undefined;
 
 
@@ -147,8 +151,71 @@ export class Logger {
 
 
 export class PrettyConsoleAppender extends LogAppender {
+	private dld: Signale = signale
+
+
 	append(log: Log): void {
-		console.log(JSON.stringify(log, null, 2));
+
+		if (log?.metadata?.context) {
+			this.dld.scope(log.metadata.context);
+		}
+
+		switch (log.level) {
+			case LogLevel.TRACE:
+
+				if (log?.metadata?.data) {
+					this.dld.note(log.message, log?.metadata?.data);
+				} else {
+					this.dld.note(log.message);
+				}
+
+				break;
+			case LogLevel.DEBUG:
+
+				if (log?.metadata?.data) {
+					this.dld.debug(log.message, log?.metadata?.data);
+				} else {
+					this.dld.debug(log.message);
+				}
+
+				break;
+			case LogLevel.INFO:
+
+				if (log?.metadata?.data) {
+					this.dld.info(log.message, log?.metadata?.data);
+				} else {
+					this.dld.info(log.message);
+				}
+
+				break;
+			case LogLevel.WARN:
+
+				if (log?.metadata?.data) {
+					this.dld.warn(log.message, log?.metadata?.data);
+				} else {
+					this.dld.warn(log.message);
+				}
+
+				break;
+			case LogLevel.ERROR:
+
+				if (log?.metadata?.data) {
+					this.dld.error(log.message, log?.metadata?.data);
+				} else {
+					this.dld.error(log.message);
+				}
+
+				break;
+			case LogLevel.FATAL:
+
+				if (log?.metadata?.data) {
+					this.dld.fatal(log.message, log?.metadata?.data);
+				} else {
+					this.dld.fatal(log.message);
+				}
+
+				break;
+		}
 	}
 }
 

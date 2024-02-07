@@ -30,7 +30,7 @@ if (__appConfig.USE_TESTCONTAINERS) {
 initializeSentry()
 
 for (let i = 0; i < 100; i++) {
-	new CombinedLogger('main').info("Kurwa...")
+	new CombinedLogger('main').info("Kurwa...", {"a": "b"})
 }
 
 await bootstrap()
