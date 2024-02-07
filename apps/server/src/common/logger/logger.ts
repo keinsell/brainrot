@@ -1,36 +1,10 @@
 import {Injectable}       from "@nestjs/common"
-import {Request}          from "express"
 import {nanoid}           from "nanoid"
 import {pino}             from "pino"
 import signale, {Signale} from "signale"
+import {LogLevel}         from "./log-level.js"
+import {Log}              from "./log.js"
 
-
-
-export enum LogLevel {
-	/** For tracing purposes. */
-	TRACE = 'trace',
-	/** For debugging purposes. */
-	DEBUG = 'debug',
-	/** For informational messages. */
-	INFO  = 'info',
-	/** For warnings. */
-	WARN  = 'warn',
-	/** For errors. */
-	ERROR = 'error',
-	/** For fatal errors. */
-	FATAL = 'fatal',
-}
-
-
-export interface Log {
-	id: string;
-	timestamp: Date;
-	level: LogLevel;
-	message: string;
-	metadata?: LogMetadata | undefined;
-	request?: Request | undefined;
-	response?: Response | undefined;
-}
 
 
 export abstract class LogAppender {
@@ -164,9 +138,9 @@ export class PrettyConsoleAppender extends LogAppender {
 			case LogLevel.TRACE:
 
 				if (log?.metadata?.data) {
-					this.dld.note(log.message, log?.metadata?.data);
+					this.dld.info(log.message, log?.metadata?.data);
 				} else {
-					this.dld.note(log.message);
+					this.dld.info(log.message);
 				}
 
 				break;
@@ -182,9 +156,9 @@ export class PrettyConsoleAppender extends LogAppender {
 			case LogLevel.INFO:
 
 				if (log?.metadata?.data) {
-					this.dld.info(log.message, log?.metadata?.data);
+					this.dld.success(log.message, log?.metadata?.data);
 				} else {
-					this.dld.info(log.message);
+					this.dld.success(log.message);
 				}
 
 				break;
