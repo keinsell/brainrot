@@ -7,6 +7,7 @@ import {Injectable, LoggerService, LogLevel} from '@nestjs/common';
 import {CombinedLogger, Logger}              from "./logger.js"
 
 
+// TODO: Logger is not parsing context well, this should be investigated.
 
 @Injectable()
 export class NestjsLogger implements LoggerService {
@@ -19,7 +20,7 @@ export class NestjsLogger implements LoggerService {
 
 
 	verbose?(message: any, ...optionalParams: any[]) {
-		this.logger.trace(message, optionalParams)
+		this.logger.trace(message, ...optionalParams)
 	}
 
 
@@ -27,26 +28,26 @@ export class NestjsLogger implements LoggerService {
 
 
 	public debug(message: any, ...optionalParams: any[]): any {
-		this.logger.debug(message, optionalParams)
+		this.logger.debug(message, ...optionalParams)
 	}
 
 
 	public error(message: any, ...optionalParams: any[]): any {
-		this.logger.error(message, optionalParams)
+		this.logger.error(message, ...optionalParams)
 	}
 
 
 	public fatal(message: any, ...optionalParams: any[]): any {
-		this.logger.fatal(message, optionalParams)
+		this.logger.fatal(message, ...optionalParams)
 	}
 
 
 	public log(message: any, ...optionalParams: any[]): any {
-		this.logger.info(message, optionalParams)
+		this.logger.info(message, ...optionalParams)
 	}
 
 
 	public warn(message: any, ...optionalParams: any[]): any {
-		this.logger.warn(message, optionalParams)
+		this.logger.warn(message, ...optionalParams)
 	}
 }

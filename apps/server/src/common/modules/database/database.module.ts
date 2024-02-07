@@ -1,22 +1,20 @@
-import { Module }                  from '@nestjs/common'
-import { prismaLoggingMiddleware } from '../resources/prisma/middleware/prisma-logging-middleware.js'
-import { prismaTracingMiddleware } from '../resources/prisma/middleware/prisma-tracing-middleware.js'
-import { PrismaModule }            from '../resources/prisma/prisma-module.js'
+import {Module}                  from '@nestjs/common'
+import {prismaTracingMiddleware} from '../resources/prisma/middleware/prisma-tracing-middleware.js'
+import {PrismaModule}            from '../resources/prisma/prisma-module.js'
 
 
 
-@Module( {
-			  imports     : [
-				 PrismaModule.forRoot( {
-												 prismaServiceOptions : {
-													middlewares : [ prismaLoggingMiddleware(), prismaTracingMiddleware() ],
-												 },
-											  } ),
-			  ],
-			  controllers : [],
-			  providers   : [],
-			  exports     : [ PrismaModule ],
-			} )
-export class DatabaseModule
-  {
-  }
+@Module({
+	imports:     [
+		PrismaModule.forRoot({
+			prismaServiceOptions: {
+				middlewares: [prismaTracingMiddleware()],
+			},
+		}),
+	],
+	controllers: [],
+	providers:   [],
+	exports:     [PrismaModule],
+})
+export class DatabaseModule {
+}

@@ -23,68 +23,63 @@
  *
  */
 
-import { getCurrentScope }          from '@sentry/node'
-import { startInactiveSpan }        from '@sentry/opentelemetry'
-import { Prisma }                   from '../../../../../vendor/prisma/index.js'
-import { LoggingMiddlewareOptions } from '../structures/prisma-logging-middleware-options.js'
+import {getCurrentScope}          from '@sentry/node'
+import {startInactiveSpan}        from '@sentry/opentelemetry'
+import {Prisma}                   from '../../../../../vendor/prisma/index.js'
+import {LoggingMiddlewareOptions} from '../structures/prisma-logging-middleware-options.js'
 
 
 
-export function prismaTracingMiddleware(args : LoggingMiddlewareOptions = {
-  logger   : console,
-  logLevel : 'debug',
-}) : Prisma.Middleware
-  {
-	 return async (
-		params,
-		next,
-	 ) => {
+export function prismaTracingMiddleware(args: LoggingMiddlewareOptions = {
+	logger:   console,
+	logLevel: 'debug',
+}): Prisma.Middleware {
+	return async (params, next) => {
 		const {
 				  model,
 				  action,
 				  runInTransaction,
 				  args,
-				}           = params
-		const description = [ model, action ].filter( Boolean ).join( '.' )
+			  }           = params
+		const description = [model, action].filter(Boolean).join('.')
 
 		const data = {
-		  model,
-		  action,
-		  runInTransaction,
-		  args,
+			model,
+			action,
+			runInTransaction,
+			args,
 		}
 
-		const span = startInactiveSpan( {
-													 startTime  : Date.now(),
-													 name       : description.toLowerCase(),
-													 op         : 'db.prisma.query',
-													 attributes : {
-														'op' : 'db.prisma.query',
-													 },
-												  } )
+		const span = startInactiveSpan({
+			startTime:  Date.now(),
+			name:       description.toLowerCase(),
+			op:         'db.prisma.query',
+			attributes: {
+				'op': 'db.prisma.query',
+			},
+		})
 
-		getCurrentScope()?.addBreadcrumb( {
-														category : 'db',
-														message  : description,
-														data,
-													 } )
+		getCurrentScope()?.addBreadcrumb({
+			category: 'db',
+			message:  description,
+			data,
+		})
 
 		const before = Date.now()
-		const result = await next( params )
-
+		const result = await next(params)
 
 		const after = Date.now()
 
 		const executionTime = after - before
 
 		// eslint-disable-next-line no-console
-		console.log( `Prisma query: ${params.model}.${params.action}() in ${executionTime}ms` )
+		//console.log( `Prisma query: ${params.model}.${params.action}() in ${executionTime}ms` )
 
-		span.setAttribute( 'query', description )
-		span.setAttribute( 'model', params.model || '' )
-		span.setAttribute( 'execution_time', executionTime )
-		span.end( after )
+		span.setAttribute('query', description)
+		span.setAttribute('model', params.model || '')
+		span.setAttribute('execution_time', executionTime)
+		span.end(after)
 
 		return result
-	 }
-  }
+	}
+}

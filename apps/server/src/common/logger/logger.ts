@@ -129,6 +129,14 @@ export class PrettyConsoleAppender extends LogAppender {
 
 
 	append(log: Log): void {
+		this.dld.config({
+			displayBadge:     true,
+			displayDate:      true,
+			displayScope:     true,
+			displayLabel:     true,
+			displayTimestamp: true,
+			underlineLabel:   true,
+		})
 
 		if (log?.metadata?.context) {
 			this.dld.scope(log.metadata.context);
@@ -145,13 +153,7 @@ export class PrettyConsoleAppender extends LogAppender {
 
 				break;
 			case LogLevel.DEBUG:
-
-				if (log?.metadata?.data) {
-					this.dld.debug(log.message, log?.metadata?.data);
-				} else {
-					this.dld.debug(log.message);
-				}
-
+				this.dld.debug(log.message);
 				break;
 			case LogLevel.INFO:
 
