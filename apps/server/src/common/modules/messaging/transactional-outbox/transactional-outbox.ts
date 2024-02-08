@@ -23,13 +23,18 @@
  *
  */
 
-import type { Message } from '../../../libraries/message/message.js'
+import type {Message} from '../../../libraries/message/message.js'
 
 
 
-export abstract class TransactionalOutbox
-  {
-	 abstract inbound(message : Message) : Promise<void>
+export abstract class TransactionalOutbox {
+	/** This method is responsible for handling the received, unprocessed transactions from your application's
+	 * system. It takes a Message object as an argument and resolves this transaction once it has been fully handled by external systems (outbox).  The implementation should be designed to handle any kind of message that could come in such way at some point during runtime unless the actual processing fails, which is not considered successful completion for handling.
+	 * @param {Message} message
+	 * @returns {Promise<void>}
+	 */
+	abstract inbound(message: Message): Promise<void>
 
-	 abstract outbound(message : Message) : Promise<void>
-  }
+
+	abstract outbound(message: Message): Promise<void>
+}

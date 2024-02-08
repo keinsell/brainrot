@@ -1,20 +1,20 @@
 import {Inject, Injectable, Logger} from '@nestjs/common'
-import {SpanKind}                    from '@opentelemetry/api'
+import {SpanKind}                   from '@opentelemetry/api'
 import {getCurrentScope, setUser}   from '@sentry/node'
-import {ServiceAbstract}             from '../../../common/libraries/services/service-abstract.js'
-import {PasswordHashing}             from '../../../common/libraries/unihash/index.js'
-import {KdfAlgorithm}                from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
-import {createEmailAddress}          from '../../../common/mailer/value-object/email-address.js'
-import {EventBus}                    from '../../../common/modules/messaging/event-bus.js'
-import {OpentelemetryTracer}         from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
-import {RegisterAccountCommand}      from '../commands/register-account/register-account-command.js'
-import {AccountSelfService}          from '../contract/account-self-service.js'
-import {Account}                     from '../entities/account.js'
-import {AccountPolicy}               from '../policies/account-policy.js'
-import {AccountRepository}           from '../repositories/account-repository.js'
-import {AccountEmail}                from '../value-objects/account-email.js'
-import {Password}                    from '../value-objects/password.js'
-import {createUsername}              from '../value-objects/username.js'
+import {ServiceAbstract}            from '../../../common/libraries/services/service-abstract.js'
+import {PasswordHashing}            from '../../../common/libraries/unihash/index.js'
+import {KdfAlgorithm}               from '../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
+import {createEmailAddress}         from '../../../common/mailer/value-object/email-address.js'
+import {EventBus}                   from '../../../common/modules/messaging/event-bus.js'
+import {OpentelemetryTracer}        from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import {RegisterAccountCommand}     from '../commands/register-account/register-account-command.js'
+import {AccountSelfService}         from '../contract/account-self-service.js'
+import {Account}                    from '../entities/account.js'
+import {AccountPolicy}              from '../policies/account-policy.js'
+import {AccountRepository}          from '../repositories/account-repository.js'
+import {AccountEmail}               from '../value-objects/account-email.js'
+import {Password}                   from '../value-objects/password.js'
+import {createUsername}             from '../value-objects/username.js'
 
 
 
@@ -53,14 +53,19 @@ export class AccountService extends ServiceAbstract<Account> implements AccountS
 		})
 
 		this.logger.debug('Validating inputs...')
+
 		const emailResult    = createEmailAddress(registerAccount.email)
 		const usernameResult = createUsername(registerAccount.username)
+
+		this.logger.debug("Checking if email is valid...")
 
 		if (emailResult.isErr()) {
 			span.end()
 			span.recordException(emailResult.error)
 			throw emailResult.error
 		}
+
+		this.logger.debug("Checking if username is valid...")
 
 		if (usernameResult.isErr()) {
 			span.end()
@@ -73,8 +78,8 @@ export class AccountService extends ServiceAbstract<Account> implements AccountS
 			username: usernameResult._unsafeUnwrap(),
 		})
 
-		const username = usernameResult._unsafeUnwrap()
-		const email    = emailResult._unsafeUnwrap()
+		const username = usernameResult.value
+		const email    = emailResult.value
 
 		this.logger.debug('Registering account...')
 
@@ -82,7 +87,7 @@ export class AccountService extends ServiceAbstract<Account> implements AccountS
 			isVerified: false,
 			address:    email,
 		})
-
+		
 		const password = await Password.fromPlain(registerAccount.password, this.hashing.use(KdfAlgorithm.Argon2id))
 
 		span.setAttribute('user.password', password.toString())

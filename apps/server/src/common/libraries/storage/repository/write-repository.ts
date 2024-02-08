@@ -1,8 +1,5 @@
-import {
-  Logger,
-  NotFoundException,
-}                from '@nestjs/common'
-import { isNil } from '../../../../utilities/type-utils/index.js'
+import {Logger, NotFoundException} from '@nestjs/common'
+import {isNil}                     from '../../../../utilities/type-utils/index.js'
 
 // WriteRepository can:
 // - Fetch an entity by unique identifier
@@ -18,85 +15,82 @@ import { isNil } from '../../../../utilities/type-utils/index.js'
 // - List entities
 // - Count entities
 
+function logMethod(target: any, key: string, descriptor: PropertyDescriptor) {
+	const originalMethod = descriptor.value;
+
+	return {
+		value: function (...args: any[]) {
+			console.log(`Calling ${key}(${args})`);
+			originalMethod.apply(this, args);
+		},
+	};
+}
+
+
 /**
  * Represents a generic write repository.
  *
  * @template T - The type of the entity.
  */
-export abstract class WriteRepository<T>
-  {
-	 private _hookLogger : Logger = new Logger( 'repository:hooks' )
+export abstract class WriteRepository<T> {
+	private _hookLogger: Logger = new Logger('repository:hooks')
 
 
-	 abstract create(entity : T) : Promise<T>;
+	abstract create(entity: T): Promise<T>;
 
 
-	 abstract update(entity : T) : Promise<T>;
+	abstract update(entity: T): Promise<T>;
 
 
-	 abstract delete(entity : T) : Promise<void>;
+	abstract delete(entity: T): Promise<void>;
 
 
-	 abstract exists(entity : T) : Promise<boolean>;
+	abstract exists(entity: T): Promise<boolean>;
 
 
-	 async save(entity : T) : Promise<T>
-		{
-		  this.beforeHook( this.save, entity )
+	async save(entity: T): Promise<T> {
+		this.beforeHook(this.save, entity)
 
-		  this.beforeHook( this.exists, entity )
-		  const doesExist = await this.exists( entity )
-		  this.after( this.exists, doesExist )
+		this.beforeHook(this.exists, entity)
+		const doesExist = await this.exists(entity)
+		this.after(this.exists, doesExist)
 
-		  if ( doesExist )
-			 {
-				this.beforeHook( this.update, entity )
-				const updated = await this.update( entity )
-				this.after( this.update, entity )
-				this.after( this.save, updated )
-				return updated
-			 }
-		  else
-			 {
-				this.beforeHook( this.create, entity )
-				const created = await this.create( entity )
-				this.after( this.create, created )
-				this.after( this.save, created )
-				return created
-			 }
+		if (doesExist) {
+			this.beforeHook(this.update, entity)
+			const updated = await this.update(entity)
+			this.after(this.update, entity)
+			this.after(this.save, updated)
+			return updated
+		} else {
+			this.beforeHook(this.create, entity)
+			const created = await this.create(entity)
+			this.after(this.create, created)
+			this.after(this.save, created)
+			return created
+		}
+	}
+
+
+	abstract findById(id: string): Promise<T | null>;
+
+
+	async getById(id: string): Promise<T> {
+		const entity = await this.findById(id)
+
+		if (isNil(entity)) {
+			throw new NotFoundException(`Entity with id ${id} not found`)
 		}
 
-
-	 abstract findById(id : string) : Promise<T | null>;
-
-
-	 async getById(id : string) : Promise<T>
-		{
-		  const entity = await this.findById( id )
-
-		  if ( isNil( entity ) )
-			 {
-				throw new NotFoundException( `Entity with id ${id} not found` )
-			 }
-
-		  return entity
-		}
+		return entity
+	}
 
 
-	 beforeHook(
-		func : Function,
-		payload? : unknown,
-	 )
-		{
-		  this._hookLogger.debug( `${this.constructor.name}.${func.name}(${JSON.stringify( payload )})` )
-		}
+	beforeHook(func: Function, payload?: unknown) {
+		this._hookLogger.debug(`${this.constructor.name}.${func.name}(${JSON.stringify(payload)})`)
+	}
 
 
-	 after(
-		func : Function,
-		result? : unknown,
-	 )
-		{
-		  this._hookLogger.verbose( `${this.constructor.name}.${func.name}(...) => ${JSON.stringify( result )}` )
-		}
-  }
+	after(func: Function, result?: unknown) {
+		this._hookLogger.verbose(`${this.constructor.name}.${func.name}(...) => ${JSON.stringify(result)}`)
+	}
+}

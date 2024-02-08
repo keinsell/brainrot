@@ -23,132 +23,119 @@
  *
  */
 
-import { randomUUID }          from 'node:crypto'
-import type { AccountId }      from '../../../modules/account/shared-kernel/account-id.js'
-import {
-  EntityBase,
-  type EntityFoundation,
-}                              from '../../libraries/domain/entity/entity-base.js'
-import type { EmailMessage }   from '../../mailer/entity/email-message.js'
-import {
-  type EmailContent,
-  isEmailContent,
-}                              from '../../mailer/value-object/email-content.js'
-import type { EmailReceipent } from '../../mailer/value-object/email-receipent.js'
-import { NotificationQueued }  from '../event/notification-queued.js'
-import { NotificationChannel } from '../value-object/notification-channel.js'
-import { NotificationStatus }  from '../value-object/notification-status.js'
+import {randomUUID}                         from 'node:crypto'
+import type {AccountId}                     from '../../../modules/account/shared-kernel/account-id.js'
+import {EntityBase, type EntityFoundation} from '../../libraries/domain/entity/entity-base.js'
+import type {EmailMessage}                  from '../../mailer/entity/email-message.js'
+import {type EmailContent, isEmailContent} from '../../mailer/value-object/email-content.js'
+import type {EmailReceipent}                from '../../mailer/value-object/email-receipent.js'
+import {NotificationQueued}                 from '../event/notification-queued.js'
+import {NotificationChannel}                from '../value-object/notification-channel.js'
+import {NotificationStatus}                 from '../value-object/notification-status.js'
 
 
 
 type ChannelContentMap = {
-  [ NotificationChannel.EMAIL ] : EmailContent
-  [ NotificationChannel.SMS ] : unknown
-  [ NotificationChannel.PUSH ] : unknown
-  [ NotificationChannel.WEBHOOK ] : unknown
+	[NotificationChannel.EMAIL]: EmailContent
+	[NotificationChannel.SMS]: unknown
+	[NotificationChannel.PUSH]: unknown
+	[NotificationChannel.WEBHOOK]: unknown
 }
 
 type ReceipentByChannelMap = {
-  [ NotificationChannel.EMAIL ] : EmailReceipent, [ NotificationChannel.SMS ] : unknown
-  [ NotificationChannel.PUSH ] : unknown
-  [ NotificationChannel.WEBHOOK ] : unknown
+	[NotificationChannel.EMAIL]: EmailReceipent, [NotificationChannel.SMS]: unknown
+	[NotificationChannel.PUSH]: unknown
+	[NotificationChannel.WEBHOOK]: unknown
 }
 
 
-export interface NotificationProperties<T extends NotificationChannel>
-  extends EntityFoundation<string>
-  {
-	 type : NotificationChannel
-	 content : ChannelContentMap[T]
-	 recipient : ReceipentByChannelMap[T]
-	 status? : NotificationStatus
-	 sentAt? : Date
-	 sentBy : AccountId
-	 priority? : 'LOW' | 'MEDIUM' | 'HIGH'
-  }
+export interface NotificationProperties<T extends NotificationChannel> extends EntityFoundation<string> {
+	type: NotificationChannel
+	content: ChannelContentMap[T]
+	recipient: ReceipentByChannelMap[T]
+	status?: NotificationStatus
+	sentAt?: Date
+	sentBy: AccountId
+	priority?: 'LOW' | 'MEDIUM' | 'HIGH'
+}
 
 
-export class Notification<T extends NotificationChannel>
-  extends EntityBase
-  implements NotificationProperties<T>
-  {
-	 content : ChannelContentMap[T]
-	 priority : 'LOW' | 'MEDIUM' | 'HIGH'
-	 recipient : ReceipentByChannelMap[T]
-	 sentAt : Date | undefined
-	 sentBy : AccountId
-	 status : NotificationStatus
-	 type : NotificationChannel
+export class Notification<T extends NotificationChannel> extends EntityBase implements NotificationProperties<T> {
+	content: ChannelContentMap[T]
+	priority: 'LOW' | 'MEDIUM' | 'HIGH'
+	recipient: ReceipentByChannelMap[T]
+	sentAt: Date | undefined
+	sentBy: AccountId
+	status: NotificationStatus
+	type: NotificationChannel
 
-	 constructor(payload : NotificationProperties<T>)
-		{
-		  super( {
-					  id        : payload.id ?? randomUUID(),
-					  updatedAt : payload.updatedAt,
-					  createdAt : payload.createdAt,
-					  version   : payload.version,
-					} )
-		  this.type = payload.type
 
-		  // Validate Content Type
+	constructor(payload: NotificationProperties<T>) {
+		super({
+			id:        payload.id ?? randomUUID(),
+			updatedAt: payload.updatedAt,
+			createdAt: payload.createdAt,
+			version:   payload.version,
+		})
+		this.type = payload.type
 
-		  if ( this.type === NotificationChannel.EMAIL )
-			 {
-				const isEmail = isEmailContent( payload.content )
+		// Validate Content Type
 
-				if ( !isEmail )
-				  {
-					 throw new Error( 'Invalid Email Message' )
-				  }
+		if (this.type === NotificationChannel.EMAIL) {
+			const isEmail = isEmailContent(payload.content)
 
-				this.content = payload.content as EmailMessage
-			 }
+			if (!isEmail) {
+				throw new Error('Invalid Email Message')
+			}
 
-		  this.status    = payload.status ?? NotificationStatus.PENDING
-		  this.sentAt    = payload.sentAt
-		  this.sentBy    = payload.sentBy
-		  this.priority  = payload.priority ?? 'MEDIUM'
-		  this.recipient = payload.recipient
-
-		  this.postConstructorLoggerHook()
+			this.content = payload.content as EmailMessage
 		}
 
-	 queue()
-		{
-		  this.when( NotificationStatus.FAILED, this.status )
-		  this.logger.debug( 'Queueing notification...' )
-		  this.status                      = NotificationStatus.PENDING
-		  const event : NotificationQueued = new NotificationQueued( this )
-		  this.appendEvent( event )
-		  this.logger.debug( 'Queued notification.' )
-		  return this
-		}
+		this.status    = payload.status ?? NotificationStatus.PENDING
+		this.sentAt    = payload.sentAt
+		this.sentBy    = payload.sentBy
+		this.priority  = payload.priority ?? 'MEDIUM'
+		this.recipient = payload.recipient
 
-	 send()
-		{
-		  this.logger.debug( 'Sending notification...' )
-		  this.status = NotificationStatus.SENT
-		  // TODO: Append Event
-		  this.logger.log( 'Sent notification.' )
-		  return this
-		}
+		this.postConstructorLoggerHook()
+	}
 
-	 cancel()
-		{
-		}
 
-	 retry()
-		{
-		}
+	queue() {
+		this.when(NotificationStatus.FAILED, this.status)
+		this.logger.debug('Queueing notification...')
+		this.status                     = NotificationStatus.PENDING
+		const event: NotificationQueued = new NotificationQueued(this)
+		this.appendEvent(event)
+		this.logger.debug('Queued notification.')
+		return this
+	}
 
-	 process()
-		{
-		  this.logger.debug( 'Processing notification...' )
-		  this.logger.debug( 'Actions on notification will be locked until it is processed.' )
-		  return this
-		}
 
-	 fail()
-		{
-		}
-  }
+	send() {
+		this.logger.debug('Sending notification...')
+		this.status = NotificationStatus.SENT
+		// TODO: Append Event
+		this.logger.log('Sent notification.')
+		return this
+	}
+
+
+	cancel() {
+	}
+
+
+	retry() {
+	}
+
+
+	process() {
+		this.logger.debug('Processing notification...')
+		this.logger.debug('Actions on notification will be locked until it is processed.')
+		return this
+	}
+
+
+	fail() {
+	}
+}
