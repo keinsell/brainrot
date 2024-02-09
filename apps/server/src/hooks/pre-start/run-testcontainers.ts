@@ -27,7 +27,7 @@ export class ContainerEnvironment {
 			stream.on('data', (data) => {
 				const logLine = data.toString().trim()
 				if (logLine) {
-					logger.info(logLine)
+					logger.debug(logLine)
 				}
 			})
 		})

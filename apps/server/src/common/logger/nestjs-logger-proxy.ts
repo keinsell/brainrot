@@ -4,13 +4,13 @@
 //
 
 import {Injectable, LoggerService, LogLevel} from '@nestjs/common';
-import {CombinedLogger, Logger}              from "./logger.js"
+import {CombinedLogger, Logger, LogMetadata} from "./logger.js"
 
 
 // TODO: Logger is not parsing context well, this should be investigated.
 
 @Injectable()
-export class NestjsLogger implements LoggerService {
+export class LoggerNestjsProxy implements LoggerService {
 	private logger: Logger;
 
 
@@ -20,7 +20,7 @@ export class NestjsLogger implements LoggerService {
 
 
 	verbose?(message: any, ...optionalParams: any[]) {
-		this.logger.trace(message, ...optionalParams)
+		this.logger.trace(message, this.parseMetadataFromLog(optionalParams))
 	}
 
 
@@ -28,26 +28,60 @@ export class NestjsLogger implements LoggerService {
 
 
 	public debug(message: any, ...optionalParams: any[]): any {
-		this.logger.debug(message, ...optionalParams)
+		this.logger.debug(message, this.parseMetadataFromLog(optionalParams))
 	}
 
 
 	public error(message: any, ...optionalParams: any[]): any {
-		this.logger.error(message, ...optionalParams)
+		this.logger.error(message, this.parseMetadataFromLog(optionalParams))
 	}
 
 
 	public fatal(message: any, ...optionalParams: any[]): any {
-		this.logger.fatal(message, ...optionalParams)
+		this.logger.fatal(message, this.parseMetadataFromLog(optionalParams))
 	}
 
 
 	public log(message: any, ...optionalParams: any[]): any {
-		this.logger.info(message, ...optionalParams)
+		this.logger.info(message, this.parseMetadataFromLog(optionalParams))
 	}
 
 
 	public warn(message: any, ...optionalParams: any[]): any {
-		this.logger.warn(message, ...optionalParams)
+		this.logger.warn(message, this.parseMetadataFromLog(optionalParams))
 	}
+
+
+	private parseMetadataFromLog(...params: any[]): LogMetadata {
+		// Assume default logs from nodejs ex. { params: [ [ [Object], 'Bootstrap' ] ] }
+		// Extract string context to variable.
+		// It seems context is always the last parameter.
+
+		let context = params[0][params[0].length - 1]
+
+		// If context is string, then it's probably a context.
+		// As data is not passed to logs as plain primitives.
+		if (typeof context === "string") {
+			params[0].pop()
+		}
+
+		// Assume the params provided are unknown datatype.
+		// Attach them to LogMetadata.data object.
+		// This is a workaround to pass data to logs.
+
+		const metadata = {
+			context: context,
+			data:    params[0]?.[0] || {},
+		}
+
+		// Do not pass empty data to logs.
+		// This is a workaround to filter out empty data.
+
+		if (params[0].length === 0) {
+			delete metadata.data
+		}
+
+		return metadata
+	}
+
 }

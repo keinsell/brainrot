@@ -1,25 +1,26 @@
-import {
-  err,
-  ok,
-  Result,
-} from 'neverthrow'
+import {err, ok, Result} from 'neverthrow'
 
 
 
-export type SpecificationUnit = (...args : any[]) => Result<boolean, any>
+export type SpecificationUnit = (...args: any[]) => Result<boolean, any>
 
 
-export class BasePolicy
-  {
-	 merge(...args : Result<boolean, any>[]) : Result<boolean, any>
-		{
-		  for ( const result of args )
-			 {
-				if ( result.isErr() )
-				  {
-					 return err( result.error )
-				  }
-			 }
-		  return ok( true )
+export class BasePolicy {
+	merge(...args: Result<boolean, Error>[]): Result<boolean, Error> {
+		let error: Error | undefined
+		let result: boolean = false
+
+		for (const result of args) {
+			if (result.isErr()) {
+				error = result.error
+				break
+			}
 		}
-  }
+
+		if (error) {
+			return err(error)
+		} else {
+			return ok(true)
+		}
+	}
+}

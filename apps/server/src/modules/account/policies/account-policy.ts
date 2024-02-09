@@ -37,7 +37,7 @@ export class AccountPolicy extends BasePolicy {
 			span.setStatus({code: SpanStatusCode.ERROR})
 			span.recordException(maybePolicy.error)
 			span.end()
-			this.logger.warn(`CanRegisterAccount policy failed.`, {error: maybePolicy.error})
+			this.logger.warn(`CanRegisterAccount policy failed.`, maybePolicy.error)
 			throw maybePolicy.error
 		} else {
 			span.setStatus({code: SpanStatusCode.OK})
@@ -77,8 +77,7 @@ export class AccountPolicy extends BasePolicy {
 
 		if (identity) {
 			this.logger.warn(`Email is already in use in system.`, {email})
-			const error = new ConflictException('Email is already in use in system, try logging in instead.')
-			return err(error)
+			return err(new ConflictException('Email is already in use in system, try logging in instead.'))
 		}
 
 		this.logger.verbose(`Email is unique.`, {email})

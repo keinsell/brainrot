@@ -1,6 +1,6 @@
 import {Module}                 from "@nestjs/common"
 import {CombinedLogger, Logger} from "./logger.js"
-import {NestjsLogger}           from "./nestjs-logger-proxy.js"
+import {LoggerNestjsProxy}      from "./nestjs-logger-proxy.js"
 
 
 
@@ -11,7 +11,7 @@ import {NestjsLogger}           from "./nestjs-logger-proxy.js"
 			useClass: CombinedLogger,
 		}, {
 			provide:  "LoggerService",
-			useValue: new NestjsLogger(),
+			useValue: new LoggerNestjsProxy(),
 		},
 	],
 	exports:   [Logger, "LoggerService"],

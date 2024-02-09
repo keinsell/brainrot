@@ -23,25 +23,10 @@
  *
  */
 
-
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger,
-}                            from '@nestjs/common'
-import { HttpArgumentsHost } from '@nestjs/common/interfaces'
-import {
-  Request,
-  Response,
-}                            from 'express'
-import {
-  getCode,
-  getErrorMessage,
-  getObjectValue,
-}                            from './dirty-utilities.js'
+import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common'
+import {HttpArgumentsHost}                                                        from '@nestjs/common/interfaces'
+import {Request, Response}                                                        from 'express'
+import {getCode, getErrorMessage, getObjectValue}                                 from './dirty-utilities.js'
 
 
 
@@ -49,69 +34,58 @@ import {
  * Catch and format thrown exception in NestJS application based on Express
  */
 @Catch()
-export class HttpExceptionFilter
-  implements ExceptionFilter
-  {
-	 private readonly logger : Logger = new Logger( HttpExceptionFilter.name )
+export class HttpExceptionFilter implements ExceptionFilter {
+	private readonly logger: Logger = new Logger(HttpExceptionFilter.name)
 
-	 /**
-	  * Catch and format thrown exception
-	  */
-	 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-	 public catch(
-		exception : any,
-		host : ArgumentsHost,
-	 ) : void
-		{
-		  const ctx : HttpArgumentsHost = host.switchToHttp()
-		  const request : Request       = ctx.getRequest()
-		  const response : Response     = ctx.getResponse()
-		  let status : number
 
-		  if ( exception instanceof HttpException )
-			 {
-				status = exception.getStatus()
-			 }
-		  else
-			 {
-				// Case of a PayloadTooLarge
-				const type : string | undefined = getObjectValue( exception, 'type' )
-				status                          = type === 'entity.too.large' ? HttpStatus.PAYLOAD_TOO_LARGE
-																								  : HttpStatus.INTERNAL_SERVER_ERROR
-			 }
+	/**
+	 * Catch and format thrown exception
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public catch(exception: any, host: ArgumentsHost): void {
+		const ctx: HttpArgumentsHost = host.switchToHttp()
+		const request: Request       = ctx.getRequest()
+		const response: Response     = ctx.getResponse()
+		let status: number
 
-		  let code : string    = exception instanceof HttpException ? getCode( exception.getResponse() )
-																						: HttpStatus[ HttpStatus.INTERNAL_SERVER_ERROR ]
-		  let message : string = exception instanceof HttpException ? getErrorMessage( exception.getResponse() )
-																						: 'An internal server error occurred'
-
-		  if ( status === HttpStatus.PAYLOAD_TOO_LARGE )
-			 {
-				code    = HttpStatus[ HttpStatus.PAYLOAD_TOO_LARGE ]
-				message = `
-        Your request entity size is too big for the server to process it:
-          - request size: ${getObjectValue( exception, 'length' )};
-          - request limit: ${getObjectValue( exception, 'limit' )}.`
-			 }
-		  //		  const exceptionStack : string = 'stack' in exception ? exception.stack : ''
-		  if ( status >= HttpStatus.INTERNAL_SERVER_ERROR )
-			 {
-				this.logger.error( `${status} [${request.method} ${request.url}] has thrown a critical error` )
-				this.logger.error( `${JSON.stringify( exception )}` )
-			 }
-		  else if ( status >= HttpStatus.BAD_REQUEST )
-			 {
-				this.logger.warn( `${status} [${request.method} ${request.url}] has thrown an HTTP client error` )
-				this.logger.warn( `${JSON.stringify( exception )}` )
-				//				this.logger.warn( {
-				//										  message : `${status} [${request.method} ${request.url}] has thrown an
-				// HTTP client error`, exceptionStack, headers : request.headers, } )
-			 }
-
-		  response.status( status ).send( {
-														code,
-														message,
-														status,
-													 } )
+		if (exception instanceof HttpException) {
+			status = exception.getStatus()
+		} else {
+			// Case of a PayloadTooLarge
+			const type: string | undefined = getObjectValue(exception, 'type')
+			status                         = type === 'entity.too.large' ?
+				HttpStatus.PAYLOAD_TOO_LARGE :
+				HttpStatus.INTERNAL_SERVER_ERROR
 		}
-  }
+
+		let code: string    = exception instanceof HttpException ?
+			getCode(exception.getResponse()) :
+			HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR]
+		let message: string = exception instanceof HttpException ?
+			getErrorMessage(exception.getResponse()) :
+			'An internal server error occurred'
+
+		if (status === HttpStatus.PAYLOAD_TOO_LARGE) {
+			code    = HttpStatus[HttpStatus.PAYLOAD_TOO_LARGE]
+			message = `
+        Your request entity size is too big for the server to process it:
+          - request size: ${getObjectValue(exception, 'length')};
+          - request limit: ${getObjectValue(exception, 'limit')}.`
+		}
+		//		  const exceptionStack : string = 'stack' in exception ? exception.stack : ''
+		if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+			this.logger.error(`${status} [${request.method} ${request.url}] has thrown a critical error`)
+			this.logger.error(`${JSON.stringify(exception)}`)
+		} else {
+			if (status >= HttpStatus.BAD_REQUEST) {
+				this.logger.warn(`${status} [${request.method} ${request.url}] has thrown an HTTP client error`, exception)
+			}
+		}
+
+		response.status(status).send({
+			code,
+			message,
+			status,
+		})
+	}
+}

@@ -33,25 +33,42 @@ export class ConsoleAppender extends LogAppender {
 
 		switch (log.level) {
 			case LogLevel.TRACE:
-				console.log(`${chalk.gray('TRACE')}`, message);
+				if (log.metadata?.data) {
+					console.log(chalk.white('TRACE ', message), chalk.gray(JSON.stringify(log.metadata?.data)));
+				} else {
+					console.log(chalk.white('TRACE ', message));
+				}
 				break;
 			case LogLevel.DEBUG:
-				console.log(`${chalk.gray('DEBUG')}`, message);
+
+				if (log.metadata?.data) {
+					console.log(`${chalk.white('DEBUG')}`, message, chalk.gray(JSON.stringify(log.metadata?.data)));
+				} else {
+					console.log(`${chalk.white('DEBUG', message)}`);
+				}
 				break;
 			case LogLevel.INFO:
-				console.log(message);
+				if (log.metadata?.data) {
+					console.log(`${chalk.green('INFO')}`, message, chalk.gray(JSON.stringify(log.metadata?.data)));
+				} else {
+					console.log(`${chalk.green('INFO')}`, message);
+				}
 				break;
 			case LogLevel.WARN:
-				console.warn(message);
+				if (log.metadata?.data) {
+					console.warn(`${chalk.yellow('WARN')}`, message, chalk.gray(JSON.stringify(log.metadata?.data)));
+				} else {
+					console.warn(`${chalk.yellow('WARN')}`, message);
+				}
 				break;
 			case LogLevel.ERROR:
-				console.error(message);
+				console.error(`${chalk.red('ERROR')}`, message, log.metadata?.error);
 				break;
 			case LogLevel.FATAL:
-				console.error(message);
+				console.error(`${chalk.red('FATAL')}`, message, log.metadata?.error);
 				break;
 			default:
-				console.log(message);
+				console.log(message, log.metadata?.data);
 				break;
 		}
 	}

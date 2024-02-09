@@ -30,8 +30,7 @@ function fn() {
         env = 'dev'; // a custom 'intelligent' default
     }
     var config = {
-        serverUrl: 'https://1rnygt5n4oth.share.zrok.io',
-        anotherUrlBase: 'https://another-host.com/v1/'
+        serverUrl: 'https://suburban-tribunal-billing-michael.trycloudflare.com',
     };
 
     karate.configure('connectTimeout', 5000);

@@ -34,8 +34,8 @@ export class AggregateLogger {
 
 
 	constructor(entity: any) {
-		this.aggregateVersion = `[V${entity.version}]`
-		this.aggregateId      = `[ID | ${entity.id}]`
+		this.aggregateId      = entity.id
+		this.aggregateVersion = entity.version.toString()
 		const aggregateName   = entity.constructor.name.toLowerCase()
 
 		this.logger = new Logger(aggregateName)

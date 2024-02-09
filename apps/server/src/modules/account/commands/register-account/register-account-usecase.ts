@@ -1,20 +1,20 @@
-import {Injectable, Logger}       from "@nestjs/common"
-import {SpanKind}                 from "@opentelemetry/api"
-import {getCurrentScope, setUser} from "@sentry/node"
-import {ok, Result}               from "neverthrow"
-import {PasswordHashing}          from "../../../../common/libraries/unihash/index.js"
-import {KdfAlgorithm}             from "../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
-import {createEmailAddress}       from "../../../../common/mailer/value-object/email-address.js"
-import {EventBus}                 from "../../../../common/modules/messaging/event-bus.js"
-import {OpentelemetryTracer}      from "../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js"
-import {UseCase}                  from "../../../../common/use-case.js"
-import {Account}                  from "../../entities/account.js"
-import {AccountPolicy}            from "../../policies/account-policy.js"
-import {AccountRepository}        from "../../repositories/account-repository.js"
-import {AccountEmail}             from "../../value-objects/account-email.js"
-import {Password}                 from "../../value-objects/password.js"
-import {createUsername}           from "../../value-objects/username.js"
-import {RegisterAccountCommand}   from "./register-account-command.js"
+import {Injectable, Logger}     from "@nestjs/common"
+import {SpanKind}               from "@opentelemetry/api"
+import {setUser}                from "@sentry/node"
+import {ok, Result}             from "neverthrow"
+import {PasswordHashing}        from "../../../../common/libraries/unihash/index.js"
+import {KdfAlgorithm}           from "../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js"
+import {createEmailAddress}     from "../../../../common/mailer/value-object/email-address.js"
+import {EventBus}               from "../../../../common/modules/messaging/event-bus.js"
+import {OpentelemetryTracer}    from "../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js"
+import {UseCase}                from "../../../../common/use-case.js"
+import {Account}                from "../../entities/account.js"
+import {AccountPolicy}          from "../../policies/account-policy.js"
+import {AccountRepository}      from "../../repositories/account-repository.js"
+import {AccountEmail}           from "../../value-objects/account-email.js"
+import {Password}               from "../../value-objects/password.js"
+import {createUsername}         from "../../value-objects/username.js"
+import {RegisterAccountCommand} from "./register-account-command.js"
 
 
 
@@ -66,11 +66,6 @@ export class RegisterAccountUseCase extends UseCase<RegisterAccountCommand, Acco
 			span.recordException(usernameResult.error)
 			throw usernameResult.error
 		}
-
-		getCurrentScope()?.setUser({
-			email:    emailResult._unsafeUnwrap(),
-			username: usernameResult._unsafeUnwrap(),
-		})
 
 		const username = usernameResult.value
 		const email    = emailResult.value

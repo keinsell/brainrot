@@ -26,6 +26,5 @@
 
 
 docker build -t karate-jre .
-#docker run -it --rm -v "$(pwd)":/src -w /src karate-jre java -jar /karate.jar .
 docker run -it --rm -v "$(pwd)":/src \
  -w /src karate-jre java -jar /karate.jar .

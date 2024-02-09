@@ -22,7 +22,7 @@ export class EventBus implements OnApplicationShutdown, OnApplicationBootstrap {
 			this.transactionalOutbox.inbound(event)
 		}
 
-		this.logger.debug(`Publishing event for ${event.namespace}...`, {event: event})
+		this.logger.debug(`Publishing event for ${event.namespace}...`, event)
 
 		const hasListeners = this.eventEmitter.hasListeners(event.namespace)
 
@@ -32,7 +32,7 @@ export class EventBus implements OnApplicationShutdown, OnApplicationBootstrap {
 
 		this.eventEmitter.emitAsync(event.namespace, event)
 		.then(() => {
-			this.logger.log(`Published event at ${event.namespace}`, {event: event})
+			this.logger.log(`Published event at ${event.namespace}`, event)
 
 			if (this.transactionalOutbox) {
 				this.transactionalOutbox.outbound(event)

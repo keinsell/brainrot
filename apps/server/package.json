@@ -155,7 +155,8 @@
     "tslib": "^2.6.2",
     "type-fest": "^4.9.0",
     "typia": "^5.3.10",
-    "untildify": "^5.0.0"
+    "untildify": "^5.0.0",
+    "untun": "^0.1.3"
   },
   "devDependencies": {
     "@automapper/types": "^6.3.1",

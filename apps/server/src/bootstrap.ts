@@ -1,21 +1,19 @@
-import {Logger}                                from '@nestjs/common'
-import {NestFactory}                           from '@nestjs/core'
-import Sentry                                  from '@sentry/node'
-import delay                                   from 'delay'
-import type {NextFunction}                     from 'express'
-import ms                                      from 'ms'
-import process                                 from 'node:process'
-import {NestjsLogger}                          from "./common/logger/nestjs-logger-proxy.js"
-import {buildCompodocDocumentation}            from './common/modules/documentation/compodoc/compodoc.js'
-import {buildSwaggerDocumentation}             from './common/modules/documentation/swagger/swagger.js'
-import {executePrismaRelatedProcesses}         from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
-import {__appConfig, __config}                from './configs/global/__config.js'
-import {isDevelopment}                         from './configs/helper/is-development.js'
-import {StaticFeatureFlags}                    from './configs/static-feature-flags.js'
-import {Container}                             from './container.js'
-import {migrateDatabase}                       from './hooks/post-start/migrate-database.js'
-import type {ExpressRequest, ExpressResponse} from './types/express-response.js'
-import {portAllocator}                         from './utilities/network-utils/port-allocator.js'
+import {Logger}                        from '@nestjs/common'
+import {NestFactory}                   from '@nestjs/core'
+import Sentry                          from '@sentry/node'
+import delay                           from 'delay'
+import ms                              from 'ms'
+import process                         from 'node:process'
+import {LoggerNestjsProxy}             from "./common/logger/nestjs-logger-proxy.js"
+import {buildCompodocDocumentation}    from './common/modules/documentation/compodoc/compodoc.js'
+import {buildSwaggerDocumentation}     from './common/modules/documentation/swagger/swagger.js'
+import {executePrismaRelatedProcesses} from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
+import {__appConfig, __config}         from './configs/global/__config.js'
+import {isDevelopment}                 from './configs/helper/is-development.js'
+import {StaticFeatureFlags}            from './configs/static-feature-flags.js'
+import {Container}                     from './container.js'
+import {migrateDatabase}               from './hooks/post-start/migrate-database.js'
+import {portAllocator}                 from './utilities/network-utils/port-allocator.js'
 
 
 
@@ -24,9 +22,13 @@ export async function bootstrap() {
 	const app = await NestFactory.create(Container, {
 		abortOnError:  false,
 		autoFlushLogs: true,
+		cors:          true,
+		bodyParser:    true,
+		rawBody:       true,
+		preview:       false,
 		bufferLogs:    true,
 		snapshot:      isDevelopment(),
-		logger:        new NestjsLogger(),
+		logger:        new LoggerNestjsProxy(),
 	})
 
 	// Implement logger used for bootstrapping and notifying about application state
@@ -51,16 +53,16 @@ export async function bootstrap() {
 	buildCompodocDocumentation()
 
 	// The error handler must be before any other error middleware and after all controllers
-	app.use(Sentry.Handlers.errorHandler())
-	//	 app.useGlobalFilters( new HttpExceptionFilter() )
+	//app.use(Sentry.Handlers.errorHandler())
+	//app.useGlobalFilters(new HttpExceptionFilter())
 
 	// Optional fallthrough error handler
-	app.use(function onError(_err: Error, _req: ExpressRequest, res: ExpressResponse, _next: NextFunction) {
-		res.statusCode = 500
-		res.end((
-			res as any
-		).sentry + '\n')
-	})
+	//app.use(function onError(_err: Error, _req: ExpressRequest, res: ExpressResponse, _next: NextFunction) {
+	//	res.statusCode = 500
+	//	res.end((
+	//		res as any
+	//	).sentry + '\n')
+	//})
 
 	const PORT = __config.get('PORT')
 
@@ -85,7 +87,7 @@ export async function bootstrap() {
 
 	while (!isApplicationListening) {
 		try {
-			await app.listen(openPort.port, () => {
+			await app.listen(openPort.port, async () => {
 				logger.verbose(`${'-'.repeat(54)}`)
 				logger.log(`🚀 Application started on ${applicationUrl} in ${NODE_ENV} mode`)
 
@@ -102,6 +104,18 @@ export async function bootstrap() {
 				}
 
 				logger.verbose(`${'-'.repeat(54)}`)
+
+				//if (__config.get("FEATURE").ENABLE_TUNNEL) {
+				//	const tunnel = await startTunnel({
+				//		port:                   openPort.port,
+				//		acceptCloudflareNotice: true,
+				//	})
+				//
+				//	if (tunnel) {
+				//		logger.verbose(`🚇 Tunnel is enabled, you can access your application via public URL: ${await tunnel.getURL()}`)
+				//	}
+				//}
+
 			})
 			isApplicationListening = true
 		} catch (e) {

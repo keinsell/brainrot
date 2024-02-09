@@ -9,19 +9,47 @@ import {Log}             from "./log.js"
 
 
 export type LogMetadataKey = "requestId" | "correlationId" | "error" | "error-message" | "context" | "data" | string
-export type LogMetadata = Record<LogMetadataKey, any> | undefined;
+export type LogMetadata = {
+	request?: {
+		id?: string
+		correlationId?: string
+		url?: string
+		body?: unknown
+		params?: unknown
+		query?: unknown
+	}
+	response?: {
+		statusCode?: number
+		body?: unknown
+	}
+	error?: {
+		message?: string
+		stack?: string
+		code?: string
+		cause?: string
+	}
+	context?: LogContext
+	data?: unknown
+}
+export type LogContext = {
+							 context: string
+							 kind: "SERVICE" | "CONTROLLER" | "REPOSITORY" | "MIDDLEWARE" | "PIPE" | "GUARD" | "INTERCEPTOR" | "FILTER" | "FUNCTION" | "OTHER"
+						 } | string | undefined
 
 
 export class Logger {
-	private context: LogMetadata           = {context: 'default'};
+	private context: LogContext            = "unknown"
 	private logAppenderList: LogAppender[] = [];
+	private defaultMetadata: LogMetadata   = {}
 
 
-	protected constructor(context?: LogMetadata, logAppenderList?: LogAppender[]) {
+	protected constructor(context?: LogContext, logAppenderList?: LogAppender[]) {
 		if (context) {
-			this.context = {
-				context: context.context,
-			}
+			this.context = context;
+		}
+
+		this.defaultMetadata = {
+			context: this.context,
 		}
 
 		if (logAppenderList) {
@@ -30,68 +58,73 @@ export class Logger {
 	}
 
 
-	info(message: string, ...meta: LogMetadata[]): void {
+	setContext(context: any) {
+
+	}
+
+
+	info(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.INFO,
 			message,
-			metadata:  {...this.context, ...meta},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
 
-	warn(message: string, ...meta: LogMetadata[]): void {
+	warn(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.WARN,
 			message,
-			metadata:  {...meta, ...this.context},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
 
-	error(message: string, ...meta: LogMetadata[]): void {
+	error(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.ERROR,
 			message,
-			metadata:  {...meta, ...this.context},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
 
-	fatal(message: string, ...meta: LogMetadata[]): void {
+	fatal(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.FATAL,
 			message,
-			metadata:  {...meta, ...this.context},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
 
-	trace(message: string, ...meta: LogMetadata[]): void {
+	trace(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.TRACE,
 			message,
-			metadata:  {...meta, ...this.context},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
 
-	debug(message: string, ...meta: LogMetadata[]): void {
+	debug(message: string, metadata?: LogMetadata): void {
 		this.log({
 			id:        this.generateLogId(),
 			timestamp: new Date(),
 			level:     LogLevel.DEBUG,
 			message,
-			metadata:  {...meta, ...this.context},
+			metadata:  {...this.defaultMetadata, ...metadata},
 		});
 	}
 
@@ -123,7 +156,7 @@ export class Logger {
 @Injectable()
 export class CombinedLogger extends Logger {
 	constructor(name?: string) {
-		super({name}, [
+		super(name, [
 			new ConsoleAppender(), new FileAppender({
 				filePath: 'logs/app.log',
 				level:    LogLevel.INFO,

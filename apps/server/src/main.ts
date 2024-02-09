@@ -1,5 +1,4 @@
 import {bootstrap}                                      from './bootstrap.js'
-import {CombinedLogger}                                 from "./common/logger/logger.js"
 import {__appConfig}                                    from './configs/global/__config.js'
 import {isProduction}                                   from './configs/helper/is-production.js'
 import {acquireProcessLock}                             from './hooks/pre-start/acquire-process-lock.js'
@@ -26,9 +25,5 @@ if (__appConfig.FEATURE_USE_DOCKER_TESTCONTAINERS) {
 }
 
 initializeSentry()
-
-for (let i = 0; i < 100; i++) {
-	new CombinedLogger('main').info("Kurwa...", {"a": "b"})
-}
 
 await bootstrap()

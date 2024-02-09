@@ -20,7 +20,7 @@ export class PrismaAccountRepository extends AccountRepository {
 
 
 	public async findByEmail(email: string): Promise<Account | null> {
-		this.logger.debug(`Searching account entity by email`)
+		this.logger.debug(`Searching account entity by email`, {email})
 
 		const maybeAccount = await this.prismaService.account.findFirst({
 			where: {
@@ -29,13 +29,16 @@ export class PrismaAccountRepository extends AccountRepository {
 		})
 
 		if (!maybeAccount) {
-			this.logger.debug(`Account not found`)
+			this.logger.debug(`Searching account entity by email resulted in no results`, {email})
 			return null
 		}
 
 		const account = maybeAccount as DbContextModel.Account.Entity
 
-		this.logger.debug(`Found account entity by email`)
+		this.logger.debug(`Found account entity by email`, {
+			email,
+			account,
+		})
 
 		return new AccountEntityModel(account).toDomainModel()
 	}
