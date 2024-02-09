@@ -56,11 +56,6 @@ export interface ConfigurationContainer {
 
 	APPLICATION: IApplicationConfiguration
 	AUTH: IAuthorizationConfiguration
-
-	PRE_LAUNCH: {
-		deployTestContainers: boolean
-	}
-
 	FEATURE: {
 		ENABLE_TUNNEL: boolean
 	}

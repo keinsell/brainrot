@@ -1,8 +1,6 @@
 import {IdentityAndAccessModule}                                                          from '@boundary/identity-and-access/identity-and-access.module.js'
 import {Logger, MiddlewareConsumer, Module, OnModuleDestroy, OnModuleInit, RequestMethod} from '@nestjs/common'
-import {APP_FILTER}                                                                       from "@nestjs/core"
 import Sentry                                                                             from '@sentry/node'
-import {HttpExceptionFilter}                                                              from "./common/filters/exception-filter/http-exception-filter.js"
 import {GraphqlModule}                                                                    from './common/graphql/graphql-module.js'
 import {DocumentationModule}                                                              from './common/modules/documentation/documentation-module.js'
 import {DeveloperToolsModule}                                                             from './common/modules/environment/dev-tools/developer-tools.module.js'
@@ -20,12 +18,7 @@ import {RegionModule}                                                           
 		ProductModule, CartModule, RegionModule,
 	],
 	controllers: [],
-	providers:   [
-		{
-			provide:  APP_FILTER,
-			useClass: HttpExceptionFilter,
-		},
-	],
+	providers:   [],
 })
 export class Container implements OnModuleInit, OnModuleDestroy {
 

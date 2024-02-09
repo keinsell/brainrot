@@ -26,7 +26,6 @@
 import convict                          from 'convict'
 import {ApplicationConfigurationSchema} from '../config-set/application-configuration.js'
 import {AuthroizationConfiguration}     from '../config-set/authorization-configuration.js'
-import {isTest}                         from '../helper/is-test.js'
 import {ConfigurationContainer}         from '../schema/configuration-container.js'
 import {NodeEnvironment}                from '../values/node-environment.js'
 
@@ -82,13 +81,6 @@ export const MainConfiguration: convict.Schema<ConfigurationContainer> = {
 	},
 	APPLICATION:         ApplicationConfigurationSchema,
 	AUTH:                AuthroizationConfiguration,
-	PRE_LAUNCH:          {
-		deployTestContainers: {
-			doc:     'Defines if testcontainers should be deployed before application launch',
-			default: isTest(),
-			env:     'PRE_LAUNCH_DEPLOY_TESTCONTAINERS',
-		},
-	},
 	FEATURE:             {
 		ENABLE_TUNNEL: {
 			doc:     'Enables or disables the tunnel feature',

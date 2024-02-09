@@ -48,6 +48,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 		const response: Response     = ctx.getResponse()
 		let status: number
 
+		this.logger.debug(`Catching exception with HttpExceptionFilter`, exception)
+
 		if (exception instanceof HttpException) {
 			status = exception.getStatus()
 		} else {
@@ -82,10 +84,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 			}
 		}
 
-		response.status(status).send({
+		response.status(status).jsonp({
 			code,
 			message,
 			status,
-		})
+		}).end()
 	}
 }
