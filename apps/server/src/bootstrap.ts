@@ -1,4 +1,4 @@
-import {Logger, ValidationPipe}        from '@nestjs/common'
+import {Logger}                        from '@nestjs/common'
 import {HttpAdapterHost, NestFactory}  from '@nestjs/core'
 import {NestExpressApplication}        from "@nestjs/platform-express"
 import Sentry                          from "@sentry/node"
@@ -31,9 +31,8 @@ export async function bootstrap() {
 		logger:        new LoggerNestjsProxy(),
 	})
 
-	//app.use(bodyParser({limit: '16mb'}));
-	app.useGlobalPipes(new ValidationPipe());
-	app.useBodyParser('json', {limit: '16mb'});
+	//app.useGlobalPipes(new ValidationPipe());
+	//app.useBodyParser('json', {limit: '16mb'});
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')
