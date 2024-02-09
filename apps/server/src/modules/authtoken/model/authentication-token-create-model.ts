@@ -23,41 +23,38 @@
  *
  */
 
-import { DbContextModel }           from '../../../common/modules/database/db-context-model.js'
-import { Prisma }                   from '../../../vendor/prisma/index.js'
-import { AuthenticationToken }      from '../entity/authentication-token.js'
-import { AuthorizationTokenStatus } from '../value-object/authorization-token-status.js'
+import {DbContextModel}           from '../../../common/modules/database/db-context-model.js'
+import {Prisma}                   from '../../../vendor/prisma/index.js'
+import {AuthenticationToken}      from '../entity/authentication-token.js'
+import {AuthorizationTokenStatus} from '../value-object/authorization-token-status.js'
 
 
 
-export class AuthenticationTokenCreateModel
-  implements DbContextModel.TokenAudit.CreatePayload
-  {
-	 deviceInfo : string
-	 Account : Prisma.AccountCreateNestedOneWithoutTokenAuditInput
-	 expiresAt : Date | string
-	 id : string
-	 isRevoked : boolean
-	 issuedAt : Date | string
-	 lastUsedAt : Date | string
-	 tokenId : string
+export class AuthenticationTokenCreateModel implements DbContextModel.TokenAudit.CreatePayload {
+	deviceInfo: string
+	Account: Prisma.AccountCreateNestedOneWithoutTokenAuditInput
+	expiresAt: Date | string
+	id: string
+	isRevoked: boolean
+	issuedAt: Date | string
+	lastUsedAt: Date | string
+	tokenId: string
 
-	 constructor(properties : DbContextModel.TokenAudit.CreatePayload)
-		{
-		  Object.assign( this, properties )
-		}
 
-	 static fromDomainModel(authenticationToken : AuthenticationToken) : AuthenticationTokenCreateModel
-		{
-		  return new AuthenticationTokenCreateModel( {
-																	  id         : authenticationToken.id,
-																	  expiresAt  : '',
-																	  tokenId    : authenticationToken.id,
-																	  isRevoked  : authenticationToken.status
-																						=== AuthorizationTokenStatus.REVOKED,
-																	  issuedAt   : authenticationToken.issuedAt,
-																	  lastUsedAt : authenticationToken.lastUsedAt,
-																	  Account    : {connect : {id : authenticationToken.accountId}},
-																	} )
-		}
-  }
+	constructor(properties: DbContextModel.TokenAudit.CreatePayload) {
+		Object.assign(this, properties)
+	}
+
+
+	static fromDomainModel(authenticationToken: AuthenticationToken): AuthenticationTokenCreateModel {
+		return new AuthenticationTokenCreateModel({
+			id:         authenticationToken.id,
+			expiresAt:  '',
+			tokenId:    authenticationToken.id,
+			isRevoked:  authenticationToken.status === AuthorizationTokenStatus.REVOKED,
+			issuedAt:   authenticationToken.issuedAt,
+			lastUsedAt: authenticationToken.lastUsedAt || null,
+			Account:    {connect: {id: authenticationToken.accountId}},
+		})
+	}
+}

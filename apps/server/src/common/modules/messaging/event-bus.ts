@@ -55,7 +55,7 @@ export class EventBus implements OnApplicationShutdown, OnApplicationBootstrap {
 
 
 	public onApplicationBootstrap(): any {
-		this.eventEmitter.onAny((event: string) => {
+		this.eventEmitter.onAny((event: string | string[]): void => {
 			this.logger.verbose(`Routing ${event}...`)
 		})
 

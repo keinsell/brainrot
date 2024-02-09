@@ -23,27 +23,23 @@
  *
  */
 
-import { EmailNotification } from '../../../common/notification/entity/email-notification.js'
-import type { AccountId }    from '../shared-kernel/account-id.js'
-import type { AccountEmail } from '../value-objects/account-email.js'
+import {EmailNotification} from '../../../common/notification/entity/email-notification.js'
+import type {AccountId}    from '../shared-kernel/account-id.js'
+import type {AccountEmail} from '../value-objects/account-email.js'
 
 
 
-export class AccountConfirmedNotification
-  extends EmailNotification
-  {
+export class AccountConfirmedNotification extends EmailNotification {
 
-	 constructor(email : AccountEmail)
-		{
-		  super( {
-					  sentAt    : undefined,
-					  sentBy    : '' as AccountId,
-					  priority  : 'HIGH',
-					  content   : {
-						 subject : 'Account Verified',
-						 body    : `Account successfully verified`,
-					  },
-					  recipient : {to : email.address},
-					} )
-		}
-  }
+	constructor(email: AccountEmail) {
+		super({
+			sentBy:    '' as AccountId,
+			priority:  'HIGH',
+			content:   {
+				subject: 'Account Verified',
+				body:    `Account successfully verified`,
+			},
+			recipient: {to: email.address},
+		})
+	}
+}

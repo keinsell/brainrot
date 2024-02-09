@@ -1,38 +1,45 @@
-import {Logger}                        from '@nestjs/common'
-import {HttpAdapterHost, NestFactory}  from '@nestjs/core'
-import {NestExpressApplication}        from "@nestjs/platform-express"
-import Sentry                          from "@sentry/node"
-import delay                           from 'delay'
-import ms                              from 'ms'
-import process                         from 'node:process'
-import {HttpExceptionFilter}           from "./common/filters/exception-filter/http-exception-filter.js"
-import {LoggerNestjsProxy}             from "./common/logger/nestjs-logger-proxy.js"
-import {buildCompodocDocumentation}    from './common/modules/documentation/compodoc/compodoc.js'
-import {buildSwaggerDocumentation}     from './common/modules/documentation/swagger/swagger.js'
-import {executePrismaRelatedProcesses} from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
-import {__appConfig, __config}         from './configs/global/__config.js'
-import {isDevelopment}                 from './configs/helper/is-development.js'
-import {StaticFeatureFlags}            from './configs/static-feature-flags.js'
-import {Container}                     from './container.js'
-import {migrateDatabase}               from './hooks/post-start/migrate-database.js'
-import {portAllocator}                 from './utilities/network-utils/port-allocator.js'
+import {Logger, ValidationPipe}                            from '@nestjs/common'
+import {BaseExceptionFilter, HttpAdapterHost, NestFactory} from '@nestjs/core'
+import {ExpressAdapter, NestExpressApplication}            from "@nestjs/platform-express"
+import Sentry                                              from "@sentry/node"
+import delay                                               from 'delay'
+import express, {NextFunction}                             from 'express'
+import ms                                                  from 'ms'
+import process                                             from 'node:process'
+import {LoggerNestjsProxy}                                 from "./common/logger/nestjs-logger-proxy.js"
+import {buildCompodocDocumentation}                        from './common/modules/documentation/compodoc/compodoc.js'
+import {buildSwaggerDocumentation}                         from './common/modules/documentation/swagger/swagger.js'
+import {executePrismaRelatedProcesses}                     from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
+import {__appConfig, __config}                             from './configs/global/__config.js'
+import {isDevelopment}                                     from './configs/helper/is-development.js'
+import {StaticFeatureFlags}                                from './configs/static-feature-flags.js'
+import {Container}                                         from './container.js'
+import {migrateDatabase}                                   from './hooks/post-start/migrate-database.js'
+import {ExpressRequest, ExpressResponse}                   from "./types/express-response.js"
+import {portAllocator}                                     from './utilities/network-utils/port-allocator.js'
 
 
 
 export async function bootstrap() {
+	// Create an express server
+	const server = express()
+
 	// Bootstrap application
-	const app: NestExpressApplication = await NestFactory.create(Container, {
-		autoFlushLogs: true,
-		cors:          true,
-		rawBody:       true,
-		preview:       false,
-		bufferLogs:    true,
-		snapshot:      isDevelopment(),
-		logger:        new LoggerNestjsProxy(),
+	const app: NestExpressApplication = await NestFactory.create(Container, new ExpressAdapter(server), {
+		autoFlushLogs: true, //cors:          true,
+		//bodyParser:    true,
+		//rawBody:       true,
+		preview:      false,
+		bufferLogs:   true,
+		abortOnError: isDevelopment(),
+		snapshot:     isDevelopment(),
+		logger:       new LoggerNestjsProxy(),
 	})
 
-	//app.useGlobalPipes(new ValidationPipe());
-	//app.useBodyParser('json', {limit: '16mb'});
+	const {httpAdapter} = app.get(HttpAdapterHost);
+
+	app.useGlobalPipes(new ValidationPipe());
+	app.useBodyParser('json', {limit: '16mb'});
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')
@@ -44,17 +51,17 @@ export async function bootstrap() {
 	buildCompodocDocumentation()
 
 	// The error handler must be before any other error middleware and after all controllers
+	app.useGlobalFilters(new BaseExceptionFilter(httpAdapter))
+
 	app.use(Sentry.Handlers.errorHandler())
-	const httpAdapterHost = app.get(HttpAdapterHost);
-	app.useGlobalFilters(new HttpExceptionFilter(httpAdapterHost))
 
 	// Optional fallthrough error handler
-	//app.use(function onError(_err: Error, _req: ExpressRequest, res: ExpressResponse, _next: NextFunction) {
-	//	res.statusCode = 500
-	//	res.end((
-	//		res as any
-	//	).sentry + '\n')
-	//})
+	app.use(function onError(_err: Error, _req: ExpressRequest, res: ExpressResponse, _next: NextFunction) {
+		res.statusCode = 500
+		res.end((
+			res as any
+		).sentry + '\n')
+	})
 
 	// Enable graceful shutdown hooks
 	app.enableShutdownHooks()

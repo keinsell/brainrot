@@ -1,4 +1,4 @@
-import {Body, Controller, Patch, Post, Req, UseGuards}                                         from '@nestjs/common'
+import {Body, Controller, HttpException, HttpStatus, Patch, Post, Req, UseGuards}              from '@nestjs/common'
 import {ApiBody, ApiConflictResponse, ApiOkResponse, ApiOperation, ApiResponse, getSchemaPath} from '@nestjs/swagger'
 import {getCurrentScope}                                                                       from '@sentry/node'
 import {Request}                                                                               from 'express'
@@ -89,9 +89,8 @@ export class AccountController {
 
 			getCurrentScope()
 			.setUser({
-				username:   result.username,
-				email:      result.email.address,
-				ip_address: request.ip,
+				username: result.username,
+				email:    result.email.address,
 			})
 
 			return {
@@ -101,8 +100,12 @@ export class AccountController {
 				username:      result.username,
 			}
 		} catch (e) {
-			console.error(e)
-			throw e
+			throw new HttpException({
+				status: HttpStatus.FORBIDDEN,
+				error:  'This is a custom message',
+			}, HttpStatus.FORBIDDEN, {
+				cause: "xD",
+			});
 		}
 	}
 

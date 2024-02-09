@@ -23,51 +23,42 @@
  *
  */
 
-import {
-  ConsoleLogger,
-  Injectable,
-}                                 from '@nestjs/common'
-import {
-  context,
-  trace,
-}                                 from '@opentelemetry/api'
-import { AutomaticTraceInjector } from '../../contract/automatic-trace-injector/automatic-trace-injector.js'
+import {ConsoleLogger, Injectable} from '@nestjs/common'
+import {context, trace}            from '@opentelemetry/api'
+import {AutomaticTraceInjector}    from '../../contract/automatic-trace-injector/automatic-trace-injector.js'
 
 
 
 @Injectable()
-export class LoggerInjector
-  implements AutomaticTraceInjector
-  {
-	 private static getMessage(message : string)
-		{
-		  const currentSpan = trace.getSpan( context.active() )
+export class LoggerInjector implements AutomaticTraceInjector {
+	private static getMessage(message: string) {
+		const currentSpan = trace.getSpan(context.active())
 
-		  if ( !currentSpan ) return message
+		if (!currentSpan) return message
 
-		  const spanContext = trace.getSpan( context.active() )?.spanContext()
+		const spanContext = trace.getSpan(context.active())?.spanContext()
 
-		  currentSpan.addEvent( message )
+		currentSpan.addEvent(message)
 
-		  return `[${spanContext?.traceId}] ${message}`
-		}
+		return `[${spanContext?.traceId}] ${message}`
+	}
 
-	 public async inject()
-		{
-		  ConsoleLogger.prototype.log     = this.wrapPrototype( ConsoleLogger.prototype.log )
-		  ConsoleLogger.prototype.debug   = this.wrapPrototype( ConsoleLogger.prototype.debug )
-		  ConsoleLogger.prototype.error   = this.wrapPrototype( ConsoleLogger.prototype.error )
-		  ConsoleLogger.prototype.verbose = this.wrapPrototype( ConsoleLogger.prototype.verbose )
-		  ConsoleLogger.prototype.warn    = this.wrapPrototype( ConsoleLogger.prototype.warn )
-		}
 
-	 private wrapPrototype(prototype : ConsoleLogger[keyof ConsoleLogger])
-		{
-		  return {
-			 [ prototype.name ] : function (...args : any[]) {
-				args[ 0 ] = LoggerInjector.getMessage( args[ 0 ] )
-				prototype.apply( this, args )
-			 },
-		  }[ prototype.name ]
-		}
-  }
+	public async inject() {
+		ConsoleLogger.prototype.log     = this.wrapPrototype(ConsoleLogger.prototype.log)
+		ConsoleLogger.prototype.debug   = this.wrapPrototype(ConsoleLogger.prototype.debug)
+		ConsoleLogger.prototype.error   = this.wrapPrototype(ConsoleLogger.prototype.error)
+		ConsoleLogger.prototype.verbose = this.wrapPrototype(ConsoleLogger.prototype.verbose)
+		ConsoleLogger.prototype.warn    = this.wrapPrototype(ConsoleLogger.prototype.warn)
+	}
+
+
+	private wrapPrototype(prototype: ConsoleLogger[keyof ConsoleLogger]) {
+		return {
+			[prototype.name]: function (...args: any[]) {
+				args[0] = LoggerInjector.getMessage(args[0])
+				prototype.apply(this, args)
+			},
+		}[prototype.name]
+	}
+}

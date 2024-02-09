@@ -1,6 +1,6 @@
-import {IdentityAndAccessModule}                                                          from '@boundary/identity-and-access/identity-and-access.module.js'
 import {Logger, MiddlewareConsumer, Module, OnModuleDestroy, OnModuleInit, RequestMethod} from '@nestjs/common'
-import Sentry                                                                             from '@sentry/node'
+import Sentry                                                                             from "@sentry/node"
+import {IdentityAndAccessModule}                                                          from "./boundaries/identity-and-access/identity-and-access.module.js"
 import {GraphqlModule}                                                                    from './common/graphql/graphql-module.js'
 import {DocumentationModule}                                                              from './common/modules/documentation/documentation-module.js'
 import {DeveloperToolsModule}                                                             from './common/modules/environment/dev-tools/developer-tools.module.js'
