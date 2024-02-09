@@ -1,11 +1,11 @@
-import {BadRequestException, ConflictException, Inject, Injectable, Logger} from '@nestjs/common'
-import {SpanStatusCode}                                                     from '@opentelemetry/api'
-import {err, ok}                                                            from 'neverthrow'
-import {BasePolicy}                                                         from '../../../common/libraries/domain/policy/base-policy.js'
-import {Pwnproc}                                                            from '../../../common/libraries/pwnproc/pwnproc.js'
-import {PasswordSecurityLevel}                                              from '../../../common/libraries/pwnproc/report/password-security-level.js'
-import {OpentelemetryTracer}                                                from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
-import {AccountRepository}                                                  from '../repositories/account-repository.js'
+import {BadRequestException, Inject, Injectable, Logger} from '@nestjs/common'
+import {SpanStatusCode}                                  from '@opentelemetry/api'
+import {err, ok}                                         from 'neverthrow'
+import {BasePolicy}                                      from '../../../common/libraries/domain/policy/base-policy.js'
+import {Pwnproc}                                         from '../../../common/libraries/pwnproc/pwnproc.js'
+import {PasswordSecurityLevel}                           from '../../../common/libraries/pwnproc/report/password-security-level.js'
+import {OpentelemetryTracer}                             from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import {AccountRepository}                               from '../repositories/account-repository.js'
 
 
 
@@ -60,7 +60,7 @@ export class AccountPolicy extends BasePolicy {
 			span.recordException(new BadRequestException('Username is already in use in system, try logging in instead.'))
 			span.end()
 			this.logger.warn(`Username is already in use in system.`, {username})
-			return err(new ConflictException('Username is already in use in system, try logging in instead.'))
+			throw new Error('Username is already in use in system, try logging in instead.')
 		}
 
 		this.logger.verbose(`Username is unique.`, {username})
@@ -77,7 +77,8 @@ export class AccountPolicy extends BasePolicy {
 
 		if (identity) {
 			this.logger.warn(`Email is already in use in system.`, {email})
-			return err(new ConflictException('Email is already in use in system, try logging in instead.'))
+			const error = new Error('Email is already in use in system, try logging in instead.')
+			throw error
 		}
 
 		this.logger.verbose(`Email is unique.`, {email})

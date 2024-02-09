@@ -23,10 +23,11 @@
  *
  */
 
-import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common'
-import {HttpArgumentsHost}                                                        from '@nestjs/common/interfaces'
-import {Request, Response}                                                        from 'express'
-import {getCode, getErrorMessage, getObjectValue}                                 from './dirty-utilities.js'
+import {ArgumentsHost, Catch, HttpException, HttpStatus, Logger} from '@nestjs/common'
+import {HttpArgumentsHost}                                       from '@nestjs/common/interfaces'
+import {BaseExceptionFilter, HttpAdapterHost}                    from "@nestjs/core"
+import {Request}                                                 from 'express'
+import {getCode, getErrorMessage, getObjectValue}                from './dirty-utilities.js'
 
 
 
@@ -34,18 +35,21 @@ import {getCode, getErrorMessage, getObjectValue}                               
  * Catch and format thrown exception in NestJS application based on Express
  */
 @Catch()
-export class HttpExceptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter extends BaseExceptionFilter {
 	private readonly logger: Logger = new Logger(HttpExceptionFilter.name)
+
+
+	constructor(httpAdapterHost: HttpAdapterHost) {
+		super(httpAdapterHost.httpAdapter)
+	}
 
 
 	/**
 	 * Catch and format thrown exception
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public catch(exception: any, host: ArgumentsHost): void {
+	public catch(exception: unknown, host: ArgumentsHost): void {
 		const ctx: HttpArgumentsHost = host.switchToHttp()
 		const request: Request       = ctx.getRequest()
-		const response: Response     = ctx.getResponse()
 		let status: number
 
 		this.logger.debug(`Catching exception with HttpExceptionFilter`, exception)
@@ -84,10 +88,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
 			}
 		}
 
-		response.status(status).jsonp({
-			code,
-			message,
-			status,
-		}).end()
+		const responseBody = {
+			statusCode: status,
+			timestamp:  new Date().toISOString(),
+			path:       this.httpAdapterHost?.httpAdapter.getRequestUrl(ctx.getRequest()),
+			code:       code,
+			message:    message,
+		};
+
+		this.httpAdapterHost?.httpAdapter.reply(ctx.getResponse(), responseBody, status);
+
+		super.catch(exception, host)
 	}
 }
