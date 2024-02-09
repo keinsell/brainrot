@@ -23,37 +23,45 @@
  *
  */
 
-import { Logger } from '@nestjs/common'
+import {Logger} from '@nestjs/common'
 
 
 
-export class AggregateLogger
-  {
-	 private readonly logger : Logger
-	 private aggregateVersion : string
-	 private aggregateId : string
+export class AggregateLogger {
+	private readonly logger: Logger
+	private aggregateVersion: string
+	private aggregateId: string
 
-	 constructor(entity : any)
-		{
-		  this.aggregateVersion = `[V${entity.version}]`
-		  this.aggregateId      = `[ID | ${entity.id}]`
-		  const aggregateName   = entity.constructor.name.toLowerCase()
 
-		  this.logger = new Logger( aggregateName )
-		}
+	constructor(entity: any) {
+		this.aggregateVersion = `[V${entity.version}]`
+		this.aggregateId      = `[ID | ${entity.id}]`
+		const aggregateName   = entity.constructor.name.toLowerCase()
 
-	 log(message : string)
-		{
-		  this.logger.log( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
-		}
+		this.logger = new Logger(aggregateName)
+	}
 
-	 verbose(message : string)
-		{
-		  this.logger.verbose( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
-		}
 
-	 debug(message : string)
-		{
-		  this.logger.debug( `${this.aggregateId} ${this.aggregateVersion} ${message}` )
-		}
-  }
+	log(message: string) {
+		this.logger.log(`${message}`, {
+			aggregateId:      this.aggregateId,
+			aggregateVersion: this.aggregateVersion,
+		})
+	}
+
+
+	verbose(message: string) {
+		this.logger.verbose(`${message}`, {
+			aggregateId:      this.aggregateId,
+			aggregateVersion: this.aggregateVersion,
+		})
+	}
+
+
+	debug(message: string) {
+		this.logger.debug(`${message}`, {
+			aggregateId:      this.aggregateId,
+			aggregateVersion: this.aggregateVersion,
+		})
+	}
+}

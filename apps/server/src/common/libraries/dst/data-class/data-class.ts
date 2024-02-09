@@ -1,23 +1,18 @@
-import { Logger } from '@nestjs/common'
-import { crc32 }  from 'crc'
+import {Logger} from '@nestjs/common'
+import {crc32}  from 'crc'
 
 
 
 type ValuesType = {
-  [ key : string ] : any;
+	[key: string]: any;
 };
 
 let O = Object
 
 
-function produce(
-  proto : object,
-  base : object,
-  values : ValuesType,
-) : object
-  {
-	 return O.freeze( O.assign( O.seal( O.assign( O.create( proto ), base ) ), values ) )
-  }
+function produce(proto: object, base: object, values: ValuesType): object {
+	return O.freeze(O.assign(O.seal(O.assign(O.create(proto), base)), values))
+}
 
 
 /**
@@ -37,60 +32,70 @@ function produce(
  * @see [Kotin `data class`](https://kotlinlang.org/docs/data-classes.html)
  * @see [Scala `case class`](https://docs.scala-lang.org/tour/case-classes.html)
  */
-export class ImmutableClass
-  {
-	 static create<Type extends ImmutableClass>(
-		this : {
-		  new() : Type
-		},
-		values? : Omit<Partial<Type>, keyof ImmutableClass>,
-	 ) : Type
-		{
-		  const product = ( produce( this.prototype, new this(), values as any ) as Type )
+export class ImmutableClass {
+	static create<Type extends ImmutableClass>(this: {
+		new(): Type
+	}, values?: Omit<Partial<Type>, keyof ImmutableClass>): Type {
+		const logger = new Logger(this.constructor.name)
 
-		  const isThis = product.validate()
+		const product = (
+			produce(this.prototype, new this(), values as any) as Type
+		)
 
-		  if ( !isThis )
-			 {
-				throw new TypeError( `Constructed Value Object is invalid` )
-			 }
+		logger.debug(`Creating value object ${product.constructor.name}... ${JSON.stringify(values)}`, {
+			constructor: this.constructor.name,
+			values:      values,
+		})
 
-		  new Logger( `vo::${product.constructor.name.toLowerCase()}` ).verbose(
-			 `Created ${product.constructor.name} (${product.hash()}) with value: ${JSON.stringify( values )}` )
+		const isThis = product.validate()
 
-		  return product
+		if (!isThis) {
+			logger.error(`Constructed value object is invalid`, {
+				constructor: this.constructor.name,
+				values:      values,
+			})
+			throw new TypeError(`Constructed Value Object is invalid`)
 		}
 
+		logger.verbose(`Created value object ${product.constructor.name}`, {
+			constructor: this.constructor.name,
+			values:      values,
+		})
 
-	 copy(values? : Omit<Partial<this>, keyof this>) : this
-		{
-		  return produce( O.getPrototypeOf( this ), this, values as any ) as this
+		return product
+	}
+
+
+	copy(values?: Omit<Partial<this>, keyof this>): this {
+		return produce(O.getPrototypeOf(this), this, values as any) as this
+	}
+
+
+	equals(other: this): boolean {
+		for (let key in this) {
+			let a = this[key]
+			let b = other[key]
+			if (a !== b && (
+				a == null || b == null || (
+					a instanceof ImmutableClass && b instanceof ImmutableClass ?
+						!a.equals(b) :
+						a.valueOf() !== b.valueOf()
+				)
+			)) {
+				return false
+			}
 		}
+		return true
+	}
 
 
-	 equals(other : this) : boolean
-		{
-		  for ( let key in this )
-			 {
-				let a = this[ key ]
-				let b = other[ key ]
-				if ( a !== b && ( a == null || b == null || ( a instanceof ImmutableClass && b instanceof ImmutableClass
-																			 ? !a.equals( b ) : a.valueOf() !== b.valueOf() ) ) )
-				  {
-					 return false
-				  }
-			 }
-		  return true
-		}
+	validate(): this is this {
+		return true
+	}
 
-	 validate() : this is this
-		{
-		  return true
-		}
 
-	 hash() : string
-		{
-		  const data = JSON.stringify( this )
-		  return crc32( data ).toString( 16 )
-		}
-  }
+	hash(): string {
+		const data = JSON.stringify(this)
+		return crc32(data).toString(16)
+	}
+}

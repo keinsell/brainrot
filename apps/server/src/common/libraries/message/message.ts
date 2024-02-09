@@ -71,7 +71,7 @@ export class Message<BODY = unknown> {
 		this.id            = this.generateIdWithNamespace(this.type)
 
 		this.logger = new Logger(`${this.id}`.replace('_', '::'))
-		this.logger.verbose(`Created ${this.type} on ${this.namespace} (${this.id})`, {message: this})
+		this.logger.verbose(`Created ${this.type} ${this.namespace}`, {message: this})
 	}
 
 

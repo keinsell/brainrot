@@ -33,7 +33,7 @@ function logMethod(target: any, key: string, descriptor: PropertyDescriptor) {
  * @template T - The type of the entity.
  */
 export abstract class WriteRepository<T> {
-	private _hookLogger: Logger = new Logger('repository:hooks')
+	private _logger: Logger = new Logger(this.constructor.name)
 
 
 	abstract create(entity: T): Promise<T>;
@@ -49,23 +49,17 @@ export abstract class WriteRepository<T> {
 
 
 	async save(entity: T): Promise<T> {
-		this.beforeHook(this.save, entity)
+		this._logger.debug("Saving entity", entity)
 
-		this.beforeHook(this.exists, entity)
 		const doesExist = await this.exists(entity)
-		this.after(this.exists, doesExist)
 
 		if (doesExist) {
-			this.beforeHook(this.update, entity)
 			const updated = await this.update(entity)
-			this.after(this.update, entity)
-			this.after(this.save, updated)
+			this._logger.verbose("Entity updated", updated)
 			return updated
 		} else {
-			this.beforeHook(this.create, entity)
 			const created = await this.create(entity)
-			this.after(this.create, created)
-			this.after(this.save, created)
+			this._logger.verbose("Entity saved", created)
 			return created
 		}
 	}
@@ -82,15 +76,5 @@ export abstract class WriteRepository<T> {
 		}
 
 		return entity
-	}
-
-
-	beforeHook(func: Function, payload?: unknown) {
-		this._hookLogger.debug(`${this.constructor.name}.${func.name}(${JSON.stringify(payload)})`)
-	}
-
-
-	after(func: Function, result?: unknown) {
-		this._hookLogger.verbose(`${this.constructor.name}.${func.name}(...) => ${JSON.stringify(result)}`)
 	}
 }

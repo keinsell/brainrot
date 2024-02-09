@@ -1,80 +1,57 @@
-import signale, {Signale} from "signale";
-import {isDevelopment}    from "../../../configs/helper/is-development.js";
-import {isTest}           from "../../../configs/helper/is-test.js";
-import {LogAppender}      from "../log-appender.js";
-import {LogLevel}         from "../log-level.js";
-import {Log}              from "../log.js";
+import chalk         from 'chalk';
+import {LogAppender} from "../log-appender.js"
+import {LogLevel}    from "../log-level.js"
+import {Log}         from "../log.js"
 
 
 
 export class ConsoleAppender extends LogAppender {
-	private dld: Signale = signale
+	private static getColorForLogLevel(logLevel: LogLevel): string {
+		switch (logLevel) {
+			case LogLevel.TRACE:
+			case LogLevel.DEBUG:
+				return 'gray';
+			case LogLevel.INFO:
+				return 'green';
+			case LogLevel.WARN:
+				return 'yellow';
+			case LogLevel.ERROR:
+			case LogLevel.FATAL:
+				return 'red';
+			default:
+				return 'white';
+		}
+	}
 
 
 	append(log: Log): void {
-		if (!isDevelopment() || !isTest()) {}
-
-		this.dld.config({
-			displayBadge:     true,
-			displayDate:      true,
-			displayScope:     true,
-			displayLabel:     true,
-			displayTimestamp: true,
-			underlineLabel:   true,
-		})
-
-		if (log?.metadata?.context) {
-			this.dld.scope(log.metadata.context);
-		}
+		const level   = log.level.toUpperCase();
+		const color   = ConsoleAppender.getColorForLogLevel(log.level);
+		const message = (
+			chalk as any
+		)[color](`${log.timestamp}: ${log.message}`);
 
 		switch (log.level) {
 			case LogLevel.TRACE:
-
-				if (log?.metadata?.data) {
-					this.dld.info(log.message, log?.metadata?.data);
-				} else {
-					this.dld.info(log.message);
-				}
-
+				console.log(`${chalk.gray('TRACE')}`, message);
 				break;
 			case LogLevel.DEBUG:
-				this.dld.debug(log.message);
+				console.log(`${chalk.gray('DEBUG')}`, message);
 				break;
 			case LogLevel.INFO:
-
-				if (log?.metadata?.data) {
-					this.dld.success(log.message, log?.metadata?.data);
-				} else {
-					this.dld.success(log.message);
-				}
-
+				console.log(message);
 				break;
 			case LogLevel.WARN:
-
-				if (log?.metadata?.data) {
-					this.dld.warn(log.message, log?.metadata?.data);
-				} else {
-					this.dld.warn(log.message);
-				}
-
+				console.warn(message);
 				break;
 			case LogLevel.ERROR:
-
-				if (log?.metadata?.data) {
-					this.dld.error(log.message, log?.metadata?.data);
-				} else {
-					this.dld.error(log.message);
-				}
-
+				console.error(message);
 				break;
 			case LogLevel.FATAL:
-
-				if (log?.metadata?.data) {
-					this.dld.fatal(log.message, log?.metadata?.data);
-				} else {
-					this.dld.fatal(log.message);
-				}
-
+				console.error(message);
+				break;
+			default:
+				console.log(message);
 				break;
 		}
 	}

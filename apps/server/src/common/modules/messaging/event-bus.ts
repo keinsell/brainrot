@@ -22,17 +22,17 @@ export class EventBus implements OnApplicationShutdown, OnApplicationBootstrap {
 			this.transactionalOutbox.inbound(event)
 		}
 
-		this.logger.debug(`Publishing ${event.id} to namespace ${event.namespace}...`, {event: event})
+		this.logger.debug(`Publishing event for ${event.namespace}...`, {event: event})
 
 		const hasListeners = this.eventEmitter.hasListeners(event.namespace)
 
 		if (!hasListeners) {
-			this.logger.warn(`No listeners registered for ${event.namespace}`)
+			this.logger.warn(`No listeners registered for ${event.namespace}. Event will be lost.`)
 		}
 
 		this.eventEmitter.emitAsync(event.namespace, event)
 		.then(() => {
-			this.logger.verbose(`Published ${event.id} to ${event.namespace}`)
+			this.logger.log(`Published event at ${event.namespace}`, {event: event})
 
 			if (this.transactionalOutbox) {
 				this.transactionalOutbox.outbound(event)

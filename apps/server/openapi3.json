@@ -348,7 +348,7 @@
             "required": true,
             "in": "query",
             "description": "Email of created account to which verification email should be sent",
-            "example": "Candido.Sporer@hotmail.com",
+            "example": "Elfrieda_Jast@hotmail.com",
             "schema": {
               "type": "string"
             }
@@ -635,7 +635,7 @@
           "email": {
             "type": "string",
             "description": "The account's email address",
-            "example": "Candido.Sporer@hotmail.com",
+            "example": "Elfrieda_Jast@hotmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -655,11 +655,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Allen.Reinger",
+            "example": "Ronaldo.Ledner96",
             "examples": [
-              "Georgiana44",
-              "Austyn.Breitenberg13",
-              "Verna84"
+              "Herman.Bauch21",
+              "Adolf_Schiller",
+              "Lane.Braun-Raynor73"
             ]
           }
         },
@@ -727,11 +727,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Allen.Reinger",
+            "example": "Ronaldo.Ledner96",
             "examples": [
-              "Georgiana44",
-              "Austyn.Breitenberg13",
-              "Verna84"
+              "Herman.Bauch21",
+              "Adolf_Schiller",
+              "Lane.Braun-Raynor73"
             ]
           },
           "method": {
@@ -762,11 +762,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98"
             ]
           }
         },
@@ -783,11 +783,11 @@
           "refreshToken": {
             "type": "string",
             "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
             "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDE1ODg3fQ.V6ONlTBCj_h3ph--5p6UifM35yAsq7hODkIyyWmLoEU"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98",
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NDY2ODgxfQ.3VmfJ9Iwb9pycFuVWPdda53Ck6SV82BcUg3quDE9e98"
             ]
           }
         },
@@ -806,7 +806,7 @@
           "email": {
             "type": "string",
             "description": "The domain's email address",
-            "example": "Candido.Sporer@hotmail.com",
+            "example": "Elfrieda_Jast@hotmail.com",
             "examples": [
               "Raul_Marks@gmail.com",
               "Buddy.Schulist@gmail.com",
@@ -821,11 +821,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Allen.Reinger",
+            "example": "Ronaldo.Ledner96",
             "examples": [
-              "Georgiana44",
-              "Austyn.Breitenberg13",
-              "Verna84"
+              "Herman.Bauch21",
+              "Adolf_Schiller",
+              "Lane.Braun-Raynor73"
             ]
           }
         },
@@ -843,11 +843,11 @@
           "username": {
             "type": "string",
             "description": "The account's username",
-            "example": "Allen.Reinger",
+            "example": "Ronaldo.Ledner96",
             "examples": [
-              "Georgiana44",
-              "Austyn.Breitenberg13",
-              "Verna84"
+              "Herman.Bauch21",
+              "Adolf_Schiller",
+              "Lane.Braun-Raynor73"
             ]
           },
           "password": {
