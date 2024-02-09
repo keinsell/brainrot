@@ -284,6 +284,9 @@ importers:
       dateformat:
         specifier: ^5.0.3
         version: 5.0.3
+      db:
+        specifier: link:vendor/prisma
+        version: link:vendor/prisma
       delay:
         specifier: ^6.0.0
         version: 6.0.0

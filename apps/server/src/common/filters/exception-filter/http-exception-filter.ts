@@ -96,8 +96,8 @@ export class HttpExceptionFilter extends BaseExceptionFilter {
 			message:    message,
 		};
 
-		this.httpAdapterHost?.httpAdapter.reply(ctx.getResponse(), responseBody, status);
-
 		super.catch(exception, host)
+
+		return this.httpAdapterHost?.httpAdapter.reply(ctx.getResponse(), responseBody, status);
 	}
 }

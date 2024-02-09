@@ -109,6 +109,7 @@
     "crc": "^4.3.2",
     "create-nestjs-middleware-module": "^0.3.1",
     "dateformat": "^5.0.3",
+    "db": "link:vendor/prisma",
     "delay": "^6.0.0",
     "detect-port": "^1.5.1",
     "dotenv": "^16.4.1",
