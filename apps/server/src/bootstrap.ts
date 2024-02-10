@@ -1,22 +1,24 @@
-import {Logger, ValidationPipe}                            from '@nestjs/common'
-import {BaseExceptionFilter, HttpAdapterHost, NestFactory} from '@nestjs/core'
-import {ExpressAdapter, NestExpressApplication}            from "@nestjs/platform-express"
-import Sentry                                              from "@sentry/node"
-import delay                                               from 'delay'
-import express, {NextFunction}                             from 'express'
-import ms                                                  from 'ms'
-import process                                             from 'node:process'
-import {LoggerNestjsProxy}                                 from "./common/logger/nestjs-logger-proxy.js"
-import {buildCompodocDocumentation}                        from './common/modules/documentation/compodoc/compodoc.js'
-import {buildSwaggerDocumentation}                         from './common/modules/documentation/swagger/swagger.js'
-import {executePrismaRelatedProcesses}                     from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
-import {__appConfig, __config}                             from './configs/global/__config.js'
-import {isDevelopment}                                     from './configs/helper/is-development.js'
-import {StaticFeatureFlags}                                from './configs/static-feature-flags.js'
-import {Container}                                         from './container.js'
-import {migrateDatabase}                                   from './hooks/post-start/migrate-database.js'
-import {ExpressRequest, ExpressResponse}                   from "./types/express-response.js"
-import {portAllocator}                                     from './utilities/network-utils/port-allocator.js'
+import {Logger, ValidationPipe}                 from '@nestjs/common'
+import {HttpAdapterHost, NestFactory}           from '@nestjs/core'
+import {ExpressAdapter, NestExpressApplication} from "@nestjs/platform-express"
+import Sentry                                   from "@sentry/node"
+import delay                                    from 'delay'
+import express, {NextFunction}                  from 'express'
+import ms                                       from 'ms'
+import process                                  from 'node:process'
+import {startTunnel}                            from "untun"
+import {HttpExceptionFilter}                    from "./common/filters/exception-filter/http-exception-filter.js"
+import {LoggerNestjsProxy}                      from "./common/logger/nestjs-logger-proxy.js"
+import {buildCompodocDocumentation}             from './common/modules/documentation/compodoc/compodoc.js'
+import {buildSwaggerDocumentation}              from './common/modules/documentation/swagger/swagger.js'
+import {executePrismaRelatedProcesses}          from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
+import {__appConfig, __config}                  from './configs/global/__config.js'
+import {isDevelopment}                          from './configs/helper/is-development.js'
+import {StaticFeatureFlags}                     from './configs/static-feature-flags.js'
+import {Container}                              from './container.js'
+import {migrateDatabase}                        from './hooks/post-start/migrate-database.js'
+import {ExpressRequest, ExpressResponse}        from "./types/express-response.js"
+import {portAllocator}                          from './utilities/network-utils/port-allocator.js'
 
 
 
@@ -51,7 +53,7 @@ export async function bootstrap() {
 	buildCompodocDocumentation()
 
 	// The error handler must be before any other error middleware and after all controllers
-	app.useGlobalFilters(new BaseExceptionFilter(httpAdapter))
+	app.useGlobalFilters(new HttpExceptionFilter(app.get(HttpAdapterHost)))
 
 	app.use(Sentry.Handlers.errorHandler())
 
@@ -107,16 +109,16 @@ export async function bootstrap() {
 
 				logger.verbose(`${'-'.repeat(54)}`)
 
-				//if (__config.get("FEATURE").ENABLE_TUNNEL) {
-				//	const tunnel = await startTunnel({
-				//		port:                   openPort.port,
-				//		acceptCloudflareNotice: true,
-				//	})
-				//
-				//	if (tunnel) {
-				//		logger.verbose(`🚇 Tunnel is enabled, you can access your application via public URL: ${await tunnel.getURL()}`)
-				//	}
-				//}
+				if (__config.get("FEATURE").ENABLE_TUNNEL) {
+					const tunnel = await startTunnel({
+						port:                   openPort.port,
+						acceptCloudflareNotice: true,
+					})
+
+					if (tunnel) {
+						logger.log(`🚇 Tunnel is enabled, you can access your application via public URL: ${await tunnel.getURL()}`)
+					}
+				}
 
 			})
 			isApplicationListening = true

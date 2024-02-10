@@ -1,4 +1,4 @@
-import {Body, Controller, HttpException, HttpStatus, Patch, Post, Req, UseGuards}              from '@nestjs/common'
+import {Body, Controller, Patch, Post, Req, UseGuards}                                         from '@nestjs/common'
 import {ApiBody, ApiConflictResponse, ApiOkResponse, ApiOperation, ApiResponse, getSchemaPath} from '@nestjs/swagger'
 import {getCurrentScope}                                                                       from '@sentry/node'
 import {Request}                                                                               from 'express'
@@ -80,32 +80,23 @@ export class AccountController {
 	})
 
 	async register(@Req() request: Request, @Body() registerAccountBody: RegisterAccountCommand): Promise<AccountViewModel> {
-		try {
-			const result = await this.service.register({
-				username: registerAccountBody.username,
-				email:    registerAccountBody.email,
-				password: registerAccountBody.password,
-			})
+		const result = await this.service.register({
+			username: registerAccountBody.username,
+			email:    registerAccountBody.email,
+			password: registerAccountBody.password,
+		})
 
-			getCurrentScope()
-			.setUser({
-				username: result.username,
-				email:    result.email.address,
-			})
+		getCurrentScope()
+		.setUser({
+			username: result.username,
+			email:    result.email.address,
+		})
 
-			return {
-				id:            result.id,
-				email:         result.email.address,
-				emailVerified: result.email.isVerified,
-				username:      result.username,
-			}
-		} catch (e) {
-			throw new HttpException({
-				status: HttpStatus.FORBIDDEN,
-				error:  'This is a custom message',
-			}, HttpStatus.FORBIDDEN, {
-				cause: "xD",
-			});
+		return {
+			id:            result.id,
+			email:         result.email.address,
+			emailVerified: result.email.isVerified,
+			username:      result.username,
 		}
 	}
 

@@ -30,7 +30,7 @@ function fn() {
         env = 'dev'; // a custom 'intelligent' default
     }
     var config = {
-        serverUrl: 'https://suburban-tribunal-billing-michael.trycloudflare.com',
+        serverUrl: 'https://same-baltimore-passenger-becomes.trycloudflare.com',
     };
 
     karate.configure('connectTimeout', 5000);
