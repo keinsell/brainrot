@@ -1,3 +1,11 @@
+*.txt
+.pre-commit-config.yaml
+CHANGELOG.md
+CONTRIBUTING.md
+
+!sentry-24.1.2/.env
+!self-hosted-24.1.1/.env
+
 # Error reporting choice cache
 .reporterrors
 
@@ -104,3 +112,4 @@ postgres/wal2json
 # integration testing
 _integration-test/custom-ca-roots/nginx/*
 sentry/test-custom-ca-roots.py
+**/geoip/GeoLite2-City.mmdb
