@@ -3,6 +3,8 @@
 CHANGELOG.md
 CONTRIBUTING.md
 
+!sentry-24.1.2/.env
+
 # Error reporting choice cache
 .reporterrors
 
