@@ -112,3 +112,4 @@ postgres/wal2json
 # integration testing
 _integration-test/custom-ca-roots/nginx/*
 sentry/test-custom-ca-roots.py
+**/geoip/GeoLite2-City.mmdb
