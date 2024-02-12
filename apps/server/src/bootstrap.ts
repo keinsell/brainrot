@@ -1,6 +1,7 @@
 import {Logger, ValidationPipe}                 from '@nestjs/common'
 import {HttpAdapterHost, NestFactory}           from '@nestjs/core'
 import {ExpressAdapter, NestExpressApplication} from "@nestjs/platform-express"
+import {apiReference}                           from "@scalar/nestjs-api-reference"
 import Sentry                                   from "@sentry/node"
 import delay                                    from 'delay'
 import express, {NextFunction}                  from 'express'
@@ -49,7 +50,18 @@ export async function bootstrap() {
 	await executePrismaRelatedProcesses()
 
 	// Build swagger documentation
-	await buildSwaggerDocumentation(app)
+	const apiSpec = await buildSwaggerDocumentation(app)
+
+	app.use('/reference', apiReference({
+		spec:        {
+			content: apiSpec,
+		},
+		showSidebar: true,
+		isEditable:  false,
+		layout:      'classic',
+		theme:       "mars",
+	}))
+
 	buildCompodocDocumentation()
 
 	// The error handler must be before any other error middleware and after all controllers
@@ -97,7 +109,7 @@ export async function bootstrap() {
 
 				logger.verbose(`${'-'.repeat(54)}`)
 				logger.verbose(`📄 Compodoc endpoint: ${applicationUrl + '/docs'}`)
-				logger.verbose(`📄 Swagger endpoint: ${applicationUrl + '/api'}`)
+				logger.verbose(`📄 OpenAPI 3.0 Documentation: ${applicationUrl + '/reference'}`)
 				if (StaticFeatureFlags.isGraphQLRunning) {
 					logger.verbose(`🧩 GraphQL is running on: ${applicationUrl + '/graphql'}`)
 				}
