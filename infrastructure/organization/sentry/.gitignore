@@ -4,6 +4,7 @@ CHANGELOG.md
 CONTRIBUTING.md
 
 !sentry-24.1.2/.env
+!self-hosted-24.1.1/.env
 
 # Error reporting choice cache
 .reporterrors
