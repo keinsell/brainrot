@@ -29,6 +29,7 @@ import type {Integration}     from '@sentry/types'
 import {__config}             from '../global/__config.js'
 import {isDebug}              from '../helper/is-debug.js'
 import {isDevelopment}        from '../helper/is-development.js'
+import {isTest}               from "../helper/is-test.js"
 
 
 
@@ -39,8 +40,8 @@ export interface ISentryConfiguration extends Sentry.NodeOptions {
 export const SENTRY_CONFIGURATION: ISentryConfiguration = {
 	dsn:                 __config.get('SENTRY_DSN'),
 	autoSessionTracking: true,
-	tracesSampleRate:    isDevelopment() ? 1 : 0.1,
-	profilesSampleRate:  isDevelopment() ? 1 : 0.1,
+	tracesSampleRate:    isDevelopment() || isTest() ? 1 : 0.1,
+	profilesSampleRate:  isDevelopment() || isTest() ? 1 : 0.1,
 	sampleRate:          1,
 	enabled:             true,
 	enableTracing:       true,
