@@ -1,0 +1,972 @@
+▶ Parsing command line ...
+
+▶ Detecting Docker platform
+Detected Docker platform is linux/amd64
+
+▶ Initializing Docker Compose ...
+
+▶ Setting up error handling ...
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 292B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#2 DONE 0.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/debian:bookworm-slim@sha256:7802002798b0e351323ed2357ae6dc5a8c4d0a05a57e7f4d8f97136151d3d603
+#4 DONE 0.0s
+
+#5 [2/2] RUN set -x   && apt-get update   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends jq   && apt-get clean   && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 writing image sha256:8c37c5851be88d824858ebf17d3cccbd05dd907748cb79ba05c12f89588dcb4f done
+#6 naming to docker.io/library/sentry-self-hosted-jq-local done
+#6 DONE 0.0s
+
+View build details: docker-desktop://dashboard/build/default/default/r7x9dmngeq7xuw8d0jid84jqq
+
+Hey, so ... we would love to automatically find out about issues with your
+Sentry instance so that we can improve the product. Turns out there is an app
+for that, called Sentry. Would you be willing to let us automatically send data
+about your instance upstream to Sentry for development and debugging purposes?
+
+  y / yes / 1
+  n / no / 0
+
+(Btw, we send this to our own self-hosted Sentry instance, not to Sentry SaaS,
+so that we can be in this together.)
+
+Here's the info we may collect:
+
+  - OS username
+  - IP address
+  - install log
+  - runtime errors
+  - performance data
+
+Thirty (30) day retention. No marketing. Privacy policy at sentry.io/privacy.
+
+y or n? 
+Understood. To avoid this prompt in the future, use one of these flags:
+
+  --report-self-hosted-issues
+  --no-report-self-hosted-issues
+
+or set the REPORT_SELF_HOSTED_ISSUES environment variable:
+
+  REPORT_SELF_HOSTED_ISSUES=1 to send data
+  REPORT_SELF_HOSTED_ISSUES=0 to not send data
+
+
+▶ Checking for latest commit ... 
+skipped
+
+▶ Checking minimum requirements ...
+Found Docker version 25.0.2
+Found Docker Compose version 2.13.0
+
+▶ Turning things off ...
+Container sentry-self-hosted-redis-1  Stopping
+Container sentry-self-hosted-redis-1  Stopping
+Container sentry-self-hosted-kafka-1  Stopping
+Container sentry-self-hosted-kafka-1  Stopping
+Container sentry-self-hosted-clickhouse-1  Stopping
+Container sentry-self-hosted-clickhouse-1  Stopping
+Container sentry-self-hosted-redis-1  Stopped
+Container sentry-self-hosted-redis-1  Removing
+Container sentry-self-hosted-clickhouse-1  Stopped
+Container sentry-self-hosted-clickhouse-1  Removing
+Container sentry-self-hosted-kafka-1  Stopped
+Container sentry-self-hosted-kafka-1  Removing
+Container sentry-self-hosted-redis-1  Removed
+Container sentry-self-hosted-kafka-1  Removed
+Container sentry-self-hosted-zookeeper-1  Stopping
+Container sentry-self-hosted-zookeeper-1  Stopping
+Container sentry-self-hosted-clickhouse-1  Removed
+Container sentry-self-hosted-zookeeper-1  Stopped
+Container sentry-self-hosted-zookeeper-1  Removing
+Container sentry-self-hosted-zookeeper-1  Removed
+Image vroom-cleanup-self-hosted-local:latest  Removing
+Image clickhouse-self-hosted-local:latest  Removing
+Image sentry-self-hosted-local:latest  Removing
+Image symbolicator-cleanup-self-hosted-local:latest  Removing
+Image sentry-cleanup-self-hosted-local:latest  Removing
+Network sentry-self-hosted_default  Removing
+Image sentry-cleanup-self-hosted-local:latest  Removed
+Image clickhouse-self-hosted-local:latest  Removed
+Image vroom-cleanup-self-hosted-local:latest  Removed
+Image symbolicator-cleanup-self-hosted-local:latest  Removed
+Image sentry-self-hosted-local:latest  Removed
+Network sentry-self-hosted_default  Removed
+
+▶ Creating volumes for persistent storage ...
+Created sentry-clickhouse.
+Created sentry-data.
+Created sentry-kafka.
+Created sentry-postgres.
+Created sentry-redis.
+Created sentry-symbolicator.
+Created sentry-zookeeper.
+
+▶ Ensuring files from examples ...
+sentry/sentry.conf.py already exists, skipped creation.
+sentry/config.yml already exists, skipped creation.
+symbolicator/config.yml already exists, skipped creation.
+
+▶ Checking memcached backend ...
+PyMemcacheCache found in sentry/sentry.conf.py, gonna assume you're good.
+
+▶ Ensuring Relay credentials ...
+relay/config.yml already exists, skipped creation.
+relay/credentials.json already exists, skipped creation.
+
+▶ Generating secret key ...
+
+▶ Fetching and updating Docker images ...
+24.1.2: Pulling from getsentry/sentry
+Digest: sha256:71a6badf47995ea03e7a14a11cf0eb4bf4f830547573fe6033ac89118aa6bb83
+Status: Image is up to date for getsentry/sentry:24.1.2
+docker.io/getsentry/sentry:24.1.2
+
+▶ Building and tagging Docker images ...
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:cbe958e98938e9ad684111644a7682fb404ff843a62a8e2933628d885badf626 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 71B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/altinity/clickhouse-server:21.8.13.1.altinitystable
+#2 DONE 0.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/1] FROM docker.io/altinity/clickhouse-server:21.8.13.1.altinitystable@sha256:125d2ea49c298515c46784d202a2bd4dde05157c85a76517afc2567f262ab335
+#4 CACHED
+
+#5 exporting to image
+#5 exporting layers done
+#5 writing image sha256:ecf0bcb90a2e82a78e353787c1512adb1cef2e117429dbd1875458cc32c8b2d0 done
+#5 naming to docker.io/library/clickhouse-self-hosted-local done
+#5 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:d8c196e3bc67e30c9e6384dda60d229f51a5328f419d433d1a8513907afe873f done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:445d68879ec0f49c48c1ddb68e42474e1adb26a718b62a9a595568fcd18162ba done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:a4089aca2a4ef48aaf2fb857c078ff5a223d2241373ffaae93245d3138da6063 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:a76aa10a39f299533e2fb7830caa3eb4f8ee7ef016148647df70501ad12384e5 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:5e575113ad30a35876260918bf912ca7e0d8c67d22fa99fa005266732ef869ac done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:0314d56f904680115d2ddcc3b282fd079c51a815383f2c8ffb947243c7d67f7c done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:0efb87f16cd3451d2001a03632ffc13cfd1e4dc3aec7dd33e514fef6c4488087 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:3eb94a445a2895c40a4b92aed270c4b22bcc4fe434c56325b240dbe9443b1814 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:a60f86d2921817634ad1317aba0889df255904b95728ceaf70d0c521940e6d4c done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:93dc54f60a3e0e34bc952ff59018c5eacf954d99e01a7563cbb9ab0727dbe6fc done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:cbe958e98938e9ad684111644a7682fb404ff843a62a8e2933628d885badf626 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 DONE 0.0s
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:85a25d9ab4f7dde35973501c49cdc02d6cd79ef065ef0cc6de755be28b39b926 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:8ef52e39ddb508b7fc3f015f7b564d6d466fd9e0fd4403598b008799dc8aba1c done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:cc8591153b1b4d812ff2337738abb8cad11acd51aa751ba04661b64d6f391fdc done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 469B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/sentry-self-hosted-local:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/sentry-self-hosted-local:latest
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 35B done
+#5 DONE 0.0s
+
+#6 [4/5] RUN apt-get update && apt-get install -y --no-install-recommends cron &&     rm -r /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [2/5] RUN if [ -n "${http_proxy}" ]; then echo "Acquire::http::proxy "${http_proxy}";" >> /etc/apt/apt.conf; fi
+#7 CACHED
+
+#8 [3/5] RUN if [ -n "${https_proxy}" ]; then echo "Acquire::https::proxy "${https_proxy}";" >> /etc/apt/apt.conf; fi
+#8 CACHED
+
+#9 [5/5] COPY entrypoint.sh /entrypoint.sh
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:811910e854732e5bc27a34a13bed5a1241a1ed5a165c386aebafcdf09dfadc2f done
+#10 naming to docker.io/library/sentry-cleanup-self-hosted-local done
+#10 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:7d0cc4b5b4ddc37c90dcf606d73007c47e6e7b0a37c74674aa608e2f2f92a6b9 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#6 CACHED
+
+#7 [2/4] COPY . /usr/src/sentry
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:c61a4e9f9702fd5884d5b006334a85ee5266925d1d968ce3f36cc92f580fe5df done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:4469b6884b31608a34745fb885ead1ab83eed67191813a73e4d7de8ceb95f915 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:62627d0977abce2a885d39e650ba8c98b4ec4ce96d011dafe174860d462496d4 done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 469B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/symbolicator:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/getsentry/symbolicator:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 35B done
+#5 DONE 0.0s
+
+#6 [3/5] RUN if [ -n "${https_proxy}" ]; then echo "Acquire::https::proxy "${https_proxy}";" >> /etc/apt/apt.conf; fi
+#6 CACHED
+
+#7 [2/5] RUN if [ -n "${http_proxy}" ]; then echo "Acquire::http::proxy "${http_proxy}";" >> /etc/apt/apt.conf; fi
+#7 CACHED
+
+#8 [4/5] RUN apt-get update && apt-get install -y --no-install-recommends cron &&     rm -r /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [5/5] COPY entrypoint.sh /entrypoint.sh
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:0a26bef6780183b90a22ca3eaa082b7911831cccf79788ca31a084870686dd5d done
+#10 naming to docker.io/library/symbolicator-cleanup-self-hosted-local done
+#10 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:fe3fa5a662df5fab315de9bdff33b4e2f725b947eca9d85fc80f16d721d1afee done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 469B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/vroom:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/getsentry/vroom:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 35B done
+#5 DONE 0.0s
+
+#6 [3/5] RUN if [ -n "${https_proxy}" ]; then echo "Acquire::https::proxy "${https_proxy}";" >> /etc/apt/apt.conf; fi
+#6 CACHED
+
+#7 [2/5] RUN if [ -n "${http_proxy}" ]; then echo "Acquire::http::proxy "${http_proxy}";" >> /etc/apt/apt.conf; fi
+#7 CACHED
+
+#8 [4/5] RUN apt-get update && apt-get install -y --no-install-recommends cron &&     rm -r /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [5/5] COPY entrypoint.sh /entrypoint.sh
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:771f7fb18b1dc21d40adfe25a0ad90f4ab7261fd8ec85a4acb477d9652ff2bab done
+#10 naming to docker.io/library/vroom-cleanup-self-hosted-local done
+#10 DONE 0.0s
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 463B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/getsentry/sentry:24.1.2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/getsentry/sentry:24.1.2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 297B done
+#5 DONE 0.0s
+
+#6 [2/4] COPY . /usr/src/sentry
+#6 CACHED
+
+#7 [3/4] RUN if [ -s /usr/src/sentry/enhance-image.sh ]; then     /usr/src/sentry/enhance-image.sh; fi
+#7 CACHED
+
+#8 [4/4] RUN if [ -s /usr/src/sentry/requirements.txt ]; then     echo "sentry/requirements.txt is deprecated, use sentry/enhance-image.sh - see https://github.com/getsentry/self-hosted#enhance-sentry-image";     pip install -r /usr/src/sentry/requirements.txt; fi
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:a2259f891aa9fe23963feea2e253f00d0900f97500d3aaf85cffefe4a982f32e done
+#9 naming to docker.io/library/sentry-self-hosted-local done
+#9 DONE 0.0s
+
+Docker images built.
+
+▶ Downloading and installing wal2json ...
+
+▶ Bootstrapping and migrating Snuba ...
+Network sentry-self-hosted_default  Creating
+Network sentry-self-hosted_default  Created
+Container sentry-self-hosted-clickhouse-1  Creating
+Container sentry-self-hosted-zookeeper-1  Creating
+Container sentry-self-hosted-redis-1  Creating
+Container sentry-self-hosted-redis-1  Created
+Container sentry-self-hosted-clickhouse-1  Created
+Container sentry-self-hosted-zookeeper-1  Created
+Container sentry-self-hosted-kafka-1  Creating
+Container sentry-self-hosted-kafka-1  Created
+Container sentry-self-hosted-redis-1  Starting
+Container sentry-self-hosted-clickhouse-1  Starting
+Container sentry-self-hosted-zookeeper-1  Starting
+Container sentry-self-hosted-redis-1  Started
+Container sentry-self-hosted-clickhouse-1  Started
+Container sentry-self-hosted-zookeeper-1  Started
+Container sentry-self-hosted-zookeeper-1  Waiting
+Container sentry-self-hosted-zookeeper-1  Healthy
+Container sentry-self-hosted-kafka-1  Starting
+Container sentry-self-hosted-kafka-1  Started
+container for service "clickhouse" is unhealthy
+Error in install/bootstrap-snuba.sh:3.
+'$dcr snuba-api bootstrap --no-migrate --force' exited with status 1
+-> /home/keinsell/src/@keinsell/methylphenidate/infrastructure/organization/sentry-24.1.2/install.sh:main:32
+--> install/bootstrap-snuba.sh:source:3
+
+Cleaning up...
