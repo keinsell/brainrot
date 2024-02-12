@@ -111,12 +111,10 @@ else:
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
         "LOCATION": ["memcached:11211"],
         "TIMEOUT": 3600,
-        "OPTIONS": {
-            "server_max_value_length": unit_text_to_bytes(env("SENTRY_MAX_EXTERNAL_SOURCEMAP_SIZE", "1M")),
-        },
+        "OPTIONS": {"ignore_exc": True}
     }
 }
 
@@ -315,9 +313,12 @@ GEOIP_PATH_MMDB = '/geoip/GeoLite2-City.mmdb'
 # for more information about the feature. Make sure the OpenAI's privacy policy is
 # aligned with your company.
 
-# Set the feature to be True if you'd like to enable Suggested Fix. You'll also need to
-# add your OPENAI_API_KEY to the docker-compose.yml file.
-SENTRY_FEATURES["organizations:open-ai-suggestion"] = False
+# Set the OPENAI_API_KEY on the .env or .env.custom file with a valid
+# OpenAI API key to turn on the feature.
+OPENAI_API_KEY = env("OPENAI_API_KEY", "")
+
+if OPENAI_API_KEY:
+  SENTRY_FEATURES["organizations:open-ai-suggestion"] = True
 
 ##############################################
 # Content Security Policy settings
@@ -329,3 +330,14 @@ CSP_REPORT_ONLY = True
 # optional extra permissions
 # https://django-csp.readthedocs.io/en/latest/configuration.html
 # CSP_SCRIPT_SRC += ["example.com"]
+
+#################
+# CSRF Settings #
+#################
+
+# Since version 24.1.0, Sentry migrated to Django 4 which contains stricter CSRF protection.
+# If you are accessing Sentry from multiple domains behind a reverse proxy, you should set
+# this to match your IPs/domains. Ports should be included if you are using custom ports.
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
+
+CSRF_TRUSTED_ORIGINS = ["keinsell.com", "sentry.keinsell.com", "127.0.0.1:9000"]
