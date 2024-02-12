@@ -2,7 +2,7 @@ import {$}                                           from 'execa'
 import {Readable}                                    from 'stream'
 import {GenericContainer, type StartedTestContainer} from 'testcontainers'
 import {LogWaitStrategy}                             from 'testcontainers/build/wait-strategies/log-wait-strategy.js'
-import {CombinedLogger}                              from "../../common/logger/logger.js"
+import {CombinedLogger}                              from "../../common/modules/observability/logger/logger.js"
 import {__appConfig}                                 from '../../configs/global/__config.js'
 
 

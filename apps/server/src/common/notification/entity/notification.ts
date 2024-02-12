@@ -23,15 +23,15 @@
  *
  */
 
-import {randomUUID}                         from 'node:crypto'
-import type {AccountId}                     from '../../../modules/account/shared-kernel/account-id.js'
+import {randomUUID}                        from 'node:crypto'
+import type {AccountId}                    from '../../../modules/account/shared-kernel/account-id.js'
 import {EntityBase, type EntityFoundation} from '../../libraries/domain/entity/entity-base.js'
-import type {EmailMessage}                  from '../../mailer/entity/email-message.js'
-import {type EmailContent, isEmailContent} from '../../mailer/value-object/email-content.js'
-import type {EmailReceipent}                from '../../mailer/value-object/email-receipent.js'
-import {NotificationQueued}                 from '../event/notification-queued.js'
-import {NotificationChannel}                from '../value-object/notification-channel.js'
-import {NotificationStatus}                 from '../value-object/notification-status.js'
+import {EmailMessage}                      from "../../modules/communication/mailer/entity/email-message.js"
+import {EmailContent, isEmailContent}      from "../../modules/communication/mailer/value-object/email-content.js"
+import {EmailReceipent}                    from "../../modules/communication/mailer/value-object/email-receipent.js"
+import {NotificationQueued}                from '../event/notification-queued.js'
+import {NotificationChannel}               from '../value-object/notification-channel.js'
+import {NotificationStatus}                from '../value-object/notification-status.js'
 
 
 

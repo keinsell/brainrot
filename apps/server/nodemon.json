@@ -12,5 +12,5 @@
   "ignore": [
     "src/externals/compodoc"
   ],
-  "exec": "clear && pnpm build:tsc && node --enable-source-maps --max-old-space-size=6000 --max-semi-space-size=512 --v8-pool-size=8 --zero-fill-buffers dist/src/main.js"
+  "exec": "clear && pnpm build:tsc && node --enable-source-maps --max-old-space-size=8000 --max-semi-space-size=1024 --v8-pool-size=16 --zero-fill-buffers --inspect --trace-deprecation --prof dist/src/main.js"
 }

@@ -26,13 +26,12 @@
 import {Module}                from '@nestjs/common'
 import Sentry                  from '@sentry/node'
 import {__sentryClient}        from './global/get-sentry.js'
-import {SentryService}         from './sentry-service.js'
 import {SENTRY_MODULE_OPTIONS} from './SENTRY_MODULE_OPTIONS.js'
 
 
 
 @Module({
-	providers: [SentryService],
+	providers: [],
 })
 export class SentryModule {
 	static forRoot(options: Sentry.NodeOptions) {
@@ -47,9 +46,9 @@ export class SentryModule {
 				{
 					provide:  SENTRY_MODULE_OPTIONS,
 					useValue: options,
-				}, SentryService,
+				},
 			],
-			exports:   [SentryService],
+			exports:   [],
 		}
 	}
 }

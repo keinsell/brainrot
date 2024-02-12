@@ -1,5 +1,5 @@
 import {Logger}                         from '@nestjs/common'
-import {OpentelemetryTracer}            from '../../modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import {OpentelemetryTracer}            from "../../modules/observability/opentelemetry/provider/tracer/opentelemetry-tracer.js"
 import {KeyDerivationFunction}          from './key-derivation-functions/key-derivation-function.js'
 import {PhcString, SerializedPhcString} from './types/phc-string.js'
 import {Salt}                           from './types/salt.js'

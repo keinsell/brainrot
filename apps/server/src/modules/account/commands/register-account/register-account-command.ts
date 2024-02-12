@@ -23,8 +23,6 @@
  *
  */
 
-
-
 // export interface RegisterAccount2 {
 // 	email : string & tags.Format<"email">
 // 	username : string & tags.Pattern<string>
@@ -38,25 +36,23 @@ import {ApiPropertyAccountUsername} from '../../value-objects/username.js'
 
 
 
-export class RegisterAccountCommand
-	{
-		/**
-		 * Represents an email address.
-		 * @typedef {string} email
-		 */
-		@ApiPropertyAccountEmail email: string
+export class RegisterAccountCommand {
+	/**
+	 * Represents an email address.
+	 * @typedef {string} email
+	 */
+	@ApiPropertyAccountEmail email: string
 
-		/**
-		 * The password variable is a string that represents a user's password.
-		 *
-		 * @type {string}
-		 */
-		@ApiPropertyAccountPassword password: string
+	/**
+	 * The password variable is a string that represents a user's password.
+	 *
+	 * @type {string}
+	 */
+	@ApiPropertyAccountPassword password: string
 
-		/**
-		 * Represents a username.
-		 * @typedef {string} username
-		 */
-		@ApiPropertyAccountUsername username: string
-	}
-
+	/**
+	 * Represents a username.
+	 * @typedef {string} username
+	 */
+	@ApiPropertyAccountUsername username: string
+}

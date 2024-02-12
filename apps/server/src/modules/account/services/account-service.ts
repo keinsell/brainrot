@@ -2,7 +2,7 @@ import {Inject, Injectable, Logger} from '@nestjs/common'
 import {ServiceAbstract}            from '../../../common/libraries/services/service-abstract.js'
 import {PasswordHashing}            from '../../../common/libraries/unihash/index.js'
 import {EventBus}                   from '../../../common/modules/messaging/event-bus.js'
-import {OpentelemetryTracer}        from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import {Tracer}                     from "../../../common/modules/observability/tracing/tracer.js"
 import {RegisterAccountCommand}     from '../commands/register-account/register-account-command.js'
 import {RegisterAccountUseCase}     from "../commands/register-account/register-account-usecase.js"
 import {AccountSelfService}         from '../contract/account-self-service.js'
@@ -14,7 +14,7 @@ import {AccountRepository}          from '../repositories/account-repository.js'
 
 @Injectable()
 export class AccountService extends ServiceAbstract<Account> implements AccountSelfService {
-	@Inject(OpentelemetryTracer) private tracer: OpentelemetryTracer
+	@Inject(Tracer) private tracer: Tracer
 	private logger: Logger = new Logger('account::service')
 
 

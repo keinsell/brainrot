@@ -1,5 +1,5 @@
 import {Body, Controller, Post}               from "@nestjs/common"
-import {InitializePasswordlessAuthentication} from "../commands/initialize-passwordless-authentication.js";
+import {InitializePasswordlessAuthentication} from "../commands/initalize-magic-authentication/initialize-passwordless-authentication.js";
 
 // Auth0 is a good example of Authentication API https://auth0.com/docs/api/authentication
 
@@ -11,12 +11,13 @@ import {InitializePasswordlessAuthentication} from "../commands/initialize-passw
 export class PasswordlessController {
 
 	@Post("start")
-	async defineAuthenticationChallenge(@Body() intializePasswordlessAuthentication : InitializePasswordlessAuthentication) : Promise<InitializePasswordlessAuthentication> {
+	async defineAuthenticationChallenge(@Body() intializePasswordlessAuthentication: InitializePasswordlessAuthentication): Promise<InitializePasswordlessAuthentication> {
 		return intializePasswordlessAuthentication
 	}
 
+
 	@Post("solve")
-	async solveAuthenticationChallenge() : Promise<string> {
+	async solveAuthenticationChallenge(): Promise<string> {
 		return "start"
 	}
 }
