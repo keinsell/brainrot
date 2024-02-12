@@ -3,8 +3,8 @@ import {OnEvent}                                                                
 import ms                                                                                  from 'ms'
 import {ok, Result}                                                                        from 'neverthrow'
 import {randomUUID}                                                                        from 'node:crypto'
-import {Mailer}                                                                            from '../../../common/mailer/contract/mailer.js'
-import {CreateEmailMessagePayload}                                                         from '../../../common/mailer/dto/create-email-message-payload.js'
+import {Mailer}                                                                            from "../../../common/modules/communication/mailer/contract/mailer.js"
+import {CreateEmailMessagePayload}                                                         from "../../../common/modules/communication/mailer/dto/create-email-message-payload.js"
 import {EventBus}                                                                          from '../../../common/modules/messaging/event-bus.js'
 import {CacheManager}                                                                      from '../../../common/modules/storage/cache-manager/contract/cache-manager.js'
 import {NotificationService}                                                               from '../../../common/notification/contract/notification-service.js'

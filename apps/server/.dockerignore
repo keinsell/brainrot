@@ -40,7 +40,7 @@ node_modules
 
 server/*.spec.js
 kubernetes
-e2e/
+test/e2e/
 build
 
 .fta.json

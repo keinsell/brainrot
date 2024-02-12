@@ -24,7 +24,7 @@
  */
 
 import {setupGlobalHub}       from '@sentry/opentelemetry'
-import {CombinedLogger}       from "../../common/logger/logger.js"
+import {CombinedLogger}       from "../../common/modules/observability/logger/logger.js"
 import {__sentry}             from '../../common/modules/resources/sentry-v2/global/get-sentry.js'
 import {SENTRY_CONFIGURATION} from '../../configs/config-set/sentry-configuration.js'
 import {__config}             from '../../configs/global/__config.js'

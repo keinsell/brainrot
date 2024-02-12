@@ -4,14 +4,14 @@ import {err, ok}                                                            from
 import {BasePolicy}                                                         from '../../../common/libraries/domain/policy/base-policy.js'
 import {Pwnproc}                                                            from '../../../common/libraries/pwnproc/pwnproc.js'
 import {PasswordSecurityLevel}                                              from '../../../common/libraries/pwnproc/report/password-security-level.js'
-import {OpentelemetryTracer}                                                from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import {Tracer}                                                             from "../../../common/modules/observability/tracing/tracer.js"
 import {AccountRepository}                                                  from '../repositories/account-repository.js'
 
 
 
 @Injectable()
 export class AccountPolicy extends BasePolicy {
-	@Inject(OpentelemetryTracer) tracer: OpentelemetryTracer
+	@Inject(Tracer) private tracer: Tracer
 	private logger: Logger = new Logger('account::policy')
 
 

@@ -9,9 +9,9 @@ import ms                                       from 'ms'
 import process                                  from 'node:process'
 import {startTunnel}                            from "untun"
 import {HttpExceptionFilter}                    from "./common/filters/exception-filter/http-exception-filter.js"
-import {LoggerNestjsProxy}                      from "./common/logger/nestjs-logger-proxy.js"
 import {buildCompodocDocumentation}             from './common/modules/documentation/compodoc/compodoc.js'
 import {buildSwaggerDocumentation}              from './common/modules/documentation/swagger/swagger.js'
+import {InternalLoggerAdapter}                  from "./common/modules/observability/logger/nestjs-logger-proxy.js"
 import {executePrismaRelatedProcesses}          from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
 import {__appConfig, __config}                  from './configs/global/__config.js'
 import {isDevelopment}                          from './configs/helper/is-development.js'
@@ -36,7 +36,7 @@ export async function bootstrap() {
 		bufferLogs:   true,
 		abortOnError: isDevelopment(),
 		snapshot:     isDevelopment(),
-		logger:       new LoggerNestjsProxy(),
+		logger:       new InternalLoggerAdapter(),
 	})
 
 	const {httpAdapter} = app.get(HttpAdapterHost);
