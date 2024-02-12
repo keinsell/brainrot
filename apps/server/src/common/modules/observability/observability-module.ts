@@ -25,6 +25,8 @@
 
 import {Module}                      from '@nestjs/common'
 import {OPENTELEMTRY_CONFIGURATION}  from '../../../configs/config-set/opentelemetry-configuration.js'
+import {SENTRY_CONFIGURATION}        from "../../../configs/config-set/sentry-configuration.js"
+import {SentryModule}                from "../resources/sentry-v2/sentry-module.js"
 import {RequestIdentificationModule} from './request-identification/index.js'
 import {OpenTelemetryModule}         from './tracing/opentelemetry/open-telemetry-module.js'
 
@@ -32,7 +34,7 @@ import {OpenTelemetryModule}         from './tracing/opentelemetry/open-telemetr
 
 @Module({
 	imports: [
-		RequestIdentificationModule.register({}), //SentryModule.forRoot( SENTRY_CONFIGURATION ),
+		RequestIdentificationModule.register({}), SentryModule.forRoot(SENTRY_CONFIGURATION),
 		OpenTelemetryModule.forRoot(OPENTELEMTRY_CONFIGURATION),
 	],
 	exports: [],

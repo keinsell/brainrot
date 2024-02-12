@@ -329,7 +329,7 @@ CSP_REPORT_ONLY = True
 
 # optional extra permissions
 # https://django-csp.readthedocs.io/en/latest/configuration.html
-# CSP_SCRIPT_SRC += ["example.com"]
+CSP_SCRIPT_SRC += ["keinsell.com", "sentry.keinsell.com", "https://sentry.keinsell.com", "127.0.0.1:9000"]
 
 #################
 # CSRF Settings #
@@ -340,4 +340,4 @@ CSP_REPORT_ONLY = True
 # this to match your IPs/domains. Ports should be included if you are using custom ports.
 # https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
 
-CSRF_TRUSTED_ORIGINS = ["keinsell.com", "sentry.keinsell.com", "127.0.0.1:9000"]
+CSRF_TRUSTED_ORIGINS = ["keinsell.com", "sentry.keinsell.com", "https://sentry.keinsell.com", "127.0.0.1:9000"]
