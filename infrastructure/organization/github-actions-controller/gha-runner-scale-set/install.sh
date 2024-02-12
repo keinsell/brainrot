@@ -23,18 +23,18 @@ helm install "${SCALESET_INSTALLATION_NAME}-x2" \
     -f ./${SCALESET_FILENAME}-2x.yml \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 
-#helm install "luminar-linux-x64-x4" \
-#    --namespace "ghar-luminar" \
-#    --create-namespace \
-#    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
-#    --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-#    -f ./grss-luminar-linux-x64-x4.yml \
-#    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
-#
-#helm install "luminar-linux-x64-x8" \
-#    --namespace "ghar-luminar" \
-#    --create-namespace \
-#    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
-#    --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-#    -f ./grss-luminar-linux-x64-x8.yml \
-#    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+helm install "${SCALESET_INSTALLATION_NAME}-x4" \
+    --namespace "${NAMESPACE}" \
+    --create-namespace \
+    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
+    --set githubConfigSecret.github_token="${GITHUB_PAT}" \
+    -f ./${SCALESET_FILENAME}-4x.yml \
+    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+
+helm install "${SCALESET_INSTALLATION_NAME}-x8" \
+    --namespace "${NAMESPACE}" \
+    --create-namespace \
+    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
+    --set githubConfigSecret.github_token="${GITHUB_PAT}" \
+    -f ./${SCALESET_FILENAME}-8x.yml \
+    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
