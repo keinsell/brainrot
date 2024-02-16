@@ -1,12 +1,12 @@
 import {Logger}         from '@nestjs/common'
-import {seeder}         from './common/libraries/seeder/seeder.js'
-import {DatabaseModule} from './common/modules/database/database.module.js'
-import {AccountModule} from './modules/account/account.module.js'
-import {AccountSeeder} from './modules/account/repositories/account-seeder.js'
-import {RoleSeeder}    from './modules/role/seeder/role-seeder.js'
-import {CartSeeder}    from './modules/todo_cart/cart-seeder.js'
-import {ProductSeeder} from './modules/todo_product/seed/product-seeder.js'
-import {ProfileSeeder} from './modules/todo_profile/infrastructure/profile-seeder.js'
+import {seeder}         from './kernel/libraries/seeder/seeder.js'
+import {DatabaseModule} from './kernel/modules/database/database.module.js'
+import {AccountModule}  from './mod/account/account.module.js'
+import {AccountSeeder}  from './mod/account/repositories/account-seeder.js'
+import {RoleSeeder}     from './mod/role/seeder/role-seeder.js'
+import {CartSeeder}     from './mod/todo_cart/cart-seeder.js'
+import {ProductSeeder}  from './mod/todo_product/seed/product-seeder.js'
+import {ProfileSeeder}  from './mod/todo_profile/infrastructure/profile-seeder.js'
 
 
 

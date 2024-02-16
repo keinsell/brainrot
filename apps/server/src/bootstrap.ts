@@ -8,18 +8,18 @@ import express, {NextFunction}                  from 'express'
 import ms                                       from 'ms'
 import process                                  from 'node:process'
 import {startTunnel}                            from "untun"
-import {HttpExceptionFilter}                    from "./common/filters/exception-filter/http-exception-filter.js"
-import {LoggerNestjsProxy}                      from "./common/logger/nestjs-logger-proxy.js"
-import {buildCompodocDocumentation}             from './common/modules/documentation/compodoc/compodoc.js'
-import {buildSwaggerDocumentation}              from './common/modules/documentation/swagger/swagger.js'
-import {executePrismaRelatedProcesses}          from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
-import {__appConfig, __config}                  from './configs/global/__config.js'
-import {isDevelopment}                          from './configs/helper/is-development.js'
-import {StaticFeatureFlags}                     from './configs/static-feature-flags.js'
+import {__appConfig, __config}                  from './conf/global/__config.js'
+import {isDevelopment}                          from './conf/helper/is-development.js'
+import {StaticFeatureFlags}                     from './conf/static-feature-flags.js'
 import {Container}                              from './container.js'
-import {migrateDatabase}                        from './hooks/post-start/migrate-database.js'
+import {HttpExceptionFilter}                    from "./kernel/filters/exception-filter/http-exception-filter.js"
+import {migrateDatabase}                        from './kernel/hooks/post-start/migrate-database.js'
+import {LoggerNestjsProxy}                      from "./kernel/logger/nestjs-logger-proxy.js"
+import {buildCompodocDocumentation}             from './kernel/modules/documentation/compodoc/compodoc.js'
+import {buildSwaggerDocumentation}              from './kernel/modules/documentation/swagger/swagger.js'
+import {executePrismaRelatedProcesses}          from './kernel/modules/resources/prisma/utils/execute-prisma-related-processes.js'
 import {ExpressRequest, ExpressResponse}        from "./types/express-response.js"
-import {portAllocator}                          from './utilities/network-utils/port-allocator.js'
+import {portAllocator}                          from './utils/network-utils/port-allocator.js'
 
 
 
