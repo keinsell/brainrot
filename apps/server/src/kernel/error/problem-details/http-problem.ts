@@ -1,0 +1,73 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 Jakub Olan <keinsell@protonmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+import {ApiProperty} from '@nestjs/swagger'
+import {ApiModel}    from '../../../utils/docs-utils/swagger-api-model.js'
+import {HttpStatus}  from '../../http-status.js'
+import {Exception}   from '../../libraries/error-registry/exception.js'
+
+
+
+export const ApiHttpProblemType = ApiProperty({
+	type:        String,
+	description: 'A URI reference that uniquely identifies the problem type only in the context of the provided API. Opposed to the specification in RFC-7807, it is neither recommended to be dereferencable and point to a human-readable documentation nor globally unique for the problem type.',
+	example:     'op.account.create_account.already_exists',
+})
+
+
+@ApiModel({
+	name: 'Problem',
+})
+export class HttpProblem extends Exception {
+	/** A URI reference [RFC3986](https://tools.ietf.org/html/rfc3986) that identifies the problem type. */
+	@ApiHttpProblemType type: string
+
+	@ApiProperty({
+		type:        String,
+		description: 'A short, human-readable summary of the problem type.',
+		example:     'Account already exist',
+	}) title: string
+
+	@ApiProperty({
+		type:        'int',
+		minimum:     100,
+		maximum:     599,
+		enum:        HttpStatus,
+		description: 'cyz',
+		example:     HttpStatus.BAD_REQUEST,
+	}) status: HttpStatus
+
+	//	 @ApiProperty( {
+	//						  type        : String,
+	//						  description : 'A human-readable explanation
+	// specific to this occurrence of the problem.', example     : 'The
+	// account with the provided email address already exists.', } )
+	// detail : string
+	@ApiProperty({
+		type:        String,
+		description: 'A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.',
+		example:     'https://jakubolan.eu.auth0.com/oauth/token',
+	}) instance: string
+}
