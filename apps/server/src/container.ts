@@ -1,14 +1,14 @@
 import {Logger, MiddlewareConsumer, Module, OnModuleDestroy, OnModuleInit, RequestMethod} from '@nestjs/common'
 import Sentry                                                                             from "@sentry/node"
-import {IdentityAndAccessModule} from "./boundaries/identity-and-access/identity-and-access.module.js"
-import {GraphqlModule}           from './kernel/graphql/graphql-module.js'
-import {DocumentationModule}     from './kernel/modules/documentation/documentation-module.js'
-import {DeveloperToolsModule}    from './kernel/modules/environment/dev-tools/developer-tools.module.js'
-import {HealthModule}            from './kernel/modules/observability/healthcheck/health-module.js'
-import {SharedModule}            from './kernel/shared-module.js'
-import {CartModule}              from './mod/todo_cart/cart-module.js'
-import {ProductModule} from './mod/todo_product/product-module.js'
-import {RegionModule}  from './mod/todo_regions/region-module.js'
+import {IdentityAndAccessModule}                                                          from "./boundaries/identity-and-access/identity-and-access.module.js"
+import {GraphqlModule}                                                                    from './common/graphql/graphql-module.js'
+import {DocumentationModule}                                                              from './common/modules/documentation/documentation-module.js'
+import {DeveloperToolsModule}                                                             from './common/modules/environment/dev-tools/developer-tools.module.js'
+import {HealthModule}                                                                     from './common/modules/observability/healthcheck/health-module.js'
+import {SharedModule}                                                                     from './common/shared-module.js'
+import {CartModule}                                                                       from './modules/todo_cart/cart-module.js'
+import {ProductModule}                                                                    from './modules/todo_product/product-module.js'
+import {RegionModule}                                                                     from './modules/todo_regions/region-module.js'
 
 
 
