@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/auth/sso/{idp}": {
-      "get": {
+    "/sso/{idp}": {
+      "post": {
         "operationId": "initiate-sso",
         "summary": "",
         "parameters": [
@@ -10,18 +10,29 @@
             "name": "idp",
             "required": true,
             "in": "path",
+            "example": "github",
             "schema": {
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateSingleSignOn"
+              }
+            }
+          }
+        },
         "responses": {
-          "200": {
+          "201": {
             "description": ""
           }
         }
       },
-      "post": {
+      "get": {
         "operationId": "complete-sso",
         "summary": "",
         "parameters": [
@@ -32,10 +43,18 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": ""
           }
         }
@@ -687,6 +706,26 @@
       }
     },
     "schemas": {
+      "InitiateSingleSignOn": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "github"
+            ],
+            "example": "github"
+          },
+          "redirectUrl": {
+            "type": "string",
+            "example": "http://localhost:1337/sso/github"
+          }
+        },
+        "required": [
+          "provider",
+          "redirectUrl"
+        ]
+      },
       "RegisterAccountCommand": {
         "type": "object",
         "properties": {
@@ -715,9 +754,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Oren.Hyatt",
-              "Melvina_Brakus12",
-              "Marlin_Block6"
+              "Cecil_Mayert59",
+              "Eve.Dooley26",
+              "Cooper_Witting"
             ]
           }
         },
@@ -787,9 +826,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Oren.Hyatt",
-              "Melvina_Brakus12",
-              "Marlin_Block6"
+              "Cecil_Mayert59",
+              "Eve.Dooley26",
+              "Cooper_Witting"
             ]
           },
           "method": {
@@ -887,9 +926,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Oren.Hyatt",
-              "Melvina_Brakus12",
-              "Marlin_Block6"
+              "Cecil_Mayert59",
+              "Eve.Dooley26",
+              "Cooper_Witting"
             ]
           }
         },
@@ -909,9 +948,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Oren.Hyatt",
-              "Melvina_Brakus12",
-              "Marlin_Block6"
+              "Cecil_Mayert59",
+              "Eve.Dooley26",
+              "Cooper_Witting"
             ]
           },
           "password": {

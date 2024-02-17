@@ -7,7 +7,7 @@
     ".env",
     "dist/.env"
   ],
-  "exitcrash": true,
+  "exitcrash": false,
   "ext": ".ts,.js",
   "ignore": [
     "src/externals/compodoc"

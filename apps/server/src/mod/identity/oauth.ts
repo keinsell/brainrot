@@ -1,5 +1,4 @@
-import {OptionPredicator} from 'typia/lib/programmers/helpers/OptionPredicator.js'
-import undefined = OptionPredicator.undefined
+import * as http from 'http'
 
 
 
@@ -95,7 +94,7 @@ export interface OAuthClientService
 {
 	getClientByIdP(idp: IdentityProvider): OAuthClient
 
-	getClientById(id: string): OAuthClient
+	getClientById(id: string): Promise<any>
 
 	deleteClientById(id: string): OAuthClient
 
@@ -110,32 +109,43 @@ export interface OAuthService
 	initiateAuthenticationFlow(scope?: string, state?: string): URL
 
 	completeAuthenticationFlow(authorizationCode: string, redirectUri: URL): OauthToken
+
+	handleOAuthCallback(request: http.IncomingMessage): Promise<any>
+
+	getUserInfo<T = unknown>(tokenSet: any): Promise<T>
 }
 
 
-export class OAuthClientManagementService
-	implements OAuthClientService
-{
-	private clientStore: OAuthClient[] = []
-
-	public deleteClientById(id: string): OAuthClient
-	{
-		return undefined
-	}
-
-	public getClientById(id: string): OAuthClient
-	{
-		return undefined
-	}
-
-	public getClientByIdP(idp: IdentityProvider): OAuthClient
-	{
-		return undefined
-	}
-
-	public storeClient(client: OAuthClient): OAuthClient
-	{
-		return undefined
-	}
-
-}
+//export class OAuthClientManagementService
+//	implements OAuthClientService
+//{
+//	private clientStore: OAuthClient[] = []
+//
+//	public async deleteClientById(id: string): Promise<OAuthClient>
+//	{
+//		return undefined
+//	}
+//
+//	public async getClientById(id: string): Promise<OAuthClient>
+//	{
+//		const clientData: OAuthClient = {} as any
+//
+//		const issuer = await Issuer.discover(clientData.authority)
+//		const client = new issuer.Client({
+//			                                 client_id    : clientData.clientId,
+//			                                 client_secret: clientData.clientSecret,
+//			                                 redirect_uris: [clientData.redirectUri],
+//		                                 })
+//	}
+//
+//	public getClientByIdP(idp: IdentityProvider): OAuthClient
+//	{
+//		return undefined
+//	}
+//
+//	public storeClient(client: OAuthClient): OAuthClient
+//	{
+//		return undefined
+//	}
+//
+//}

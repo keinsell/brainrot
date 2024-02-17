@@ -25,23 +25,28 @@
 
 import {getCurrentScope}          from '@sentry/node'
 import {startInactiveSpan}        from '@sentry/opentelemetry'
-import {Prisma}                   from '../../../../../vendor/prisma/index.js'
+import {Prisma}                   from 'db'
 import {LoggingMiddlewareOptions} from '../structures/prisma-logging-middleware-options.js'
 
 
 
 export function prismaTracingMiddleware(args: LoggingMiddlewareOptions = {
-	logger:   console,
+	logger  : console,
 	logLevel: 'debug',
-}): Prisma.Middleware {
-	return async (params, next) => {
+}): Prisma.Middleware
+{
+	return async (params, next) =>
+	{
 		const {
-				  model,
-				  action,
-				  runInTransaction,
-				  args,
-			  }           = params
-		const description = [model, action].filter(Boolean).join('.')
+			      model,
+			      action,
+			      runInTransaction,
+			      args,
+		      }           = params
+		const description = [
+			model,
+			action,
+		].filter(Boolean).join('.')
 
 		const data = {
 			model,
@@ -51,19 +56,19 @@ export function prismaTracingMiddleware(args: LoggingMiddlewareOptions = {
 		}
 
 		const span = startInactiveSpan({
-			startTime:  Date.now(),
-			name:       description.toLowerCase(),
-			op:         'db.prisma.query',
-			attributes: {
-				'op': 'db.prisma.query',
-			},
-		})
+			                               startTime : Date.now(),
+			                               name      : description.toLowerCase(),
+			                               op        : 'db.prisma.query',
+			                               attributes: {
+				                               'op': 'db.prisma.query',
+			                               },
+		                               })
 
 		getCurrentScope()?.addBreadcrumb({
-			category: 'db',
-			message:  description,
-			data,
-		})
+			                                 category: 'db',
+			                                 message : description,
+			                                 data,
+		                                 })
 
 		const before = Date.now()
 		const result = await next(params)
