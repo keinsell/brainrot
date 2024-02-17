@@ -81,7 +81,6 @@
       "@types/node",
       "@types/express-session",
       //      "./src/types/**/*.d.ts",
-      "./src/vendor/prisma/index.d.ts"
     ],
     "paths": {
       "@filesystem/*": [
@@ -163,6 +162,7 @@
   ],
   "exclude": [
     "node_modules",
+    "vendor",
     "dist",
     "coverage",
     "src/**/*.spec.ts",
