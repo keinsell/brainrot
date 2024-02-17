@@ -1,6 +1,46 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/auth/sso/{idp}": {
+      "get": {
+        "operationId": "initiate-sso",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "idp",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "complete-sso",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "idp",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "operationId": "healthcheck",
@@ -675,9 +715,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bulah16",
-              "Alexzander65",
-              "Annette_Weimann"
+              "Oren.Hyatt",
+              "Melvina_Brakus12",
+              "Marlin_Block6"
             ]
           }
         },
@@ -747,9 +787,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bulah16",
-              "Alexzander65",
-              "Annette_Weimann"
+              "Oren.Hyatt",
+              "Melvina_Brakus12",
+              "Marlin_Block6"
             ]
           },
           "method": {
@@ -840,16 +880,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": true
+            "example": false
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bulah16",
-              "Alexzander65",
-              "Annette_Weimann"
+              "Oren.Hyatt",
+              "Melvina_Brakus12",
+              "Marlin_Block6"
             ]
           }
         },
@@ -869,9 +909,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bulah16",
-              "Alexzander65",
-              "Annette_Weimann"
+              "Oren.Hyatt",
+              "Melvina_Brakus12",
+              "Marlin_Block6"
             ]
           },
           "password": {
