@@ -24,28 +24,25 @@
  */
 
 import {
-  DynamicModule,
-  Module,
-}                               from '@nestjs/common'
-import { ConfigurationService } from './service/configuration-service.js'
+	DynamicModule,
+	Module,
+}                             from '@nestjs/common'
+import {ConfigurationService} from '../../../configs/service/configuration-service.js'
 
 
 
-@Module( {
-			  providers : [ ConfigurationService ],
-			  exports   : [ ConfigurationService ],
-			} )
+@Module({
+	        providers: [ConfigurationService],
+	        exports  : [ConfigurationService],
+        })
 export class ConfigModule
-  {
+{
 
-	 static forRoot(
-		entities = [],
-		options? : {},
-	 ) : DynamicModule
-		{
-		  return {
-			 module : ConfigModule,
-			 global : true,
-		  }
+	static forRoot(entities = [], options?: {}): DynamicModule
+	{
+		return {
+			module: ConfigModule,
+			global: true,
 		}
-  }
+	}
+}
