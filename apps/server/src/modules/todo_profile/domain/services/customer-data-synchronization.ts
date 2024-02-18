@@ -1,22 +1,18 @@
-import {Injectable}      from "@nestjs/common"
-import {DataDestination} from "../../../../common/libraries/data-synchronization/data-destination.js"
-import {DataSource}      from "../../../../common/libraries/data-synchronization/data-source.js"
-import {
-	DataSynchronizationManager,
-}                        from "../../../../common/libraries/data-synchronization/data-synchronization-manager.js"
-import {User}            from "../../../../vendor/prisma/index.js"
-import {isNil}           from "../../../../utilities/type-utils/index.js";
-import {PrismaService}   from "../../../../common/modules/resources/prisma/services/prisma-service.js";
+import {Injectable}                  from '@nestjs/common'
+import {User}                        from 'db'
+import {DataDestination}             from '../../../../common/libraries/data-synchronization/data-destination.js'
+import {DataSource}                  from '../../../../common/libraries/data-synchronization/data-source.js'
+import {DataSynchronizationManager} from '../../../../common/libraries/data-synchronization/data-synchronization-manager.js'
+import {PrismaService}               from '../../../../common/modules/resources/prisma/services/prisma-service.js'
+import {isNil}                       from '../../../../utilities/type-utils/index.js'
 
 
 
 @Injectable()
 export class CustomerSynchronization
-	extends DataSynchronizationManager<User> {
-	constructor(
-		private readonly dataSource : CustomerRepositoryDataSource,
-		private readonly dataDestination : CustomerStripeDataDestination,
-	)
+	extends DataSynchronizationManager<User>
+{
+	constructor(private readonly dataSource: CustomerRepositoryDataSource, private readonly dataDestination: CustomerStripeDataDestination)
 	{
 		super()
 		this.registerDataDestination(dataDestination)
@@ -27,18 +23,25 @@ export class CustomerSynchronization
 
 @Injectable()
 export class CustomerRepositoryDataSource
-	extends DataSource<User> {
-	constructor(private prismaService : PrismaService) {super()}
+	extends DataSource<User>
+{
+	constructor(private prismaService: PrismaService)
+	{
+		super()
+	}
 
 
-	public async fetch(identifier : string) : Promise<User> {
+	public async fetch(identifier: string): Promise<User>
+	{
 		const user = this.prismaService.user.findUnique({
-			where: {id: identifier},
-		})
-		if (!isNil(user)) {
+			                                                where: {id: identifier},
+		                                                })
+		if (!isNil(user))
+		{
 			return user as any
 		}
-		else {
+		else
+		{
 			throw new Error(`Could not find user with id ${identifier}`)
 		}
 	}
@@ -47,8 +50,10 @@ export class CustomerRepositoryDataSource
 
 @Injectable()
 export class CustomerStripeDataDestination
-	extends DataDestination<User> {
-	public async push(payload : User) : Promise<void> {
+	extends DataDestination<User>
+{
+	public async push(payload: User): Promise<void>
+	{
 		// Get stripe customer by metadata
 		// If exist update information
 		// If not exist create customer

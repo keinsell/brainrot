@@ -23,65 +23,65 @@
  *
  */
 
-import { faker }         from '@faker-js/faker'
+import {faker}         from '@faker-js/faker'
 import {
-  Injectable,
-  Logger,
-}                        from '@nestjs/common'
-import { SeederBase }    from '../../../common/libraries/seeder/seeder-base.js'
-import { PrismaService } from '../../../common/modules/resources/prisma/services/prisma-service.js'
-import type { Prisma }   from '../../../vendor/prisma/index.js'
+	Injectable,
+	Logger,
+}                      from '@nestjs/common'
+import type {Prisma}   from 'db'
+import {SeederBase}    from '../../../common/libraries/seeder/seeder-base.js'
+import {PrismaService} from '../../../common/modules/resources/prisma/services/prisma-service.js'
 
 
 
 @Injectable()
 export class RoleSeeder
-  extends SeederBase<Prisma.RoleCreateInput>
-  {
+	extends SeederBase<Prisma.RoleCreateInput>
+{
 
-	 constructor(private prismaService : PrismaService)
-		{
-		  super( new Logger( 'seeder:role' ) )
+	constructor(private prismaService: PrismaService)
+	{
+		super(new Logger('seeder:role'))
 
-		  this.provideDataset( [
-										 {name : 'Super Administrator'},
-										 {name : 'Administrator'},
-										 {name : 'Customer Support'},
-										 {name : 'User'},
-									  ] )
+		this.provideDataset([
+			                    {name: 'Super Administrator'},
+			                    {name: 'Administrator'},
+			                    {name: 'Customer Support'},
+			                    {name: 'User'},
+		                    ])
+	}
+
+
+	public async count(): Promise<number>
+	{
+		return this.prismaService.role.count()
+	}
+
+
+	public async exists(input: Prisma.RoleCreateInput): Promise<boolean>
+	{
+		const exists = await this.prismaService.role.findFirst({
+			                                                       where: {
+				                                                       name: input.name,
+			                                                       },
+		                                                       })
+
+		return exists !== null
+	}
+
+
+	public async fabricate(): Promise<Prisma.RoleCreateInput>
+	{
+		return {
+			name: faker.word.sample(),
 		}
+	}
 
 
-	 public async count() : Promise<number>
-		{
-		  return this.prismaService.role.count()
-		}
-
-
-	 public async exists(input : Prisma.RoleCreateInput) : Promise<boolean>
-		{
-		  const exists = await this.prismaService.role.findFirst( {
-																						where : {
-																						  name : input.name,
-																						},
-																					 } )
-
-		  return exists !== null
-		}
-
-
-	 public async fabricate() : Promise<Prisma.RoleCreateInput>
-		{
-		  return {
-			 name : faker.word.sample(),
-		  }
-		}
-
-
-	 public save(input : Prisma.RoleCreateInput) : Promise<unknown>
-		{
-		  return this.prismaService.role.create( {
-																 data : input,
-															  } )
-		}
-  }
+	public save(input: Prisma.RoleCreateInput): Promise<unknown>
+	{
+		return this.prismaService.role.create({
+			                                      data: input,
+		                                      })
+	}
+}

@@ -23,41 +23,47 @@
  *
  */
 
-import {Injectable}             from '@nestjs/common'
-import Convict                  from 'convict'
-import * as dotenv              from 'dotenv'
-import {MainConfiguration}      from '../config-set/main-configuration.js'
+import {Injectable}              from '@nestjs/common'
+import Convict                   from 'convict'
+import * as dotenv               from 'dotenv'
+import {MainConfiguration}       from '../config-set/main-configuration.js'
 import {ConfigurationContainer} from '../schema/configuration-container.js'
 
 
 
 @Injectable()
-export class ConfigurationService {
+export class ConfigurationService
+{
 	private config: Convict.Config<ConfigurationContainer>
 
 
-	constructor() {
+	constructor()
+	{
 		this.config      = Convict(MainConfiguration)
 		const dotEnvFile = dotenv.config().parsed
 
-		if (dotEnvFile) {
+		if (dotEnvFile)
+		{
 			this.config.load(dotenv.config().parsed)
 		}
 
 		this.config.validate({
-			allowed: 'warn',
-			output:  (message) => {
-				// Disabled for noop logging
-				//											 const chunks = message.split( '\n' )
-				//											 chunks.forEach( (chunk) => {
-				//												new Logger( 'config' ).verbose( chunk )
-				//											 } )
-			},
-		})
+			                     allowed: 'warn',
+			                     output : (message) =>
+			                     {
+				                     // Disabled for noop logging
+				                     //											 const chunks = message.split( '\n'
+				                     // )
+				                     //											 chunks.forEach( (chunk) => {
+				                     //												new Logger( 'config' ).verbose(
+				                     // chunk ) } )
+			                     },
+		                     })
 	}
 
 
-	get<K extends keyof ConfigurationContainer>(key: K) {
+	get<K extends keyof ConfigurationContainer>(key: K)
+	{
 		return this.config.get(key)
 	}
 }

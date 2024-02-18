@@ -1,5 +1,6 @@
 import {Module}                         from '@nestjs/common'
 import {ConfigModule}                   from '../kernel/core/configuration/config-module.js'
+import {RedisModule}                    from '../kernel/resource/redis/redis.module.js'
 import {SessionMiddlewareModule}        from './middleware/session/session-middleware-module.js'
 import {DatabaseModule}                 from './modules/database/database.module.js'
 import {AsyncLocalStorageModule}        from './modules/environment/local-storage/async-local-storage-module.js'
@@ -17,6 +18,9 @@ import {ObservabilityModule}            from './modules/observability/observabil
 		        ObservabilityModule,
 		        DatabaseModule,
 		        EventBusModule,
+		        RedisModule,
+		        EventBusModule,
+		        XcacheModule,
 		        SessionMiddlewareModule.forRoot({
 			                                        session: {
 				                                        secret           : 'secretomitted',
@@ -39,6 +43,8 @@ import {ObservabilityModule}            from './modules/observability/observabil
 		        AsyncLocalStorageModule,
 		        ConfigModule,
 		        EventBusModule,
+		        RedisModule,
+		        XcacheModule,
 	        ],
         })
 export class SharedModule

@@ -28,7 +28,18 @@ import {IAuthorizationConfiguration} from '../config-set/authorization-configura
 
 
 
-export interface ConfigurationContainer {
+export interface IRedisConfiguration
+{
+	host: string
+	port: number
+	username: string | undefined
+	password: string | undefined
+	url: string | undefined
+}
+
+
+export interface ConfigurationContainer
+{
 	/** Defines the protocol used by the application. Options are 'http' or 'https'. Default is 'http'. */
 	PROTOCOL: 'http' | 'https';
 
@@ -59,4 +70,5 @@ export interface ConfigurationContainer {
 	FEATURE: {
 		ENABLE_TUNNEL: boolean
 	}
+	redis: IRedisConfiguration
 }

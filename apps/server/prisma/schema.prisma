@@ -70,8 +70,59 @@ model Account {
   PaymentMethod           PaymentMethod[]
   AccountMetadata         AccountMetadata[]
   VerificationRequest     VerificationRequest[]
+  FederatedIdentity       FederatedIdentity[]
 
   // @@index(fields: [id, email, username, phone_number], map: "account_idx", type: Hash)
+}
+
+model OAuthClient {
+  id                    String              @id @default(cuid())
+  // --------------------------------------------------
+  IdP                   String              @unique
+  // Sadly things cannot be ideal as they could be, GitHub is a example where
+  // implementation of .well-known was too hard in this case authority needs
+  // to be optional and add resolving endpoints manually.
+  // https://fusionauth.io/docs/lifecycle/authenticate-users/identity-providers/social/github
+  discoverEndpoints     Boolean
+  authority             String?
+  authorizationEndpoint String?
+  tokenEndpoint         String?
+  userinfoEndpoint      String?
+  issuer                String?
+  clientId              String
+  clientSecret          String
+  redirectUri           String
+  scope                 String
+  // --------------------------------------------------
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  version               Int                 @default(1)
+  FederatedIdentity     FederatedIdentity[]
+
+  @@map("auth_oauth_client")
+}
+
+model FederatedIdentity {
+  id          String      @id @default(cuid())
+  // --------------------------------------------------
+  accountId   String
+  IdP         String
+  /// The unique identifier for the user's identity within the external
+  /// identity provider.
+  /// This should be a string value that is provided by the IdP.
+  sub         String
+  name        String
+  picture     String?
+  expiresAt   DateTime
+  // --------------------------------------------------
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  version     Int         @default(1)
+  // --------------------------------------------------
+  Account     Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  OAuthClient OAuthClient @relation(fields: [IdP], references: [IdP], onDelete: Cascade)
+
+  @@map("auth_federated_identity")
 }
 
 /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
@@ -124,6 +175,7 @@ model Session {
   Account   Account  @relation(fields: [accountId], references: [id], map: "account_session_fkey", onUpdate: Cascade, onDelete: Cascade)
 }
 
+// TODO: It is temporary entity that could be hold in logs
 model TokenAudit {
   id         String    @id @default(cuid())
   // --------------------------------------------------
@@ -147,6 +199,7 @@ model TokenAudit {
   Account    Account   @relation(fields: [accountId], references: [id], map: "account_token_audit_fkey")
 }
 
+// TODO: Temporary entity that could be hold in cache
 model VerificationRequest {
   id        String   @id @default(cuid())
   // --------------------------------------------------

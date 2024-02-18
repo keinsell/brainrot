@@ -23,14 +23,16 @@
  *
  */
 
+import {Prisma}                   from 'db'
 import {DbContextModel}           from '../../../common/modules/database/db-context-model.js'
-import {Prisma}                   from '../../../vendor/prisma/index.js'
 import {AuthenticationToken}      from '../entity/authentication-token.js'
 import {AuthorizationTokenStatus} from '../value-object/authorization-token-status.js'
 
 
 
-export class AuthenticationTokenCreateModel implements DbContextModel.TokenAudit.CreatePayload {
+export class AuthenticationTokenCreateModel
+	implements DbContextModel.TokenAudit.CreatePayload
+{
 	deviceInfo: string
 	Account: Prisma.AccountCreateNestedOneWithoutTokenAuditInput
 	expiresAt: Date | string
@@ -41,20 +43,23 @@ export class AuthenticationTokenCreateModel implements DbContextModel.TokenAudit
 	tokenId: string
 
 
-	constructor(properties: DbContextModel.TokenAudit.CreatePayload) {
+	constructor(properties: DbContextModel.TokenAudit.CreatePayload)
+	{
 		Object.assign(this, properties)
 	}
 
 
-	static fromDomainModel(authenticationToken: AuthenticationToken): AuthenticationTokenCreateModel {
+	static fromDomainModel(authenticationToken: AuthenticationToken): AuthenticationTokenCreateModel
+	{
 		return new AuthenticationTokenCreateModel({
-			id:         authenticationToken.id,
-			expiresAt:  '',
-			tokenId:    authenticationToken.id,
-			isRevoked:  authenticationToken.status === AuthorizationTokenStatus.REVOKED,
-			issuedAt:   authenticationToken.issuedAt,
-			lastUsedAt: authenticationToken.lastUsedAt || null,
-			Account:    {connect: {id: authenticationToken.accountId}},
-		})
+			                                          id        : authenticationToken.id,
+			                                          expiresAt : '',
+			                                          tokenId   : authenticationToken.id,
+			                                          isRevoked : authenticationToken.status
+			                                                      === AuthorizationTokenStatus.REVOKED,
+			                                          issuedAt  : authenticationToken.issuedAt,
+			                                          lastUsedAt: authenticationToken.lastUsedAt || null,
+			                                          Account   : {connect: {id: authenticationToken.accountId}},
+		                                          })
 	}
 }
