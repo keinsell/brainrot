@@ -28,8 +28,11 @@ import {ConfigSet} from '../contract/config-set.js'
 import {isTest}    from '../helper/is-test.js'
 
 
+// TODO: Test Container feature should lookup availability of ex. database or redis before running test-container.
 
-export interface IApplicationConfiguration extends ConfigSet {
+export interface IApplicationConfiguration
+	extends ConfigSet
+{
 	/** Defines if application should ensure seed in a database */
 	RUN_SEED: boolean
 	/** Defines endpoint on which OpenAPI 3.0 Specification/UI should be exposed */
@@ -46,22 +49,22 @@ export interface IApplicationConfiguration extends ConfigSet {
 
 
 export const ApplicationConfigurationSchema: convict.Schema<IApplicationConfiguration> = {
-	RUN_SEED:                          {
+	RUN_SEED                         : {
 		default: false,
-		format:  Boolean,
+		format : Boolean,
 	},
 	FEATURE_USE_DOCKER_TESTCONTAINERS: {
 		default: isTest() || false,
-		format:  Boolean,
+		format : Boolean,
 	},
-	OPENAPI_ENDPOINT:                  {
+	OPENAPI_ENDPOINT                 : {
 		default: '/api',
 	},
-	HEALTHCHECK_ENDPOINT:              {
+	HEALTHCHECK_ENDPOINT             : {
 		default: '/health',
 	},
-	PRISMA_ADMIN_PORT:                 {
-		format:  'port',
+	PRISMA_ADMIN_PORT                : {
+		format : 'port',
 		default: 5555,
 	},
 }
