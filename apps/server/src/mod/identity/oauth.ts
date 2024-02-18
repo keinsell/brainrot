@@ -1,4 +1,12 @@
+import {
+	NotFoundException,
+	OnApplicationBootstrap,
+}                from '@nestjs/common'
 import * as http from 'http'
+import {
+	discoverSSOClients,
+	OAuthClientConfig,
+}                from '../../kernel/modules/configuration/oauth-config.js'
 
 
 
@@ -62,7 +70,9 @@ export interface OIDC
  * The name of the external identity provider that manages the user's identity. This should be a string value, such as
  * "google", "facebook", or "github".
  */
-type IdentityProvider = 'google'
+type IdentityProvider =
+	'google'
+	| 'github'
 
 
 export interface FederatedIdentity
@@ -90,15 +100,66 @@ export interface FederatedIdentity
 }
 
 
-export interface OAuthClientService
+export interface IOAuthClientStore
+	extends OnApplicationBootstrap
 {
-	getClientByIdP(idp: IdentityProvider): OAuthClient
+	getClientByIdP(idp: IdentityProvider): OAuthClientConfig
 
-	getClientById(id: string): Promise<any>
+	deleteClientById(id: string): void
 
-	deleteClientById(id: string): OAuthClient
+	storeClient(client: OAuthClientConfig): OAuthClientConfig
 
-	storeClient(client: OAuthClient): OAuthClient
+	// OAuthClientStore should read OAuthClients from provided configuration on application start,
+	// these configurations will be unencrypted, so they need to be encrypted before saving them to some perishable
+	// place.
+	// At some point, they do not need to be stored in a database at all,
+	// just to be provided to application by abstraction presented above.
+}
+
+
+export class OAuthClientStore
+	implements IOAuthClientStore
+{
+	private clients: OAuthClientConfig[] = []
+
+	public deleteClientById(id: string): void
+	{
+		return
+	}
+
+	public getClientByIdP(idp: IdentityProvider): OAuthClientConfig
+	{
+		const maybeClient = this.clients.find((x) => x?.IdP === idp)
+
+		if (!maybeClient)
+		{
+			throw new NotFoundException('OAuth Client not found')
+		}
+
+		return maybeClient
+	}
+
+	public storeClient(client: OAuthClientConfig): OAuthClientConfig
+	{
+		const isExisting = this.clients.filter((x) => x.IdP === client.IdP)
+
+		if (isExisting.length === 1)
+		{
+			// Edit client
+			throw new Error('Client already exists')
+		}
+
+		this.clients.push(client)
+
+		return client
+	}
+
+	public onApplicationBootstrap(): any
+	{
+		const clients = discoverSSOClients()
+		clients.forEach(client => this.storeClient(client))
+	}
+
 }
 
 

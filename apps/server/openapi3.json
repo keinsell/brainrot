@@ -754,9 +754,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Cecil_Mayert59",
-              "Eve.Dooley26",
-              "Cooper_Witting"
+              "Jarrell17",
+              "Earline_Zulauf",
+              "Karli50"
             ]
           }
         },
@@ -826,9 +826,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Cecil_Mayert59",
-              "Eve.Dooley26",
-              "Cooper_Witting"
+              "Jarrell17",
+              "Earline_Zulauf",
+              "Karli50"
             ]
           },
           "method": {
@@ -926,9 +926,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Cecil_Mayert59",
-              "Eve.Dooley26",
-              "Cooper_Witting"
+              "Jarrell17",
+              "Earline_Zulauf",
+              "Karli50"
             ]
           }
         },
@@ -948,9 +948,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Cecil_Mayert59",
-              "Eve.Dooley26",
-              "Cooper_Witting"
+              "Jarrell17",
+              "Earline_Zulauf",
+              "Karli50"
             ]
           },
           "password": {
