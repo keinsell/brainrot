@@ -19,6 +19,7 @@ import {ObservabilityModule}            from './modules/observability/observabil
 		        DatabaseModule,
 		        RedisModule,
 		        EventBusModule,
+		        XcacheModule,
 		        SessionMiddlewareModule.forRoot({
 			                                        session: {
 				                                        secret           : 'secretomitted',
@@ -41,6 +42,8 @@ import {ObservabilityModule}            from './modules/observability/observabil
 		        AsyncLocalStorageModule,
 		        ConfigModule,
 		        EventBusModule,
+		        RedisModule,
+		        XcacheModule,
 	        ],
         })
 export class SharedModule
