@@ -45,9 +45,11 @@ export interface OAuthClientConfig
 
 export function discoverSSOClients(): OAuthClientConfig[]
 {
-	const ENV                          = process.env
-	const clients: OAuthClientConfig[] = []
-	const logger                       = new CombinedLogger()
+	const ENV    = process.env
+	const clients: {
+		[idp: string]: OAuthClientConfig
+	}            = {}
+	const logger = new CombinedLogger()
 
 	for (const [key, value] of Object.entries(ENV))
 	{
@@ -55,84 +57,67 @@ export function discoverSSOClients(): OAuthClientConfig[]
 		if (key.startsWith('OAUTH_CLIENT_') && typeof value === 'string')
 		{
 			// Get a IDP name
-			const idp = key.split('_')[2].toLowerCase()
+			const parts = key.split('_')
+			const idp   = parts[2].toLowerCase()
 			logger.debug(`Discovered configuration of "${idp}" OAuth 2.0 Client`)
 
-			// Create a new config object with basic properties
-			const config: OAuthClientConfig = {
-				IdP              : idp,
-				clientId         : value,
-				discoverEndpoints: false,
-				scope            : 'openid email profile',
-				redirectUri      : `http://localhost:1337/sso/${idp}`,
+			if (!(
+				idp in clients
+			))
+			{
+				clients[idp] = {
+					IdP              : idp,
+					discoverEndpoints: false,
+					scope            : 'openid email profile',
+					redirectUri      : `http://localhost:1337/sso/${idp}`,
+				} as any
 			}
+
+			const config = clients[idp]
 
 			// Parse additional fields
-			if (key.endsWith('_CLIENT_ID'))
+			const setting = parts.slice(3).join('_')
+
+			if (setting === 'CLIENT_ID')
+			{
+				logger.debug(`${key}=${value}`)
+				config.clientId = value
+			}
+			else if (setting === 'SECRET')
 			{
 				logger.debug(`${key}=${value}`)
 				config.clientSecret = value
 			}
-
-			if (key.endsWith('_SECRET'))
-			{
-				logger.debug(`${key}=${value}`)
-				config.clientSecret = value
-			}
-
-			if (key.endsWith('_AUTHORITY'))
+			else if (setting === 'AUTHORITY')
 			{
 				logger.debug(`${key}=${value}`)
 				config.authority = value
 			}
-
-			if (key.endsWith('_USERINFO_ENDPOINT'))
+			else if (setting === 'USERINFO_ENDPOINT')
 			{
 				logger.debug(`${key}=${value}`)
 				config.userinfoEndpoint = value
 			}
-
-			if (key.endsWith('_TOKEN_ENDPOINT'))
+			else if (setting === 'TOKEN_ENDPOINT')
 			{
 				logger.debug(`${key}=${value}`)
 				config.tokenEndpoint = value
 			}
-
-			if (key.endsWith('_AUTH_ENDPOINT'))
+			else if (setting === 'AUTH_ENDPOINT')
 			{
 				logger.debug(`${key}=${value}`)
 				config.authorizationEndpoint = value
 			}
-
-			if (key.endsWith('_ISSUER'))
+			else if (setting === 'ISSUER')
 			{
 				logger.debug(`${key}=${value}`)
 				config.issuer = value
 			}
-
-			// Check if the config is valid
-			const isSSOClientValid = validateSSOClient(config)
-
-			if (isSSOClientValid)
-			{
-				// Find a IDP in clients array
-				const existingClient = clients.filter((x) => x.IdP === idp)
-
-				if (existingClient.length > 0)
-				{
-					// Overwrite existing client with the new config
-					existingClient[0] = {...existingClient[0], ...config}
-				}
-				else
-				{
-					// Add the new client to the array
-					clients.push(config)
-				}
-			}
 		}
 	}
 
-	return clients
+	// Filter out invalid clients
+	return Object.values(clients).filter(validateSSOClient)
 }
 
 function validateSSOClient(client: OAuthClientConfig): boolean

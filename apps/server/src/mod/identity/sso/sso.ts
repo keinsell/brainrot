@@ -230,6 +230,8 @@ export class SsoController
 		// mismatch of account email and email used for SSO, however, I believe this can be done
 		// with additional parameter during SSO authentication.
 
+		const idpAccountId = String(user.id)
+
 		const federatedIdentity: FederatedIdentity = {
 			id       : nanoid(128),
 			accountId: '',
