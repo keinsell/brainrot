@@ -3,25 +3,24 @@ import {
 	Body,
 	Controller,
 	Get,
+	Logger,
 	NotFoundException,
 	Param,
 	Post,
 	Query,
 	Req,
-}                from '@nestjs/common'
+}                          from '@nestjs/common'
 import {
 	ApiBody,
 	ApiOperation,
 	ApiParam,
 	ApiProperty,
-}                from '@nestjs/swagger'
-import {
-	FederatedIdentity,
-	PrismaClient,
-}                from 'db'
-import * as http from 'http'
-import {nanoid}  from 'nanoid'
-import {Issuer}  from 'openid-client'
+}                          from '@nestjs/swagger'
+import {FederatedIdentity} from 'db'
+import * as http           from 'http'
+import {nanoid}            from 'nanoid'
+import {Issuer}            from 'openid-client'
+import {OAuthClientStore}  from '../oauth.js'
 
 
 
@@ -112,6 +111,13 @@ export interface SingleSignOnService
 @Controller('/sso')
 export class SsoController
 {
+	private oauthClientStore = new OAuthClientStore()
+	private logger: Logger   = new Logger()
+
+	constructor()
+	{
+		this.oauthClientStore.onApplicationBootstrap()
+	}
 
 	@ApiBody({type: InitiateSingleSignOn}) @ApiParam({
 		                                                 example: 'github',
@@ -127,17 +133,11 @@ export class SsoController
 		// Query requested identity provider
 		// Throw or use oauth2 client
 
-		if (!identityProvider)
-		{
-			throw new NotFoundException('Requested provider not found.')
-		}
+		this.logger.debug('Fetching OAuth 2.0 Client...')
 
-		const oauthClientInformation = await new PrismaClient().oAuthClient.findFirst({where: {IdP: identityProvider}})
+		const oauthClientInformation = this.oauthClientStore.getClientByIdP(identityProvider as IdentityProvider)
 
-		if (!oauthClientInformation)
-		{
-			throw new NotFoundException('OAuth client information not found.')
-		}
+		this.logger.debug('Got OAuth 2.0 Client', oauthClientInformation)
 
 		let issuer: Issuer
 
@@ -180,13 +180,7 @@ export class SsoController
 	              }) @Get(':idp')
 	async completeSingleSignOn(@Param('idp') identityProvider: IdentityProvider, @Body() body: CompleteSsoRequest, @Req() request: http.IncomingMessage, @Query('code') authenticationCode?: string): Promise<CompletedSingleSignOnResponse>
 	{
-
-		if (!identityProvider)
-		{
-			throw new NotFoundException('Requested provider not found.')
-		}
-
-		const oauthClientInformation = await new PrismaClient().oAuthClient.findFirst({where: {IdP: identityProvider}})
+		const oauthClientInformation = this.oauthClientStore.getClientByIdP(identityProvider)
 
 		if (!oauthClientInformation)
 		{
