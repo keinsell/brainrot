@@ -10,8 +10,8 @@
     "prestart": "rollup -c",
     "start": "node dist/index.js",
     "dev": "tsc && node dist/src/index.js",
-    "dev2": "pnpm bundle && node dist/bin.js",
-    "dev3": "ncc build src/index.ts -o dist && node dist/index.js --mod snappy"
+    "dev2": "rollup -c && node dist/bin.js",
+    "dev3": "ncc build -e snappy src/index.ts -o dist && node dist/index.js"
   },
   "keywords": [],
   "author": "",
