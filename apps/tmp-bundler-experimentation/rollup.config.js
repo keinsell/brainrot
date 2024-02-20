@@ -42,6 +42,9 @@ export default {
     // TODO: Find a way to bundle snappy
     external: ['snappy'],
     plugins: [
+        typescript({
+            outputToFilesystem: true,
+        }),
         jsccPlugin({
             values: {_NODEJS: 1},
         }),
@@ -50,9 +53,6 @@ export default {
             esmExternals: false,
             transformMixedEsModules: true,
             sourceMap: true,
-        }),
-        typescript({
-            outputToFilesystem: true,
         }),
         nodeGlobals(),
         resolve({
