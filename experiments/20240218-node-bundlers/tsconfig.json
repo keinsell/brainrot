@@ -7,13 +7,13 @@
       "WebWorker"
     ],
     // Modules
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "moduleDetection": "force",
-    "isolatedModules": true,
+    "isolatedModules": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": false,
+    "verbatimModuleSyntax": true,
     // Code Quality and Safety
     "strict": false,
     "allowUnreachableCode": false,
@@ -28,7 +28,7 @@
     "forceConsistentCasingInFileNames": false,
     "strictFunctionTypes": true,
     "exactOptionalPropertyTypes": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     // Syntax
     "allowArbitraryExtensions": false,
     // Generate source maps for the compiler output.
