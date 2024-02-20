@@ -1,0 +1,128 @@
+{
+  "compilerOptions": {
+    // Transpiration and Compatibility
+    "target": "ESNext",
+    "lib": [
+      "ESNext",
+      "WebWorker"
+    ],
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": false,
+    // Code Quality and Safety
+    "strict": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "useDefineForClassFields": true,
+    "strictPropertyInitialization": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": false,
+    "strictFunctionTypes": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    // Syntax
+    "allowArbitraryExtensions": false,
+    // Generate source maps for the compiler output.
+    "sourceMap": true,
+    "inlineSources": true,
+    "inlineSourceMap": false,
+    // Compiler tracing
+    "traceResolution": false,
+    "diagnostics": false,
+    "extendedDiagnostics": false,
+    // Incremental compilation
+    "incremental": true,
+    "composite": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "assumeChangesOnlyAffectDirectDependencies": false,
+    // Emit design-type metadata for decorated declarations in source files.
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    // Directories
+    "sourceRoot": "./",
+    "mapRoot": "./",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    // Should be always project root (tsconfig location)
+    "rootDir": "./",
+    "declarationDir": "./dist/types",
+    // Emitting files
+    "noEmitOnError": true,
+    "emitDeclarationOnly": false,
+    "noEmitHelpers": false,
+    "importHelpers": true,
+    "downlevelIteration": false,
+    "preserveValueImports": false,
+    // Declaration files
+    "declaration": true,
+    "declarationMap": true,
+    // Output configuration
+    "removeComments": true,
+    "generateCpuProfile": "profile.cpuprofile",
+    "noErrorTruncation": false,
+    "pretty": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "emitBOM": true,
+    // Performance At Home
+    "disableSourceOfProjectReferenceRedirect": false,
+    "disableReferencedProjectLoad": false,
+    "disableSolutionSearching": false,
+    "disableSizeLimit": true,
+    // Uncategorized Yet
+    "preserveSymlinks": false,
+    "resolveJsonModule": true,
+    "noEmit": false,
+    "types": [
+      "@types/node"
+    ],
+    "paths": {
+      "internal:mod/*": [
+        "./src/mod/*"
+      ],
+      "internal:kernel": [
+        "./src/kernel/*",
+        "./src/kernel/index.ts"
+      ]
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      {
+        "transform": "typescript-transform-paths"
+      },
+      {
+        "transform": "tsc-progress",
+        "title": "Compiling..."
+      }
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "dist",
+    "coverage",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.e2e-spec.ts",
+    "src/**/*.e2e-test.ts"
+  ],
+  "compileOnSave": true,
+  "typeAcquisition": {
+    "include": [
+      "@types/node"
+    ],
+    "enable": true
+  }
+}
