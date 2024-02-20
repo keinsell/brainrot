@@ -11,7 +11,7 @@
     "start": "node dist/index.js",
     "dev": "tsc && node dist/src/index.js",
     "dev2": "rollup -c && node dist/bin.js",
-    "dev3": "ncc build -e snappy src/index.ts -o dist && node dist/index.js"
+    "dev3": "ncc build -e snappy src/index.ts --out dist/bin --v8-cache -m -s && node dist/bin"
   },
   "keywords": [],
   "author": "",
