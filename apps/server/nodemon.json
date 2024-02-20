@@ -5,7 +5,8 @@
   "watch": [
     "src",
     ".env",
-    "dist/.env"
+    "dist/.env",
+    "node_modules"
   ],
   "exitcrash": false,
   "ext": ".ts,.js",

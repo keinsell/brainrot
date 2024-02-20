@@ -23,10 +23,45 @@
  *
  */
 
-import { EmailMessage } from '../entity/email-message.js'
+
+import {EmailAddress}        from '../value-object/email-address.js'
+import {EmailAttachment}     from '../value-object/email-attachment.js'
+import {EmailContent}        from '../value-object/email-content.js'
+import type {EmailReceipent} from '../value-object/email-receipent.js'
+import {Html}                from '../value-object/html.js'
+import {PlainText}           from '../value-object/plain-text.js'
 
 
 
-export interface CreateEmailMessagePayload
-  extends Omit<EmailMessage, 'sender'>
-  {}
+export interface IEmailMessage
+	extends EmailContent
+{
+	recipient: EmailReceipent
+	sender?: {
+		from: EmailAddress
+		replyTo?: string
+	}
+}
+
+
+export class EmailMessage
+	implements IEmailMessage
+{
+	attachments?: EmailAttachment[]
+	body?: Html | PlainText
+	subject?: string
+	recipient: EmailReceipent
+	sender?: {
+		from: EmailAddress
+		replyTo?: string
+	}
+
+	constructor(message: IEmailMessage)
+	{
+		this.body        = message.body
+		this.recipient   = message.recipient
+		this.sender      = message.sender
+		this.subject     = message.subject
+		this.attachments = message.attachments
+	}
+}

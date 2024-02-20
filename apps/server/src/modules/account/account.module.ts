@@ -1,13 +1,13 @@
 import {Module}                        from '@nestjs/common'
 import {PwnprocModule}                 from '../../common/libraries/pwnproc/pwnproc-module.js'
 import {UnihashModule}                 from '../../common/libraries/unihash/index.js'
-import {MailerModule}                  from '../../common/mailer/mailer-module.js'
 import {DatabaseModule}                from '../../common/modules/database/database.module.js'
 import {EventBusModule}                from '../../common/modules/messaging/event-bus-module.js'
 import {OpentelemetryTracer}           from '../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import {CacheManagerModule}            from '../../common/modules/storage/cache-manager/cache-manager-module.js'
 import {NotificationModule}            from '../../common/notification/notification-module.js'
-import {RegisterAccountUseCase}        from "./commands/register-account/register-account-usecase.js"
+import {MailerModule}                  from '../../kernel/integration/mailer/mailer-module.js'
+import {RegisterAccountUseCase}        from './commands/register-account/register-account-usecase.js'
 import {AccountRecoveryController}     from './controllers/account-recovery.controller.js'
 import {AccountVerificationController} from './controllers/account-verification.controller.js'
 import {AccountController}             from './controllers/account.controller.js'
@@ -21,24 +21,38 @@ import {AccountVerification}           from './services/account-verification.js'
 
 
 @Module({
-	imports:     [
-		DatabaseModule, PwnprocModule, UnihashModule, EventBusModule, CacheManagerModule, MailerModule,
-		NotificationModule,
-	],
-	controllers: [
-		AccountController, AccountRecoveryController, AccountVerificationController,
-	],
-	providers:   [
-		AccountService, RegisterAccountUseCase, AccountPolicy, {
-			provide:  AccountRepository,
-			useClass: PrismaAccountRepository,
-		}, AccountVerification, AccountRecovery, // Workaround for crashing seeder which is using AccountService
-		// class which is dependent on TraceService.
-		OpentelemetryTracer,
-	],
-	exports:     [
-		AccountService, AccountRepository,
-	],
-})
-export class AccountModule {
+	        imports    : [
+		        DatabaseModule,
+		        PwnprocModule,
+		        UnihashModule,
+		        EventBusModule,
+		        CacheManagerModule,
+		        MailerModule,
+		        NotificationModule,
+	        ],
+	        controllers: [
+		        AccountController,
+		        AccountRecoveryController,
+		        AccountVerificationController,
+	        ],
+	        providers  : [
+		        AccountService,
+		        RegisterAccountUseCase,
+		        AccountPolicy,
+		        {
+			        provide : AccountRepository,
+			        useClass: PrismaAccountRepository,
+		        },
+		        AccountVerification,
+		        AccountRecovery, // Workaround for crashing seeder which is using AccountService
+		        // class which is dependent on TraceService.
+		        OpentelemetryTracer,
+	        ],
+	        exports    : [
+		        AccountService,
+		        AccountRepository,
+	        ],
+        })
+export class AccountModule
+{
 }
