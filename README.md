@@ -1,6 +1,6 @@
 <center>
 <h1>
-⚡ Methylphenidate ⚡
+🎠 Plygrnd 🎠
 </h1>
 </center>
 
