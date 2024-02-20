@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": false,
+    "verbatimModuleSyntax": true,
     // Code Quality and Safety
     "strict": false,
     "allowUnreachableCode": false,
@@ -90,7 +90,6 @@
         "./src/mod/*"
       ],
       "internal:kernel": [
-        "./src/kernel/*",
         "./src/kernel/index.ts"
       ]
     },

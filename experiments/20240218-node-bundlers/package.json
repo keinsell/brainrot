@@ -10,8 +10,8 @@
     "prestart": "rollup -c",
     "start": "node dist/index.js",
     "dev": "tsc && node dist/src/index.js",
-    "dev2": "pnpm bundle && node dist/bin.js",
-    "dev3": "ncc build src/index.ts -o dist && node dist/index.js --mod snappy"
+    "dev2": "rollup -c --configIsBuildNode --forceExit && node dist/bin.js",
+    "dev3": "ncc build -e snappy src/index.ts -o dist && node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +22,10 @@
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-swc": "^0.3.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "@rollup/plugin-wasm": "^6.2.2",
+    "@swc-node/register": "^1.8.0",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.17",
     "@types/pg": "^8.11.0",
@@ -32,6 +34,7 @@
     "node-gyp": "^10.0.1",
     "node-gyp-build": "^4.8.0",
     "prebuildify": "^6.0.0",
+    "rollup": "^4.12.0",
     "rollup-plugin-flat-dts": "^2.5.0",
     "rollup-plugin-jscc": "^2.0.0",
     "rollup-plugin-natives": "^0.7.8",
@@ -49,6 +52,7 @@
     "get-port-please": "^3.1.2",
     "listhen": "^1.6.0",
     "pg": "^8.11.3",
+    "rollup-plugin-swc3": "^0.11.0",
     "snappy": "^7.2.2"
   },
   "optionalDependencies": {
