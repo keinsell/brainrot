@@ -9,7 +9,6 @@ import {PrismaService}               from '../../../common/modules/resources/pri
 import {ApiAccountMockup}            from '../../../utilities/fixtures/api-account-mockup.js'
 import type {RegisterAccountCommand} from '../commands/register-account/register-account-command.js'
 import {AccountService}              from '../services/account-service.js'
-import EmailVerificationStatus = $Enums.EmailVerificationStatus
 
 
 
@@ -61,7 +60,7 @@ export class AccountSeeder
 				                                        id: account.id,
 			                                        },
 			                                        data : {
-				                                        emailVerificationStatus: EmailVerificationStatus.VERIFIED,
+				                                        email_verified: true,
 			                                        },
 		                                        })
 

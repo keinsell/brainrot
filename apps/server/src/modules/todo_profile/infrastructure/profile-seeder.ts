@@ -83,17 +83,6 @@ export class ProfileSeeder
 			firstName        : faker.person.firstName(),
 			lastName         : faker.person.lastName(),
 			about            : faker.person.bio(),
-			ShippingAddresses: {
-				create: {
-					fullName   : faker.name.fullName(),
-					streetLine1: faker.location.streetAddress(),
-					streetLine2: undefined,
-					city       : faker.location.city(),
-					zipCode    : faker.location.zipCode(),
-					state      : faker.location.state(),
-					country    : faker.location.countryCode(),
-				},
-			},
 			billingAddress   : {
 				connectOrCreate: {
 					create: {

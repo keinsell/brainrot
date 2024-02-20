@@ -12,8 +12,8 @@ import { ApiOperation } from '@nestjs/swagger'
 export class BlobController
   {
 	 @Post() @ApiOperation( {
-									  summary     : 'Uploads a blob to the blobber.',
-									  description : 'Uploads a blob to the blobber.',
+									  summary     : 'Upload blob',
+									  description : 'Upload a any type of blob that should be stored on server-side, note that blobs uploaded and not associated with other resource may be purged from database after period of 24h or less. This endpoint is rate-limited (10r/min) and payload-limited (single blob can take up to 5mb of space) to prevent abuse.',
 									  operationId : 'upload-blob',
 									} )
 	 public async uploadBlob()

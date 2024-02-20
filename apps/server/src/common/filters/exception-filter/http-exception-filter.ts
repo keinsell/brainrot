@@ -23,11 +23,22 @@
  *
  */
 
-import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common'
-import {HttpArgumentsHost}                                                        from '@nestjs/common/interfaces'
-import {HttpAdapterHost}                                                          from "@nestjs/core"
-import {Request}                                                                  from 'express'
-import {getCode, getErrorMessage, getObjectValue}                                 from './dirty-utilities.js'
+import {
+	ArgumentsHost,
+	Catch,
+	ExceptionFilter,
+	HttpException,
+	HttpStatus,
+	Logger,
+}                          from '@nestjs/common'
+import {HttpArgumentsHost} from '@nestjs/common/interfaces'
+import {HttpAdapterHost}   from '@nestjs/core'
+import {Request}           from 'express'
+import {
+	getCode,
+	getErrorMessage,
+	getObjectValue,
+}                          from './dirty-utilities.js'
 
 
 
@@ -35,74 +46,81 @@ import {getCode, getErrorMessage, getObjectValue}                               
  * Catch and format thrown exception in NestJS application based on Express
  */
 @Catch()
-export class HttpExceptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter
+	implements ExceptionFilter
+{
 	private readonly logger: Logger = new Logger(HttpExceptionFilter.name)
 
 
-	constructor(public httpAdapterHost: HttpAdapterHost) {
+	constructor(public httpAdapterHost: HttpAdapterHost)
+	{
 	}
 
 
 	/**
 	 * Catch and format thrown exception
 	 */
-	public catch(exception: unknown, host: ArgumentsHost): void {
-		const ctx: HttpArgumentsHost = host.switchToHttp();
-		const request: Request       = ctx.getRequest();
-		let status: number;
+	public catch(exception: unknown, host: ArgumentsHost): void
+	{
+		const ctx: HttpArgumentsHost = host.switchToHttp()
+		const request: Request       = ctx.getRequest()
+		let status: number
 
-		this.logger.debug(`Catching exception with HttpExceptionFilter`, exception);
+		this.logger.debug(`Catching exception with HttpExceptionFilter`, exception)
 
-		if (exception instanceof HttpException) {
-			status = exception.getStatus();
-		} else {
-			const type: string | undefined = getObjectValue(exception, 'type');
-			status                         = type === 'entity.too.large' ?
-				HttpStatus.PAYLOAD_TOO_LARGE :
-				HttpStatus.INTERNAL_SERVER_ERROR;
+		if (exception instanceof HttpException)
+		{
+			status = exception.getStatus()
+		}
+		else
+		{
+			const type: string | undefined = getObjectValue(exception, 'type')
+			status                         = type === 'entity.too.large' ? HttpStatus.PAYLOAD_TOO_LARGE
+			                                                             : HttpStatus.INTERNAL_SERVER_ERROR
 		}
 
-		let code: string    = exception instanceof HttpException ?
-			getCode(exception.getResponse()) :
-			HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR];
-		let message: string = exception instanceof HttpException ?
-			getErrorMessage(exception.getResponse()) :
-			'An internal server error occurred';
+		let code: string    = exception instanceof HttpException ? getCode(exception.getResponse())
+		                                                         : HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR]
+		let message: string = exception instanceof HttpException ? getErrorMessage(exception.getResponse())
+		                                                         : 'An internal server error occurred'
 
-		if (status === HttpStatus.PAYLOAD_TOO_LARGE) {
-			code    = HttpStatus[HttpStatus.PAYLOAD_TOO_LARGE];
+		if (status === HttpStatus.PAYLOAD_TOO_LARGE)
+		{
+			code    = HttpStatus[HttpStatus.PAYLOAD_TOO_LARGE]
 			message = `
       Your request entity size is too big for the server to process it:
         - request size: ${getObjectValue(exception, 'length')};
-        - request limit: ${getObjectValue(exception, 'limit')}.`;
+        - request limit: ${getObjectValue(exception, 'limit')}.`
 		}
 
 		const exceptionStack: any = 'stack' in (
 			exception as any
-		) ?
-			(
-				exception as any
-			).stack :
-			'';
+		) ? (
+			                            exception as any
+		                            ).stack : ''
 
-		if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
-			this.logger.error(`${status} [${request.method} ${request.url}] has thrown a critical error: ${exceptionStack}`);
-		} else {
-			if (status >= HttpStatus.BAD_REQUEST) {
-				this.logger.warn(`${status} [${request.method} ${request.url}] has thrown an HTTP client error: ${exceptionStack}`, exception);
+		if (status >= HttpStatus.INTERNAL_SERVER_ERROR)
+		{
+			this.logger.error(`${status} [${request.method} ${request.url}] has thrown a critical error: ${exceptionStack}`)
+		}
+		else
+		{
+			if (status >= HttpStatus.BAD_REQUEST)
+			{
+				this.logger.warn(`${status} [${request.method} ${request.url}] has thrown an HTTP client error: ${exceptionStack}`, exception)
 			}
 		}
 
-		const response = ctx.getResponse();
+		const response = ctx.getResponse()
 		response
-		.status(status)
-		.json({
-			statusCode: status,
-			timestamp:  new Date().toISOString(),
-			path:       this.httpAdapterHost?.httpAdapter.getRequestUrl(ctx.getRequest()),
-			method:     request.method,
-			code:       code,
-			message:    message,
-		});
+			.status(status)
+			.json({
+				      statusCode: status,
+				      timestamp : new Date().toISOString(),
+				      path      : this.httpAdapterHost?.httpAdapter.getRequestUrl(ctx.getRequest()),
+				      method    : request.method,
+				      code      : code,
+				      message   : message,
+			      })
 	}
 }

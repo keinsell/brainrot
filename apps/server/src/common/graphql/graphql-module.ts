@@ -24,55 +24,62 @@
  */
 
 
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
+//import {ApolloServerPluginCacheControl}            from '@apollo/server/plugin/cacheControl'
+import {ApolloServerPluginLandingPageLocalDefault} from '@apollo/server/plugin/landingPage/default'
+//import {ApolloServerPluginUsageReporting}          from '@apollo/server/plugin/usageReporting'
 import {
-  ApolloDriver,
-  type ApolloDriverConfig,
-}                                                    from '@nestjs/apollo'
+	ApolloDriver,
+	type ApolloDriverConfig,
+}                                                  from '@nestjs/apollo'
 import {
-  Module,
-  OnModuleDestroy,
-  OnModuleInit,
-}                                                    from '@nestjs/common'
-import { GraphQLModule }                             from '@nestjs/graphql'
-import { join }                                      from 'node:path'
-import process                                       from 'node:process'
-import { StaticFeatureFlags }                        from '../../configs/static-feature-flags.js'
-import { FooResolver }                               from './hello-world-resolver.js'
+	Module,
+	OnModuleDestroy,
+	OnModuleInit,
+}                                                  from '@nestjs/common'
+import {GraphQLModule}                             from '@nestjs/graphql'
+import {join}                                      from 'node:path'
+import process                                     from 'node:process'
+import {isDevelopment}                             from '../../configs/helper/is-development.js'
+import {StaticFeatureFlags}                        from '../../configs/static-feature-flags.js'
+import {FooResolver}                               from './hello-world-resolver.js'
 
 
 
-@Module( {
-			  imports   : [
-				 GraphQLModule.forRoot<ApolloDriverConfig>( {
-																			 driver                   : ApolloDriver,
-																			 autoSchemaFile           : join( process.cwd(),
-																														 'schema.gql',
-																			 ),
-																			 playground               : false,
-																			 plugins                  : [ ApolloServerPluginLandingPageLocalDefault() as any ],
-																			 allowBatchedHttpRequests : true,
-																			 introspection            : true,
-																			 transformAutoSchemaFile  : true,
-																			 autoTransformHttpErrors  : true,
-																			 sortSchema               : true,
-																			 cache                    : 'bounded',
-																			 persistedQueries         : {},
-																			 stopOnTerminationSignals : true,
-																		  } ),
-			  ],
-			  providers : [ FooResolver ],
-			} )
+@Module({
+	        imports  : [
+		        GraphQLModule.forRoot<ApolloDriverConfig>({
+			                                                  driver                           : ApolloDriver,
+			                                                  autoSchemaFile                   : join(process.cwd(), 'schema.gql'),
+			                                                  playground                       : false,
+			                                                  plugins                          : [
+				                                                  ApolloServerPluginLandingPageLocalDefault() as any,
+				                                                  //				                                                  ApolloServerPluginCacheControl({defaultMaxAge:
+				                                                  // 5}), ApolloServerPluginUsageReporting({}),
+			                                                  ],
+			                                                  allowBatchedHttpRequests         : true,
+			                                                  introspection                    : true,
+			                                                  transformAutoSchemaFile          : true,
+			                                                  autoTransformHttpErrors          : true,
+			                                                  sortSchema                       : true,
+			                                                  installSubscriptionHandlers      : true,
+			                                                  cache                            : 'bounded',
+			                                                  persistedQueries                 : {},
+			                                                  stopOnTerminationSignals         : true,
+			                                                  includeStacktraceInErrorResponses: isDevelopment(),
+		                                                  }),
+	        ],
+	        providers: [FooResolver],
+        })
 export class GraphqlModule
-  implements OnModuleInit,
-				 OnModuleDestroy
-  {
-	 public onModuleDestroy() : any
-		{
-		}
+	implements OnModuleInit,
+	           OnModuleDestroy
+{
+	public onModuleDestroy(): any
+	{
+	}
 
-	 public onModuleInit() : any
-		{
-		  StaticFeatureFlags.isGraphQLRunning = true
-		}
-  }
+	public onModuleInit(): any
+	{
+		StaticFeatureFlags.isGraphQLRunning = true
+	}
+}

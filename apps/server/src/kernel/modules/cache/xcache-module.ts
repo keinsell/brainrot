@@ -13,6 +13,7 @@ import ms                from 'ms'
 		        CacheModule.register({
 			                             isGlobal: true,
 			                             ttl     : ms('1m'),
+			                             max     : 100,
 		                             }),
 	        ],
 	        providers: [

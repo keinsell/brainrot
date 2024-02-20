@@ -31,7 +31,7 @@ export class CartSeeder
 	{
 		const exists = await this.prismaService.cart.findUnique({
 			                                                        where: {
-				                                                        profileId: input.User!.connect!.id,
+				                                                        customerId: input.User!.connect!.id,
 			                                                        },
 		                                                        })
 

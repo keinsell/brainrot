@@ -30,16 +30,32 @@ import {
 	Get,
 	Patch,
 	Post,
-}                       from '@nestjs/common'
-import {ApiOperation}   from '@nestjs/swagger'
+} from '@nestjs/common'
+import {
+	ApiBody,
+	ApiOperation,
+	ApiProperty,
+	ApiTags,
+} from '@nestjs/swagger';
 import type {
 	Prisma,
 	Product,
-}                       from 'db'
+} from 'db'
+import { string } from 'fp-ts';
 import {PrismaService} from '../../../common/modules/resources/prisma/services/prisma-service.js'
 
+export class CreateProduct implements Prisma.ProductCreateInput {
+	public attributes: Prisma.ProductAttributeCreateNestedManyWithoutProductInput;
+	@ApiProperty({type: 'string', name: 'name', description: 'The name of the product', example: "NVIDIA RTX 4090"})
+	public name: string;
+	@ApiProperty({type: 'number', name: 'price', description: 'The price of the product', example: 10_000_00})
+	public price: number;
+	@ApiProperty({type: 'string', name: 'currency', description: 'The currency of the price', example: "PLN"})
+	public currency: string;
+	public variants: Prisma.ProductVariantCreateNestedManyWithoutProductInput;
+}
 
-
+@ApiTags('product')
 @Controller('product')
 export class ProductController
 {
@@ -48,18 +64,31 @@ export class ProductController
 	}
 
 
+	@ApiBody({type: CreateProduct})
 	@Post() @ApiOperation({
 		                      tags       : ['product'],
 		                      summary    : 'Create product',
 		                      operationId: 'create-product',
 	                      })
-	async createProduct(@Body() create: Prisma.ProductCreateInput): Promise<string>
+	async createProduct(@Body() create: Prisma.ProductCreateInput): Promise<Product>
 	{
 		const product = await this.prismaService.product.create({
-			                                                        data: create,
+			                                                        data: {
+																																name: "Nvidia RTX 3080",
+				                                                        price: 699.99,
+				                                                        currency: 'USD',
+				                                                        variants: {
+																																	create: {}
+				                                                        },
+				                                                        attributes: {
+																																	create: {
+																																		name: "Cuda Cores",
+																																	}
+				                                                        }
+			                                                        },
 		                                                        })
 
-		return product.id
+		return product
 	}
 
 

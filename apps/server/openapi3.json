@@ -60,6 +60,66 @@
         }
       }
     },
+    "/cbac/initiate": {
+      "post": {
+        "operationId": "request-proof-of-possession-of-private-key",
+        "summary": "Initiate certificate based authentication",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateCertificateBasedAuthentication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cbac/verify": {
+      "post": {
+        "operationId": "verify-possession-of-private-key",
+        "summary": "Verify proof of possession of Private Key",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/compute": {
+      "get": {
+        "operationId": "ComputeController_compute",
+        "summary": "",
+        "description": "Compute the shit",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/compute/v2": {
+      "get": {
+        "operationId": "ComputeController_computeV2",
+        "summary": "",
+        "description": "Compute the shit2",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "operationId": "healthcheck",
@@ -546,6 +606,16 @@
           "product"
         ],
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProduct"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -587,7 +657,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "product"
+        ]
       },
       "delete": {
         "operationId": "ProductController_deleteProduct",
@@ -596,7 +669,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "product"
+        ]
       }
     },
     "/cart/{id}": {
@@ -726,6 +802,24 @@
           "redirectUrl"
         ]
       },
+      "InitiateCertificateBasedAuthentication": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The account's username",
+            "example": "Raul_Marks",
+            "examples": [
+              "Al.Shields-Treutel7",
+              "Demarco14",
+              "Margie.Gulgowski70"
+            ]
+          }
+        },
+        "required": [
+          "username"
+        ]
+      },
       "RegisterAccountCommand": {
         "type": "object",
         "properties": {
@@ -754,9 +848,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Al.Shields-Treutel7",
+              "Demarco14",
+              "Margie.Gulgowski70"
             ]
           }
         },
@@ -826,9 +920,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Al.Shields-Treutel7",
+              "Demarco14",
+              "Margie.Gulgowski70"
             ]
           },
           "method": {
@@ -898,6 +992,31 @@
           "refreshToken"
         ]
       },
+      "CreateProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the product",
+            "example": "NVIDIA RTX 4090"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the product",
+            "example": 1000000
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the price",
+            "example": "PLN"
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "currency"
+        ]
+      },
       "Account": {
         "type": "object",
         "properties": {
@@ -919,16 +1038,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": false
+            "example": true
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Al.Shields-Treutel7",
+              "Demarco14",
+              "Margie.Gulgowski70"
             ]
           }
         },
@@ -948,9 +1067,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Al.Shields-Treutel7",
+              "Demarco14",
+              "Margie.Gulgowski70"
             ]
           },
           "password": {

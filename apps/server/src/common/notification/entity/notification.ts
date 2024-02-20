@@ -23,15 +23,21 @@
  *
  */
 
-import {randomUUID}                         from 'node:crypto'
-import type {AccountId}                     from '../../../modules/account/shared-kernel/account-id.js'
-import {EntityBase, type EntityFoundation} from '../../libraries/domain/entity/entity-base.js'
-import type {EmailMessage}                  from '../../mailer/entity/email-message.js'
-import {type EmailContent, isEmailContent} from '../../mailer/value-object/email-content.js'
-import type {EmailReceipent}                from '../../mailer/value-object/email-receipent.js'
-import {NotificationQueued}                 from '../event/notification-queued.js'
-import {NotificationChannel}                from '../value-object/notification-channel.js'
-import {NotificationStatus}                 from '../value-object/notification-status.js'
+import {randomUUID}          from 'node:crypto'
+import {EmailMessage}        from '../../../kernel/integration/mailer/entity/email-message.js'
+import {
+	EmailContent,
+	isEmailContent,
+}                            from '../../../kernel/integration/mailer/value-object/email-content.js'
+import {EmailReceipent}      from '../../../kernel/integration/mailer/value-object/email-receipent.js'
+import type {AccountId}      from '../../../modules/account/shared-kernel/account-id.js'
+import {
+	EntityBase,
+	type EntityFoundation,
+}                            from '../../libraries/domain/entity/entity-base.js'
+import {NotificationQueued}  from '../event/notification-queued.js'
+import {NotificationChannel} from '../value-object/notification-channel.js'
+import {NotificationStatus}  from '../value-object/notification-status.js'
 
 
 
@@ -43,13 +49,16 @@ type ChannelContentMap = {
 }
 
 type ReceipentByChannelMap = {
-	[NotificationChannel.EMAIL]: EmailReceipent, [NotificationChannel.SMS]: unknown
+	[NotificationChannel.EMAIL]: EmailReceipent,
+	[NotificationChannel.SMS]: unknown
 	[NotificationChannel.PUSH]: unknown
 	[NotificationChannel.WEBHOOK]: unknown
 }
 
 
-export interface NotificationProperties<T extends NotificationChannel> extends EntityFoundation<string> {
+export interface NotificationProperties<T extends NotificationChannel>
+	extends EntityFoundation<string>
+{
 	type: NotificationChannel
 	content: ChannelContentMap[T]
 	recipient: ReceipentByChannelMap[T]
@@ -60,7 +69,10 @@ export interface NotificationProperties<T extends NotificationChannel> extends E
 }
 
 
-export class Notification<T extends NotificationChannel> extends EntityBase implements NotificationProperties<T> {
+export class Notification<T extends NotificationChannel>
+	extends EntityBase
+	implements NotificationProperties<T>
+{
 	content: ChannelContentMap[T]
 	priority: 'LOW' | 'MEDIUM' | 'HIGH'
 	recipient: ReceipentByChannelMap[T]
@@ -70,21 +82,24 @@ export class Notification<T extends NotificationChannel> extends EntityBase impl
 	type: NotificationChannel
 
 
-	constructor(payload: NotificationProperties<T>) {
+	constructor(payload: NotificationProperties<T>)
+	{
 		super({
-			id:        payload.id ?? randomUUID(),
-			updatedAt: payload.updatedAt,
-			createdAt: payload.createdAt,
-			version:   payload.version,
-		})
+			      id       : payload.id ?? randomUUID(),
+			      updatedAt: payload.updatedAt,
+			      createdAt: payload.createdAt,
+			      version  : payload.version,
+		      })
 		this.type = payload.type
 
 		// Validate Content Type
 
-		if (this.type === NotificationChannel.EMAIL) {
+		if (this.type === NotificationChannel.EMAIL)
+		{
 			const isEmail = isEmailContent(payload.content)
 
-			if (!isEmail) {
+			if (!isEmail)
+			{
 				throw new Error('Invalid Email Message')
 			}
 
@@ -101,7 +116,8 @@ export class Notification<T extends NotificationChannel> extends EntityBase impl
 	}
 
 
-	queue() {
+	queue()
+	{
 		this.when(NotificationStatus.FAILED, this.status)
 		this.logger.debug('Queueing notification...')
 		this.status                     = NotificationStatus.PENDING
@@ -112,7 +128,8 @@ export class Notification<T extends NotificationChannel> extends EntityBase impl
 	}
 
 
-	send() {
+	send()
+	{
 		this.logger.debug('Sending notification...')
 		this.status = NotificationStatus.SENT
 		// TODO: Append Event
@@ -121,21 +138,25 @@ export class Notification<T extends NotificationChannel> extends EntityBase impl
 	}
 
 
-	cancel() {
+	cancel()
+	{
 	}
 
 
-	retry() {
+	retry()
+	{
 	}
 
 
-	process() {
+	process()
+	{
 		this.logger.debug('Processing notification...')
 		this.logger.debug('Actions on notification will be locked until it is processed.')
 		return this
 	}
 
 
-	fail() {
+	fail()
+	{
 	}
 }
