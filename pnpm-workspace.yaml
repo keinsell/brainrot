@@ -7,3 +7,4 @@ packages:
   - 'packages/*'
   - 'components/**'
   - '!**/test/**'
+  - 'experiments/*'
