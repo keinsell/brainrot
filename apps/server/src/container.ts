@@ -9,7 +9,6 @@ import {
 }                                from '@nestjs/common'
 import {APP_INTERCEPTOR}         from '@nestjs/core'
 import Sentry                    from '@sentry/node'
-import {IdentityAndAccessModule} from './boundaries/identity-and-access/identity-and-access.module.js'
 import {GraphqlModule}           from './common/graphql/graphql-module.js'
 import {DocumentationModule}     from './common/modules/documentation/documentation-module.js'
 import {DeveloperToolsModule}    from './common/modules/environment/dev-tools/developer-tools.module.js'
@@ -24,7 +23,6 @@ import {ProductModule}           from './modules/todo_product/product-module.js'
 import {RegionModule}            from './modules/todo_regions/region-module.js'
 
 
-
 @Module({
 	        imports    : [
 		        GraphqlModule,
@@ -32,7 +30,6 @@ import {RegionModule}            from './modules/todo_regions/region-module.js'
 		        DocumentationModule,
 		        HealthModule,
 		        DeveloperToolsModule,
-		        IdentityAndAccessModule,
 		        ProductModule,
 		        CartModule,
 		        RegionModule,

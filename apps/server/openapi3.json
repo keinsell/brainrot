@@ -120,184 +120,6 @@
         }
       }
     },
-    "/health": {
-      "get": {
-        "operationId": "healthcheck",
-        "summary": "Health check endpoint",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The Health Check is successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "ok"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {},
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "The Health Check is not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "error"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        },
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/account": {
       "post": {
         "operationId": "register",
@@ -598,6 +420,184 @@
         }
       }
     },
+    "/health": {
+      "get": {
+        "operationId": "healthcheck",
+        "summary": "Health check endpoint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/product": {
       "post": {
         "operationId": "create-product",
@@ -631,7 +631,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiProduct"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -810,9 +820,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Al.Shields-Treutel7",
-              "Demarco14",
-              "Margie.Gulgowski70"
+              "Vella_Swaniawski",
+              "Wilfredo_Adams5",
+              "Kathlyn43"
             ]
           }
         },
@@ -848,9 +858,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Al.Shields-Treutel7",
-              "Demarco14",
-              "Margie.Gulgowski70"
+              "Vella_Swaniawski",
+              "Wilfredo_Adams5",
+              "Kathlyn43"
             ]
           }
         },
@@ -920,9 +930,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Al.Shields-Treutel7",
-              "Demarco14",
-              "Margie.Gulgowski70"
+              "Vella_Swaniawski",
+              "Wilfredo_Adams5",
+              "Kathlyn43"
             ]
           },
           "method": {
@@ -1017,6 +1027,36 @@
           "currency"
         ]
       },
+      "ApiProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the product",
+            "example": "NVIDIA RTX 4090"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the product",
+            "example": 1000000
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the price",
+            "example": "PLN"
+          },
+          "attributes": {
+            "type": "array",
+            "description": "The attributes of the product"
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "currency",
+          "attributes"
+        ]
+      },
       "Account": {
         "type": "object",
         "properties": {
@@ -1038,16 +1078,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": true
+            "example": false
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Al.Shields-Treutel7",
-              "Demarco14",
-              "Margie.Gulgowski70"
+              "Vella_Swaniawski",
+              "Wilfredo_Adams5",
+              "Kathlyn43"
             ]
           }
         },
@@ -1067,9 +1107,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Al.Shields-Treutel7",
-              "Demarco14",
-              "Margie.Gulgowski70"
+              "Vella_Swaniawski",
+              "Wilfredo_Adams5",
+              "Kathlyn43"
             ]
           },
           "password": {
