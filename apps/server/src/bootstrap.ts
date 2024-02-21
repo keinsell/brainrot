@@ -17,6 +17,7 @@ import express, {
 	Express,
 	NextFunction,
 }                                      from 'express'
+import helmet                          from 'helmet'
 import ms                              from 'ms'
 import process                         from 'node:process'
 import {startTunnel}                   from 'untun'
@@ -43,7 +44,6 @@ import {portAllocator}                 from './utilities/network-utils/port-allo
 
 export async function bootstrap(): Promise<NestExpressApplication>
 {
-
 	const __expressApp: Express = express()
 
 	// Bootstrap application
@@ -62,6 +62,7 @@ export async function bootstrap(): Promise<NestExpressApplication>
 
 	app.useGlobalPipes(new ValidationPipe())
 	app.useBodyParser('json')
+	app.use(helmet())
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')
@@ -80,6 +81,7 @@ export async function bootstrap(): Promise<NestExpressApplication>
 		                                   layout     : 'modern',
 		                                   theme      : 'kepler',
 	                                   }))
+
 
 	buildCompodocDocumentation()
 
