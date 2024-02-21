@@ -1,6 +1,6 @@
 import {Module}            from "@nestjs/common"
 import {SharedModule}      from "../../common/shared-module.js"
-import {ProductController} from "./controller/product-controller.js"
+import {ProductController} from "../../http/v1/product-controller.js"
 
 
 

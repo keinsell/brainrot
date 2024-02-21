@@ -2,6 +2,8 @@ import {Module}                         from '@nestjs/common'
 import {ConfigModule}                   from '../configs/config-module.js'
 import {XcacheModule}                   from '../kernel/modules/cache/xcache-module.js'
 import {RedisModule}                    from '../kernel/resource/redis/redis.module.js'
+import { AccountModule }                from '../modules/account/account.module.js';
+import { AuthenticationModule }         from '../modules/authentication/authentication-module.js';
 import {SessionMiddlewareModule}        from './middleware/session/session-middleware-module.js'
 import {DatabaseModule}                 from './modules/database/database.module.js'
 import {AsyncLocalStorageModule}        from './modules/environment/local-storage/async-local-storage-module.js'
@@ -13,6 +15,7 @@ import {ObservabilityModule}            from './modules/observability/observabil
 
 @Module({
 	        imports  : [
+		        AccountModule, AuthenticationModule,
 		        ContinuationLocalStorageModule,
 		        AsyncLocalStorageModule,
 		        ConfigModule.forRoot(),

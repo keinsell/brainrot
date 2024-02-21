@@ -376,36 +376,120 @@ model Product {
 enum AttributeType {
   STRING
   NUMBER
+  INTEGER
+  UNIT
   BOOLEAN
   DATE
-  ENUM
 }
 
 model ProductAttribute {
-  id          String   @id @default(cuid())
+  id          String            @id @default(cuid())
   // --------------------------------------------------
-  /// Example of ProductAttribute would be "CUDA Cores" or "Memory"
   productId   String
+  /// Example of ProductAttribute would be "CUDA Cores" or "Memory"
   name        String
   description String?
+  type        AttributeType
+  // Multi-table inheritance (MTI)
+  // https://www.prisma.io/docs/orm/prisma-schema/data-model/table-inheritance#data-model
+  // Sadly prisma do not support union types which eventually lead to hell
+  // like this without any proper way to enforce type safety (out of the box).
+  // Eventually, we need to use a single table inheritance (STI) pattern.
+  // STI would be more efficient.
+  int         AttributeInteger?
+  unit        AttributeUnit?
+  boolean     AttributeBoolean?
+  string      AttributeString?
+  date        AttributeDate?
   // --------------------------------------------------
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   // --------------------------------------------------
-  Product     Product  @relation(fields: [productId], references: [id])
+  Product     Product           @relation(fields: [productId], references: [id])
 
   // --------------------------------------------------
   @@map("product_attribute")
 }
 
-model ProductOption {
-  id   String @id @default(cuid())
+model AttributeInteger {
+  id                 String           @id @default(cuid())
   // --------------------------------------------------
-  name String
+  productAttributeId String           @unique
+  value              Int
+  // --------------------------------------------------
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
 
   // --------------------------------------------------
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("product_attribute_int")
+}
+
+model AttributeUnit {
+  id                 String           @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String           @unique
+  value              Int
+  unit               String
+  // --------------------------------------------------
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
+
+  // --------------------------------------------------
+  @@map("product_attribute_unit")
+}
+
+model AttributeBoolean {
+  id                 String           @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String           @unique
+  value              Boolean
+  // --------------------------------------------------
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
+
+  // --------------------------------------------------
+  @@map("product_attribute_boolean")
+}
+
+model AttributeString {
+  id                 String           @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String           @unique
+  value              String
+  // --------------------------------------------------
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
+
+  // --------------------------------------------------
+  @@map("product_attribute_string")
+}
+
+model AttributeDate {
+  id                 String           @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String           @unique
+  value              DateTime
+  // --------------------------------------------------
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
+
+  // --------------------------------------------------
+  @@map("product_attribute_date")
+}
+
+model ProductOption {
+  id                 String   @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String
+  value              String
+  // --------------------------------------------------
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   // --------------------------------------------------
   @@map("product_option")
