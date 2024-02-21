@@ -14,7 +14,7 @@ env:
 
 jobs:
   release:
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     steps:
       - name: 📜 Checkout Repository
         uses: actions/checkout@v3
@@ -32,7 +32,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
 
   rollback:
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     steps:
       - name: 📜 Checkout Repository
         uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0
 
   monitor:
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     steps:
       - name: 📜 Checkout Repository
         uses: actions/checkout@v3

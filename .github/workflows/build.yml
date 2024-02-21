@@ -6,7 +6,7 @@ on:
 jobs:
   build_server:
     name: "server"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     timeout-minutes: 80
     permissions:
       contents: read

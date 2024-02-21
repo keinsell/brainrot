@@ -7,7 +7,7 @@ on:
 jobs:
   lint:
     name: "lint"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     continue-on-error: false
     steps:
       - name: 📜 Checkout Repository
