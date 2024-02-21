@@ -347,6 +347,9 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
+      helmet:
+        specifier: ^7.1.0
+        version: 7.1.0
       immutable:
         specifier: 5.0.0-beta.5
         version: 5.0.0-beta.5
@@ -13112,6 +13115,11 @@ packages:
       space-separated-tokens: 2.0.2
     dev: false
 
+  /helmet@7.1.0:
+    resolution: {integrity: sha512-g+HZqgfbpXdCkme/Cd/mZkV0aV3BZZZSugecH03kl38m/Kmdx8jKjBikpDj2cr+Iynv4KpYEviojNdTJActJAg==}
+    engines: {node: '>=16.0.0'}
+    dev: false
+
   /hexer@1.5.0:
     resolution: {integrity: sha512-dyrPC8KzBzUJ19QTIo1gXNqIISRXQ0NwteW6OeQHRN4ZuZeHkdODfj0zHBdOlHbRY8GqbqK57C9oWSvQZizFsg==}
     engines: {node: '>= 0.10.x'}
@@ -19847,6 +19855,14 @@ packages:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
     dev: true
 
+  /tsc-progress@1.0.4(typescript@5.4.0-beta):
+    resolution: {integrity: sha512-x3a+n9YXy82M3nmwqpnerYkKCSY4vNAnOtkhg9t2x0vyWbSrzB++MaMTV7UQpnaVgnH5WNUKF5QtchGt3ggRQA==}
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      ansi-escapes: 4.3.2
+      figures: 3.2.0
+      markdown-table: 3.0.3
   /tsc-progress@1.0.4(typescript@5.3.2):
     resolution: {integrity: sha512-x3a+n9YXy82M3nmwqpnerYkKCSY4vNAnOtkhg9t2x0vyWbSrzB++MaMTV7UQpnaVgnH5WNUKF5QtchGt3ggRQA==}
     peerDependencies:
@@ -19861,14 +19877,6 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /tsc-progress@1.0.4(typescript@5.4.0-beta):
-    resolution: {integrity: sha512-x3a+n9YXy82M3nmwqpnerYkKCSY4vNAnOtkhg9t2x0vyWbSrzB++MaMTV7UQpnaVgnH5WNUKF5QtchGt3ggRQA==}
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      ansi-escapes: 4.3.2
-      figures: 3.2.0
-      markdown-table: 3.0.3
       picocolors: 1.0.0
       pretty-time: 1.1.0
       typescript: 5.4.0-beta
@@ -20080,6 +20088,14 @@ packages:
       ts-toolbelt: 9.6.0
     dev: true
 
+  /typescript-transform-paths@3.4.6(typescript@5.4.0-beta):
+    resolution: {integrity: sha512-qdgpCk9oRHkIBhznxaHAapCFapJt5e4FbFik7Y4qdqtp6VyC3smAIPoDEIkjZ2eiF7x5+QxUPYNwJAtw0thsTw==}
+    peerDependencies:
+      typescript: '>=3.6.5'
+    dependencies:
+      minimatch: 3.1.2
+      typescript: 5.4.0-beta
+    dev: true
   /typescript-transform-paths@3.4.6(typescript@5.3.2):
     resolution: {integrity: sha512-qdgpCk9oRHkIBhznxaHAapCFapJt5e4FbFik7Y4qdqtp6VyC3smAIPoDEIkjZ2eiF7x5+QxUPYNwJAtw0thsTw==}
     peerDependencies:
@@ -20089,25 +20105,12 @@ packages:
       typescript: 5.3.2
     dev: true
 
-  /typescript-transform-paths@3.4.6(typescript@5.4.0-beta):
-    resolution: {integrity: sha512-qdgpCk9oRHkIBhznxaHAapCFapJt5e4FbFik7Y4qdqtp6VyC3smAIPoDEIkjZ2eiF7x5+QxUPYNwJAtw0thsTw==}
-    peerDependencies:
-      typescript: '>=3.6.5'
-    dependencies:
-      minimatch: 3.1.2
-      typescript: 5.4.0-beta
-    dev: true
 
   /typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: false
-
-  /typescript@5.3.2:
-    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
 
   /typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
@@ -20117,9 +20120,13 @@ packages:
 
   /typescript@5.4.0-beta:
     resolution: {integrity: sha512-KgekV5JS7TQ7Bb8eO64QGxdM7MSBUUXOXq28OWX23d2MA8SiVtNYoo4s33tCTEGV8+6AGBRD2+KiXNNnexRRYw==}
+  /typescript@5.3.2:
+    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
+
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   /typesync@0.12.1(typescript@5.3.2):
     resolution: {integrity: sha512-BX3RBZzBzYtHaNTDqc7vq6gUehJqhl34c3DFr67/FXTV6kz9Q6FiravII5HpJfeSE2iDz2Lhm5/YdlDlQbezLQ==}
@@ -20128,6 +20135,7 @@ packages:
     dependencies:
       awilix: 9.0.0
       chalk: 4.1.2
+    dev: true
       cosmiconfig: 9.0.0(typescript@5.3.2)
       detect-indent: 6.1.0
       glob: 10.3.10
