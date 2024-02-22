@@ -9,7 +9,7 @@ on:
 jobs:
   analyze:
     name: analyze
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     continue-on-error: true
 
     permissions:

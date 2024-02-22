@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     name: "test"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     timeout-minutes: 80
     permissions:
       contents: read
