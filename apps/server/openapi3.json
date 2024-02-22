@@ -921,9 +921,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Maude.Connelly",
-              "Carmen_Turner",
-              "Vladimir.Zieme15"
+              "Lonzo_Collins",
+              "Juanita.Lynch51",
+              "Ila_Wilkinson32"
             ]
           }
         },
@@ -974,9 +974,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Maude.Connelly",
-              "Carmen_Turner",
-              "Vladimir.Zieme15"
+              "Lonzo_Collins",
+              "Juanita.Lynch51",
+              "Ila_Wilkinson32"
             ]
           }
         },
@@ -1046,9 +1046,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Maude.Connelly",
-              "Carmen_Turner",
-              "Vladimir.Zieme15"
+              "Lonzo_Collins",
+              "Juanita.Lynch51",
+              "Ila_Wilkinson32"
             ]
           },
           "method": {
@@ -1175,9 +1175,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Maude.Connelly",
-              "Carmen_Turner",
-              "Vladimir.Zieme15"
+              "Lonzo_Collins",
+              "Juanita.Lynch51",
+              "Ila_Wilkinson32"
             ]
           }
         },
@@ -1197,9 +1197,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Maude.Connelly",
-              "Carmen_Turner",
-              "Vladimir.Zieme15"
+              "Lonzo_Collins",
+              "Juanita.Lynch51",
+              "Ila_Wilkinson32"
             ]
           },
           "password": {

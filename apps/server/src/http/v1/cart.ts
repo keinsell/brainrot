@@ -18,9 +18,9 @@ import {
 	Cart,
 	Customer,
 }                        from 'db'
-import {Fingerprint}     from 'nestjs-fingerprint'
 import {randomUUID}      from 'node:crypto'
 import {PrismaService}   from '../../common/modules/resources/prisma/services/prisma-service.js'
+import { Fingerprint }   from '../../kernel/platform/http/middleware/fingerprint.js';
 import {Account}         from '../../modules/account/entities/account.js'
 import {RequestIdentity} from '../../modules/authentication/request-identity.js'
 import type { Product }       from 'db';
@@ -92,7 +92,7 @@ export class CartController
 		let customer: Customer | null = null
 
 		// TODO: Add proper fingerprinting
-		console.log(request?.fp)
+		console.log(request?.fingerprint)
 		console.log(fp)
 
 		const fingerprint = {id: randomUUID()}

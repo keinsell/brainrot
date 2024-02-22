@@ -7,7 +7,6 @@ import {
 	RequestMethod,
 }                                                 from '@nestjs/common'
 import Sentry                                     from '@sentry/node'
-import {NestjsFingerprintModule}                  from 'nestjs-fingerprint'
 import {DocumentationModule}                      from './common/modules/documentation/documentation-module.js'
 import {DeveloperToolsModule}                     from './common/modules/environment/dev-tools/developer-tools.module.js'
 import {HealthModule}                             from './common/modules/observability/healthcheck/health-module.js'
@@ -16,6 +15,7 @@ import {SharedModule}                             from './common/shared-module.j
 import {CartController}                           from './http/v1/cart.js'
 import {ComputeController}                        from './http/v1/compute.js'
 import {GraphqlModule}                            from './kernel/platform/gql/graphql-module.js'
+import { FingerprintModule }                      from './kernel/platform/http/middleware/fingerprint.js';
 import {CertificateBasedAuthenticationController} from './mod/identity/cbac/cbac.js'
 import {SingleSignOnController}                   from './mod/identity/sso/sso.js'
 import {CartModule}                               from './modules/todo_cart/cart-module.js'
@@ -35,13 +35,7 @@ import {RegionModule}                             from './modules/todo_regions/r
 		        CartModule,
 		        RegionModule,
 		        CacheManagerModule,
-		        NestjsFingerprintModule.forRoot({
-			                                        params: [
-				                                        'headers',
-				                                        'userAgent',
-				                                        'ipAddress',
-			                                        ],
-		                                        }),
+		        FingerprintModule.forRoot(),
 	        ],
 	        controllers: [
 		        SingleSignOnController,

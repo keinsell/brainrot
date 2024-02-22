@@ -45,11 +45,11 @@ import {
 	Prisma,
 	Product,
 }                      from 'db'
+import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
 import {
 	Fingerprint,
 	IFingerprint,
-}                      from 'nestjs-fingerprint'
-import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
+} from '../../kernel/platform/http/middleware/fingerprint.js';
 
 
 
