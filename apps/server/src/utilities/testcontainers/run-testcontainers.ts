@@ -6,8 +6,8 @@ import {
 	type StartedTestContainer,
 }                        from 'testcontainers'
 import {LogWaitStrategy} from 'testcontainers/build/wait-strategies/log-wait-strategy.js'
-import {CombinedLogger}  from '../../common/logger/logger.js'
 import {__appConfig}     from '../../configs/global/__config.js'
+import {CombinedLogger}  from '../../kernel/modules/logger/logger.js'
 
 
 

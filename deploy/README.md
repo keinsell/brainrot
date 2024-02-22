@@ -21,3 +21,11 @@ code /etc/hosts
 - [ ] Docker Swarm Deployment
 - [ ] Kubernetes Deployment
 - [ ] Localhost Deployment
+
+### Production
+
+- Haproxy with Certbot
+- NATS Queue
+- Redis Cache
+- Memcached Cache
+- CockroachDB
