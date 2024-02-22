@@ -7,7 +7,6 @@ import {
 	RequestMethod,
 }                                                 from '@nestjs/common'
 import Sentry                                     from '@sentry/node'
-import {NestjsFingerprintModule}                  from 'nestjs-fingerprint'
 import {DocumentationModule}                      from './common/modules/documentation/documentation-module.js'
 import {DeveloperToolsModule}                     from './common/modules/environment/dev-tools/developer-tools.module.js'
 import {HealthModule}                             from './common/modules/observability/healthcheck/health-module.js'
@@ -35,13 +34,6 @@ import {RegionModule}                             from './modules/todo_regions/r
 		        CartModule,
 		        RegionModule,
 		        CacheManagerModule,
-		        NestjsFingerprintModule.forRoot({
-			                                        params: [
-				                                        'headers',
-				                                        'userAgent',
-				                                        'ipAddress',
-			                                        ],
-		                                        }),
 	        ],
 	        controllers: [
 		        SingleSignOnController,

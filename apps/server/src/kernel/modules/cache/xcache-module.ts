@@ -12,8 +12,8 @@ import ms                from 'ms'
 	        imports  : [
 		        CacheModule.register({
 			                             isGlobal: true,
-			                             ttl     : ms('1m'),
-			                             max     : 100,
+			                             ttl     : ms('5s'),
+			                             max     : 1000,
 		                             }),
 	        ],
 	        providers: [

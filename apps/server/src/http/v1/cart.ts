@@ -6,8 +6,9 @@ import {
 	Put,
 	Req,
 	Body,
-    Logger,
-}                        from '@nestjs/common'
+	Logger,
+	NotFoundException,
+} from '@nestjs/common';
 import {
 	ApiBody,
 	ApiOperation,
@@ -18,9 +19,11 @@ import {
 	Cart,
 	Customer,
 }                        from 'db'
-import {Fingerprint}     from 'nestjs-fingerprint'
 import {randomUUID}      from 'node:crypto'
 import {PrismaService}   from '../../common/modules/resources/prisma/services/prisma-service.js'
+import {
+	generateFingerprint,
+} from '../../kernel/platform/http/middleware/fingerprint.js';
 import {Account}         from '../../modules/account/entities/account.js'
 import {RequestIdentity} from '../../modules/authentication/request-identity.js'
 import type { Product }       from 'db';
@@ -41,8 +44,8 @@ const combineDecorators = (...decorators: Array<Function>): CombinedDecorators =
 
 export class AddItemToCart
 {
-	@ApiProperty() productId: string
-	@ApiProperty() quantity: number
+	@ApiProperty({example: "gpu.nvidia.rtx.4090"}) productId: string
+	@ApiProperty({example: 1}) quantity: number
 }
 
 
@@ -79,23 +82,23 @@ export class CartController
 	private cartRepository: PrismaService['cart']
 	private customerRepository: PrismaService['customer']
 	private cartItemRepository: PrismaService['cartItem']
+	private productRepository: PrismaService['product']
 
 	constructor(prisma: PrismaService)
 	{
 		this.cartRepository = prisma.cart
+		this.customerRepository = prisma.customer
+		this.cartItemRepository = prisma.cartItem
+		this.productRepository = prisma.product
 	}
 
 	@Get()
-	private async getMyCart(@Req() request: any, @Fingerprint() fp: any, @RequestIdentity() user?: Account)
+	private async getMyCart(@Req() request: any, @RequestIdentity() user?: Account)
 	{
 		let cart: Cart | null         = null
 		let customer: Customer | null = null
 
-		// TODO: Add proper fingerprinting
-		console.log(request?.fp)
-		console.log(fp)
-
-		const fingerprint = {id: randomUUID()}
+		const fingerprint = generateFingerprint(request)
 
 		// Find a Customer related to the authenticated user
 		if (user)
@@ -114,7 +117,7 @@ export class CartController
 		// If no cart is found for the customer, find a cart associated with the user's fingerprint
 		if (!cart)
 		{
-			cart = await this.cartRepository.findFirst({where: {fingerprint: fingerprint.id}})
+			cart = await this.cartRepository.findFirst({where: {fingerprint: fingerprint}, include: {CartItem: true}})
 		}
 
 		// If no cart is found for the fingerprint, create a new cart for the user
@@ -123,7 +126,7 @@ export class CartController
 			cart = await this.cartRepository.create({
 				                                        data: {
 					                                        customerId : customer?.id,
-					                                        fingerprint: fingerprint.id,
+					                                        fingerprint: fingerprint,
 				                                        },
 			                                        })
 		}
@@ -137,9 +140,10 @@ export class CartController
 
 
 	@Put()
-	private async updateMyCart(@RequestIdentity() user: Account, @Fingerprint() fingerprint: string, @Req() request: any, @Req() fp: any)
+	private async updateMyCart(@RequestIdentity() user: Account, @Req() request: any, @Req() fp: any)
 	{
-		const cart = await this.getUserCartByAccountAndFingerprint( fingerprint, user,)
+		const fingerprint = generateFingerprint(request)
+		const cart = await this.getUserCartByAccountAndFingerprint( fingerprint, user)
 
 		// Update a cart with the provided data
 		// This is complex operation as it must overall atomicity and events produced during cart operations,
@@ -196,11 +200,11 @@ export class CartController
 		return cart
 	}
 
-	@Post('item/:id') @ApiOperation({
+	@Post('item') @ApiOperation({
 		                                operationId: 'add-cart-item',
 		                                summary    : 'Add item to cart',
 	                                })
-	private async addItemToCart(@Body() requestBody: AddItemToCart, @Req() request: any, @Fingerprint() fp: any, @RequestIdentity() user?: Account)
+	private async addItemToCart(@Body() requestBody: AddItemToCart, @Req() request: any, @RequestIdentity() user?: Account)
 	{
 		let product: Product | null = null
 		let cartItem: any | null = null
@@ -208,30 +212,48 @@ export class CartController
 		this.logger.debug("Fetching a cart of a user...")
 
 		// Get a cart by the user's fingerprint
-		const cart = await this.getUserCartByAccountAndFingerprint( request.fp, user)
+		const fingerprint = generateFingerprint(request)
+		const cart = await this.getUserCartByAccountAndFingerprint( fingerprint, user)
+
+		this.logger.debug("Received a cart of a user...", cart)
 
 		// Once we have a cart, we must check if the product is already in the cart, if so, we must update the quantity of the product in the cart.
 
 		this.logger.debug("Fetching a product to add to the cart...")
 
-		this.logger.debug("Updating CartItem entity with the new quantity and price...")
+		// Find a product by the provided productId
+		product = await this.productRepository.findFirst({where: {id: requestBody.productId}})
+
+		if (!product)
+		{
+			throw new NotFoundException("Product not found")
+		}
+
+		this.logger.debug("Received a product to add to the cart...", product)
+
+		this.logger.debug("Updating CartItem entity with the new quantity and price...", {body: requestBody})
+
+		// TODO: Add Currency Conversion support
 
 		cartItem = await this.cartItemRepository.upsert(
 			{
 				where: {
-				cartId_productId: {cartId: cart.id, productId: requestBody.productId},
+	cartId_productId: {
+		cartId: cart.id,
+		productId: requestBody.productId
+	}
 				},
 				create: {
 					cartId   : cart.id,
 					productId: requestBody.productId,
 					quantity : requestBody.quantity,
-					price: requestBody.quantity * 1,
+					price: requestBody.quantity * product.price,
 					currency: 'USD',
 				}, update: {
 					cartId	 : cart.id,
 					productId: requestBody.productId,
 					price: {
-						increment: requestBody.quantity * 1,
+						increment: requestBody.quantity * product.price,
 					},
 					quantity: {
 						increment: requestBody.quantity,

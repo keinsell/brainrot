@@ -365,9 +365,9 @@ model Product {
   // --------------------------------------------------
   ProductAttribute ProductAttribute[]
   variants         ProductVariant[]
-  CartItem         CartItem[]         @ignore
+  CartItem         CartItem[]
   Category         Category?          @relation(fields: [categoryId], references: [id])
-  OrderLine        OrderLine[]        @ignore
+  OrderLine        OrderLine[]
   Swap             Swap[]
 
   // --------------------------------------------------
