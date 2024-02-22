@@ -22,7 +22,6 @@ import ms                              from 'ms'
 import process                         from 'node:process'
 import {startTunnel}                   from 'untun'
 import {HttpExceptionFilter}           from './common/filters/exception-filter/http-exception-filter.js'
-import {LoggerNestjsProxy}             from './common/logger/nestjs-logger-proxy.js'
 import {buildCompodocDocumentation}    from './common/modules/documentation/compodoc/compodoc.js'
 import {buildSwaggerDocumentation}     from './common/modules/documentation/swagger/swagger.js'
 import {executePrismaRelatedProcesses} from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
@@ -34,6 +33,7 @@ import {isDevelopment}                 from './configs/helper/is-development.js'
 import {StaticFeatureFlags}            from './configs/static-feature-flags.js'
 import {Container}                     from './container.js'
 import {migrateDatabase}               from './hooks/post-start/migrate-database.js'
+import {LoggerNestjsProxy}             from './kernel/modules/logger/nestjs-logger-proxy.js'
 import {
 	ExpressRequest,
 	ExpressResponse,
@@ -62,13 +62,14 @@ export async function bootstrap(): Promise<NestExpressApplication>
 
 	app.useGlobalPipes(new ValidationPipe())
 	app.useBodyParser('json')
-	app.use(helmet())
+	app.use(helmet({contentSecurityPolicy:false}))
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')
 
 	await executePrismaRelatedProcesses()
 
+	app.use(helmet({contentSecurityPolicy: false}))
 	// Build swagger documentation
 	const apiSpec = await buildSwaggerDocumentation(app)
 
@@ -89,6 +90,7 @@ export async function bootstrap(): Promise<NestExpressApplication>
 	app.useGlobalFilters(new HttpExceptionFilter(app.get(HttpAdapterHost)))
 
 	app.use(Sentry.Handlers.errorHandler())
+
 
 	// Optional fallthrough error handler
 	app.use(function onError(_err: Error, _req: ExpressRequest, res: ExpressResponse, _next: NextFunction)

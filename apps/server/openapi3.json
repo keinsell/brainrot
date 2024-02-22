@@ -120,6 +120,93 @@
         }
       }
     },
+    "/cart": {
+      "get": {
+        "operationId": "CartController_getMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "operationId": "CartController_updateMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartController_deleteMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/cart/item/{id}": {
+      "post": {
+        "operationId": "add-cart-item",
+        "summary": "Add item to cart",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemToCart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartController_removeItemFromCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "operationId": "CartController_updateItemInCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
     "/account": {
       "post": {
         "operationId": "register",
@@ -598,6 +685,20 @@
         }
       }
     },
+    "/product/fp": {
+      "get": {
+        "operationId": "ProductController_getFingerprint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      }
+    },
     "/product": {
       "post": {
         "operationId": "create-product",
@@ -820,14 +921,29 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Vella_Swaniawski",
-              "Wilfredo_Adams5",
-              "Kathlyn43"
+              "Samson32",
+              "Mossie.Moore",
+              "Kennedy.Prosacco"
             ]
           }
         },
         "required": [
           "username"
+        ]
+      },
+      "AddItemToCart": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "quantity"
         ]
       },
       "RegisterAccountCommand": {
@@ -858,9 +974,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Vella_Swaniawski",
-              "Wilfredo_Adams5",
-              "Kathlyn43"
+              "Samson32",
+              "Mossie.Moore",
+              "Kennedy.Prosacco"
             ]
           }
         },
@@ -930,9 +1046,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Vella_Swaniawski",
-              "Wilfredo_Adams5",
-              "Kathlyn43"
+              "Samson32",
+              "Mossie.Moore",
+              "Kennedy.Prosacco"
             ]
           },
           "method": {
@@ -1005,6 +1121,11 @@
       "CreateProduct": {
         "type": "object",
         "properties": {
+          "currency": {
+            "type": "string",
+            "description": "The currency of the price",
+            "example": "PLN"
+          },
           "name": {
             "type": "string",
             "description": "The name of the product",
@@ -1014,48 +1135,17 @@
             "type": "number",
             "description": "The price of the product",
             "example": 1000000
-          },
-          "currency": {
-            "type": "string",
-            "description": "The currency of the price",
-            "example": "PLN"
           }
         },
         "required": [
+          "currency",
           "name",
-          "price",
-          "currency"
+          "price"
         ]
       },
       "ApiProduct": {
         "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of the product",
-            "example": "NVIDIA RTX 4090"
-          },
-          "price": {
-            "type": "number",
-            "description": "The price of the product",
-            "example": 1000000
-          },
-          "currency": {
-            "type": "string",
-            "description": "The currency of the price",
-            "example": "PLN"
-          },
-          "attributes": {
-            "type": "array",
-            "description": "The attributes of the product"
-          }
-        },
-        "required": [
-          "name",
-          "price",
-          "currency",
-          "attributes"
-        ]
+        "properties": {}
       },
       "Account": {
         "type": "object",
@@ -1078,16 +1168,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": false
+            "example": true
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Vella_Swaniawski",
-              "Wilfredo_Adams5",
-              "Kathlyn43"
+              "Samson32",
+              "Mossie.Moore",
+              "Kennedy.Prosacco"
             ]
           }
         },
@@ -1107,9 +1197,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Vella_Swaniawski",
-              "Wilfredo_Adams5",
-              "Kathlyn43"
+              "Samson32",
+              "Mossie.Moore",
+              "Kennedy.Prosacco"
             ]
           },
           "password": {

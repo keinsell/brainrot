@@ -236,40 +236,39 @@ model VerificationRequest {
 }
 
 model User {
-  id             String          @id @default(cuid())
+  id          String         @id @default(cuid())
   // --------------------------------------------------
-  accountId      String          @unique
-  firstName      String
-  lastName       String
-  email          String
-  phoneNumber    String?
-  avatar         String?
-  billingAddress BillingAddress?
-  about          String?
+  accountId   String         @unique
+  firstName   String
+  lastName    String
+  email       String
+  phoneNumber String?
+  avatar      String?
+  about       String?
   // --------------------------------------------------
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  version        Int             @default(1)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  version     Int            @default(1)
   // --------------------------------------------------
-  Account        Account         @relation(fields: [accountId], references: [id])
-  Payments       Payment[]
-  Checkout       Checkout[]
-  Metadata       UserMetadata[]
-  Customer       Customer?
+  Account     Account        @relation(fields: [accountId], references: [id])
+  Payments    Payment[]
+  Checkout    Checkout[]
+  Metadata    UserMetadata[]
+  Customer    Customer?
 
   @@map("user")
 }
 
 model Customer {
-  id String @id @default(cuid())
+  id                String            @id @default(cuid())
   // --------------------------------------------------
-
   // --------------------------------------------------
   User              User              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Subscription      Subscription[]
   ShippingAddresses ShippingAddress[]
   Order             Order[]
   Cart              Cart?
+  BillingAddress    BillingAddress[]
 
   @@map("customer")
 }
@@ -288,6 +287,7 @@ model UserMetadata {
   @@map("user_md")
 }
 
+/// User can have only one billing address, but can have multiple shipping addresses.
 model BillingAddress {
   id            String         @id @default(cuid())
   // --------------------------------------------------
@@ -304,9 +304,9 @@ model BillingAddress {
   updatedAt     DateTime       @updatedAt
   version       Int            @default(1)
   // --------------------------------------------------
-  User          User           @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Order         Order[]
   Subscription  Subscription[]
+  Customer      Customer       @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("user_billing_address")
 }
@@ -368,6 +368,7 @@ model Product {
   CartItem   CartItem[]         @ignore
   Category   Category?          @relation(fields: [categoryId], references: [id])
   OrderLine  OrderLine[]        @ignore
+  Swap       Swap[]
 
   // --------------------------------------------------
   @@map("product")
@@ -508,6 +509,16 @@ model ProductVariant {
   @@map("product_variant")
 }
 
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUNDED
+  RETURNED
+}
+
 model Order {
   id                     String           @id @default(cuid())
   // --------------------------------------------------
@@ -521,20 +532,45 @@ model Order {
   // with subscription ID, this is because we want to track all "sub-orders"
   // that are part of subscription. No idea about other way.
   subscriptionId         String?
+  status                 OrderStatus
   subtotal               Int
   tax                    Int
   total                  Int
   // --------------------------------------------------
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
+  processedAt            DateTime?
+  shippedAt              DateTime?
+  deliveredAt            DateTime?
+  canceledAt             DateTime?
+  refundedAt             DateTime?
+  returnedAt             DateTime?
   // --------------------------------------------------
   Customer               Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ShippingAddress        ShippingAddress  @relation(fields: [shippingAddressId, shippingAddressVersion], references: [id, version])
   BillingAddress         BillingAddress?  @relation(fields: [billingAddressId], references: [id])
   OrderLine              OrderLine[]
   Subscription           Subscription?    @relation(fields: [subscriptionId], references: [id])
+  Swap                   Swap[]
 
   @@map("order")
+}
+
+model Swap {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Order     Order    @relation(fields: [orderId], references: [id])
+  Product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("swap")
 }
 
 model OrderLine {
@@ -555,16 +591,34 @@ model OrderLine {
 }
 
 model Cart {
-  id         String     @id @default(cuid())
+  id            String     @id @default(cuid())
   // --------------------------------------------------
-  customerId String?    @unique
+  /// Customer who owns the cart. His existence is optional.
+  customerId    String?    @unique
+  /// Fingerprints are used to identify a cart across multiple devices. If a
+  /// customer logs in on a different device, the cart will be restored using
+  /// the fingerprint.
+  fingerprint   String?
+  /// Promotion code applied to the cart.
+  promotionCode String?
+  /// Currency used for the cart. If not set, defaults to the currency of the customer.
+  currency      String     @default("USD")
+  /// Total quantity of items in the cart.
+  quantity      Int        @default(0)
+  /// Total before any discounts or taxes are applied.
+  subtotal      Int        @default(0)
+  /// Total tax amount applied. If no tax was applied, defaults to 0.
+  tax           Int        @default(0)
+  /// Total discount amount applied. If no discounts were applied, defaults to 0.
+  discount      Int        @default(0)
+  /// Total after discounts and taxes.
+  total         Int        @default(0)
   // --------------------------------------------------
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   // --------------------------------------------------
-  Checkout   Checkout?
-  CartItem   CartItem[]
-  User       Customer?  @relation(fields: [customerId], references: [id])
+  CartItem      CartItem[]
+  User          Customer?  @relation(fields: [customerId], references: [id])
 
   @@map("cart")
 }
@@ -572,9 +626,15 @@ model Cart {
 model CartItem {
   id        String   @id @default(cuid())
   // --------------------------------------------------
+  /// The cart ID.
   cartId    String
+  /// The product ID.
   productId String
+  /// Total before any discounts or taxes are applied.
   price     Int
+  /// Currency used for the cart item. If not set, defaults to the currency of the cart.
+  currency  String
+  /// Total quantity of items in the cart.
   quantity  Int
   // --------------------------------------------------
   createdAt DateTime @default(now())
@@ -615,6 +675,7 @@ model Payment {
   Payer           User          @relation(fields: [payerId], references: [id])
   PaymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
   Checkout        Checkout?
+  Invoice         Invoice[]
 
   // --------------------------------------------------
   @@map("payment")
@@ -633,11 +694,14 @@ model Invoice {
   // --------------------------------------------------
   customerId  String
   status      InvoiceStatus
+  paymentId   String
   // --------------------------------------------------
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   // --------------------------------------------------
   InvoiceLine InvoiceLine[]
+  Payment     Payment?      @relation(fields: [paymentId], references: [id])
+  Checkout    Checkout[]
 
   // --------------------------------------------------
   @@map("invoice")
@@ -690,19 +754,33 @@ model StripePaymentMethod {
 }
 
 model Checkout {
-  id           String         @id @default(cuid())
+  id             String         @id @default(cuid())
   // --------------------------------------------------
-  userId       String
-  cartId       String         @unique
-  paymentId    String         @unique
+  userId         String
+  paymentId      String         @unique
+  invoiceId      String
+  subscriptionId String?
+  orderId        String?
+  /// Currency used for the cart. If not set, defaults to the currency of the customer.
+  currency       String         @default("USD")
+  /// Total quantity of items in the cart.
+  quantity       Int            @default(0)
+  /// Total before any discounts or taxes are applied.
+  subtotal       Int            @default(0)
+  /// Total tax amount applied. If no tax was applied, defaults to 0.
+  tax            Int            @default(0)
+  /// Total discount amount applied. If no discounts were applied, defaults to 0.
+  discount       Int            @default(0)
+  /// Total after discounts and taxes.
+  total          Int            @default(0)
   // --------------------------------------------------
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   // --------------------------------------------------
-  Cart         Cart           @relation(fields: [cartId], references: [id])
-  Payment      Payment        @relation(fields: [paymentId], references: [id])
-  User         User           @relation(fields: [userId], references: [id])
-  CheckoutItem CheckoutItem[]
+  Payment        Payment        @relation(fields: [paymentId], references: [id])
+  User           User           @relation(fields: [userId], references: [id])
+  Invoice        Invoice        @relation(fields: [invoiceId], references: [id])
+  CheckoutItem   CheckoutItem[]
 
   // --------------------------------------------------
   @@map("checkout")
@@ -834,6 +912,30 @@ enum SubscriptionStatus {
   @@map("subscription_status")
 }
 
+model SubscriptionSchedule {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  startDate DateTime
+  endDate   DateTime
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --------------------------------------------------
+  // --------------------------------------------------
+  @@map("subscription_schedule")
+}
+
+model Plan {
+  id String @id @default(cuid())
+  // --------------------------------------------------
+}
+
+model PlanItem {
+  id String @id @default(cuid())
+  // --------------------------------------------------
+}
+
 model Subscription {
   id                String             @id @default(cuid())
   // --------------------------------------------------
@@ -859,4 +961,9 @@ model Subscription {
 
   // --------------------------------------------------
   @@map("subscription")
+}
+
+model Discount {
+  id String @id @default(cuid())
+  // --------------------------------------------------
 }
