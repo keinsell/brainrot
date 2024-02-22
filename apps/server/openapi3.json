@@ -158,7 +158,7 @@
         ]
       }
     },
-    "/cart/item/{id}": {
+    "/cart/item": {
       "post": {
         "operationId": "add-cart-item",
         "summary": "Add item to cart",
@@ -181,7 +181,9 @@
         "tags": [
           "cart"
         ]
-      },
+      }
+    },
+    "/cart/item/{id}": {
       "delete": {
         "operationId": "CartController_removeItemFromCart",
         "parameters": [],
@@ -685,20 +687,6 @@
         }
       }
     },
-    "/product/fp": {
-      "get": {
-        "operationId": "ProductController_getFingerprint",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "product"
-        ]
-      }
-    },
     "/product": {
       "post": {
         "operationId": "create-product",
@@ -921,9 +909,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lonzo_Collins",
-              "Juanita.Lynch51",
-              "Ila_Wilkinson32"
+              "Sammie68",
+              "Rudolph53",
+              "Leta3"
             ]
           }
         },
@@ -935,10 +923,12 @@
         "type": "object",
         "properties": {
           "productId": {
-            "type": "string"
+            "type": "string",
+            "example": "gpu.nvidia.rtx.4090"
           },
           "quantity": {
-            "type": "number"
+            "type": "number",
+            "example": 1
           }
         },
         "required": [
@@ -974,9 +964,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lonzo_Collins",
-              "Juanita.Lynch51",
-              "Ila_Wilkinson32"
+              "Sammie68",
+              "Rudolph53",
+              "Leta3"
             ]
           }
         },
@@ -1046,9 +1036,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lonzo_Collins",
-              "Juanita.Lynch51",
-              "Ila_Wilkinson32"
+              "Sammie68",
+              "Rudolph53",
+              "Leta3"
             ]
           },
           "method": {
@@ -1175,9 +1165,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lonzo_Collins",
-              "Juanita.Lynch51",
-              "Ila_Wilkinson32"
+              "Sammie68",
+              "Rudolph53",
+              "Leta3"
             ]
           }
         },
@@ -1197,9 +1187,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lonzo_Collins",
-              "Juanita.Lynch51",
-              "Ila_Wilkinson32"
+              "Sammie68",
+              "Rudolph53",
+              "Leta3"
             ]
           },
           "password": {

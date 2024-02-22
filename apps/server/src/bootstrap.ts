@@ -12,6 +12,7 @@ import {
 }                                      from '@nestjs/platform-express'
 import {apiReference}                  from '@scalar/nestjs-api-reference'
 import Sentry                          from '@sentry/node'
+import cookieParser                    from 'cookie-parser';
 import delay                           from 'delay'
 import express, {
 	Express,
@@ -20,6 +21,7 @@ import express, {
 import helmet                          from 'helmet'
 import ms                              from 'ms'
 import process                         from 'node:process'
+import requestIp                       from 'request-ip';
 import {startTunnel}                   from 'untun'
 import {HttpExceptionFilter}           from './common/filters/exception-filter/http-exception-filter.js'
 import {buildCompodocDocumentation}    from './common/modules/documentation/compodoc/compodoc.js'
@@ -63,6 +65,8 @@ export async function bootstrap(): Promise<NestExpressApplication>
 	app.useGlobalPipes(new ValidationPipe())
 	app.useBodyParser('json')
 	app.use(helmet({contentSecurityPolicy:false}))
+	app.use(requestIp.mw())
+	app.use(cookieParser())
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')

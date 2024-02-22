@@ -46,10 +46,6 @@ import {
 	Product,
 }                      from 'db'
 import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
-import {
-	Fingerprint,
-	IFingerprint,
-} from '../../kernel/platform/http/middleware/fingerprint.js';
 
 
 
@@ -113,11 +109,6 @@ export class ProductController
 
 	constructor(private prismaService: PrismaService)
 	{
-	}
-
-	@Get('fp') getFingerprint(@Fingerprint() fp: IFingerprint): IFingerprint
-	{
-		return fp
 	}
 
 
@@ -217,6 +208,7 @@ export class ProductController
 
 		const products: Prisma.ProductCreateInput[] = [
 			{
+				id: 'gpu.nvidia.rtx.4090',
 				name      : 'NVIDIA RTX 4090',
 				price     : 10_000_00,
 				currency  : 'PLN',
