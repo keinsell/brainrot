@@ -4,7 +4,7 @@ on:
 
 jobs:
   qodana:
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     steps:
       - uses: actions/checkout@v3
         with:

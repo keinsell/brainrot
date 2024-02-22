@@ -8,7 +8,7 @@ on:
 jobs:
   spinoff_preivew_environment:
     name: "spinoff_preivew_environment"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     permissions:
       contents: read
       packages: write
