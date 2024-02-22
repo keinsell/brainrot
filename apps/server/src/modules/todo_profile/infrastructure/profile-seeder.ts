@@ -83,23 +83,23 @@ export class ProfileSeeder
 			firstName        : faker.person.firstName(),
 			lastName         : faker.person.lastName(),
 			about            : faker.person.bio(),
-			billingAddress   : {
-				connectOrCreate: {
-					create: {
-						taxIdentifier: faker.finance.iban(),
-						streetLine1  : faker.location.streetAddress(),
-						streetLine2  : undefined,
-						city         : faker.location.city(),
-						zipCode      : faker.location.zipCode(),
-						state        : faker.location.state(),
-						country      : faker.location.countryCode(),
-						legalName    : faker.company.name(),
-					},
-					where : {
-						id: account.id,
-					},
-				},
-			},
+//			billingAddress   : {
+//				connectOrCreate: {
+//					create: {
+//						taxIdentifier: faker.finance.iban(),
+//						streetLine1  : faker.location.streetAddress(),
+//						streetLine2  : undefined,
+//						city         : faker.location.city(),
+//						zipCode      : faker.location.zipCode(),
+//						state        : faker.location.state(),
+//						country      : faker.location.countryCode(),
+//						legalName    : faker.company.name(),
+//					},
+//					where : {
+//						id: account.id,
+//					},
+//				},
+//			},
 			avatar           : faker.image.avatar(),
 			email            : faker.internet.email(),
 			createdAt        : faker.date.past(),

@@ -152,12 +152,7 @@ export class ProductController
 	{
 		return this.prismaService.product.findMany({
 			                                           include: {
-				                                           attributes: {
-					                                           include: {
-						                                           unit: true,
-						                                           int : true,
-					                                           },
-				                                           },
+				                                           ProductAttribute: true,
 				                                           variants  : true,
 			                                           },
 		                                           })
@@ -190,109 +185,80 @@ export class ProductController
 
 	public async onApplicationBootstrap(): Promise<any>
 	{
-		// Seed a one product into database
-		const nvidiaRtx3080: Prisma.ProductCreateInput = {
-			name    : 'Nvidia RTX 3080',
-			price   : 699.99,
-			currency: 'USD', //			attributes: {
-			//				createMany: {
-			//					skipDuplicates: true,
-			//					data: [
-			//						{
-			//							name: "CUDA Cores",
-			//							description: "CUDA Cores are the processing units in NVIDIA graphics
-			// processing units (GPUs) that perform computations and execute instructions. CUDA Cores are designed to
-			// handle large numbers of threads in parallel, making them highly efficient for tasks that can be broken
-			// down into many smaller ones, such as rendering graphics or performing scientific computations.", type:
-			// AttributeType.UNIT, }, { name: "Memory", value: "10 GB", description: "The amount of memory available on
-			// the graphics card for storing data and textures.", }, { name: "Memory Bandwidth", value: "760 GB/s",
-			// description: "The rate at which data can be read from or written to the memory of the graphics card.",
-			// }, { name: "TDP", value: "320 W", description: "The maximum power consumption of the graphics card,
-			// measured in watts.", }, { name: "GPU Architecture", value: "Ampere", description: "The architecture of
-			// the graphics card, which determines its performance and capabilities.", }, ] } },
+	//  Create a promise that will be handled in background (seedModule)
+		this.seedModule().then(() => {
+			this.logger.debug('Product Module seeded')
+		})
+	}
+
+	private async seedModule() {
+		this.logger.debug('Bootstrapping Product Module')
+
+		this.logger.debug('Preparing seed of core information into database...')
+
+		// Product #1 - NVIDIA RTX 4090
+		//
+		// NVIDIA RTX 4090
+		// Price: 10 000,00 PLN
+		// NVIDIA RTX 4090 is a high-end graphics card designed for gaming and professional use. It features the latest
+		// technologies such as ray tracing and DLSS, making it the best choice for gamers and professionals alike.
+		//
+		// Attributes:
+		// DLSS: true
+		// Shader Cores: 10 240
+		// Ray Tracing Cores: 160
+		// Memory: 24 GB GDDR6X
+		// NVENC: true
+		// Base Clock: 1.5 GHz
+		// Boost Clock: 2.5 GHz
+		// TDP: 400 W
+		// GPU Architecture: Ada Lovelace
+		// Dimensions: 10.5" x 4.4" x 2.5"
+
+		const products: Prisma.ProductCreateInput[] = [
+			{
+				name      : 'NVIDIA RTX 4090',
+				price     : 10_000_00,
+				currency  : 'PLN',
+				ProductAttribute: {
+					createMany: {
+						skipDuplicates: true,
+						data          : [
+							{
+								uid: "gpu.dlss",
+								name       : 'DLSS',
+								type       : AttributeType.BOOLEAN,
+								description: String`
+DLSS is a deep learning technology that uses AI to boost frame rates and generate beautiful, sharp images for your games. DLSS leverages the power of a deep learning neural network to boost frame rates and generate beautiful, sharp images for your games.
+`,
+							},
+							{
+								uid: "gpu.shader_cores",
+								name       : 'Shader Cores',
+								type       : AttributeType.INTEGER,
+								description: String`
+Shader Cores are the processing units in NVIDIA graphics processing units (GPUs) that perform computations and execute instructions. Shader Cores are designed to handle large numbers of threads in parallel, making them highly efficient for tasks that can be broken down into many smaller ones, such as rendering graphics or performing scientific computations.
+								`,
+							},
+							{
+								uid: "gpu.ray_tracing_cores",
+								name       : 'Ray Tracing Cores',
+								type       : AttributeType.INTEGER,
+								description: String`
+							
+Ray Tracing Cores are the processing units in NVIDIA graphics processing units (GPUs) that perform computations and execute instructions. Ray Tracing Cores are designed to handle large numbers of threads in parallel, making them highly efficient for tasks that can be broken down into many smaller ones, such as rendering graphics or performing scientific computations.
+								`,
+							}
+						],
+					},
+				},
+			},
+		]
+
+		// Seed products into database
+		for (const product of products)
+		{
+			await this.prismaService.product.create({data: product})
 		}
-
-		this.prismaService.product.create({data: nvidiaRtx3080}).then(product =>
-		                                                              {
-			                                                              this.logger.log(`Created product: ${product.name}`)
-
-			                                                              const cudaCores: Prisma.ProductAttributeCreateInput       = {
-				                                                              name       : 'CUDA Cores',
-				                                                              description: 'CUDA Cores are the processing units in NVIDIA graphics processing units (GPUs) that perform computations and execute instructions. CUDA Cores are designed to handle large numbers of threads in parallel, making them highly efficient for tasks that can be broken down into many smaller ones, such as rendering graphics or performing scientific computations.',
-				                                                              type       : AttributeType.INTEGER,
-				                                                              int        : {
-					                                                              create: {
-						                                                              value: 8704,
-					                                                              },
-				                                                              },
-				                                                              Product    : {
-					                                                              connect: {
-						                                                              id: product.id,
-					                                                              },
-				                                                              },
-			                                                              }
-			                                                              const memory: Prisma.ProductAttributeCreateInput          = {
-				                                                              name       : 'Memory',
-				                                                              description: 'The amount of memory available on the graphics card for storing data and textures.',
-				                                                              type       : AttributeType.UNIT,
-				                                                              unit       : {
-					                                                              create: {
-						                                                              value: 10,
-						                                                              unit : 'GB',
-					                                                              },
-				                                                              },
-				                                                              Product    : {
-					                                                              connect: {
-						                                                              id: product.id,
-					                                                              },
-				                                                              },
-			                                                              }
-			                                                              const memoryBandwidth: Prisma.ProductAttributeCreateInput = {
-				                                                              name       : 'Memory Bandwidth',
-				                                                              description: 'The rate at which data can be read from or written to the memory of the graphics card.',
-				                                                              type       : AttributeType.UNIT,
-				                                                              unit       : {
-					                                                              create: {
-						                                                              value: 760,
-						                                                              unit : 'GB/s',
-					                                                              },
-				                                                              },
-				                                                              Product    : {
-					                                                              connect: {
-						                                                              id: product.id,
-					                                                              },
-				                                                              },
-			                                                              }
-			                                                              const tdp: Prisma.ProductAttributeCreateInput             = {
-				                                                              name       : 'TDP',
-				                                                              description: 'The maximum power consumption of the graphics card, measured in watts.',
-				                                                              type       : AttributeType.UNIT,
-				                                                              unit       : {
-					                                                              create: {
-						                                                              value: 320,
-						                                                              unit : 'W',
-					                                                              },
-				                                                              },
-				                                                              Product    : {
-					                                                              connect: {
-						                                                              id: product.id,
-					                                                              },
-				                                                              },
-			                                                              }
-
-			                                                              const prismaCreateAttribute = async (attribute: Prisma.ProductAttributeCreateInput) =>
-			                                                              {
-				                                                              await this.prismaService.productAttribute.create({data: attribute})
-				                                                              this.logger.log(`Created attribute: ${attribute.name}`)
-			                                                              }
-
-			                                                              prismaCreateAttribute(cudaCores)
-			                                                              prismaCreateAttribute(memory)
-			                                                              prismaCreateAttribute(memoryBandwidth)
-			                                                              prismaCreateAttribute(tdp)
-
-
-
-		                                                              })
 	}
 }

@@ -35,6 +35,8 @@ export interface IRedisConfiguration
 	username: string | undefined
 	password: string | undefined
 	url: string | undefined
+	enableOfflineQueue: boolean | undefined
+	db: number | undefined
 }
 
 
