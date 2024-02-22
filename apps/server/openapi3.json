@@ -921,9 +921,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Samson32",
-              "Mossie.Moore",
-              "Kennedy.Prosacco"
+              "Jesse.Toy96",
+              "Freeda_Casper",
+              "Kimberly_Rath66"
             ]
           }
         },
@@ -974,9 +974,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Samson32",
-              "Mossie.Moore",
-              "Kennedy.Prosacco"
+              "Jesse.Toy96",
+              "Freeda_Casper",
+              "Kimberly_Rath66"
             ]
           }
         },
@@ -1046,9 +1046,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Samson32",
-              "Mossie.Moore",
-              "Kennedy.Prosacco"
+              "Jesse.Toy96",
+              "Freeda_Casper",
+              "Kimberly_Rath66"
             ]
           },
           "method": {
@@ -1168,16 +1168,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": true
+            "example": false
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Samson32",
-              "Mossie.Moore",
-              "Kennedy.Prosacco"
+              "Jesse.Toy96",
+              "Freeda_Casper",
+              "Kimberly_Rath66"
             ]
           }
         },
@@ -1197,9 +1197,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Samson32",
-              "Mossie.Moore",
-              "Kennedy.Prosacco"
+              "Jesse.Toy96",
+              "Freeda_Casper",
+              "Kimberly_Rath66"
             ]
           },
           "password": {

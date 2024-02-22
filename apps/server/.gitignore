@@ -1,3 +1,4 @@
 src/externals/generated/**
 src/externals/compodoc/**
 vendor/**
+!.env

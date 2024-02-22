@@ -1,11 +1,20 @@
 # Compose specific for project for sharing service not really for production
 
 version: '3.7'
-name: ${SERVICE_NAME}
+name: ${PROJECT}
 
 services:
-#  web:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    command: python manage.py runserve
+  meilisearch:
+    container_name: ${PROJECT}-meilisearch
+    image: getmeili/meilisearch:latest
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
+      - MEILI_NO_ANALYTICS=${MEILI_NO_ANALYTICS:-true}
+      - MEILI_ENV=${MEILI_ENV:-development}
+      - MEILI_LOG_LEVEL
+      - MEILI_DB_PATH=${MEILI_DB_PATH:-/data.ms}
+    ports:
+      - ${MEILI_PORT:-7700}:7700
+    volumes:
+      - ./.volumes/melisearch_data/data.ms:/data.ms
+    restart: no
