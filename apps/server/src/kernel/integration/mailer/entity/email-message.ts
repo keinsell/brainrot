@@ -24,12 +24,13 @@
  */
 
 
-import {EmailAddress}        from '../value-object/email-address.js'
-import {EmailAttachment}     from '../value-object/email-attachment.js'
-import {EmailContent}        from '../value-object/email-content.js'
-import type {EmailReceipent} from '../value-object/email-receipent.js'
-import {Html}                from '../value-object/html.js'
-import {PlainText}           from '../value-object/plain-text.js'
+
+import {EmailAddress}    from '../value-object/email-address.js'
+import {EmailAttachment} from '../value-object/email-attachment.js'
+import {EmailContent}    from '../value-object/email-content.js'
+import {EmailReceipent}  from '../value-object/email-receipent.js'
+import {Html}            from '../value-object/html.js'
+import {PlainText}       from '../value-object/plain-text.js'
 
 
 

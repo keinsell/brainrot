@@ -353,22 +353,22 @@ model Category {
 }
 
 model Product {
-  id         String             @id @default(cuid())
+  id               String             @id @default(cuid())
   // --------------------------------------------------
-  name       String
-  categoryId String?
-  price      Int
-  currency   String
+  name             String
+  categoryId       String?
+  price            Int
+  currency         String
   // --------------------------------------------------
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   // --------------------------------------------------
-  variants   ProductVariant[]
-  attributes ProductAttribute[]
-  CartItem   CartItem[]         @ignore
-  Category   Category?          @relation(fields: [categoryId], references: [id])
-  OrderLine  OrderLine[]        @ignore
-  Swap       Swap[]
+  ProductAttribute ProductAttribute[]
+  variants         ProductVariant[]
+  CartItem         CartItem[]         @ignore
+  Category         Category?          @relation(fields: [categoryId], references: [id])
+  OrderLine        OrderLine[]        @ignore
+  Swap             Swap[]
 
   // --------------------------------------------------
   @@map("product")
@@ -383,104 +383,40 @@ enum AttributeType {
   DATE
 }
 
+// TODO: In future this can be extended to Attribute and AttributeValue which
+// would allow to create custom attributes for products. ProductAttribute
+// would be a connector between Attribute, AttributeValue and Product. This
+// will allow running really comprehensive queries and filters. The one worst
+// case to be resolved is different data types adn potentially implementation of
+// MTI to keep everything type-safe.
 model ProductAttribute {
-  id          String            @id @default(cuid())
+  id           String        @id @default(cuid())
   // --------------------------------------------------
-  productId   String
+  /// @example "gpu.vram"
+  uid          String        @unique
+  productId    String
   /// Example of ProductAttribute would be "CUDA Cores" or "Memory"
-  name        String
-  description String?
-  type        AttributeType
-  // Multi-table inheritance (MTI)
+  name         String
+  description  String?
+  type         AttributeType
+  // Single-table inheritance (STI)
   // https://www.prisma.io/docs/orm/prisma-schema/data-model/table-inheritance#data-model
   // Sadly prisma do not support union types which eventually lead to hell
   // like this without any proper way to enforce type safety (out of the box).
   // Eventually, we need to use a single table inheritance (STI) pattern.
   // STI would be more efficient.
-  int         AttributeInteger?
-  unit        AttributeUnit?
-  boolean     AttributeBoolean?
-  string      AttributeString?
-  date        AttributeDate?
+  valueInt     Int?
+  valueBoolean Boolean?
+  valueString  String?
+  valueIntUnit String?
   // --------------------------------------------------
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   // --------------------------------------------------
-  Product     Product           @relation(fields: [productId], references: [id])
+  Product      Product       @relation(fields: [productId], references: [id])
 
   // --------------------------------------------------
   @@map("product_attribute")
-}
-
-model AttributeInteger {
-  id                 String           @id @default(cuid())
-  // --------------------------------------------------
-  productAttributeId String           @unique
-  value              Int
-  // --------------------------------------------------
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
-
-  // --------------------------------------------------
-  @@map("product_attribute_int")
-}
-
-model AttributeUnit {
-  id                 String           @id @default(cuid())
-  // --------------------------------------------------
-  productAttributeId String           @unique
-  value              Int
-  unit               String
-  // --------------------------------------------------
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
-
-  // --------------------------------------------------
-  @@map("product_attribute_unit")
-}
-
-model AttributeBoolean {
-  id                 String           @id @default(cuid())
-  // --------------------------------------------------
-  productAttributeId String           @unique
-  value              Boolean
-  // --------------------------------------------------
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
-
-  // --------------------------------------------------
-  @@map("product_attribute_boolean")
-}
-
-model AttributeString {
-  id                 String           @id @default(cuid())
-  // --------------------------------------------------
-  productAttributeId String           @unique
-  value              String
-  // --------------------------------------------------
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
-
-  // --------------------------------------------------
-  @@map("product_attribute_string")
-}
-
-model AttributeDate {
-  id                 String           @id @default(cuid())
-  // --------------------------------------------------
-  productAttributeId String           @unique
-  value              DateTime
-  // --------------------------------------------------
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  ProductAttribute   ProductAttribute @relation(fields: [productAttributeId], references: [id])
-
-  // --------------------------------------------------
-  @@map("product_attribute_date")
 }
 
 model ProductOption {

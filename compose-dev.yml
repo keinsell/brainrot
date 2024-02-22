@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   traefik:
-    container_name: ${PROJECT}-traefik
+    container_name: dev-${PROJECT}-traefik
     image: traefik:v2.3
     labels:
       - "flame.type=application"
@@ -26,7 +26,7 @@ services:
           memory: 256M
 
   jaeger:
-    container_name: ${PROJECT}-jaeger
+    container_name: dev-${PROJECT}-jaeger
     image: jaegertracing/all-in-one:1.41
     labels:
       - "traefik.enable=true"
@@ -56,7 +56,7 @@ services:
           cpus: '0.5'
           memory: 256M
   postgres:
-    container_name: ${PROJECT}-postgres
+    container_name: dev-${PROJECT}-postgres
     image: postgres:latest
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
@@ -77,7 +77,7 @@ services:
           cpus: '0.5'
           memory: 256M
   redis:
-    container_name: ${PROJECT}-redis
+    container_name: dev-${PROJECT}-redis
     image: redis:latest
     labels:
       - "traefik.enable=true"
@@ -97,7 +97,7 @@ services:
   # http://localhost:5005/
   flame:
     image: pawelmalak/flame
-    container_name: ${PROJECT}-flame
+    container_name: dev-${PROJECT}-flame
     volumes:
       - "${PWD}/.docker/flame:/app/data"
       - /var/run/docker.sock:/var/run/docker.sock
@@ -112,7 +112,7 @@ services:
           memory: 256M
 
   nats:
-    container_name: ${PROJECT}-nats
+    container_name: dev-${PROJECT}-nats
     image: nats:latest
     ports:
       - "4222:4222" # Client connections
@@ -142,7 +142,7 @@ services:
           cpus: "0.25"
           memory: 512M
   meilisearch:
-    container_name: ${PROJECT}-meilisearch
+    container_name: dev-${PROJECT}-meilisearch
     image: getmeili/meilisearch:latest
     labels:
       - "flame.type=application"

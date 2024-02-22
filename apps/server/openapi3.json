@@ -870,7 +870,7 @@
     }
   },
   "info": {
-    "title": "methylophenidate",
+    "title": "${PROJECT}",
     "description": "Methylophenidate is a boilerplate for Nest.js applications with batteries included.",
     "version": "1.0",
     "contact": {}
@@ -921,9 +921,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jesse.Toy96",
-              "Freeda_Casper",
-              "Kimberly_Rath66"
+              "Maude.Connelly",
+              "Carmen_Turner",
+              "Vladimir.Zieme15"
             ]
           }
         },
@@ -974,9 +974,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jesse.Toy96",
-              "Freeda_Casper",
-              "Kimberly_Rath66"
+              "Maude.Connelly",
+              "Carmen_Turner",
+              "Vladimir.Zieme15"
             ]
           }
         },
@@ -1046,9 +1046,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jesse.Toy96",
-              "Freeda_Casper",
-              "Kimberly_Rath66"
+              "Maude.Connelly",
+              "Carmen_Turner",
+              "Vladimir.Zieme15"
             ]
           },
           "method": {
@@ -1175,9 +1175,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jesse.Toy96",
-              "Freeda_Casper",
-              "Kimberly_Rath66"
+              "Maude.Connelly",
+              "Carmen_Turner",
+              "Vladimir.Zieme15"
             ]
           }
         },
@@ -1197,9 +1197,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jesse.Toy96",
-              "Freeda_Casper",
-              "Kimberly_Rath66"
+              "Maude.Connelly",
+              "Carmen_Turner",
+              "Vladimir.Zieme15"
             ]
           },
           "password": {

@@ -226,6 +226,7 @@ export class CartController
 					productId: requestBody.productId,
 					quantity : requestBody.quantity,
 					price: requestBody.quantity * 1,
+					currency: 'USD',
 				}, update: {
 					cartId	 : cart.id,
 					productId: requestBody.productId,
@@ -235,6 +236,7 @@ export class CartController
 					quantity: {
 						increment: requestBody.quantity,
 					},
+					currency: 'USD',
 				}
 			}
 		)
