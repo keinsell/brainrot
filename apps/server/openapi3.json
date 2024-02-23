@@ -909,9 +909,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Sammie68",
-              "Rudolph53",
-              "Leta3"
+              "Bertram_Stoltenberg95",
+              "Albert_Volkman",
+              "Elenor11"
             ]
           }
         },
@@ -964,9 +964,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Sammie68",
-              "Rudolph53",
-              "Leta3"
+              "Bertram_Stoltenberg95",
+              "Albert_Volkman",
+              "Elenor11"
             ]
           }
         },
@@ -1036,9 +1036,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Sammie68",
-              "Rudolph53",
-              "Leta3"
+              "Bertram_Stoltenberg95",
+              "Albert_Volkman",
+              "Elenor11"
             ]
           },
           "method": {
@@ -1158,16 +1158,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": false
+            "example": true
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Sammie68",
-              "Rudolph53",
-              "Leta3"
+              "Bertram_Stoltenberg95",
+              "Albert_Volkman",
+              "Elenor11"
             ]
           }
         },
@@ -1187,9 +1187,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Sammie68",
-              "Rudolph53",
-              "Leta3"
+              "Bertram_Stoltenberg95",
+              "Albert_Volkman",
+              "Elenor11"
             ]
           },
           "password": {
