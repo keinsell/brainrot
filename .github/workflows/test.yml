@@ -45,5 +45,5 @@ jobs:
       - name: Build API
         run: cd apps/server && CI='' pnpm build:tsc
       - shell: bash
-        run: cp example.env apps/server/.env
+        run: cp example.env .env
       # TODO: Add container environment
