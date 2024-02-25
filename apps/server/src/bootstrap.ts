@@ -38,6 +38,7 @@ import {StaticFeatureFlags}            from './configs/static-feature-flags.js'
 import {Container}                     from './container.js'
 import {migrateDatabase}               from './hooks/post-start/migrate-database.js'
 import {LoggerNestjsProxy}             from './kernel/modules/logger/nestjs-logger-proxy.js'
+import {FingerprintMiddleware}         from './kernel/platform/http/middleware/fingerprint.js'
 import {
 	ExpressRequest,
 	ExpressResponse,
@@ -70,6 +71,7 @@ export async function bootstrap(): Promise<NestExpressApplication>
 	app.use(helmet({contentSecurityPolicy: false}))
 	app.use(requestIp.mw())
 	app.use(cookieParser())
+	app.use(new FingerprintMiddleware().use)
 
 	// Implement logger used for bootstrapping and notifying about application state
 	const logger = new Logger('Bootstrap')

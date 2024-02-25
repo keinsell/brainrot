@@ -1,14 +1,13 @@
-import {env}                                        from 'node:process'
-import os                                           from 'os'
-import {bootstrap}                                  from './bootstrap.js'
-import {isProduction}                               from './configs/helper/is-production.js'
-import {acquireProcessLock}                         from './hooks/pre-start/acquire-process-lock.js'
-import {initializeSentry}                           from './hooks/pre-start/initialize-sentry.js'
+import {env}                from 'node:process'
+import os                   from 'os'
+import {bootstrap}          from './bootstrap.js'
+import {isProduction}       from './configs/helper/is-production.js'
+import {acquireProcessLock} from './hooks/pre-start/acquire-process-lock.js'
+import {initializeSentry}   from './hooks/pre-start/initialize-sentry.js'
 import {
 	prettyPrintServiceInformation,
 	printSystemInfo,
-}                                                   from './utilities/console-utils/index.js'
-import {prepareContainerizedDevelopmentEnvironment} from './utilities/testcontainers/run-testcontainers.js'
+}                           from './utilities/console-utils/index.js'
 
 
 
@@ -30,7 +29,7 @@ if (isProduction())
 
 prettyPrintServiceInformation()
 
-await prepareContainerizedDevelopmentEnvironment()
+//await prepareContainerizedDevelopmentEnvironment()
 
 initializeSentry()
 

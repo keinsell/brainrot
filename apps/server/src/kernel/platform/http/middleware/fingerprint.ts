@@ -1,6 +1,7 @@
 import {
+	createParamDecorator,
+	ExecutionContext,
 	Injectable,
-	Logger,
 	NestMiddleware,
 }                       from '@nestjs/common'
 import {
@@ -11,6 +12,7 @@ import {
 import murmurhash       from 'murmurhash3js'
 import ua               from 'useragent'
 import {ExpressRequest} from '../../../../types/express-response.js'
+import {__logger}       from '../../../modules/logger/logger.js'
 
 
 
@@ -27,6 +29,11 @@ function getUserAgentFromRequest(req: Request): ua.Agent
  */
 export function generateFingerprint(req: Request): string
 {
+	const logger = __logger('fingerprint')
+	logger.debug('Called generateFingerprint')
+
+	// Get the user agent from the request
+	logger.debug('Getting user agent from request...')
 	const ua = getUserAgentFromRequest(req)
 
 	// Create a new fingerprint object
@@ -54,10 +61,20 @@ export function generateFingerprint(req: Request): string
 		ipAddress: req.ip,
 	}
 
-	req.headers['x-fingerprint'] = fingerprint
+	logger.debug(`Dug fingerprint metadata: ${JSON.stringify(fingerprint)}`)
 
+	logger.debug('Generating hash for fingerprint...')
+	const hash = murmurhash.x86.hash128(JSON.stringify(fingerprint))
+	logger.debug(`Generated hash for fingerprint: ${hash}`)
+
+
+	logger.debug('Adding fingerprint to request headers...')
+	req.headers['x-fingerprint'] = hash
+	req.fingerprint              = hash
+
+	logger.debug(`Returning hash...`, {data: {hash}})
 	// Generate a unique hash for the fingerprint
-	return murmurhash.x86.hash128(JSON.stringify(fingerprint))
+	return hash
 }
 
 
@@ -68,9 +85,7 @@ export function generateFingerprint(req: Request): string
 export class FingerprintMiddleware
 	implements NestMiddleware
 {
-	private readonly logger = new Logger('middleware:fingerprint')
-
-	use(req: ExpressRequest, res: Response, next: NextFunction): void
+	use(req: ExpressRequest, _res: Response, next: NextFunction): void
 	{
 		// Generate a fingerprint for the request
 		const fingerprint = generateFingerprint(req)
@@ -79,9 +94,22 @@ export class FingerprintMiddleware
 		req.headers['x-fingerprint'] = fingerprint
 		req.fingerprint              = fingerprint
 
-		this.logger.debug(`Generated fingerprint for request: ${fingerprint}`)
-
 		// Pass the request
 		next()
 	}
 }
+
+
+// Fingerprint decorator that will take the fingerprint from the request and attach it to parameter
+// Ex. @Fingerprint() fingerprint: string
+
+/**
+ * Get fingerprint by request
+ */
+export const Fingerprint = createParamDecorator((_, ctx: ExecutionContext): string | undefined =>
+                                                {
+	                                                const request: Request = ctx
+		                                                .switchToHttp()
+		                                                .getRequest()
+	                                                return request.fingerprint
+                                                })
