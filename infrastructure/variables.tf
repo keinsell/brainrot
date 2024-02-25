@@ -4,6 +4,22 @@ variable "project_name" {
   default     = "methylophenidate"
 }
 
+#variable "cloudflare_token" {
+#  description = "API Token to Cloudflare.\n https://dash.cloudflare.com/profile/api-tokens"
+#  type        = string
+#}
+
+variable "sentry_token" {
+  description = "You will need to configure the provider by providing an authentication token. You can create an authentication token within Sentry by creating an internal integration. This is also available for self-hosted Sentry. https://docs.sentry.io/product/integrations/integration-platform/internal-integration/#auth-tokens"
+  type        = string
+}
+
+variable "sentry_base_url" {
+  description = "Base URL to Sentry."
+  type        = string
+  default     = "https://sentry.io"
+}
+
 variable "neon_token" {
   description = "Developer Token dedicated to interact with Neon Platform.\n https://console.neon.tech/app/settings/api-keys"
 }
