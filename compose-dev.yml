@@ -59,7 +59,7 @@ services:
     container_name: dev-${PROJECT}-postgres
     image: postgres:latest
     ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+      - "${DATABASE_PORT}:5432"
     volumes:
       - "${PWD}/.docker/postgres:/var/lib/postgresql/data"
     environment:
