@@ -1,9 +1,6 @@
 #!/bin/bash
 
-INSTALLATION_NAME="luminar-linux-x64-x1"
-NAMESPACE="methylphenidate-runners"
-GITHUB_CONFIG_URL="https://github.com/keinsell/plygrnd"
-GITHUB_PAT=$(op read op://dev/arc_4b7a43a2/token)
+source .env
 
 # Install ARC
 helm install arc \
@@ -19,6 +16,6 @@ helm install "${INSTALLATION_NAME}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
     --set containerMode.type=dind \
     --set minRunners=1 \
-    --set maxRunners=3 \
+    --set maxRunners=10 \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 
