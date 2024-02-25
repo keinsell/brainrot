@@ -42,7 +42,7 @@ jobs:
   deploy_server:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     name: "deploy-server"
-    runs-on: luminar-linux-x64-x2
+    runs-on: luminar-linux-x64-x1
     timeout-minutes: 80
     #    environment: Development
     permissions:
