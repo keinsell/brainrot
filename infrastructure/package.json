@@ -1,11 +1,11 @@
 {
-  "name": "@mph/infrastructure",
+  "name": "@plygrnd/infrastructure",
   "version": "1.0.0",
   "description": "Project for managing infrastructure",
   "scripts": {
     "init": "terraform init",
     "plan": "terraform plan",
-    "apply": "terraform apply",
+    "apply": "terraform apply -auto-approve",
     "destroy": "terraform destroy"
   },
   "author": "Jakub Olan <keinsell@protonmail.com>",
