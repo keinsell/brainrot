@@ -7,16 +7,9 @@
 > Boilerplate that will save you few lines
 > ~ @keinsell
 
+Plygrnd is a little collection of shit that I wrote, it's not really meaningful for the community and serve no other purpose than tracking my own progress over time with the oversight on things which actually struggling me, there may be tons of code which I'll probably use as boilerplate for building things as nobody in this industry are building new things - all of shit that companies need is mostly things that I've wrote from 2-3 years ago. I also starting struggling with burnout so I hope my work will be helpful to some new people. I just wanted to make this place like a place where I would like to work instead messy repositories from job to job where nothing is documented, nothing is designed, at most cases I could not even run a project locally without 3-5 days asking for credits for 3rd-party services, not mentioning projects had no tests because it was barely possible to fit crap into container. Like... I just have fucking enough man...
 
-Methylophenidate is caffeinated language-agnostic repository boilerplate for "modern software" (after month of building
-I would like to say this repository is more like organization bootstrap instead a single project) built around
-open-source technologies (nothing feels that great as vendor-locked cloud-native). Featuring release management, CI/CD,
-Deployment, Infrastructure Management, Application Observability and bunch of other famous buzzwords minus the
-blockchain and AI (however, it's on the roadmap).
-
-## Table of Contents
-
-TODO
+Do not understand me wrong, I'm not the person who is against all of the complexity in the world - It's natural for things to get complex, and it's natural to seek ways to organize this chaos - that's why we have a flood of developer tools and frameworks - but really... do we need to know all of them? I always trying to build things my way - they way I find right, sometimes my "right" is not the "right" people would like to see, or deal with - however, this is the purpose of this repository - build things in my "right" way and see overall outcome - and what I mean by that? How newcommer would be able to adapt to the codebase? What it takes to change something in codebase? How many people could be able to work at the codebase same time without conflicting?
 
 ## Getting Started
 
