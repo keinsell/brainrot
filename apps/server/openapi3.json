@@ -909,9 +909,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Brigitte_Farrell14",
-              "Edna_Price",
-              "Eldora.Beatty"
+              "Luther_Hilll98",
+              "Amiya_Gleichner",
+              "Nicola81"
             ]
           }
         },
@@ -964,9 +964,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Brigitte_Farrell14",
-              "Edna_Price",
-              "Eldora.Beatty"
+              "Luther_Hilll98",
+              "Amiya_Gleichner",
+              "Nicola81"
             ]
           }
         },
@@ -1037,9 +1037,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Brigitte_Farrell14",
-              "Edna_Price",
-              "Eldora.Beatty"
+              "Luther_Hilll98",
+              "Amiya_Gleichner",
+              "Nicola81"
             ]
           },
           "method": {
@@ -1159,16 +1159,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": false
+            "example": true
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Brigitte_Farrell14",
-              "Edna_Price",
-              "Eldora.Beatty"
+              "Luther_Hilll98",
+              "Amiya_Gleichner",
+              "Nicola81"
             ]
           }
         },
@@ -1188,9 +1188,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Brigitte_Farrell14",
-              "Edna_Price",
-              "Eldora.Beatty"
+              "Luther_Hilll98",
+              "Amiya_Gleichner",
+              "Nicola81"
             ]
           },
           "password": {
