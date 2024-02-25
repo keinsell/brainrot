@@ -31,17 +31,24 @@ resource "sentry_project" "main" {
   platform     = "node"
 }
 
+resource "sentry_project" "webapp" {
+  organization = sentry_team.main.organization
+  teams        = [sentry_team.main.id]
+  name         = "plg-web"
+  platform     = "react"
+}
+
 output "sentry_server_project" {
   value = sentry_project.main.id
 }
 
 
-data "sentry_key" "main" {
+data "sentry_key" "plg_server" {
   organization = sentry_project.main.organization
   project      = sentry_project.main.id
   first        = true
 }
 
-output "project_key" {
+output "sentry_server_key" {
   value = data.sentry_key.main
 }
