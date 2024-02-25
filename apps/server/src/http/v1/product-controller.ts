@@ -75,8 +75,17 @@ export class CreateProduct
 }
 
 
+export const ApiPropertyProductId = ApiProperty({
+	type       : 'string',
+	name       : 'productId',
+	description: 'The product ID',
+	example    : 'gpu.nvidia.rtx.4090',
+                                                })
+
 export class ApiProduct
 {
+	@ApiPropertyProductId
+	public id: string
 	//	@ApiProperty({type: 'string', name: 'name', description: 'The name of the product', example: "NVIDIA RTX
 	// 4090"})
 	public name: string
