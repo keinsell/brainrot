@@ -10,12 +10,12 @@ variable "project_name" {
 #}
 
 variable "sentry_token" {
-  description = "API Token to Sentry.\n https://sentry.io/settings/account/api/auth-tokens/"
+  description = "You will need to configure the provider by providing an authentication token. You can create an authentication token within Sentry by creating an internal integration. This is also available for self-hosted Sentry. https://docs.sentry.io/product/integrations/integration-platform/internal-integration/#auth-tokens"
   type        = string
 }
 
 variable "sentry_base_url" {
-  description = "Base URL to Sentry.\n https://sentry.io/settings/account/api/auth-tokens/"
+  description = "Base URL to Sentry."
   type        = string
   default     = "https://sentry.io"
 }

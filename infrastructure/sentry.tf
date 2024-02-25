@@ -3,10 +3,12 @@ provider "sentry" {
   base_url = var.sentry_base_url
 }
 
+# Usually this would be a data source, but we're creating a new organization
 data "sentry_organization" "this" {
   # Taken from URL: https://sentry.io/organizations/[slug]/issues/
   slug = "keinsell"
 }
+
 
 output "sentry_organization" {
   value = data.sentry_organization.this
