@@ -33,10 +33,14 @@ resource "koyeb_service" "server" {
       value = "production"
     }
     env {
-      key   = "DATABASE_URI"
-      value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
-      .password}@${neon_project.this.branch.endpoint
+      key = "DATABASE_URI"
+      secret = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
+        .password}@${neon_project.this.branch.endpoint
       .host}:5432/${neon_database.this.name}"
+    }
+    env {
+      key   = "SENTRY_DSN"
+      value = data.sentry_key.plg_server.dsn_public
     }
 
     # Exposure
@@ -71,7 +75,8 @@ resource "koyeb_service" "server" {
 
   depends_on = [
     neon_project.this,
-    koyeb_app.this
+    koyeb_app.this,
+    sentry_project.main
   ]
 }
 
@@ -80,7 +85,7 @@ resource "infisical_secret" "KOYEB_SERVICE_ID" {
   value       = koyeb_service.server.id
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     koyeb_service.server
   ]
 }

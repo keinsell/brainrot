@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "jsx": false,
+      "dynamicImport": true,
+      "privateMethod": true,
+      "functionBind": true,
+      "exportDefaultFrom": true,
+      "exportNamespaceFrom": true,
+      "decorators": true,
+      "decoratorsBeforeExport": true,
+      "topLevelAwait": true,
+      "importMeta": true,
+      "nullishCoalescing": true,
+      "numericSeparator": true,
+      "classProperty": true,
+      "classPrivateProperty": true,
+      "importAssertions": true
+    },
+    "transform": {
+      "decoratorMetadata": true,
+      "useDefineForClassFields": true,
+      "hidden": {
+        "jest": false
+      },
+      "legacyDecorator": true,
+      "optimizer": {
+        "globals": {
+          "vars": {
+          },
+          "envs": []
+        }
+      }
+    },
+    "target": "esnext",
+    "loose": true,
+    "preserveAllComments": false,
+    "externalHelpers": true,
+    "keepClassNames": false,
+    "experimental": {
+      "keepImportAssertions": true
+    }
+  },
+  "disableHygiene": true,
+  "disableFixer": false,
+  "minify": false
+}

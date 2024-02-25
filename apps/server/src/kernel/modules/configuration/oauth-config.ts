@@ -6,7 +6,9 @@
 // and automatically parse them into objects,
 // then validate them and notify the administrator of the application if things are fine or something gone wrong.
 
-import {CombinedLogger} from '../../../common/logger/logger.js'
+
+
+import {CombinedLogger} from '../logger/logger.js'
 
 
 

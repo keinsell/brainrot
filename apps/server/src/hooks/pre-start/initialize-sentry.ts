@@ -24,34 +24,41 @@
  */
 
 import {setupGlobalHub}       from '@sentry/opentelemetry'
-import {CombinedLogger}       from "../../common/logger/logger.js"
 import {__sentry}             from '../../common/modules/resources/sentry-v2/global/get-sentry.js'
 import {SENTRY_CONFIGURATION} from '../../configs/config-set/sentry-configuration.js'
 import {__config}             from '../../configs/global/__config.js'
+import {CombinedLogger}       from '../../kernel/modules/logger/logger.js'
 
 
 
-export function initializeSentry(): void {
-	const logger = new CombinedLogger("sentry")
+export function initializeSentry(): void
+{
+	const logger = new CombinedLogger('sentry')
 
-	if (SENTRY_CONFIGURATION.enabled) {
+	if (SENTRY_CONFIGURATION.enabled)
+	{
 		logger.debug(`Initializing Sentry... ${__config.get('SENTRY_DSN')}`)
 	}
 
 	// Turn ON if integrating with OTEL
-	if (SENTRY_CONFIGURATION.instrumenter === 'otel') {
+	if (SENTRY_CONFIGURATION.instrumenter === 'otel')
+	{
 		setupGlobalHub()
 	}
 
 	// OTEL Configuration
-	try {
+	try
+	{
 		__sentry?.init({
-			...SENTRY_CONFIGURATION,
-		})
-	} catch {
+			               ...SENTRY_CONFIGURATION,
+		               })
+	}
+	catch
+	{
 	}
 
-	if (SENTRY_CONFIGURATION.enabled) {
+	if (SENTRY_CONFIGURATION.enabled)
+	{
 		logger.info(`Sentry initialized!`)
 	}
 }

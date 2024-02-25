@@ -23,15 +23,17 @@
  *
  */
 
-import type { Account } from '../../modules/account/entities/account.js'
+import {IFingerprint} from 'nestjs-fingerprint'
+import type {Account} from '../../modules/account/entities/account.js'
 
 
 
 declare namespace Express
-  {
-	 export interface Request
-		{
-		  user : Account
-		  requestId : string
-		}
-  }
+{
+	export interface Request
+	{
+		user: Account
+		requestId: string
+		fp: IFingerprint
+	}
+}

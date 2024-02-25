@@ -1,0 +1,12 @@
+openapi: 3.0.0
+info:
+  title: Pet Store Service
+  version: 2021-03-25
+  description: This is a sample server Petstore server.
+tags: []
+paths: {}
+components: {}
+servers:
+  - url: https://example.com
+    description: Single server endpoint
+    variables: {}

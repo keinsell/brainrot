@@ -77,10 +77,12 @@
     // TODO: Turn on.
     //    "noEmit": false,
     //    "moduleResolution": "NodeNext",
-    "types": [
-      "@types/node",
-      "@types/express-session",
-      //      "./src/types/**/*.d.ts",
+    //    "types": [
+    //      "@types/node",
+    //      "@types/express-session"
+    //    ],
+    "typeRoots": [
+      "./src/types/**/*"
     ],
     "paths": {
       "@filesystem/*": [
@@ -172,6 +174,9 @@
   ],
   "compileOnSave": true,
   "typeAcquisition": {
+    "include": [
+      "node"
+    ],
     "enable": true
   }
 }

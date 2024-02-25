@@ -1,107 +1,97 @@
 # Preview workflow is dedicated for spinning off a development environments on terraform, for example for every PR opened to main there will be real-world environment setted up on infrastructure which will be destroyed after merge.
 
-name : 👨‍💻Deploy
+name: 👨‍💻Deploy
 
-on   :
-  workflow_call     :
-  workflow_dispatch :
-  push              :
-    branches :
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches:
       - next
       - main
-    paths    :
+    paths:
       - 'package.json'
       - 'yarn.lock'
       - 'apps/server/**'
       - 'packages/**'
       - 'libs/shared/**'
 
-env  :
-  DOCKER_USERNAME  : ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_TOKEN     : ${{ secrets.DOCKERHUB_TOKEN }}
-  DATABASE_URI     : ${{ secrets.DATABASE_URI }}
-  KOYEB_SERVICE_ID : ${{ secrets.KOYEB_SERVICE_ID }}
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  DATABASE_URI: ${{ secrets.DATABASE_URI }}
+  KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
 
-jobs :
-  deploy        :
-    name        : "deploy"
-    runs-on     : methylphenidate-runner-set
-    container   :
-      image : ubuntu:latest
-    permissions :
-      contents    : read
-      packages    : write
-      deployments : write
-      id-token    : write
-    steps       :
-      -
-        name : 📜 Checkout Repository
-        uses : actions/checkout@v3
-        with :
-          fetch-depth : 0
+jobs:
+  deploy:
+    name: "deploy"
+    runs-on: luminar-linux-x64-x1
+    container:
+      image: ubuntu:latest
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
   
-  deploy_server :
-    if              : "!contains(github.event.head_commit.message, 'ci skip')"
-    name            : "deploy-server"
-    runs-on         : luminar-linux-x64-x2
-    timeout-minutes : 80
+  deploy_server:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    name: "deploy-server"
+    runs-on: luminar-linux-x64-x1
+    timeout-minutes: 80
     #    environment: Development
-    permissions     :
-      contents    : read
-      packages    : write
-      deployments : write
-      id-token    : write
-    steps           :
-      -
-        uses : actions/checkout@v3
-        with :
-          fetch-depth : 0
-      
-      -
-        name : Setup OS
-        uses : "./.github/actions/setup-os"
-      
-      -
-        name : ✳️ Setup Node.js
-        uses : "./.github/actions/setup-node"
-      
-      -
-        name : 🐳 Setup Docker
-        uses : "./.github/actions/setup-docker"
-        with :
-          docker_username : ${{ env.DOCKER_USERNAME }}
-          docker_password : ${{ env.DOCKER_TOKEN }}
-      
-      -
-        name : 🐳 Publish Docker Image
-        uses : docker/build-push-action@v5
-        with :
-          context    : apps/server
-          file       : apps/server/build/Dockerfile
-          push       : true
-          tags       : |
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup OS
+        uses: "./.github/actions/setup-os"
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
+        with:
+          docker_username: ${{ env.DOCKER_USERNAME }}
+          docker_password: ${{ env.DOCKER_TOKEN }}
+
+      - name: 🐳 Publish Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: apps/server
+          file: apps/server/build/Dockerfile
+          push: true
+          tags: |
             keinsell/methylphenidate-server:${{ github.sha }}
             ${{ github.event_name != 'pull_request' && 'keinsell/methylphenidate-server:dev' }}
-          cache-from : type=gha
-          cache-to   : type=gha,mode=max
-      
-      -
-        name : Install and configure the Koyeb CLI
-        uses : koyeb-community/install-koyeb-cli@v2
-        with :
-          api_token    : "${{ secrets.KOYEB_TOKEN }}"
-          github_token : "${{ secrets.GITHUB_TOKEN }}"
-      
-      -
-        name  : Build and deploy the application
-        shell : bash
-        run   : koyeb services redeploy $KOYEB_SERVICE_ID
-      
-      -
-        name : Check service health
-        run  : ./scripts/ci/api-healthcheck.sh $KOYEB_SERVICE_ID
-      
-      -
-        name : Migrate Database
-        run  : |
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/install-koyeb-cli@v2
+        with:
+          api_token: "${{ secrets.KOYEB_TOKEN }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Build and deploy the application
+        shell: bash
+        run: koyeb services redeploy $KOYEB_SERVICE_ID
+
+      - name: Check service health
+        run: ./scripts/ci/api-healthcheck.sh $KOYEB_SERVICE_ID
+
+      - name: Migrate Database
+        run: |
           cd apps/server && pnpm run db:migrate:deploy

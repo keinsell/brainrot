@@ -17,7 +17,6 @@ export namespace DbContextModel
 {
 	export namespace Enums
 	{
-		export type EmailVerificationStatus = $Enums.EmailVerificationStatus
 		export type PaymentProcessor = $Enums.PaymentProcessor
 	}
 

@@ -2,16 +2,21 @@ version: "3.7"
 
 services:
   traefik:
-    container_name: ${SERVICE_NAME}-traefik
+    container_name: dev-${PROJECT}-traefik
     image: traefik:v2.3
+    labels:
+      - "flame.type=application"
+      - "flame.name=traefik"
+      - "flame.url=http://localhost:8090"
+      - "flame.public=true"
     command:
       - --api.insecure=true
       - --providers.docker
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "8089:80"
+      - "8090:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -21,7 +26,7 @@ services:
           memory: 256M
 
   jaeger:
-    container_name: ${SERVICE_NAME}-jaeger
+    container_name: dev-${PROJECT}-jaeger
     image: jaegertracing/all-in-one:1.41
     labels:
       - "traefik.enable=true"
@@ -51,10 +56,10 @@ services:
           cpus: '0.5'
           memory: 256M
   postgres:
-    container_name: ${SERVICE_NAME}-postgres
+    container_name: dev-${PROJECT}-postgres
     image: postgres:latest
     ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+      - "${DATABASE_PORT}:5432"
     volumes:
       - "${PWD}/.docker/postgres:/var/lib/postgresql/data"
     environment:
@@ -72,13 +77,13 @@ services:
           cpus: '0.5'
           memory: 256M
   redis:
-    container_name: ${SERVICE_NAME}-redis
+    container_name: dev-${PROJECT}-redis
     image: redis:latest
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.redis.rule=Host(`redis.local`)"
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:6379"
     volumes:
       - "${PWD}/.docker/redis:/var/lib/redis"
     mem_reservation: 126M
@@ -92,12 +97,14 @@ services:
   # http://localhost:5005/
   flame:
     image: pawelmalak/flame
-    container_name: ${SERVICE_NAME}-flame
+    container_name: dev-${PROJECT}-flame
     volumes:
       - "${PWD}/.docker/flame:/app/data"
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - 5005:5005
+      - "5005:5005"
+    environment:
+      - PASSWORD=admin
     deploy:
       resources:
         limits:
@@ -105,7 +112,7 @@ services:
           memory: 256M
 
   nats:
-    container_name: ${SERVICE_NAME}-nats
+    container_name: dev-${PROJECT}-nats
     image: nats:latest
     ports:
       - "4222:4222" # Client connections
@@ -134,6 +141,23 @@ services:
         reservations:
           cpus: "0.25"
           memory: 512M
+  meilisearch:
+    container_name: dev-${PROJECT}-meilisearch
+    image: getmeili/meilisearch:latest
+    labels:
+      - "flame.type=application"
+      - "flame.name=melisearch"
+      - "flame.url=http://localhost:${MEILI_PORT:-7700}"
+      - "flame.public=true"
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
+      - MEILI_NO_ANALYTICS=${MEILI_NO_ANALYTICS:-true}
+      - MEILI_ENV=${MEILI_ENV:-development}
+      - MEILI_LOG_LEVEL
+      - MEILI_DB_PATH=${MEILI_DB_PATH:-/data.ms}
+    ports:
+      - ${MEILI_PORT:-7700}:7700
+    restart: no
 
 networks:
   default:

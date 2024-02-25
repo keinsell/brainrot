@@ -72,4 +72,36 @@ export class HttpProblem
 			             description: 'A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.',
 			             example    : 'https://jakubolan.eu.auth0.com/oauth/token',
 		             }) instance: string
+
+		constructor(
+data: {
+	type: string
+	title: string
+	status: HttpStatus
+	instance: string
+	message: string
+	metadata?: Record<string, any>
+}
+		)
+		{
+			const {
+				      type,
+				      title,
+				      status,
+				      instance,
+				      message,
+				      metadata,
+			      } = data
+
+			super(
+				type,
+				title,
+				message
+			)
+
+			this.type     = type
+			this.title    = title
+			this.status   = status
+			this.instance = instance
+}
 	}

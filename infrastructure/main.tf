@@ -39,9 +39,18 @@ terraform {
       version = "~> 5.0"
     }
 
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.0"
+    }
+
     cloudinit = {
       source  = "hashicorp/cloudinit"
       version = "~> 2.3.2"
+    }
+
+    sentry = {
+      source = "jianyuan/sentry"
     }
   }
   required_version = ">= 1.0"

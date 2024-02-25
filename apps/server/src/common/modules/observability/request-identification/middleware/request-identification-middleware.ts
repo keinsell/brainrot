@@ -24,60 +24,53 @@
  */
 
 import {
-  Inject,
-  Injectable,
-  type NestMiddleware,
-}                                            from '@nestjs/common'
-import { nanoid }                            from 'nanoid'
+	Inject,
+	Injectable,
+	type NestMiddleware,
+}                                          from '@nestjs/common'
+import {nanoid}                            from 'nanoid'
 import type {
-  ExpressRequest,
-  ExpressResponse,
-}                                            from '../../../../../types/express-response.js'
-import type { UniqueIdentifier }             from '../../../../libraries/identification/index.js'
-import type { RequestIdModuleOptions }       from '../config/request-id.config.js'
-import { REQUEST_ID_HEADER }                 from '../constant/REQUEST_ID_HEADER.js'
-import { REQUEST_ID_SERVICE }                from '../constant/REQUEST_ID_SERVICE.js'
-import { REQUEST_ID_MODULE_OPTIONS_TOKEN }   from '../module/request-identificatiion-module-definition.js'
-import type { RequestIdentificationService } from '../service/request-identification-service.js'
+	ExpressRequest,
+	ExpressResponse,
+}                                          from '../../../../../types/express-response.js'
+import type {UniqueIdentifier}             from '../../../../libraries/identification/index.js'
+import type {RequestIdModuleOptions}       from '../config/request-id.config.js'
+import {REQUEST_ID_HEADER}                 from '../constant/REQUEST_ID_HEADER.js'
+import {REQUEST_ID_SERVICE}                from '../constant/REQUEST_ID_SERVICE.js'
+import {REQUEST_ID_MODULE_OPTIONS_TOKEN}   from '../module/request-identificatiion-module-definition.js'
+import type {RequestIdentificationService} from '../service/request-identification-service.js'
 
 
 
 @Injectable()
 export class RequestIdentificationMiddleware
-  implements NestMiddleware
-  {
-	 constructor(
-		@Inject( REQUEST_ID_SERVICE ) private readonly service : RequestIdentificationService,
-		@Inject( REQUEST_ID_MODULE_OPTIONS_TOKEN ) private readonly options : RequestIdModuleOptions,
-	 )
+	implements NestMiddleware
+{
+	constructor(@Inject(REQUEST_ID_SERVICE) private readonly service: RequestIdentificationService, @Inject(REQUEST_ID_MODULE_OPTIONS_TOKEN) private readonly options: RequestIdModuleOptions)
+	{
+	}
+
+	use(req: ExpressRequest, res: ExpressResponse, next: () => void): void
+	{
+		let requestId: UniqueIdentifier
+
+		// Use generator provided by options or use a default generator
+		if (this.options.generator)
 		{
+			requestId = this.options.generator()
+		}
+		else
+		{
+			requestId = nanoid(128)
 		}
 
-	 use(
-		req : ExpressRequest,
-		res : ExpressResponse,
-		next : () => void,
-	 ) : void
-		{
-		  let requestId : UniqueIdentifier
+		// Set Request ID to headers
+		req.headers[REQUEST_ID_HEADER] = requestId as any
+		res.setHeader(REQUEST_ID_HEADER, requestId)
 
-		  // Use generator provided by options or use a default generator
-		  if ( this.options.generator )
-			 {
-				requestId = this.options.generator()
-			 }
-		  else
-			 {
-				requestId = nanoid( 128 )
-			 }
+		// Set Request ID to CLS
+		this.service.requestId = requestId
 
-		  // Set Request ID to headers
-		  req.headers[ REQUEST_ID_HEADER ] = requestId
-		  res.setHeader( REQUEST_ID_HEADER, requestId )
-
-		  // Set Request ID to CLS
-		  this.service.requestId = requestId
-
-		  next()
-		}
-  }
+		next()
+	}
+}

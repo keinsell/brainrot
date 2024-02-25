@@ -8,18 +8,18 @@ minRunners: 0
 runnerScaleSetName: "luminar-linux-x64-x2"
 
 containerMode:
-   type: "dind"
+  type: "dind"
 
 template:
   spec:
     containers:
       - name: runner
         image: ghcr.io/actions/actions-runner:latest
-        command: ["/home/runner/run.sh"]
+        command: [ "/home/runner/run.sh" ]
         resources:
           requests:
             memory: "64Mi"
             cpu: "250m"
           limits:
-            memory: "2Gi"
+            memory: "4Gi"
             cpu: "2"

@@ -60,182 +60,162 @@
         }
       }
     },
-    "/health": {
-      "get": {
-        "operationId": "healthcheck",
-        "summary": "Health check endpoint",
+    "/cbac/initiate": {
+      "post": {
+        "operationId": "request-proof-of-possession-of-private-key",
+        "summary": "Initiate certificate based authentication",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The Health Check is successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "ok"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {},
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "The Health Check is not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "error"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        },
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": {
-                          "type": "object"
-                        }
-                      }
-                    }
-                  }
-                }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateCertificateBasedAuthentication"
               }
             }
           }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
         }
+      }
+    },
+    "/cbac/verify": {
+      "post": {
+        "operationId": "verify-possession-of-private-key",
+        "summary": "Verify proof of possession of Private Key",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/compute": {
+      "get": {
+        "operationId": "ComputeController_compute",
+        "summary": "",
+        "description": "Compute the shit",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/compute/v2": {
+      "get": {
+        "operationId": "ComputeController_computeV2",
+        "summary": "",
+        "description": "Compute the shit2",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "operationId": "CartController_getMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "operationId": "CartController_updateMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartController_deleteMyCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/cart/item": {
+      "post": {
+        "operationId": "add-cart-item",
+        "summary": "Add item to cart",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemToCart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/cart/item/{cartItemId}": {
+      "delete": {
+        "operationId": "CartController_removeItemFromCart",
+        "parameters": [
+          {
+            "name": "cartItemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "put": {
+        "operationId": "CartController_updateItemInCart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "cart"
+        ]
       }
     },
     "/account": {
@@ -538,6 +518,184 @@
         }
       }
     },
+    "/health": {
+      "get": {
+        "operationId": "healthcheck",
+        "summary": "Health check endpoint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/product": {
       "post": {
         "operationId": "create-product",
@@ -546,6 +704,16 @@
           "product"
         ],
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProduct"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -561,7 +729,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiProduct"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -587,7 +765,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "product"
+        ]
       },
       "delete": {
         "operationId": "ProductController_deleteProduct",
@@ -596,7 +777,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "product"
+        ]
       }
     },
     "/cart/{id}": {
@@ -683,7 +867,7 @@
     }
   },
   "info": {
-    "title": "methylophenidate",
+    "title": "${PROJECT}",
     "description": "Methylophenidate is a boilerplate for Nest.js applications with batteries included.",
     "version": "1.0",
     "contact": {}
@@ -726,6 +910,41 @@
           "redirectUrl"
         ]
       },
+      "InitiateCertificateBasedAuthentication": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The account's username",
+            "example": "Raul_Marks",
+            "examples": [
+              "Danyka_Connelly",
+              "Seth_Rippin11",
+              "Delfina_Wilderman"
+            ]
+          }
+        },
+        "required": [
+          "username"
+        ]
+      },
+      "AddItemToCart": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "example": "gpu.nvidia.rtx.4090"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "productId",
+          "quantity"
+        ]
+      },
       "RegisterAccountCommand": {
         "type": "object",
         "properties": {
@@ -754,9 +973,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Danyka_Connelly",
+              "Seth_Rippin11",
+              "Delfina_Wilderman"
             ]
           }
         },
@@ -800,7 +1019,11 @@
               304,
               305,
               307,
-              400
+              400,
+              401,
+              404,
+              409,
+              500
             ],
             "description": "cyz",
             "example": 400
@@ -826,9 +1049,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Danyka_Connelly",
+              "Seth_Rippin11",
+              "Delfina_Wilderman"
             ]
           },
           "method": {
@@ -898,6 +1121,44 @@
           "refreshToken"
         ]
       },
+      "CreateProduct": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "The currency of the price",
+            "example": "PLN"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the product",
+            "example": "NVIDIA RTX 4090"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the product",
+            "example": 1000000
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "price"
+        ]
+      },
+      "ApiProduct": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "description": "The product ID",
+            "example": "gpu.nvidia.rtx.4090"
+          }
+        },
+        "required": [
+          "productId"
+        ]
+      },
       "Account": {
         "type": "object",
         "properties": {
@@ -926,9 +1187,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Danyka_Connelly",
+              "Seth_Rippin11",
+              "Delfina_Wilderman"
             ]
           }
         },
@@ -948,9 +1209,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Jarrell17",
-              "Earline_Zulauf",
-              "Karli50"
+              "Danyka_Connelly",
+              "Seth_Rippin11",
+              "Delfina_Wilderman"
             ]
           },
           "password": {

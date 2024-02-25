@@ -18,8 +18,8 @@ provider "github" {
 }
 
 resource "github_repository" "this" {
-  name                        = "methylphenidate"
-  description                 = "⚡ Meet Methylphenidate: The caffeinated language-agnostic repository boilerplate that will save you a lot of lines."
+  name                        = "plygrnd"
+  description                 = "🎠 Plygrnd: The caffeinated language-agnostic repository boilerplate that will save you a lot of lines."
   delete_branch_on_merge      = true
   allow_update_branch         = true
   allow_auto_merge            = true

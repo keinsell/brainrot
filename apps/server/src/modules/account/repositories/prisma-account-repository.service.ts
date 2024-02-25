@@ -1,11 +1,18 @@
-import {Injectable, Logger} from '@nestjs/common'
-import {DbContextModel}     from '../../../common/modules/database/db-context-model.js'
-import {PrismaService}      from '../../../common/modules/resources/prisma/services/prisma-service.js'
-import {Account}            from '../entities/account.js'
-import {AccountCreateModel} from '../models/account/account-create-model.js'
-import {AccountEntityModel} from '../models/account/account-entity-model.js'
-import {Username}           from '../value-objects/username.js'
-import {AccountRepository}  from './account-repository.js'
+import {
+	Injectable,
+	Logger,
+}                            from '@nestjs/common';
+import { PhcString }         from '../../../common/libraries/unihash/types/phc-string.js';
+import { DbContextModel }    from '../../../common/modules/database/db-context-model.js';
+import { PrismaService }     from '../../../common/modules/resources/prisma/services/prisma-service.js';
+import { Account }           from '../entities/account.js';
+import { DbContextModelAccountCreatePayloadMapper } from '../models/account/account-create-model.js';
+import { AccountEntityMapper } from '../models/account/account-entity-model.js';
+import { AccountEmail }      from '../value-objects/account-email.js';
+import { AccountStatus }     from '../value-objects/account-status.js';
+import { Password }          from '../value-objects/password.js';
+import { Username }          from '../value-objects/username.js';
+import { AccountRepository } from './account-repository.js';
 
 
 
@@ -40,7 +47,14 @@ export class PrismaAccountRepository extends AccountRepository {
 			account,
 		})
 
-		return new AccountEntityModel(account).toDomainModel()
+		return Account.build({
+			email: AccountEmail.create({address: account.email as any, isVerified: account.email_verified}),
+			id: account.id,
+			status: AccountStatus.ACTIVE,
+			groups: [],
+			password: Password.fromHash(account.password as any),
+			username: account.username as Username,
+		                     })
 	}
 
 
@@ -68,7 +82,14 @@ export class PrismaAccountRepository extends AccountRepository {
 
 		this.logger.debug(`findByUsername() => Account`)
 
-		return new AccountEntityModel(account).toDomainModel()
+		return Account.build({
+			                     email: AccountEmail.create({address: account.email as any, isVerified: account.email_verified}),
+			                     id: account.id,
+			                     status: AccountStatus.ACTIVE,
+			                     groups: [],
+			                     password: Password.fromHash(account.password as any),
+			                     username: account.username as Username,
+		                     })
 	}
 
 
@@ -97,7 +118,7 @@ export class PrismaAccountRepository extends AccountRepository {
 
 		const account = maybeAccount
 
-		return new AccountEntityModel(account).toDomainModel()
+		return new AccountEntityMapper().map(account)
 	}
 
 
@@ -106,14 +127,14 @@ export class PrismaAccountRepository extends AccountRepository {
 
 		try {
 			entity = await this.prismaService.account.create({
-				data: AccountCreateModel.fromDomainModel(identity),
+				data: DbContextModelAccountCreatePayloadMapper(identity),
 			})
 		} catch (e) {
 			this.logger.error(e)
 			throw e
 		}
 
-		return new AccountEntityModel(entity).toDomainModel()
+		return new AccountEntityMapper().map(entity)
 	}
 
 
@@ -143,7 +164,7 @@ export class PrismaAccountRepository extends AccountRepository {
 		})
 
 		if (entity) {
-			return new AccountEntityModel(entity).toDomainModel()
+			return new AccountEntityMapper().map(entity)
 		} else {
 			return null
 		}
@@ -160,7 +181,7 @@ export class PrismaAccountRepository extends AccountRepository {
 			},
 		})
 
-		return new AccountEntityModel(account).toDomainModel()
+		return new AccountEntityMapper().map(account)
 	}
 
 }

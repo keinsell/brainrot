@@ -16,63 +16,60 @@ datasource db {
   // shadowDatabaseUrl = env("DATABASE_URL")
 }
 
-enum EmailVerificationStatus {
-  VERIFIED
-  UNVERIFIED
-}
-
 model Account {
-  id                      String                  @id @default(cuid())
+  id                  String                @id @default(cuid())
   // --------------------------------------------------
   /// The user's family name.
-  family_name             String?
+  family_name         String?
   /// The user's given name.
-  given_name              String?
+  given_name          String?
   /// The user's locale.
-  locale                  String?                 @default("en")
+  locale              String?               @default("en")
   /// URL pointing to the user's profile picture.
-  picture                 String?
+  picture             String?
   /// The user's full name
-  name                    String?
+  name                String?
   /// The user's nickname.
-  nickname                String?
+  nickname            String?
   /// The user's phone number. Only valid for users with SMS connections.
-  phone_number            String?
+  phone_number        String?
   /// Indicates whether the user has been verified their phone number.
-  phone_verified          Boolean                 @default(false)
+  phone_verified      Boolean               @default(false)
   /// The user's username. Must be unique.
-  username                String                  @unique
+  username            String                @unique
   /// The user's email address. Must be unique.
-  email                   String                  @unique
+  email               String                @unique
   /// Indicates whether the user has verified their email address.
-  emailVerificationStatus EmailVerificationStatus @default(UNVERIFIED)
+  email_verified      Boolean               @default(false)
   //   email_verified Boolean @default(false)
   /// The user's password. Only valid for users with Database connections.
   /// (It's argon2 hashed)
-  password                String
+  password            String
   /// IP address associated with the user's last login.
-  last_ip                 String?
+  last_ip             String?
   /// Timestamp indicating when the user last logged in.
-  last_login              DateTime?
+  last_login          DateTime?
   // --------------------------------------------------
-  createdAt               DateTime                @default(now())
+  createdAt           DateTime              @default(now())
   /// Timestamp indicating when the user's profile was last updated/modified.
   /// Changes to last_login are considered updates, so most of the time,
   /// updated_at will match last_login.
-  updatedAt               DateTime                @updatedAt
-  version                 Int                     @default(1)
+  updatedAt           DateTime              @updatedAt
+  version             Int                   @default(1)
   // --------------------------------------------------
-  Sessions                Session[]
-  User                    User?
-  TokenAudit              TokenAudit[]
-  Group                   Group[]
-  Role                    Role[]
-  PaymentMethod           PaymentMethod[]
-  AccountMetadata         AccountMetadata[]
-  VerificationRequest     VerificationRequest[]
-  FederatedIdentity       FederatedIdentity[]
+  Sessions            Session[]
+  User                User?
+  TokenAudit          TokenAudit[]
+  Group               Group[]
+  Role                Role[]
+  PaymentMethod       PaymentMethod[]
+  AccountMetadata     AccountMetadata[]
+  VerificationRequest VerificationRequest[]
+  FederatedIdentity   FederatedIdentity[]
+  PGPKey              PGPKey?
 
   // @@index(fields: [id, email, username, phone_number], map: "account_idx", type: Hash)
+  @@map("iam_account")
 }
 
 model OAuthClient {
@@ -99,7 +96,21 @@ model OAuthClient {
   version               Int                 @default(1)
   FederatedIdentity     FederatedIdentity[]
 
-  @@map("auth_oauth_client")
+  @@map("iam_oauth_client")
+}
+
+model PGPKey {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  key       String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(1)
+  // --------------------------------------------------
+  Account   Account  @relation(fields: [id], references: [id], map: "account_openpgp_public_key_fkey")
+
+  @@map("iam_pgp_public_key")
 }
 
 model FederatedIdentity {
@@ -122,7 +133,7 @@ model FederatedIdentity {
   Account     Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
   OAuthClient OAuthClient @relation(fields: [IdP], references: [IdP], onDelete: Cascade)
 
-  @@map("auth_federated_identity")
+  @@map("iam_federated_identity")
 }
 
 /// Custom fields that store info about a user that does not impact what they can or cannot access, such as work address, home address, or user preferences.
@@ -139,6 +150,7 @@ model AccountMetadata {
   Account   Account  @relation(fields: [id], references: [id], map: "account_metadata_fk")
 
   @@unique([id, key])
+  @@map("iam_account_md")
 }
 
 model Group {
@@ -151,6 +163,8 @@ model Group {
   version   Int       @default(1)
   // --------------------------------------------------
   Members   Account[]
+
+  @@map("iam_group")
 }
 
 model Role {
@@ -163,6 +177,8 @@ model Role {
   version   Int       @default(1)
   // --------------------------------------------------
   Accounts  Account[]
+
+  @@map("iam_role")
 }
 
 model Session {
@@ -173,6 +189,8 @@ model Session {
   createdAt DateTime @default(now())
   // --------------------------------------------------
   Account   Account  @relation(fields: [accountId], references: [id], map: "account_session_fkey", onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("iam_session")
 }
 
 // TODO: It is temporary entity that could be hold in logs
@@ -218,70 +236,41 @@ model VerificationRequest {
 }
 
 model User {
+  id          String         @id @default(cuid())
+  // --------------------------------------------------
+  accountId   String         @unique
+  firstName   String
+  lastName    String
+  email       String
+  phoneNumber String?
+  avatar      String?
+  about       String?
+  // --------------------------------------------------
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  version     Int            @default(1)
+  // --------------------------------------------------
+  Account     Account        @relation(fields: [accountId], references: [id])
+  Payments    Payment[]
+  Checkout    Checkout[]
+  Metadata    UserMetadata[]
+  Customer    Customer?
+
+  @@map("user")
+}
+
+model Customer {
   id                String            @id @default(cuid())
   // --------------------------------------------------
-  accountId         String            @unique
-  firstName         String
-  lastName          String
-  email             String
-  phoneNumber       String?
-  avatar            String?
-  billingAddress    BillingAddress?
-  about             String?
   // --------------------------------------------------
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  version           Int               @default(1)
-  // --------------------------------------------------
-  Account           Account           @relation(fields: [accountId], references: [id])
-  Payments          Payment[]
-  Checkout          Checkout[]
-  Order             Order[]
-  Metadata          UserMetadata[]
-  Cart              Cart?
+  User              User              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Subscription      Subscription[]
   ShippingAddresses ShippingAddress[]
-}
+  Order             Order[]
+  Cart              Cart?
+  BillingAddress    BillingAddress[]
 
-model BillingAddress {
-  id            String   @id @default(cuid())
-  // --------------------------------------------------
-  legalName     String
-  taxIdentifier String
-  streetLine1   String
-  streetLine2   String?
-  city          String
-  state         String?
-  zipCode       String
-  country       String
-  // --------------------------------------------------
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  version       Int      @default(1)
-  // --------------------------------------------------
-  User          User     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Order         Order[]
-}
-
-model ShippingAddress {
-  id          String   @unique @default(cuid())
-  // --------------------------------------------------
-  userId      String
-  fullName    String
-  streetLine1 String
-  streetLine2 String?
-  city        String
-  state       String?
-  zipCode     String
-  country     String
-  // --------------------------------------------------
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  version     Int      @default(1)
-  // --------------------------------------------------
-  User        User     @relation(fields: [userId], references: [id])
-  Order       Order[]
-
-  @@id(fields: [id, version], map: "versioned_shipping_address_pk", name: "vid")
+  @@map("customer")
 }
 
 model UserMetadata {
@@ -294,60 +283,294 @@ model UserMetadata {
   updatedAt DateTime @updatedAt
   // --------------------------------------------------
   User      User     @relation(fields: [id], references: [id], map: "user_metadata_fkey", onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("user_md")
+}
+
+/// User can have only one billing address, but can have multiple shipping addresses.
+model BillingAddress {
+  id            String         @id @default(cuid())
+  // --------------------------------------------------
+  legalName     String
+  taxIdentifier String
+  streetLine1   String
+  streetLine2   String?
+  city          String
+  state         String?
+  zipCode       String
+  country       String
+  // --------------------------------------------------
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  version       Int            @default(1)
+  // --------------------------------------------------
+  Order         Order[]
+  Subscription  Subscription[]
+  Customer      Customer       @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("user_billing_address")
+}
+
+model ShippingAddress {
+  id           String         @unique @default(cuid())
+  // --------------------------------------------------
+  userId       String
+  fullName     String
+  streetLine1  String
+  streetLine2  String?
+  city         String
+  state        String?
+  zipCode      String
+  country      String
+  // --------------------------------------------------
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  version      Int            @default(1)
+  // --------------------------------------------------
+  Order        Order[]
+  Subscription Subscription[]
+  Customer     Customer?      @relation(fields: [customerId], references: [id])
+  customerId   String?
+
+  @@id(fields: [id, version], map: "versioned_shipping_address_pk", name: "vid")
+  @@unique([id, version])
+  @@map("user_shipping_address")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  // --------------------------------------------------
+  name        String
+  parentId    String?
+  description String?
+  // --------------------------------------------------
+  children    Category[] @relation(name: "CategoryParentCategoryChild")
+  parent      Category?  @relation(fields: [parentId], references: [id], name: "CategoryParentCategoryChild")
+  Product     Product[]
+
+  // --------------------------------------------------
+  @@map("product_category")
 }
 
 model Product {
-  id        String     @id @default(cuid())
+  id               String             @id @default(cuid())
   // --------------------------------------------------
-  name      String
-  price     Int
-  currency  String
+  name             String
+  categoryId       String?
+  price            Int
+  currency         String
   // --------------------------------------------------
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   // --------------------------------------------------
-  Order     Order[]
-  CartItem  CartItem[]
+  ProductAttribute ProductAttribute[]
+  variants         ProductVariant[]
+  CartItem         CartItem[]
+  Category         Category?          @relation(fields: [categoryId], references: [id])
+  OrderLine        OrderLine[]
+  Swap             Swap[]
+
+  // --------------------------------------------------
+  @@map("product")
+}
+
+enum AttributeType {
+  STRING
+  NUMBER
+  INTEGER
+  UNIT
+  BOOLEAN
+  DATE
+}
+
+// TODO: In future this can be extended to Attribute and AttributeValue which
+// would allow to create custom attributes for products. ProductAttribute
+// would be a connector between Attribute, AttributeValue and Product. This
+// will allow running really comprehensive queries and filters. The one worst
+// case to be resolved is different data types adn potentially implementation of
+// MTI to keep everything type-safe.
+model ProductAttribute {
+  id           String        @id @default(cuid())
+  // --------------------------------------------------
+  /// @example "gpu.vram"
+  uid          String        @unique
+  productId    String
+  /// Example of ProductAttribute would be "CUDA Cores" or "Memory"
+  name         String
+  description  String?
+  type         AttributeType
+  // Single-table inheritance (STI)
+  // https://www.prisma.io/docs/orm/prisma-schema/data-model/table-inheritance#data-model
+  // Sadly prisma do not support union types which eventually lead to hell
+  // like this without any proper way to enforce type safety (out of the box).
+  // Eventually, we need to use a single table inheritance (STI) pattern.
+  // STI would be more efficient.
+  valueInt     Int?
+  valueBoolean Boolean?
+  valueString  String?
+  valueIntUnit String?
+  // --------------------------------------------------
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  // --------------------------------------------------
+  Product      Product       @relation(fields: [productId], references: [id])
+
+  // --------------------------------------------------
+  @@map("product_attribute")
+}
+
+model ProductOption {
+  id                 String   @id @default(cuid())
+  // --------------------------------------------------
+  productAttributeId String
+  value              String
+  // --------------------------------------------------
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // --------------------------------------------------
+  @@map("product_option")
+}
+
+model ProductVariant {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  productId String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("product_variant")
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUNDED
+  RETURNED
 }
 
 model Order {
-  id                     String          @id @default(cuid())
+  id                     String           @id @default(cuid())
   // --------------------------------------------------
-  userId                 String
-  productId              String
-  quantity               Int
+  customerId             String
   shippingAddressId      String
   shippingAddressVersion Int
   billingAddressId       String?
+  // Indicates if placed order should start subscription
+  billingInterval        BillingInterval?
+  // If Order was placed as a part of subscription, this field will be populated
+  // with subscription ID, this is because we want to track all "sub-orders"
+  // that are part of subscription. No idea about other way.
+  subscriptionId         String?
+  status                 OrderStatus
+  subtotal               Int
+  tax                    Int
+  total                  Int
   // --------------------------------------------------
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+  processedAt            DateTime?
+  shippedAt              DateTime?
+  deliveredAt            DateTime?
+  canceledAt             DateTime?
+  refundedAt             DateTime?
+  returnedAt             DateTime?
   // --------------------------------------------------
-  User                   User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Product                Product         @relation(fields: [productId], references: [id])
-  ShippingAddress        ShippingAddress @relation(fields: [shippingAddressId, shippingAddressVersion], references: [id, version])
-  billingAddress         BillingAddress? @relation(fields: [billingAddressId], references: [id])
+  Customer               Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ShippingAddress        ShippingAddress  @relation(fields: [shippingAddressId, shippingAddressVersion], references: [id, version])
+  BillingAddress         BillingAddress?  @relation(fields: [billingAddressId], references: [id])
+  OrderLine              OrderLine[]
+  Subscription           Subscription?    @relation(fields: [subscriptionId], references: [id])
+  Swap                   Swap[]
+
+  @@map("order")
+}
+
+model Swap {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Order     Order    @relation(fields: [orderId], references: [id])
+  Product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("swap")
+}
+
+model OrderLine {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Order     Order    @relation(fields: [orderId], references: [id])
+  Product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_line")
 }
 
 model Cart {
-  id        String     @id @default(cuid())
+  id            String     @id @default(cuid())
   // --------------------------------------------------
-  profileId String?    @unique
+  /// Customer who owns the cart. His existence is optional.
+  customerId    String?    @unique
+  /// Fingerprints are used to identify a cart across multiple devices. If a
+  /// customer logs in on a different device, the cart will be restored using
+  /// the fingerprint.
+  fingerprint   String?
+  /// Promotion code applied to the cart.
+  promotionCode String?
+  /// Currency used for the cart. If not set, defaults to the currency of the customer.
+  currency      String     @default("USD")
+  /// Total quantity of items in the cart.
+  quantity      Int        @default(0)
+  /// Total before any discounts or taxes are applied.
+  subtotal      Int        @default(0)
+  /// Total tax amount applied. If no tax was applied, defaults to 0.
+  tax           Int        @default(0)
+  /// Total discount amount applied. If no discounts were applied, defaults to 0.
+  discount      Int        @default(0)
+  /// Total after discounts and taxes.
+  total         Int        @default(0)
   // --------------------------------------------------
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   // --------------------------------------------------
-  Checkout  Checkout?
-  CartItem  CartItem[]
-  User      User?      @relation(fields: [profileId], references: [id])
+  CartItem      CartItem[]
+  User          Customer?  @relation(fields: [customerId], references: [id])
+
+  @@map("cart")
 }
 
 model CartItem {
   id        String   @id @default(cuid())
   // --------------------------------------------------
+  /// The cart ID.
   cartId    String
+  /// The product ID.
   productId String
+  /// Total before any discounts or taxes are applied.
   price     Int
+  /// Currency used for the cart item. If not set, defaults to the currency of the cart.
+  currency  String
+  /// Total quantity of items in the cart.
   quantity  Int
   // --------------------------------------------------
   createdAt DateTime @default(now())
@@ -358,11 +581,20 @@ model CartItem {
 
   // Disallow duplicate rows with same product as quantity exists
   @@unique([cartId, productId])
+  @@map("cart_item")
 }
 
 enum PaymentProcessor {
   STRIPE
   PAYPAL
+  MANUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  FAILED
+  PAID
+  ACTION_REQUIRED
 }
 
 model Payment {
@@ -379,20 +611,68 @@ model Payment {
   Payer           User          @relation(fields: [payerId], references: [id])
   PaymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
   Checkout        Checkout?
+  Invoice         Invoice[]
+
+  // --------------------------------------------------
+  @@map("payment")
+}
+
+enum InvoiceStatus {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+  REFUNDED
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  // --------------------------------------------------
+  customerId  String
+  status      InvoiceStatus
+  paymentId   String
+  // --------------------------------------------------
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  // --------------------------------------------------
+  InvoiceLine InvoiceLine[]
+  Payment     Payment?      @relation(fields: [paymentId], references: [id])
+  Checkout    Checkout[]
+
+  // --------------------------------------------------
+  @@map("invoice")
+}
+
+model InvoiceLine {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  invoiceId String
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // --------------------------------------------------
+  Invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+
+  // --------------------------------------------------
+  @@map("invoice_line")
 }
 
 model PaymentMethod {
-  id        String               @id @default(cuid())
+  id           String               @id @default(cuid())
   // --------------------------------------------------
-  accountId String
-  processor PaymentProcessor
+  accountId    String
+  processor    PaymentProcessor
   // --------------------------------------------------
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
   // --------------------------------------------------
-  Account   Account              @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Stripe    StripePaymentMethod?
-  Payment   Payment[]
+  Account      Account              @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Stripe       StripePaymentMethod?
+  Payment      Payment[]
+  Subscription Subscription[]
+
+  // --------------------------------------------------
+  @@map("payment_method")
 }
 
 model StripePaymentMethod {
@@ -405,22 +685,41 @@ model StripePaymentMethod {
   updatedAt             DateTime      @updatedAt
   // --------------------------------------------------
   PaymentMethod         PaymentMethod @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("stripe_payment_method")
 }
 
 model Checkout {
-  id           String         @id @default(cuid())
+  id             String         @id @default(cuid())
   // --------------------------------------------------
-  userId       String
-  cartId       String         @unique
-  paymentId    String         @unique
+  userId         String
+  paymentId      String         @unique
+  invoiceId      String
+  subscriptionId String?
+  orderId        String?
+  /// Currency used for the cart. If not set, defaults to the currency of the customer.
+  currency       String         @default("USD")
+  /// Total quantity of items in the cart.
+  quantity       Int            @default(0)
+  /// Total before any discounts or taxes are applied.
+  subtotal       Int            @default(0)
+  /// Total tax amount applied. If no tax was applied, defaults to 0.
+  tax            Int            @default(0)
+  /// Total discount amount applied. If no discounts were applied, defaults to 0.
+  discount       Int            @default(0)
+  /// Total after discounts and taxes.
+  total          Int            @default(0)
   // --------------------------------------------------
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   // --------------------------------------------------
-  Cart         Cart           @relation(fields: [cartId], references: [id])
-  Payment      Payment        @relation(fields: [paymentId], references: [id])
-  User         User           @relation(fields: [userId], references: [id])
-  CheckoutItem CheckoutItem[]
+  Payment        Payment        @relation(fields: [paymentId], references: [id])
+  User           User           @relation(fields: [userId], references: [id])
+  Invoice        Invoice        @relation(fields: [invoiceId], references: [id])
+  CheckoutItem   CheckoutItem[]
+
+  // --------------------------------------------------
+  @@map("checkout")
 }
 
 model CheckoutItem {
@@ -437,6 +736,9 @@ model CheckoutItem {
   total      Int
   // --------------------------------------------------
   Checkout   Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // --------------------------------------------------
+  @@map("checkout_item")
 }
 
 model Blob {
@@ -445,13 +747,16 @@ model Blob {
   checksum  String
   type      String
   size      Int
-  url       String
+  filename  String   @unique
   // --------------------------------------------------
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // --------------------------------------------------
+  @@map("blob")
 }
 
-///  A coupon contains information about a percent-off or amount-off discount
+/// Coupon contains information about a percent-off or amount-off discount
 /// you might want to apply to a customer. Coupons may be applied to
 /// subscriptions, invoices, checkout sessions, quotes, and more. Coupons do not
 /// work with conventional one-off charges or payment intents.
@@ -471,6 +776,9 @@ model Coupon {
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
   metadata                 CouponMetadata[]
+
+  // --------------------------------------------------
+  @@map("coupon")
 }
 
 /// Set of key-value pairs that you can attach to an object.
@@ -483,6 +791,9 @@ model CouponMetadata {
   value  String
   // --------------------------------------------------
   Coupon Coupon @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // --------------------------------------------------
+  @@map("coupon_md")
 }
 
 /// A Promotion Code represents a customer-redeemable code for a coupon. It
@@ -493,4 +804,102 @@ model PromotionCode {
   // --------------------------------------------------
   code   String
   active Boolean
+
+  // --------------------------------------------------
+  @@map("promotion_code")
+}
+
+model Region {
+  id      String @id @default(cuid())
+  // --------------------------------------------------
+  name    String
+  country String
+
+  // --------------------------------------------------
+  @@map("region")
+}
+
+enum BillingInterval {
+  DAILY
+  EVERY_OTHER_DAY
+  EVERY_THIRD_DAY
+  EVERY_FOURTH_DAY
+  EVERY_WEEKDAY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMIANNUALLY
+  ANNUALLY
+
+  @@map("billing_interval")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  UNPAID
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  PAST_TRIALING
+
+  @@map("subscription_status")
+}
+
+model SubscriptionSchedule {
+  id        String   @id @default(cuid())
+  // --------------------------------------------------
+  startDate DateTime
+  endDate   DateTime
+  // --------------------------------------------------
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --------------------------------------------------
+  // --------------------------------------------------
+  @@map("subscription_schedule")
+}
+
+model Plan {
+  id String @id @default(cuid())
+  // --------------------------------------------------
+}
+
+model PlanItem {
+  id String @id @default(cuid())
+  // --------------------------------------------------
+}
+
+model Subscription {
+  id                String             @id @default(cuid())
+  // --------------------------------------------------
+  customerId        String
+  billingInterval   BillingInterval
+  billingFrequency  Int
+  paymentMethodId   String
+  nextBillingDate   DateTime
+  status            SubscriptionStatus
+  billingAddressId  String?
+  shippingAddressId String?
+  startedAt         DateTime
+  endedAt           DateTime?
+  // --------------------------------------------------
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  // --------------------------------------------------
+  Customer          Customer           @relation(fields: [customerId], references: [id])
+  PaymentMethod     PaymentMethod      @relation(fields: [paymentMethodId], references: [id])
+  BillingAddress    BillingAddress?    @relation(fields: [billingAddressId], references: [id])
+  ShippingAddress   ShippingAddress?   @relation(fields: [shippingAddressId], references: [id])
+  Order             Order[]
+
+  // --------------------------------------------------
+  @@map("subscription")
+}
+
+model Discount {
+  id String @id @default(cuid())
+  // --------------------------------------------------
 }

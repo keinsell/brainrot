@@ -109,7 +109,7 @@ export interface SingleSignOnService
  * SSO (Single Sign-On): Allow users to sign in with a single ID to access multiple related applications.
  */
 @Controller('/sso')
-export class SsoController
+export class SingleSignOnController
 {
 	private oauthClientStore = new OAuthClientStore()
 	private logger: Logger   = new Logger()

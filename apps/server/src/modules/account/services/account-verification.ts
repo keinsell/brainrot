@@ -1,24 +1,34 @@
-import {BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException} from '@nestjs/common'
-import {OnEvent}                                                                           from '@nestjs/event-emitter'
-import ms                                                                                  from 'ms'
-import {ok, Result}                                                                        from 'neverthrow'
-import {randomUUID}                                                                        from 'node:crypto'
-import {Mailer}                                                                            from '../../../common/mailer/contract/mailer.js'
-import {CreateEmailMessagePayload}                                                         from '../../../common/mailer/dto/create-email-message-payload.js'
-import {EventBus}                                                                          from '../../../common/modules/messaging/event-bus.js'
-import {CacheManager}                                                                      from '../../../common/modules/storage/cache-manager/contract/cache-manager.js'
-import {NotificationService}                                                               from '../../../common/notification/contract/notification-service.js'
-import {StaticFeatureFlags}                                                                from '../../../configs/static-feature-flags.js'
-import {AccountEmailConfirmed}                                                             from '../events/account-email-confirmed.js'
-import {AccountRegistered}                                                                 from '../events/account-registered.js'
-import {AccountVerificationEmailSent}                                                      from '../events/account-verification-email-sent.js'
-import {AccountConfirmedNotification}                                                      from '../notifcation/account-confirmed-notification.js'
-import {AccountRepository}                                                                 from '../repositories/account-repository.js'
+import {
+	BadRequestException,
+	Injectable,
+	Logger,
+	NotFoundException,
+	UnauthorizedException,
+}                                     from '@nestjs/common'
+import {OnEvent}                      from '@nestjs/event-emitter'
+import ms                             from 'ms'
+import {
+	ok,
+	Result,
+}                                     from 'neverthrow'
+import {randomUUID}                   from 'node:crypto'
+import {EventBus}                     from '../../../common/modules/messaging/event-bus.js'
+import {CacheManager}                 from '../../../common/modules/storage/cache-manager/contract/cache-manager.js'
+import {NotificationService}          from '../../../common/notification/contract/notification-service.js'
+import {StaticFeatureFlags}           from '../../../configs/static-feature-flags.js'
+import {Mailer}                       from '../../../kernel/integration/mailer/contract/mailer.js'
+import {CreateEmailMessagePayload}    from '../../../kernel/integration/mailer/dto/create-email-message-payload.js'
+import {AccountEmailConfirmed}        from '../events/account-email-confirmed.js'
+import {AccountRegistered}            from '../events/account-registered.js'
+import {AccountVerificationEmailSent} from '../events/account-verification-email-sent.js'
+import {AccountConfirmedNotification} from '../notifcation/account-confirmed-notification.js'
+import {AccountRepository}            from '../repositories/account-repository.js'
 
 
 
 @Injectable()
-export class AccountVerification {
+export class AccountVerification
+{
 	private logger: Logger
 	private accountRepository: AccountRepository
 	private publisher: EventBus
@@ -27,7 +37,8 @@ export class AccountVerification {
 	private notificationService: NotificationService
 
 
-	constructor(accountRepository: AccountRepository, eventBus: EventBus, cacheManager: CacheManager, mailer: Mailer, notificationService: NotificationService) {
+	constructor(accountRepository: AccountRepository, eventBus: EventBus, cacheManager: CacheManager, mailer: Mailer, notificationService: NotificationService)
+	{
 		this.logger              = new Logger('account::verification::service')
 		this.accountRepository   = accountRepository
 		this.publisher           = eventBus
@@ -37,7 +48,8 @@ export class AccountVerification {
 	}
 
 
-	public async sendVerificationEmail(accountId: string): Promise<void> {
+	public async sendVerificationEmail(accountId: string): Promise<void>
+	{
 		const account = await this.accountRepository.getById(accountId)
 
 		// Create secret code for email
@@ -52,8 +64,8 @@ export class AccountVerification {
 			recipient: {
 				to: account.email.address,
 			},
-			subject:   'Account Confirmation',
-			body:      'Your verification code is: ' + verificationSecret,
+			subject  : 'Account Confirmation',
+			body     : 'Your verification code is: ' + verificationSecret,
 		}
 
 		await this.mailer.sendEmail(verificationEmail)
@@ -64,14 +76,17 @@ export class AccountVerification {
 	}
 
 
-	public async resendVerificationEmail(accountEmail: string): Promise<void> {
+	public async resendVerificationEmail(accountEmail: string): Promise<void>
+	{
 		const account = await this.accountRepository.findByEmail(accountEmail)
 
-		if (!account) {
+		if (!account)
+		{
 			throw new NotFoundException('Account with associated mail was not found.')
 		}
 
-		if (account.email.isVerified) {
+		if (account.email.isVerified)
+		{
 			throw new BadRequestException('Account email is already verified.')
 		}
 
@@ -86,16 +101,19 @@ export class AccountVerification {
 	}
 
 
-	public async verifyEmail(code: string): Promise<Result<true, false>> {
+	public async verifyEmail(code: string): Promise<Result<true, false>>
+	{
 		const accountId = await this.cacheManager.get<string>(`verification_${code}`)
 
-		if (!accountId) {
+		if (!accountId)
+		{
 			throw new UnauthorizedException('Provided verification code is not valid.')
 		}
 
 		const account = await this.accountRepository.getById(accountId)
 
-		if (!account) {
+		if (!account)
+		{
 			throw new NotFoundException('Account associated with provided code was not found.')
 		}
 
@@ -116,7 +134,8 @@ export class AccountVerification {
 
 
 	@OnEvent('account.registered', {async: true})
-	private async onAccountRegistered(event: AccountRegistered): Promise<void> {
+	private async onAccountRegistered(event: AccountRegistered): Promise<void>
+	{
 		this.logger.debug(`Handling ${event.id} with "onAccountRegistered"`)
 		await this.sendVerificationEmail(event.body!.aggregateId)
 		this.logger.log(`Handled ${event.id} with "onAccountRegistered"`)
@@ -124,10 +143,12 @@ export class AccountVerification {
 
 
 	@OnEvent('account.verification.completed')
-	private async onEmailVerified(event: AccountEmailConfirmed): Promise<void> {
+	private async onEmailVerified(event: AccountEmailConfirmed): Promise<void>
+	{
 		this.logger.debug(`Handling ${event.id} with "onEmailVerified": ${JSON.stringify(event)}`)
 
-		if (!event.body?.email) {
+		if (!event.body?.email)
+		{
 			throw new BadRequestException('Email is missing.')
 		}
 
@@ -141,12 +162,16 @@ export class AccountVerification {
 	}
 
 
-	private createVerificationSecret(): string {
+	private createVerificationSecret(): string
+	{
 		let verificationSecret: string
 
-		if (StaticFeatureFlags.shouldUseTestingVerificationCode) {
+		if (StaticFeatureFlags.shouldUseTestingVerificationCode)
+		{
 			verificationSecret = 'verification_code'
-		} else {
+		}
+		else
+		{
 			verificationSecret = randomUUID()
 		}
 

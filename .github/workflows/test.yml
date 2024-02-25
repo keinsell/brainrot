@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     name: "test"
-    runs-on: methylphenidate-runner-set
+    runs-on: luminar-linux-x64-x1
     timeout-minutes: 80
     permissions:
       contents: read
@@ -45,5 +45,5 @@ jobs:
       - name: Build API
         run: cd apps/server && CI='' pnpm build:tsc
       - shell: bash
-        run: cp example.env apps/server/.env
+        run: cp example.env .env
       # TODO: Add container environment
