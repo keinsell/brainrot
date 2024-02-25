@@ -31,17 +31,13 @@ resource "sentry_project" "main" {
   platform     = "node"
 }
 
-output "sentry_server_project" {
-  value = sentry_project.main.id
-}
-
-
-data "sentry_key" "main" {
+data "sentry_key" "plg_server" {
   organization = sentry_project.main.organization
   project      = sentry_project.main.id
   first        = true
+  depends_on   = [sentry_project.main]
 }
 
 output "project_key" {
-  value = data.sentry_key.main
+  value = data.sentry_key.plg_server
 }
