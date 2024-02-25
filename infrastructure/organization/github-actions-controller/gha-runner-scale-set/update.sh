@@ -1,8 +1,6 @@
 #!/bin/bash
 
-NAMESPACE="ghar-luminar"
-GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
-GITHUB_PAT=$(op read op://dev/arc_4b7a43a2/token)
+source ../.env
 
 SCALESET_FILENAME="scaleset-luminar-linux-x64"
 SCALESET_INSTALLATION_NAME="luminar-linux-x64"
