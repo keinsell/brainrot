@@ -909,9 +909,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bertram_Stoltenberg95",
-              "Albert_Volkman",
-              "Elenor11"
+              "Brigitte_Farrell14",
+              "Edna_Price",
+              "Eldora.Beatty"
             ]
           }
         },
@@ -964,9 +964,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bertram_Stoltenberg95",
-              "Albert_Volkman",
-              "Elenor11"
+              "Brigitte_Farrell14",
+              "Edna_Price",
+              "Eldora.Beatty"
             ]
           }
         },
@@ -1010,7 +1010,8 @@
               304,
               305,
               307,
-              400
+              400,
+              500
             ],
             "description": "cyz",
             "example": 400
@@ -1036,9 +1037,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bertram_Stoltenberg95",
-              "Albert_Volkman",
-              "Elenor11"
+              "Brigitte_Farrell14",
+              "Edna_Price",
+              "Eldora.Beatty"
             ]
           },
           "method": {
@@ -1158,16 +1159,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": true
+            "example": false
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bertram_Stoltenberg95",
-              "Albert_Volkman",
-              "Elenor11"
+              "Brigitte_Farrell14",
+              "Edna_Price",
+              "Eldora.Beatty"
             ]
           }
         },
@@ -1187,9 +1188,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Bertram_Stoltenberg95",
-              "Albert_Volkman",
-              "Elenor11"
+              "Brigitte_Farrell14",
+              "Edna_Price",
+              "Eldora.Beatty"
             ]
           },
           "password": {

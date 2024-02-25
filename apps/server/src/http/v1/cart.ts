@@ -23,10 +23,12 @@ import {
 }                            from 'db'
 import {Event}               from '../../common/libraries/message/event.js'
 import {EventBus}            from '../../common/modules/messaging/event-bus.js'
+import {REQUEST_ID_HEADER}   from '../../common/modules/observability/request-identification/constant/REQUEST_ID_HEADER.js'
 import {PrismaService}       from '../../common/modules/resources/prisma/services/prisma-service.js'
 import {generateFingerprint} from '../../kernel/platform/http/middleware/fingerprint.js'
 import {Account}             from '../../modules/account/entities/account.js'
 import {RequestIdentity}     from '../../modules/authentication/request-identity.js'
+import {ExpressRequest}      from '../../types/express-response.js'
 
 
 
@@ -121,12 +123,15 @@ export class CartController
 	}
 
 	@Get()
-	private async getMyCart(@Req() request: any, @RequestIdentity() user?: Account)
+	private async getMyCart(@Req() request: ExpressRequest, @RequestIdentity() user?: Account)
 	{
 		let cart: Cart | null         = null
 		let customer: Customer | null = null
 
 		const fingerprint = generateFingerprint(request)
+
+		console.log(request.fingerprint)
+		console.log(request.headers[REQUEST_ID_HEADER])
 
 		// Find a Customer related to the authenticated user
 		if (user)

@@ -1,10 +1,12 @@
-import { IFingerprint } from '../kernel/platform/http/middleware/fingerprint';
-import { Account }      from '../modules/account/entities/account';
-import * as express      from 'express';
+import {Account} from '../modules/account/entities/account'
 
-declare module 'express' {
-  export interface Response extends express.Response {
-    account?: Account;
-    fingerprint?: IFingerprint;
-  }
+
+
+declare module 'express'
+{
+	interface Request
+	{
+		account?: Account
+		fingerprint?: string
+	}
 }

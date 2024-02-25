@@ -1,4 +1,5 @@
 import {
+	HttpException,
 	Logger,
 	ValidationPipe,
 }                                      from '@nestjs/common'
@@ -12,7 +13,7 @@ import {
 }                                      from '@nestjs/platform-express'
 import {apiReference}                  from '@scalar/nestjs-api-reference'
 import Sentry                          from '@sentry/node'
-import cookieParser                    from 'cookie-parser';
+import cookieParser                    from 'cookie-parser'
 import delay                           from 'delay'
 import express, {
 	Express,
@@ -21,9 +22,10 @@ import express, {
 import helmet                          from 'helmet'
 import ms                              from 'ms'
 import process                         from 'node:process'
-import requestIp                       from 'request-ip';
+import requestIp                       from 'request-ip'
 import {startTunnel}                   from 'untun'
 import {HttpExceptionFilter}           from './common/filters/exception-filter/http-exception-filter.js'
+import {HttpStatus}                    from './common/http-status.js'
 import {buildCompodocDocumentation}    from './common/modules/documentation/compodoc/compodoc.js'
 import {buildSwaggerDocumentation}     from './common/modules/documentation/swagger/swagger.js'
 import {executePrismaRelatedProcesses} from './common/modules/resources/prisma/utils/execute-prisma-related-processes.js'
@@ -50,21 +52,22 @@ export async function bootstrap(): Promise<NestExpressApplication>
 
 	// Bootstrap application
 	const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(Container, new ExpressAdapter(__expressApp), {
-		autoFlushLogs: true, //cors:          true,
-		//bodyParser:    true,
-		//rawBody:       true,
-		preview     : false,
-		bufferLogs  : true,
-		abortOnError: isDevelopment(),
-		snapshot    : isDevelopment(),
-		logger      : new LoggerNestjsProxy(),
+		autoFlushLogs: true,
+		cors         : true,
+		bodyParser   : true,
+		rawBody      : true,
+		preview      : false,
+		bufferLogs   : true,
+		abortOnError : isDevelopment(),
+		snapshot     : isDevelopment(),
+		logger       : new LoggerNestjsProxy(),
 	})
 
 	const {httpAdapter} = app.get(HttpAdapterHost)
 
 	app.useGlobalPipes(new ValidationPipe())
 	app.useBodyParser('json')
-	app.use(helmet({contentSecurityPolicy:false}))
+	app.use(helmet({contentSecurityPolicy: false}))
 	app.use(requestIp.mw())
 	app.use(cookieParser())
 
@@ -93,7 +96,17 @@ export async function bootstrap(): Promise<NestExpressApplication>
 	// The error handler must be before any other error middleware and after all controllers
 	app.useGlobalFilters(new HttpExceptionFilter(app.get(HttpAdapterHost)))
 
-	app.use(Sentry.Handlers.errorHandler())
+	app.use(Sentry.Handlers.errorHandler({
+		                                     // No better idea how to filter out non-important errors rn
+		                                     shouldHandleError: function (error: Error | HttpException): boolean
+		                                     {
+			                                     if (error instanceof HttpException)
+			                                     {
+				                                     return error.getStatus() >= HttpStatus.INTERNAL_SERVER_ERROR
+			                                     }
+			                                     return true
+		                                     },
+	                                     }))
 
 
 	// Optional fallthrough error handler

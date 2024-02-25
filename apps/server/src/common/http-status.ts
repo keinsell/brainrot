@@ -27,26 +27,27 @@
  * @see [RFC 7231, Section 6.1](https://datatracker.ietf.org/doc/html/rfc7231#section-6)
  */
 export enum HttpStatus
-  {
-	 /**   The 100 (Continue) status code indicates that the initial part of a
+{
+	/**   The 100 (Continue) status code indicates that the initial part of a
    request has been received and has not yet been rejected by the
    server.  The server intends to send a final response after the
    request has been fully received and acted upon. */
-	 CONTINUE                      = 100,
-	 SWITCHING_PROTOCOLS           = 101,
-	 OK                            = 200,
-	 CREATED                       = 201,
-	 ACCEPTED                      = 202,
-	 NON_AUTHORITATIVE_INFORMATION = 203,
-	 NO_CONTENT                    = 204,
-	 RESET_CONTENT                 = 205,
-	 PARTIAL_CONTENT               = 206,
-	 MULTIPLE_CHOICES              = 300,
-	 MOVED_PERMANENTLY             = 301,
-	 FOUND                         = 302,
-	 SEE_OTHER                     = 303,
-	 NOT_MODIFIED                  = 304,
-	 USE_PROXY                     = 305,
-	 TEMPORARY_REDIRECT            = 307,
-	 BAD_REQUEST                   = 400,
-  }
+	CONTINUE                      = 100,
+	SWITCHING_PROTOCOLS           = 101,
+	OK                            = 200,
+	CREATED                       = 201,
+	ACCEPTED                      = 202,
+	NON_AUTHORITATIVE_INFORMATION = 203,
+	NO_CONTENT                    = 204,
+	RESET_CONTENT                 = 205,
+	PARTIAL_CONTENT               = 206,
+	MULTIPLE_CHOICES              = 300,
+	MOVED_PERMANENTLY             = 301,
+	FOUND                         = 302,
+	SEE_OTHER                     = 303,
+	NOT_MODIFIED                  = 304,
+	USE_PROXY                     = 305,
+	TEMPORARY_REDIRECT            = 307,
+	BAD_REQUEST                   = 400,
+	INTERNAL_SERVER_ERROR         = 500,
+}

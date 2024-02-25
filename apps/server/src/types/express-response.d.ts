@@ -23,9 +23,12 @@
  *
  */
 
-import type { Response } from 'express'
+import type {
+	Request,
+	Response,
+} from 'express'
 
 
 
 export type ExpressResponse = Response
-export type ExpressRequest = ExpressRequest
+export type ExpressRequest = Request

@@ -1,4 +1,6 @@
-INSTALLATION_NAME="methylphenidate-runner-set"
+#!/bin/bash
+
+INSTALLATION_NAME="luminar-linux-x64-x1"
 NAMESPACE="methylphenidate-runners"
 GITHUB_CONFIG_URL="https://github.com/keinsell/methylphenidate"
 GITHUB_PAT=$(op read op://dev/arc_4b7a43a2/token)
