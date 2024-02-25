@@ -45,9 +45,24 @@ import {
 	Prisma,
 	Product,
 }                      from 'db'
+import { HttpProblem } from '../../common/error/problem-details/http-problem.js';
+import { HttpStatus }  from '../../common/http-status.js';
 import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
 
-
+export class ProductNotFound extends HttpProblem {
+	constructor(productId: string)
+	{
+		super(
+			{
+				type: 'com.application.product.not-found',
+				title: 'Product Not Found',
+				status: HttpStatus.NOT_FOUND,
+				instance: `com.application.product.${productId}`,
+				message: 'The product could not be found.',
+			}
+		)
+	}
+}
 
 export class CreateProduct
 	implements Prisma.ProductCreateInput

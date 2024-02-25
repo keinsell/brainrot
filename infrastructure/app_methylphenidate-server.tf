@@ -75,7 +75,8 @@ resource "koyeb_service" "server" {
 
   depends_on = [
     neon_project.this,
-    koyeb_app.this
+    koyeb_app.this,
+    sentry_project.main
   ]
 }
 
