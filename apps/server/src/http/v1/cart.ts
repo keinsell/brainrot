@@ -4,7 +4,7 @@ import {
 	Delete,
 	Get,
 	Logger,
-	NotFoundException,
+	Param,
 	Post,
 	Put,
 	Req,
@@ -16,11 +16,16 @@ import {
 	ApiProperty,
 	ApiTags,
 }                            from '@nestjs/swagger'
-import type {Product}        from 'db'
+import type {
+	CartItem,
+	Product,
+}                            from 'db'
 import {
 	Cart,
 	Customer,
 }                            from 'db'
+import {HttpProblem}         from '../../common/error/problem-details/http-problem.js'
+import {HttpStatus}          from '../../common/http-status.js'
 import {Event}               from '../../common/libraries/message/event.js'
 import {EventBus}            from '../../common/modules/messaging/event-bus.js'
 import {REQUEST_ID_HEADER}   from '../../common/modules/observability/request-identification/constant/REQUEST_ID_HEADER.js'
@@ -29,6 +34,7 @@ import {generateFingerprint} from '../../kernel/platform/http/middleware/fingerp
 import {Account}             from '../../modules/account/entities/account.js'
 import {RequestIdentity}     from '../../modules/authentication/request-identity.js'
 import {ExpressRequest}      from '../../types/express-response.js'
+import {ProductNotFound}     from './product-controller.js'
 
 
 
@@ -39,6 +45,22 @@ const combineDecorators = (...decorators: Array<Function>): CombinedDecorators =
 	return (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) =>
 	{
 		decorators.forEach(decorator => decorator(target, propertyKey, descriptor))
+	}
+}
+
+
+export class CartItemNotFound
+	extends HttpProblem
+{
+	constructor(cartItemId: string)
+	{
+		super({
+			      type    : 'com.application.cart-item.not-found',
+			      title   : 'Cart Item Not Found',
+			      status  : HttpStatus.NOT_FOUND,
+			      instance: `com.application.cart-item.${cartItemId}`,
+			      message : 'The cart item could not be found.',
+		      })
 	}
 }
 
@@ -74,6 +96,17 @@ export interface CartItemAddedEventBody
 }
 
 
+export interface CartItemDeletedEventBody
+{
+	id: string
+	cartId: string
+	productId: string
+	quantity: number
+	total: number
+	currency: string
+}
+
+
 export class CartItemAddedEvent
 	extends Event<CartItemAddedEventBody>
 {
@@ -81,6 +114,19 @@ export class CartItemAddedEvent
 	{
 		super({
 			      namespace: 'cart.item.added',
+			      body,
+		      })
+	}
+}
+
+
+export class CartItemDeletedEvent
+	extends Event<CartItemDeletedEventBody>
+{
+	constructor(body: CartItemDeletedEventBody)
+	{
+		super({
+			      namespace: 'cart.item.deleted',
 			      body,
 		      })
 	}
@@ -263,7 +309,7 @@ export class CartController
 
 		if (!product)
 		{
-			throw new NotFoundException('Product not found')
+			throw new ProductNotFound(requestBody.productId)
 		}
 
 		this.logger.debug('Received a product to add to the cart...', product)
@@ -321,19 +367,52 @@ export class CartController
 		return cartItem
 	}
 
-	@Delete('item/:id')
-	private removeItemFromCart()
+	@Delete('item/:cartItemId')
+	private async removeItemFromCart(@Req() request: ExpressRequest, @Param('cartItemId') cartItemId: string, @RequestIdentity() user?: Account)
 	{
+		let product: Product | null   = null
+		let cartItem: CartItem | null = null
+
 		this.logger.debug('Fetching a cart of a user...')
+
+		// Get a cart by the user's fingerprint
+		const fingerprint = generateFingerprint(request)
+		const cart        = await this.getUserCartByAccountAndFingerprint(fingerprint, user)
+
+		this.logger.debug('Received a cart of a user...', cart)
+
+		let cartItemToDelete = await this.cartItemRepository.findFirst({where: {id: request.params.id}})
+
+		if (!cartItemToDelete)
+		{
+			throw new CartItemNotFound(request.params.id)
+		}
+
 		this.logger.debug('Removing item from cart...')
 
+		await this.cartItemRepository.delete({where: {id: cartItemId}})
+
+		this.logger.debug('CartItem entity removed')
+
+		this.logger.debug('Emitting CartItemDeleted event...')
+
+		// Emit an event that the cart item was added
+
+		this.bus.publish(new CartItemDeletedEvent({
+			                                          id       : cartItemId,
+			                                          cartId   : cart.id,
+			                                          productId: cartItemToDelete.productId,
+			                                          quantity : cartItemToDelete.quantity,
+			                                          total    : cartItemToDelete.price,
+			                                          currency : cartItemToDelete.currency,
+		                                          }))
 
 		this.logger.log('Deleted CartItem')
 
-		return 'Hello, cart!'
+		return 'ok'
 	}
 
-	@Put('item/:id')
+	@Put('item/:cartItemId')
 	private updateItemInCart()
 	{
 		return 'Hello, cart!'
@@ -357,6 +436,29 @@ export class CartController
 				                                 },
 				                                 subtotal: {
 					                                 increment: event.body.totalAdded,
+				                                 },
+				                                 currency: event.body.currency,
+			                                 },
+		                                 })
+	}
+
+	@OnEvent('cart.item.deleted', {async: true})
+	private async onCartItemDeleted(event: CartItemDeletedEvent)
+	{
+		this.logger.debug('Received CartItemDeleted event...', event)
+
+		this.logger.debug('Updating Cart with CartItem data', event)
+		await this.cartRepository.update({
+			                                 where: {id: event.body.cartId},
+			                                 data : {
+				                                 quantity: {
+					                                 decrement: event.body.quantity,
+				                                 },
+				                                 total   : {
+					                                 decrement: event.body.total,
+				                                 },
+				                                 subtotal: {
+					                                 decrement: event.body.total,
 				                                 },
 				                                 currency: event.body.currency,
 			                                 },
