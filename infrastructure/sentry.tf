@@ -35,7 +35,7 @@ resource "sentry_project" "webapp" {
   organization = sentry_team.main.organization
   teams        = [sentry_team.main.id]
   name         = "plg-web"
-  platform     = "react"
+  platform     = "reactjs"
 }
 
 output "sentry_server_project" {
