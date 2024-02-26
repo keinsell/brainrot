@@ -16,14 +16,12 @@ terraform {
 }
 
 
-provider "minikube" {
-  kubernetes_version = "v1.28.3"
-}
+provider "minikube" {}
 
 resource "minikube_cluster" "docker" {
   driver       = "docker"
   cluster_name = "minikube"
-  addons       = [
+  addons = [
     "default-storageclass",
     "storage-provisioner"
   ]
@@ -53,46 +51,46 @@ provider "helm" {
   }
 }
 
-resource "helm_release" "arc" {
-  name       = "arc"
-  namespace  = kubernetes_namespace.arc-systems.metadata[0].name
-  repository = "https://ghcr.io/actions/actions-runner-controller-charts"
-  chart      = "gha-runner-scale-set-controller"
-}
+# resource "helm_release" "arc" {
+#   name       = "arc"
+#   namespace  = kubernetes_namespace.arc-systems.metadata[0].name
+#   repository = "https://ghcr.io/actions/actions-runner-controller-charts"
+#   chart      = "gha-runner-scale-set-controller"
+# }
 
-resource "helm_release" "runner_set" {
-  name       = "luminar-linux-x64-x1"
-  namespace  = "methylphenidate-runners"
-  repository = "https://ghcr.io/actions/actions-runner-controller-charts"
-  chart      = "gha-runner-scale-set"
+# resource "helm_release" "runner_set" {
+#   name       = "luminar-linux-x64-x1"
+#   namespace  = "methylphenidate-runners"
+#   repository = "https://ghcr.io/actions/actions-runner-controller-charts"
+#   chart      = "gha-runner-scale-set"
 
-  set {
-    name  = "githubConfigUrl"
-    value = "https://github.com/keinsell/plygrnd"
-  }
+#   set {
+#     name  = "githubConfigUrl"
+#     value = "https://github.com/keinsell/plygrnd"
+#   }
 
-  set_sensitive {
-    name  = "githubConfigSecret.github_token"
-    value = var.github_pat
-  }
+#   set_sensitive {
+#     name  = "githubConfigSecret.github_token"
+#     value = var.github_pat
+#   }
 
-  set {
-    name  = "containerMode.type"
-    value = "dind"
-  }
+#   set {
+#     name  = "containerMode.type"
+#     value = "dind"
+#   }
 
-  set {
-    name  = "minRunners"
-    value = "1"
-  }
+#   set {
+#     name  = "minRunners"
+#     value = "1"
+#   }
 
-  set {
-    name  = "maxRunners"
-    value = "10"
-  }
-}
+#   set {
+#     name  = "maxRunners"
+#     value = "10"
+#   }
+# }
 
-variable "github_pat" {
-  description = "GitHub Personal Access Token"
-  sensitive   = true
-}
+# variable "github_pat" {
+#   description = "GitHub Personal Access Token"
+#   sensitive   = true
+# }

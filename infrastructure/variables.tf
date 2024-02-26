@@ -14,6 +14,10 @@ variable "sentry_token" {
   type        = string
 }
 
+variable "storj_access_grant" {
+  type = string
+}
+
 variable "sentry_base_url" {
   description = "Base URL to Sentry."
   type        = string
