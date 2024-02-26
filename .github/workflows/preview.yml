@@ -38,6 +38,18 @@ jobs:
         with:
           terraform_version: 0.14.0
 
+          # Prepare the workspace
+
+      - name: Create Workspace
+        uses: hashicorp/tfc-workflows-github/actions/create-workspace@v1.0.0
+        id: create-workspace
+        with:
+          organization: ${{ env.TF_CLOUD_ORGANIZATION }}
+          name: ${{ env.TF_WORKSPACE }}
+          auto_apply: false
+          working_directory: ${{ env.CONFIG_DIRECTORY }}
+          speculative: true
+
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: upload-configuration
