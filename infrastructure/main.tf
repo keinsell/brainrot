@@ -2,7 +2,8 @@ terraform {
   cloud {
     organization = "keinsell"
     workspaces {
-      name = "methylphenidate"
+      name    = "methylphenidate"
+      project = "plygrnd"
     }
   }
   required_providers {
