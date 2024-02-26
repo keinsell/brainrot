@@ -35,3 +35,11 @@ resource "github_repository" "this" {
   squash_merge_commit_title   = "PR_TITLE"
   vulnerability_alerts        = true
 }
+
+# Github Application must be created before manually
+# https://develop.sentry.dev/integrations/github/
+# https://github.com/integrations/terraform-provider-github/issues/509
+#resource "github_app_installation_repository" "sentry" {
+#  installation_id = ""
+#  repository      = ""
+#}
