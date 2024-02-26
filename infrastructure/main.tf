@@ -76,6 +76,11 @@ terraform {
       source  = "hashicorp/hcp"
       version = "0.83.0"
     }
+
+    storj = {
+      source  = "storj/storj"
+      version = "0.0.1"
+    }
   }
   required_version = ">= 1.0"
 }
