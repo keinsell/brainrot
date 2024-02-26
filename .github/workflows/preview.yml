@@ -33,6 +33,9 @@ jobs:
       - name: 🐧 Setup OS
         uses: "./.github/actions/setup-os"
 
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
