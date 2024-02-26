@@ -52,6 +52,30 @@ terraform {
     sentry = {
       source = "jianyuan/sentry"
     }
+
+    // TODO: Add CDN, https://registry.terraform.io/providers/fastly
+    fastly = {
+      source  = "fastly/fastly"
+      version = ">= 5.6.0"
+    }
+
+    // TODO: Add Configuration Management, https://registry.terraform.io/providers/configcat
+    configcat = {
+      source  = "configcat/configcat"
+      version = "4.0.0"
+    }
+
+    // TODO: Add Airbyte (Self-Hosted), https://registry.terraform.io/providers/airbytehq/airbyte
+    airbyte = {
+      source  = "airbytehq/airbyte"
+      version = "0.4.1"
+    }
+
+    // TODO: Give HCP a try, https://registry.terraform.io/providers/hashicorp/hcp
+    hcp = {
+      source  = "hashicorp/hcp"
+      version = "0.83.0"
+    }
   }
   required_version = ">= 1.0"
 }
