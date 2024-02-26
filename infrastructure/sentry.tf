@@ -1,3 +1,6 @@
+# TOOD: I cannot find a way to automate connection between GitHub and Sentry
+# For now it will be requried to be done manually
+
 provider "sentry" {
   token    = var.sentry_token
   base_url = var.sentry_base_url
@@ -41,3 +44,21 @@ data "sentry_key" "plg_server" {
 output "project_key" {
   value = data.sentry_key.plg_server
 }
+
+#resource "github_app_installation_repository" "sentry" {
+#  installation_id = "sentry"
+#  repository      = "${github_repository.this.name}"
+#}
+#
+#data "sentry_organization_integration" "github" {
+#  organization = data.sentry_organization.this.name
+#  provider_key = "github"
+#  name         = "keinsell"
+#}
+#
+#
+#resource "sentry_organization_repository_github" "this" {
+#  organization   = data.sentry_organization.this.name
+#  integration_id = data.sentry_organization_integration.github.internal_id
+#  identifier     = "keinsell/${github_repository.this.name}"
+#}
