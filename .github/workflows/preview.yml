@@ -47,7 +47,6 @@ jobs:
       - name: 📦 Create Ephemeral Workspace
         run: |
           terraform workspace new ${{ env.TF_WORKSPACE }}
-          terraform workspace select ${{ env.TF_WORKSPACE }}
 
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
