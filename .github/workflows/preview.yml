@@ -45,23 +45,8 @@ jobs:
         shell: bash
         run: |
           cd infrastructure
+          terraform workspace new $TF_WORKSPACE || terraform workspace select $TF_WORKSPACE
           terraform init
-          RESPONSE=$(curl \
-            --header "Authorization: Bearer ${{ secrets.TF_API_TOKEN }}" \
-            --header "Content-Type: application/vnd.api+json" \
-            --request POST \
-            --data '{
-              "data": {
-                "type": "workspaces",
-                "attributes": {
-                  "name": "${{ env.TF_WORKSPACE }}",
-                  "auto-apply": true
-                }
-              }
-            }' \
-            https://app.terraform.io/api/v2/organizations/${{ secrets.TF_CLOUD_ORGANIZATION }}/workspaces)
-          WORKSPACE_ID=$(echo $RESPONSE | jq -r '.data.id')
-          terraform workspace select $WORKSPACE_ID
 
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
