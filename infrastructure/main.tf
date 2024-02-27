@@ -1,7 +1,10 @@
 terraform {
   cloud {
     organization = "keinsell"
-    workspaces {}
+    workspaces {
+      workspace = "development"
+      project = "plygrnd"
+    }
   }
   required_providers {
     scaleway = {

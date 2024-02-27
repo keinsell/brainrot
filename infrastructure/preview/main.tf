@@ -1,11 +1,13 @@
-data "terraform_remote_state" "shared" {
+data "terraform_remote_state" "development" {
   backend = "remote"
-
-  config = {
+  config  = {
     organization = "keinsell"
-    workspaces = {
-      name    = "methylphenidate"
-      project = "plygrnd"
+    workspaces   = {
+      project     = "plygrnd"
+      environment = "development"
     }
   }
+}
+
+provider "koyeb" {
 }
