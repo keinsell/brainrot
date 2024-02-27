@@ -1,9 +1,23 @@
+locals {
+  environments = {
+    preview = "preview"
+    development = "development"
+    nightly     = "nightly"
+    canary      = "canary"
+    production  = "production"
+  }
+  tags = {
+    application = "plygrnd"
+    environment = "development"
+  }
+}
+
 terraform {
   cloud {
     organization = "keinsell"
     workspaces {
-      workspace = "development"
       project = "plygrnd"
+      tags = ["plygrnd"]
     }
   }
   required_providers {
