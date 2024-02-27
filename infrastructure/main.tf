@@ -1,10 +1,7 @@
 terraform {
   cloud {
     organization = "keinsell"
-    workspaces {
-      name    = "methylphenidate"
-      project = "plygrnd"
-    }
+    workspaces {}
   }
   required_providers {
     scaleway = {
