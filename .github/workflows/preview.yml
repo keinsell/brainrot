@@ -41,12 +41,6 @@ jobs:
         with:
           terraform_version: 0.14.0
 
-      # Prepare the workspace
-      - name: Create Workspace
-        run: |
-          terraform login -t ${{ env.TF_API_TOKEN }}
-          terraform workspace new ${{ env.TF_WORKSPACE }}
-
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: upload-configuration

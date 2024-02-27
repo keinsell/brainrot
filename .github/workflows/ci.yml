@@ -29,7 +29,6 @@ jobs:
     name: 💡 Pre-build
     uses: ./.github/workflows/pre-build.yml
 
-
   # Build is a step dedicated for building application.
   build:
     name: 🔨 Build
