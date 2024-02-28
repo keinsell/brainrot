@@ -45,7 +45,6 @@ jobs:
         shell: bash
         run: |
           cd infrastructure
-          terraform workspace new $TF_WORKSPACE || terraform workspace select $TF_WORKSPACE
           terraform init
 
       - name: Upload Configuration
