@@ -43,7 +43,7 @@ jobs:
 
       - name: Create Workspace
         run: |
-          terraform login ${{ secrets.TF_API_TOKEN }}
+          cd ${{ env.CONFIG_DIRECTORY }}
           terraform workspace new ${{ env.TF_WORKSPACE }} || terraform workspace select ${{ env.TF_WORKSPACE }}
 
       - run: |
