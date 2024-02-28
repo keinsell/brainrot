@@ -6,10 +6,6 @@ locals {
     canary      = "canary"
     production  = "production"
   }
-  tags = {
-    application = "plygrnd"
-    environment = "development"
-  }
 }
 
 terraform {
