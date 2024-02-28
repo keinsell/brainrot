@@ -49,7 +49,7 @@ jobs:
           token: ${{ env.TF_API_TOKEN }}
           workspace: ${{ env.TF_WORKSPACE }}
           directory: ${{ env.CONFIG_DIRECTORY }}
-          speculative: true
+          speculative: false
 
 
       - name: Create Plan Run
