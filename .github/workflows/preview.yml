@@ -41,25 +41,23 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: 📦Setup Terraform Workspace
-        shell: bash
-        run: |
-          cd infrastructure
-          terraform workspace new ${{ env.TF_WORKSPACE }}
-          terraform init
-
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: upload-configuration
         with:
+          organization: ${{ env.TF_CLOUD_ORGANIZATION }}
+          token: ${{ env.TF_API_TOKEN }}
           workspace: ${{ env.TF_WORKSPACE }}
           directory: ${{ env.CONFIG_DIRECTORY }}
           speculative: true
+
 
       - name: Create Plan Run
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         id: create-run
         with:
+          organization: ${{ env.TF_CLOUD_ORGANIZATION }}
+          token: ${{ env.TF_API_TOKEN }}
           workspace: ${{ env.TF_WORKSPACE }}
           configuration_version: ${{ steps.upload-configuration.outputs.configuration_version_id }}
           plan_only: true
@@ -68,4 +66,6 @@ jobs:
         uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
         id: plan-output
         with:
+          organization: ${{ env.TF_CLOUD_ORGANIZATION }}
+          token: ${{ env.TF_API_TOKEN }}
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
