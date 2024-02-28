@@ -45,6 +45,7 @@ jobs:
         shell: bash
         run: |
           cd infrastructure
+          terraform workspace new ${{ env.TF_WORKSPACE }}
           terraform init
 
       - name: Upload Configuration
