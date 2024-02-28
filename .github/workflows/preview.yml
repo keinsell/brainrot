@@ -41,6 +41,11 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Create Workspace
+        run: |
+          terraform login ${{ secrets.TF_API_TOKEN }}
+          terraform workspace new ${{ env.TF_WORKSPACE }} || terraform workspace select ${{ env.TF_WORKSPACE }}
+
       - run: |
           cd ${{ env.CONFIG_DIRECTORY }}
           sed -i 's/tags = \["plygrnd"\]/name = "'$TF_WORKSPACE'"/g' main.tf
