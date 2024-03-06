@@ -1,5 +1,5 @@
 import {Module}                         from '@nestjs/common'
-import {ConfigModule}                   from '../configs/config-module.js'
+import {ConfigModule}                   from '../kernel/core/configuration/config-module.js'
 import {XcacheModule}                   from '../kernel/modules/cache/xcache-module.js'
 import {RedisModule}                    from '../kernel/resource/redis/redis.module.js'
 import {AccountModule}                  from '../modules/account/account.module.js'
@@ -21,6 +21,7 @@ import {ObservabilityModule}            from './modules/observability/observabil
 		        ConfigModule.forRoot(),
 		        ObservabilityModule,
 		        DatabaseModule,
+		        EventBusModule,
 		        RedisModule,
 		        EventBusModule,
 		        XcacheModule,
