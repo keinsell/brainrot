@@ -9,12 +9,11 @@ import {
 	ok,
 	Result,
 }                                       from 'neverthrow'
-import {PlainText}                      from '../../../kernel/integration/mailer/value-object/plain-text.js'
-import type {AccountId}                 from '../../account/shared-kernel/account-id.js'
+import {PlainText}                             from '../../../kernel/integration/mailer/value-object/plain-text.js'
+import {AccessToken, JwtService, RefreshToken} from "../../../mod/identity/jwt.js"
+import type {AccountId}                        from '../../account/shared-kernel/account-id.js'
 import {CredentialValidator}            from '../../account/shared-kernel/credential-validator/credential-validator.js'
 import type {Username}                  from '../../account/value-objects/username.js'
-import {TokenManagement}                from '../../authtoken/contract/token-management.js'
-import type {SignedAuthenticationToken} from '../../authtoken/value-object/signed-authentication-token.js'
 import {AuthenticationService}          from '../contract/authentication-service.js'
 
 
@@ -24,7 +23,7 @@ export class LocalAuthenticationService
 	extends AuthenticationService
 {
 
-	constructor(private credentialValidator: CredentialValidator, private tokenManagement: TokenManagement)
+	constructor(private credentialValidator: CredentialValidator, private jwt: JwtService)
 	{
 		super()
 	}
@@ -46,9 +45,9 @@ export class LocalAuthenticationService
 	 *     error.
 	 */
 	public async authenticate(username: Username, password: PlainText): Promise<Result<{
-		accessToken: SignedAuthenticationToken,
-		refreshToken: SignedAuthenticationToken,
-		accountId: AccountId
+		accountId: AccountId,
+		accessToken: AccessToken,
+		refreshToken: RefreshToken,
 	}, NotFoundException | ForbiddenException>>
 	{
 		const accountOrException = await this.credentialValidator.validateCredentials(username, password)
@@ -66,22 +65,12 @@ export class LocalAuthenticationService
 			        email   : account.email.address,
 		        })
 
-		const signedAccessToken = await this.tokenManagement.issueToken({
-			                                                                accountId: account.id,
-			                                                                duration : ms('4h'),
-			                                                                metadata : {},
-		                                                                })
-
-		const signedRefreshToken = await this.tokenManagement.issueToken({
-			                                                                 accountId: account.id,
-			                                                                 duration : ms('3w'),
-			                                                                 metadata : {},
-		                                                                 })
+		const tokens = await this.jwt.issueToken({id: account.id})
 
 		return ok({
 			          accountId   : account.id,
-			          accessToken : signedAccessToken.signature,
-			          refreshToken: signedRefreshToken.signature,
+			          accessToken : tokens[0],
+			          refreshToken: tokens[1],
 		          })
 	}
 
@@ -91,21 +80,15 @@ export class LocalAuthenticationService
 	}
 
 	public async refreshToken(refreshToken: string): Promise<{
-		refreshToken: SignedAuthenticationToken,
-		accessToken: SignedAuthenticationToken
+		refreshToken: RefreshToken,
+		accessToken: AccessToken
 	}>
 	{
-		const decodedRefreshToken = await this.tokenManagement.decodeToken(refreshToken as SignedAuthenticationToken)
-
-		const issuedAccessToken = await this.tokenManagement.issueToken({
-			                                                                accountId: decodedRefreshToken.sub as AccountId,
-			                                                                duration : ms('4h'),
-			                                                                metadata : {},
-		                                                                })
+		const refreshedToken = this.jwt.refresh(refreshToken as RefreshToken)
 
 		return {
-			refreshToken: refreshToken as SignedAuthenticationToken,
-			accessToken : issuedAccessToken.signature,
+			refreshToken: refreshToken as RefreshToken,
+			accessToken : refreshedToken,
 		}
 	}
 }

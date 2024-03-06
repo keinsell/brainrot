@@ -30,10 +30,13 @@ import {Exception}   from '../../libraries/error-registry/error.js'
 
 
 
+// I see multiple people just do this like this: pl.stepapp.account.already-exists
+// Does not really matter, the thing that matters it's a unique id for the error on
+// which end-user of API can predicate what happened and how to handle such.
 export const ApiHttpProblemType = ApiProperty({
 	                                              type       : String,
 	                                              description: 'A URI reference that uniquely identifies the problem type only in the context of the provided API. Opposed to the specification in RFC-7807, it is neither recommended to be dereferencable and point to a human-readable documentation nor globally unique for the problem type.',
-	                                              example    : 'com.methylphenidate.account.already-exists',
+	                                              example    : 'com.app.account.already-exists',
                                               })
 
 
@@ -46,10 +49,11 @@ export class HttpProblem
 		/** A URI reference [RFC3986](https://tools.ietf.org/html/rfc3986) that identifies the problem type. */
 		@ApiHttpProblemType type: string
 
+		// Should be i18n
 		@ApiProperty({
 			             type       : String,
 			             description: 'A short, human-readable summary of the problem type.',
-			             example    : 'Account Already Exists',
+			             example    : 'Account already exists',
 		             }) title: string
 
 		@ApiProperty({
@@ -57,20 +61,25 @@ export class HttpProblem
 			             minimum    : 100,
 			             maximum    : 599,
 			             enum       : HttpStatus,
-			             description: 'cyz',
+			             description: 'No rocket science there.',
 			             example    : HttpStatus.BAD_REQUEST,
 		             }) status: HttpStatus
 
-		//	 @ApiProperty( {
-		//						  type        : String,
-		//						  description : 'A human-readable explanation
-		// specific to this occurrence of the problem.', example     : 'The
-		// account with the provided email address already exists.', } ) detail
-		// : string
+		// Should be i18n
+		@ApiProperty({
+			             type       : String,
+			             description: 'A human-readable explanation specific to this occurrence of the problem.',
+			             example    : 'The account you are trying to register, already exists.',
+		             }) detail: string
+
+
+		// It's in the spec but I do not see how to apply it in suitable pattern
+		// This should tell end user on which resource error have happened
+		// like id of error or smth.
 		@ApiProperty({
 			             type       : String,
 			             description: 'A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.',
-			             example    : 'https://jakubolan.eu.auth0.com/oauth/token',
+			             example    : 'com.app.account.already-exists',
 		             }) instance: string
 
 		constructor(
