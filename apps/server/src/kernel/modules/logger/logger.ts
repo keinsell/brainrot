@@ -1,5 +1,6 @@
 import {Injectable}      from '@nestjs/common'
 import {nanoid}          from 'nanoid'
+import {Terminal}        from "nestjs-cls"
 import {ConsoleAppender} from './appender/console-appender.js'
 import {FileAppender}    from './appender/file-appender.js'
 import {LogAppender}     from './log-appender.js'
@@ -16,6 +17,8 @@ export type LogMetadataKey =
 	| 'context'
 	| 'data'
 	| string
+
+
 export type LogMetadata = {
 	request?: {
 		id?: string
@@ -24,6 +27,7 @@ export type LogMetadata = {
 		body?: unknown
 		params?: unknown
 		query?: unknown
+		headers?: unknown
 	}
 	response?: {
 		statusCode?: number
@@ -46,6 +50,11 @@ export type LogContext =
 	| string
 	| undefined
 
+
+export interface LoggerV2 {
+	info(message: string, metadata?: LogMetadata): void
+	info(objectOrMetadata: Terminal<unknown>, message?: string, metadata?: LogMetadata ): void
+}
 
 export class Logger
 {

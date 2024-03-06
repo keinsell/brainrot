@@ -24,6 +24,7 @@ jobs:
       # Generate Changelog
       # Publish Docker Image
       # Publish Artifacts on Github Releases
+
   deploy:
     concurrency:
       group: "deploy"

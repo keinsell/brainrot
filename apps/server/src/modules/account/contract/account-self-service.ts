@@ -30,11 +30,13 @@ import {Account}                     from '../entities/account.js'
 
 export interface AccountSelfService
 	{
-		/**
-		 * # `register-account`
+		/** # register-account
 		 *
 		 * Register account is an operation dedicated to creating new accounts
 		 * in codebase.
+		 *
+		 * - Will end up in an unverified account (account that his not recoverable as until account provided in
+		 * registration will be confirmed), but an overall account can be used as well as verified account.
 		 *
 		 * @param {RegisterAccountCommand} registerAccount
 		 * @returns {Promise<Account>}
