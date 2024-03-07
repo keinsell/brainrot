@@ -12,7 +12,7 @@ import {PasswordHashing}        from '../../../../common/libraries/unihash/index
 import {KdfAlgorithm}           from '../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
 import {EventBus}               from '../../../../common/modules/messaging/event-bus.js'
 import {OpentelemetryTracer}    from '../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
-import {createEmailAddress}     from '../../../../kernel/integration/mailer/value-object/email-address.js'
+import {createEmailAddress}     from "../../../../kernel/modules/mailer/value-object/email-address.js"
 import {UseCase}                from '../../../../kernel/standard/use-case.js'
 import {Account}                from '../../entities/account.js'
 import {AccountPolicy}          from '../../policies/account-policy.js'

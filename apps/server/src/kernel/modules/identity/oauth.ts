@@ -6,7 +6,7 @@ import * as http from 'http'
 import {
 	discoverSSOClients,
 	OAuthClientConfig,
-}                from '../../kernel/modules/configuration/oauth-config.js'
+}                from '../configuration/oauth-config.js'
 
 
 

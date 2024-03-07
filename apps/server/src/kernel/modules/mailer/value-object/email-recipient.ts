@@ -23,13 +23,12 @@
  *
  */
 
-
-
-import {EmailMessage} from '../entity/email-message.js'
+import { EmailAddress } from './email-address.js'
 
 
 
-export interface CreateEmailMessagePayload
-	extends Omit<EmailMessage, 'sender'>
-{
+export type EmailRecipient = {
+  to : EmailAddress
+  cc? : EmailAddress[]
+  bcc? : EmailAddress[]
 }
