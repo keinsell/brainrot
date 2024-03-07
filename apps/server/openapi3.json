@@ -218,6 +218,129 @@
         ]
       }
     },
+    "/checkout/payment-methods": {
+      "get": {
+        "operationId": "get-checkout-payment-methods",
+        "summary": "Available PaymentMethods for Checkout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutPaymentMethods"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout/shipment-methods": {
+      "get": {
+        "operationId": "CheckoutController_getShipmentMethods",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout": {
+      "post": {
+        "operationId": "initialize-checkout",
+        "summary": "Initialize Checkout",
+        "description": "Initialization of the checkout is pre-final process of placing order in our system, the Customer is able to declare real intention to buy and we calculate the stuff for him, at the end he gets a CheckoutSummary which describes things he's going to buy and the price he's going to pay. Checkout is immutable once it's made, the only thing Customer can do when his order is not correct is cancellation of Checkout. Process itself will result in Checkout with list of CheckoutItem, draft of an Invoice and Discount.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeCheckout"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutSummary"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      },
+      "get": {
+        "operationId": "CheckoutController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      },
+      "delete": {
+        "operationId": "cancel-checkout",
+        "summary": "Cancel Checkout",
+        "description": "Operation will cancel the current checkout process started by user, as process is immutable once it's made - the only thing Customer can do when his order is not correct is cancellation of Checkout.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout/cart/{cardId}": {
+      "post": {
+        "operationId": "CheckoutController_initializeWithCart",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout/finalize": {
+      "post": {
+        "operationId": "CheckoutController_finalize",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
     "/account": {
       "post": {
         "operationId": "register",
@@ -490,32 +613,6 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/session/refresh-session": {
-      "post": {
-        "operationId": "refresh-session",
-        "summary": "",
-        "description": "Use a refresh token to extend a session and generate another access token",
-        "tags": [
-          "session"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshSession"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
       }
     },
     "/health": {
@@ -918,9 +1015,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Danyka_Connelly",
-              "Seth_Rippin11",
-              "Delfina_Wilderman"
+              "Lilyan_Hagenes",
+              "Nathanial6",
+              "Aliyah.Mann67"
             ]
           }
         },
@@ -943,6 +1040,158 @@
         "required": [
           "productId",
           "quantity"
+        ]
+      },
+      "CheckoutPaymentMethods": {
+        "type": "object",
+        "properties": {
+          "paymentMethods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "stripe"
+            ]
+          }
+        },
+        "required": [
+          "paymentMethods"
+        ]
+      },
+      "CheckoutStripePaymentMethod": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "example": "cus_J3z3v2eZvKYlo2C5z3v2eZvKYlo"
+          },
+          "paymentMethodId": {
+            "type": "string",
+            "example": "pm_1J3z3v2eZvKYlo2C5z3v2eZvKYlo"
+          }
+        }
+      },
+      "CheckoutPaymentMethod": {
+        "type": "object",
+        "properties": {
+          "STRIPE": {
+            "$ref": "#/components/schemas/CheckoutStripePaymentMethod"
+          }
+        }
+      },
+      "AddCheckoutItem": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "description": "The product ID",
+            "example": "gpu.nvidia.rtx.4090"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "productId",
+          "quantity"
+        ]
+      },
+      "InitializeCheckout": {
+        "type": "object",
+        "properties": {
+          "paymentMethod": {
+            "$ref": "#/components/schemas/CheckoutPaymentMethod"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddCheckoutItem"
+            }
+          }
+        },
+        "required": [
+          "paymentMethod",
+          "items"
+        ]
+      },
+      "ApiProduct": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "description": "The product ID",
+            "example": "gpu.nvidia.rtx.4090"
+          }
+        },
+        "required": [
+          "productId"
+        ]
+      },
+      "ApiCheckoutItem": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "description": "The product",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiProduct"
+              }
+            ]
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Subtotal is the total price of all items in the cart"
+          },
+          "discount": {
+            "type": "number",
+            "example": 100
+          },
+          "tax": {
+            "type": "number",
+            "example": 230
+          },
+          "total": {
+            "type": "number",
+            "example": 900
+          }
+        },
+        "required": [
+          "product",
+          "quantity",
+          "subtotal",
+          "discount",
+          "tax",
+          "total"
+        ]
+      },
+      "CheckoutSummary": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiCheckoutItem"
+            }
+          },
+          "currency": {
+            "type": "string",
+            "example": "PLN"
+          },
+          "total": {
+            "type": "number",
+            "example": 1000
+          }
+        },
+        "required": [
+          "items",
+          "currency",
+          "total"
         ]
       },
       "RegisterAccountCommand": {
@@ -973,9 +1222,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Danyka_Connelly",
-              "Seth_Rippin11",
-              "Delfina_Wilderman"
+              "Lilyan_Hagenes",
+              "Nathanial6",
+              "Aliyah.Mann67"
             ]
           }
         },
@@ -991,12 +1240,12 @@
           "type": {
             "type": "string",
             "description": "A URI reference that uniquely identifies the problem type only in the context of the provided API. Opposed to the specification in RFC-7807, it is neither recommended to be dereferencable and point to a human-readable documentation nor globally unique for the problem type.",
-            "example": "com.methylphenidate.account.already-exists"
+            "example": "com.app.account.already-exists"
           },
           "title": {
             "type": "string",
             "description": "A short, human-readable summary of the problem type.",
-            "example": "Account Already Exists"
+            "example": "Account already exists"
           },
           "status": {
             "type": "number",
@@ -1025,19 +1274,25 @@
               409,
               500
             ],
-            "description": "cyz",
+            "description": "No rocket science there.",
             "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "example": "The account you are trying to register, already exists."
           },
           "instance": {
             "type": "string",
             "description": "A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.",
-            "example": "https://jakubolan.eu.auth0.com/oauth/token"
+            "example": "com.app.account.already-exists"
           }
         },
         "required": [
           "type",
           "title",
           "status",
+          "detail",
           "instance"
         ]
       },
@@ -1049,9 +1304,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Danyka_Connelly",
-              "Seth_Rippin11",
-              "Delfina_Wilderman"
+              "Lilyan_Hagenes",
+              "Nathanial6",
+              "Aliyah.Mann67"
             ]
           },
           "method": {
@@ -1087,37 +1342,13 @@
           },
           "refreshToken": {
             "type": "string",
-            "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-            "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc"
-            ]
+            "description": "Refresh token."
           }
         },
         "required": [
           "id",
           "mfa",
           "accessToken",
-          "refreshToken"
-        ]
-      },
-      "RefreshSession": {
-        "type": "object",
-        "properties": {
-          "refreshToken": {
-            "type": "string",
-            "description": "...",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-            "examples": [
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc",
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA3NzQ1NTE5fQ.ZMuKBcLvQm_Jc4TSx1cp0tWU7TmSrpIfr_Ust_BbcEc"
-            ]
-          }
-        },
-        "required": [
           "refreshToken"
         ]
       },
@@ -1144,19 +1375,6 @@
           "currency",
           "name",
           "price"
-        ]
-      },
-      "ApiProduct": {
-        "type": "object",
-        "properties": {
-          "productId": {
-            "type": "string",
-            "description": "The product ID",
-            "example": "gpu.nvidia.rtx.4090"
-          }
-        },
-        "required": [
-          "productId"
         ]
       },
       "Account": {
@@ -1187,9 +1405,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Danyka_Connelly",
-              "Seth_Rippin11",
-              "Delfina_Wilderman"
+              "Lilyan_Hagenes",
+              "Nathanial6",
+              "Aliyah.Mann67"
             ]
           }
         },
@@ -1209,9 +1427,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Danyka_Connelly",
-              "Seth_Rippin11",
-              "Delfina_Wilderman"
+              "Lilyan_Hagenes",
+              "Nathanial6",
+              "Aliyah.Mann67"
             ]
           },
           "password": {

@@ -96,6 +96,7 @@ jobs:
   terraform-apply:
     runs-on: luminar-linux-x64-x1
     name: 'apply-infrastructure'
+
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read

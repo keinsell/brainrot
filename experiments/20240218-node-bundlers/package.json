@@ -9,7 +9,7 @@
     "bundle": "rollup -c",
     "prestart": "rollup -c",
     "start": "node dist/index.js",
-    "dev": "tsc && node dist/src/index.js",
+    "dev4": "tsc && node dist/src/index.js",
     "dev2": "rollup -c && node dist/bin.js",
     "dev3": "ncc build -e snappy src/index.ts --out dist/bin --v8-cache -m -s && node dist/bin"
   },

@@ -95,7 +95,8 @@ export const ApiPropertyProductId = ApiProperty({
 	name       : 'productId',
 	description: 'The product ID',
 	example    : 'gpu.nvidia.rtx.4090',
-                                                })
+})
+
 
 export class ApiProduct
 {
@@ -278,3 +279,9 @@ Ray Tracing Cores are the processing units in NVIDIA graphics processing units (
 		}
 	}
 }
+
+export const ApiPropertyProduct = ApiProperty({
+	type       : ApiProduct,
+	name       : 'product',
+	description: 'The product',
+})

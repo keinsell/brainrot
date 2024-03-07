@@ -23,15 +23,6 @@
  *
  */
 
-
-
-// export interface RegisterAccount2 {
-// 	email : string & tags.Format<"email">
-// 	username : string & tags.Pattern<string>
-// 	password : string & tags.Pattern<string>
-// }
-//
-
 import {ApiPropertyAccountEmail}    from '../../value-objects/account-email.js'
 import {ApiPropertyAccountPassword} from '../../value-objects/password.js'
 import {ApiPropertyAccountUsername} from '../../value-objects/username.js'

@@ -32,8 +32,9 @@ import {
 	Logger,
 }                          from '@nestjs/common'
 import {HttpArgumentsHost} from '@nestjs/common/interfaces'
-import {HttpAdapterHost}   from '@nestjs/core'
-import {Request}           from 'express'
+import {HttpAdapterHost}                      from '@nestjs/core'
+import {GqlArgumentsHost, GqlExceptionFilter} from "@nestjs/graphql"
+import {Request}                              from 'express'
 import {
 	getCode,
 	getErrorMessage,
@@ -122,5 +123,15 @@ export class HttpExceptionFilter
 				      code      : code,
 				      message   : message,
 			      })
+	}
+}
+
+
+@Catch()
+export class GraphQLErrorFilter implements GqlExceptionFilter {
+	catch(exception: unknown, host: ArgumentsHost) {
+		const gqlHost = GqlArgumentsHost.create(host);
+		// handle the exception here
+		return exception;
 	}
 }

@@ -67,6 +67,15 @@ jobs:
           docker_username: ${{ env.DOCKER_USERNAME }}
           docker_password: ${{ env.DOCKER_TOKEN }}
 
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: keinsell
+          minimum-approvals: 1
+          issue-title: ":shipit: Ship ${{github.head_ref}} to production?"
+          exclude-workflow-initiator-as-approver: false
+          timeout-minutes: 60
+
       - name: 🐳 Publish Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -84,7 +93,16 @@ jobs:
         with:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-
+          
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: keinsell
+          minimum-approvals: 1
+          issue-title: ":shipit: Ship ${{github.head_ref}} to production?"
+          exclude-workflow-initiator-as-approver: false
+          timeout-minutes: 60
+      
       - name: Build and deploy the application
         shell: bash
         run: koyeb services redeploy $KOYEB_SERVICE_ID

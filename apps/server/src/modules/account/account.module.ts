@@ -44,8 +44,7 @@ import {AccountVerification}           from './services/account-verification.js'
 			        useClass: PrismaAccountRepository,
 		        },
 		        AccountVerification,
-		        AccountRecovery, // Workaround for crashing seeder which is using AccountService
-		        // class which is dependent on TraceService.
+		        AccountRecovery,
 		        OpentelemetryTracer,
 	        ],
 	        exports    : [

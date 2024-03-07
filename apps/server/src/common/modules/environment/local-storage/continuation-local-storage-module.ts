@@ -1,6 +1,21 @@
 import { ClsModule } from 'nestjs-cls'
 
 
+const CLS_CONFIG = {
+	global      : true,
+	interceptor : {mount : true},
+	guard       : {mount : true},
+	middleware  : {
+		mount        : true,
+		generateId   : true,
+		saveReq      : true,
+		saveRes      : true,
+		useEnterWith : true,
+		idGenerator  : () => Math.random().toString( 36 )
+		.slice( 2 ),
+	},
+}
+
 
 /** Continuation-local storage allows to store state and propagate it throughout callbacks and promise chains. It
  * allows storing data throughout the lifetime of a web request or any other asynchronous duration. It is similar
@@ -17,17 +32,4 @@ import { ClsModule } from 'nestjs-cls'
  *
  *   https://papooch.github.io/nestjs-cls/
  */
-export const ContinuationLocalStorageModule = ClsModule.forRoot( {
-																						 global      : true,
-																						 interceptor : {mount : true},
-																						 guard       : {mount : true},
-																						 middleware  : {
-																							mount        : true,
-																							generateId   : true,
-																							saveReq      : true,
-																							saveRes      : true,
-																							useEnterWith : true,
-																							idGenerator  : () => Math.random().toString( 36 )
-																															 .slice( 2 ),
-																						 },
-																					  } )
+export const ContinuationLocalStorageModule = ClsModule.forRoot( CLS_CONFIG )

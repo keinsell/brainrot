@@ -27,9 +27,8 @@ import {
 	ForbiddenException,
 	NotFoundException,
 }                                       from '@nestjs/common'
-import {Result}                         from 'neverthrow'
-import type {SignedAuthenticationToken} from '../../authtoken/value-object/signed-authentication-token.js'
-
+import {Result}                    from 'neverthrow'
+import {AccessToken, RefreshToken} from "../../../mod/identity/jwt.js"
 
 
 export abstract class AuthenticationService
@@ -53,15 +52,15 @@ export abstract class AuthenticationService
 			username: string,
 			password: string,
 		): Promise<Result<{
-			accessToken: SignedAuthenticationToken,
-			refreshToken: SignedAuthenticationToken,
+			accessToken: AccessToken,
+			refreshToken: RefreshToken,
 			accountId: string
 		}, NotFoundException | ForbiddenException>>;
 
 		public abstract logout(): Promise<void>;
 
-		public abstract refreshToken(refreshToken: SignedAuthenticationToken): Promise<{
-			refreshToken: SignedAuthenticationToken,
-			accessToken: SignedAuthenticationToken
+		public abstract refreshToken(refreshToken: RefreshToken): Promise<{
+			refreshToken: RefreshToken,
+			accessToken: AccessToken
 		}>;
 	}
