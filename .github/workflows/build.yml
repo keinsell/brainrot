@@ -35,7 +35,7 @@ jobs:
           zip -r server-build-artifacts.zip apps/server/dist apps/server/public
 
       - name: 📦 Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: server-build-artifacts
           path: server-build-artifacts.zip
