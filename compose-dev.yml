@@ -1,0 +1,164 @@
+version: "3.7"
+
+services:
+  traefik:
+    container_name: dev-${PROJECT}-traefik
+    image: traefik:v2.3
+    labels:
+      - "flame.type=application"
+      - "flame.name=traefik"
+      - "flame.url=http://localhost:8090"
+      - "flame.public=true"
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "8089:80"
+      - "8090:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  jaeger:
+    container_name: dev-${PROJECT}-jaeger
+    image: jaegertracing/all-in-one:1.41
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jaeger.rule=Host(`jaeger.local`)"
+      - "traefik.http.routers.jaeger.entrypoints=web"
+      - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
+      - "flame.type=application"
+      - "flame.name=jager"
+      - "flame.url=http://localhost:16686/search"
+      - "flame.public=true"
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+  postgres:
+    container_name: dev-${PROJECT}-postgres
+    image: postgres:latest
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - "${PWD}/.docker/postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DATABASE=${DATABASE_NAME}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=${DATABASE_PORT}
+      - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    mem_reservation: 126M
+    cpu_count: 1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+  redis:
+    container_name: dev-${PROJECT}-redis
+    image: redis:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis.rule=Host(`redis.local`)"
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - "${PWD}/.docker/redis:/var/lib/redis"
+    mem_reservation: 126M
+    cpu_count: 1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+  # Dashboard listing all services related to repository for easier navigation.
+  # http://localhost:5005/
+  flame:
+    image: pawelmalak/flame
+    container_name: dev-${PROJECT}-flame
+    volumes:
+      - "${PWD}/.docker/flame:/app/data"
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "5005:5005"
+    environment:
+      - PASSWORD=admin
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  nats:
+    container_name: dev-${PROJECT}-nats
+    image: nats:latest
+    ports:
+      - "4222:4222" # Client connections
+      - "6222:6222" # Route connections
+      - "8222:8222" # HTTP management
+    volumes:
+      - "${PWD}/.docker/nats:/var/lib/nats"
+    environment:
+      - NATS_USER=myUser
+      - NATS_PASSWORD=myPassword
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nats.rule=Host(`nats.local`)"
+      - "traefik.http.services.nats.loadbalancer.server.port=8222"
+      - "flame.type=application"
+      - "flame.name=nats-management"
+      - "flame.url=http://localhost:8222"
+      - "flame.public=true"
+    mem_reservation: 126M
+    cpu_count: 1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024m
+        reservations:
+          cpus: "0.25"
+          memory: 512M
+  meilisearch:
+    container_name: dev-${PROJECT}-meilisearch
+    image: getmeili/meilisearch:latest
+    labels:
+      - "flame.type=application"
+      - "flame.name=melisearch"
+      - "flame.url=http://localhost:${MEILI_PORT:-7700}"
+      - "flame.public=true"
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
+      - MEILI_NO_ANALYTICS=${MEILI_NO_ANALYTICS:-true}
+      - MEILI_ENV=${MEILI_ENV:-development}
+      - MEILI_LOG_LEVEL
+      - MEILI_DB_PATH=${MEILI_DB_PATH:-/data.ms}
+    ports:
+      - ${MEILI_PORT:-7700}:7700
+    restart: no
+
+networks:
+  default:
+    driver: bridge

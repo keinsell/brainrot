@@ -1,0 +1,40 @@
+name: 💡 Pre-build
+
+on:
+  workflow_call:
+
+
+jobs:
+  lint:
+    name: "lint"
+    runs-on: luminar-linux-x64-x1
+    continue-on-error: false
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
+      - run: cd apps/server && pnpm lint:fta
+
+  #  spellcheck:
+  #    name: "spellcheck"
+  #    runs-on: methylphenidate-runner-set
+  #    continue-on-error: true
+  #    steps:
+  #      - name: 📜 Checkout Repository
+  #        uses: actions/checkout@v3
+  #        with:
+  #          fetch-depth: 0
+  #      - uses: errata-ai/vale-action@reviewdog
+
+  #  code-quality:
+  #    name: "qodana"
+  #    uses: ./.github/workflows/code-quality.yml
+
+#  security_codeql:
+#    name: "codeql"
+#    uses: ./.github/workflows/security-codeql.yml

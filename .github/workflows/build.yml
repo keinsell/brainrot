@@ -1,0 +1,41 @@
+name: 🔨 Build
+
+on:
+  workflow_call:
+
+jobs:
+  build_server:
+    name: "server"
+    runs-on: luminar-linux-x64-x1
+    timeout-minutes: 80
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: ✳️ Setup OS
+        uses: "./.github/actions/setup-os"
+
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+
+      - name: ✳️ Build server
+        id: build-node-server
+        run: pnpm run build
+        shell: bash
+
+      - name: 📦 Build Archive of Artifacts
+        run: |
+          zip -r server-build-artifacts.zip apps/server/dist apps/server/public
+
+      - name: 📦 Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-build-artifacts
+          path: server-build-artifacts.zip

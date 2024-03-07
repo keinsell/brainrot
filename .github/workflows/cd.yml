@@ -1,0 +1,49 @@
+name: 🚚 Continuous Delivery
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [ "./.github/workflows/ci.yml" ]
+    branches: [ main ]
+    types:
+      - completed
+env:
+  TF_WORKSPACE: keinsell-dev
+  CONFIGU_ORG: ${{ secrets.CONFIGU_ORG }}
+  CONFIGU_SECRET: ${{ secrets.CONFIGU_SECRET }}
+
+jobs:
+  release:
+    runs-on: luminar-linux-x64-x1
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Bump Versions
+      # Generate Changelog
+      # Publish Docker Image
+      # Publish Artifacts on Github Releases
+
+  deploy:
+    concurrency:
+      group: "deploy"
+      cancel-in-progress: false
+    needs: [ release ]
+    uses: ./.github/workflows/deploy.yml
+
+  rollback:
+    runs-on: luminar-linux-x64-x1
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+  monitor:
+    runs-on: luminar-linux-x64-x1
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0

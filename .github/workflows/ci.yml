@@ -1,0 +1,46 @@
+name: 🔁 Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      - next
+    paths:
+      - 'package.json'
+      - 'yarn.lock'
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'libs/shared/**'
+  push:
+    branches:
+      - next
+      - main
+    paths:
+      - 'package.json'
+      - 'yarn.lock'
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'libs/shared/**'
+
+jobs:
+  # Pre-build is a quality-control step, dedicated for checking code formatting,
+  # catching linting issues and other common dev-level mistakes.
+  pre-build:
+    name: 💡 Pre-build
+    uses: ./.github/workflows/pre-build.yml
+
+
+  # Build is a step dedicated for building application.
+  build:
+    name: 🔨 Build
+    needs:
+      - pre-build
+    uses: ./.github/workflows/build.yml
+
+  # Testing is a step dedicated for running all tests associated with given app.
+  test:
+    name: 🔬 Test
+    uses: ./.github/workflows/test.yml
+    needs:
+      - build
+      - pre-build

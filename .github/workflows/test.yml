@@ -1,0 +1,49 @@
+name: 🔬 Test
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: "test"
+    runs-on: luminar-linux-x64-x1
+    timeout-minutes: 80
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+      id-token: write
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: keinsell
+          POSTGRES_PASSWORD: keinsell
+          POSTGRES_ROOT_PASSWORD: keinsell
+          POSTGRES_DB: methylophenidate
+        ports:
+          - 5432:5432
+      nats:
+        image: nats
+        ports:
+          - 4222:4222
+    steps:
+      - name: 📜 Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: 🐧 Setup Operating System
+        uses: "./.github/actions/setup-os"
+      - name: ✳️ Setup Node.js
+        uses: "./.github/actions/setup-node"
+      - name: 🐳 Setup Docker
+        uses: "./.github/actions/setup-docker"
+      - name: Build API
+        run: cd apps/server && CI='' pnpm build:tsc
+      - shell: bash
+        run: cp example.env .env
+      # TODO: Add container environment

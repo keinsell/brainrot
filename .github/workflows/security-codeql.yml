@@ -1,0 +1,45 @@
+name: CodeQL
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: '31 7 * * 3'
+
+jobs:
+  analyze:
+    name: analyze
+    runs-on: luminar-linux-x64-x1
+    continue-on-error: true
+
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - TypeScript
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        id: initialize
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          source-root: .
+
+      - name: Autobuild
+        id: autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        id: analyze
+        uses: github/codeql-action/analyze@v2

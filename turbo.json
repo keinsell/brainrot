@@ -1,0 +1,58 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
+    },
+    "server#build": {
+      "outputMode": "new-only",
+      "cache": true,
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "!src/vendor",
+        "src/**"
+      ],
+      "outputs": [
+        "dist/**",
+        "src/vendor/**",
+        "public/**"
+      ]
+    },
+    "server#db:generate": {
+      "outputMode": "full",
+      "inputs": [
+        "prisma/schema.prisma"
+      ],
+      "outputs": [
+        "src/vendor/prisma"
+      ]
+    },
+    "server#db:push": {
+      "cache": false,
+      "inputs": [
+        "prisma/schema.prisma"
+      ],
+      "env": [
+        "DATABASE_URL"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "src/**"
+      ]
+    }
+  }
+}

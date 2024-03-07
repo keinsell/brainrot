@@ -1,0 +1,5 @@
+- [ ] Add `SeederAbstract` for abstracting the common features of seeders and simplify implementation of new seeders.
+- [ ] Add CRUDs for `Product`, `Checkout`, `User` etc.
+- [ ] Prepare `Stripe` module for handling Stripe and working with Stripe API.
+- [ ] Prepare `CustomerDataSynchronization` module for syncing customer data from Stripe to your IAM.
+- [ ] Prepare code for performing simple payment.

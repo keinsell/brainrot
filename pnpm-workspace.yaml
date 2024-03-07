@@ -1,0 +1,10 @@
+packages:
+  - 'apps/*'
+  - 'libs/*'
+  - 'services/*'
+  - 'workflows/*'
+  - 'infrastructure'
+  - 'packages/*'
+  - 'components/**'
+  - '!**/test/**'
+  - 'experiments/*'

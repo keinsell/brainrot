@@ -1,0 +1,31 @@
+name: ✳️ Setup Node.js
+
+description: Sets up the project, installs dependencies, and links submodules
+
+runs:
+  using: composite
+  steps:
+    - name: 📦 Setup pnpm
+      uses: pnpm/action-setup@v2
+
+    - name: ✳️ Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'latest'
+        cache: 'pnpm'
+
+    - name: ♻️ Cache pnpm packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+
+    - name: 📥 Install Node.js Dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: 📦 Install wait-on plugin
+      shell: bash
+      run: pnpm i -g wait-on

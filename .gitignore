@@ -128,3 +128,33 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Docker-based development environment (https://www.docker.com/)
+# .docker/
+
+# InteliJ IDEA (https://www.jetbrains.com/idea/)
+# Lightweight ignore which store project-wide configuration.
+.idea
+# Contains project-specific code style settings.
+!.idea/codeStyles/
+# Contains project-specific inspection profiles.
+!.idea/inspectionProfiles/
+# Contains shared run configurations.
+!.idea/runConfigurations/
+# Contains version control settings (like which VCS you're using).
+!.idea/vcs.xml
+# Contains miscellaneous project settings.
+!.idea/misc.xml
+# Lists the modules in a project.
+!.idea/modules.xml
+# Contains module-specific settings and dependencies.
+!.idea/*.iml
+
+src/externals/compodoc
+
+.docker/flame/*.sqlite
+.docker/flame/db_backups
+.docker/flame/uploads
+
+.turbo
+test/target/*

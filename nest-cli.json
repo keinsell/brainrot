@@ -1,0 +1,28 @@
+{
+  "monorepo": true,
+  "projects": {
+    "api": {
+      "collection": "@nestjs/schematics",
+      "type": "application",
+      "root": "src",
+      "entryFile": "main",
+      "sourceRoot": "src",
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@nestjs/graphql",
+            "options": {
+              "typeFileNameSuffix": [
+                ".input.ts",
+                ".args.ts",
+                ".model.ts"
+              ],
+              "introspectComments": true
+            }
+          }
+        ],
+        "tsConfigPath": "tsconfig.json"
+      }
+    }
+  }
+}
