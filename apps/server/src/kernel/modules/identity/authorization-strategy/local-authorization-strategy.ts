@@ -5,10 +5,10 @@ import {
 import { PassportStrategy }       from '@nestjs/passport'
 import { setUser }                from '@sentry/node'
 import { Strategy }               from 'passport-local'
-import { OpentelemetryTracer }    from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
-import { censorString }           from '../../../utilities/console-utils/censor-string.js'
-import { CredentialValidator }    from '../../../modules/account/shared-kernel/credential-validator/credential-validator.js'
-import { AuthenticationStrategy } from '../../../modules/authentication/contract/authentication-strategy/authentication-strategy.js'
+import { OpentelemetryTracer }    from '../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
+import { censorString }           from '../../../../utilities/console-utils/censor-string.js'
+import { CredentialValidator }    from '../../../../modules/account/shared-kernel/credential-validator/credential-validator.js'
+import { AuthenticationStrategy } from '../../../../modules/authentication/contract/authentication-strategy/authentication-strategy.js'
 
 
 

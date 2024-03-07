@@ -28,7 +28,7 @@ import {
 	NotFoundException,
 }                                       from '@nestjs/common'
 import {Result}                    from 'neverthrow'
-import {AccessToken, RefreshToken} from "../../../mod/identity/jwt.js"
+import {AccessToken, RefreshToken} from "../../../kernel/modules/identity/jwt.js"
 
 
 export abstract class AuthenticationService

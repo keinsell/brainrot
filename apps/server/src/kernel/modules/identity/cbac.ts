@@ -10,13 +10,13 @@ import {
 	ApiOperation,
 } from '@nestjs/swagger';
 import ms                from 'ms';
-import { PrismaService } from '../../common/modules/resources/prisma/services/prisma-service.js';
-import { CacheManager }  from '../../common/modules/storage/cache-manager/contract/cache-manager.js';
+import { PrismaService } from '../../../common/modules/resources/prisma/services/prisma-service.js';
+import { CacheManager }  from '../../../common/modules/storage/cache-manager/contract/cache-manager.js';
 import {randomBytes}     from 'node:crypto';
 import {
 	ApiPropertyAccountUsername,
 	createUsername,
-}                        from '../../modules/account/value-objects/username.js';
+}                        from '../../../modules/account/value-objects/username.js';
 
 
 

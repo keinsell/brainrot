@@ -1015,9 +1015,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lilyan_Hagenes",
-              "Nathanial6",
-              "Aliyah.Mann67"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1222,9 +1222,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lilyan_Hagenes",
-              "Nathanial6",
-              "Aliyah.Mann67"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1304,9 +1304,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lilyan_Hagenes",
-              "Nathanial6",
-              "Aliyah.Mann67"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           },
           "method": {
@@ -1405,9 +1405,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lilyan_Hagenes",
-              "Nathanial6",
-              "Aliyah.Mann67"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1427,9 +1427,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Lilyan_Hagenes",
-              "Nathanial6",
-              "Aliyah.Mann67"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           },
           "password": {

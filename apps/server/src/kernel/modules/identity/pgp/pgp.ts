@@ -5,7 +5,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { JwtAuthorizationGuard } from '../../../modules/authentication/guards/jwt-authorization-guard.js';
+import { JwtAuthorizationGuard } from '../../../../modules/authentication/guards/jwt-authorization-guard.js';
 
 class CreatePgpKey {
   @ApiProperty({

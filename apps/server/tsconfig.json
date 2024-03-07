@@ -76,7 +76,7 @@
     "strictPropertyInitialization": false,
     // TODO: Turn on.
     //    "noEmit": false,
-    //    "moduleResolution": "NodeNext",
+        "moduleResolution": "NodeNext",
     //    "types": [
     //      "@types/node",
     //      "@types/express-session"

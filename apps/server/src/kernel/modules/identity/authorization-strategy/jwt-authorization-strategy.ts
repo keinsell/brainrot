@@ -3,10 +3,10 @@ import {PassportStrategy}                        from '@nestjs/passport'
 import {setUser}                                 from '@sentry/node'
 import {JwtPayload}                              from "jsonwebtoken"
 import {ExtractJwt, Strategy}       from 'passport-jwt'
-import {__authConfig}               from '../../../configs/global/__config.js'
-import {AccountService}             from '../../../modules/account/services/account-service.js'
-import {AuthenticationStrategyType} from '../../../modules/authentication/contract/authentication-strategy/authentication-strategy-type.js'
-import {AuthenticationStrategy}     from '../../../modules/authentication/contract/authentication-strategy/authentication-strategy.js'
+import {__authConfig}               from '../../../../configs/global/__config.js'
+import {AccountService}             from '../../../../modules/account/services/account-service.js'
+import {AuthenticationStrategyType} from '../../../../modules/authentication/contract/authentication-strategy/authentication-strategy-type.js'
+import {AuthenticationStrategy}     from '../../../../modules/authentication/contract/authentication-strategy/authentication-strategy.js'
 
 
 

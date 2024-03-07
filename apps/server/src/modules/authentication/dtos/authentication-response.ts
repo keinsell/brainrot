@@ -1,5 +1,4 @@
 import {ApiProperty}                      from '@nestjs/swagger'
-import {RefreshToken}                     from "../../../../dist/src/mod/authentication/value-objects/tokens/refresh-token.js"
 import {UniqueIdentifierApiSpecification} from '../../../common/libraries/identification/index.js'
 import {ApiAccountMockup}                 from '../../../utilities/fixtures/api-account-mockup.js'
 
