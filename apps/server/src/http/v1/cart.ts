@@ -148,6 +148,31 @@ export const ApiAddItemToCart = combineDecorators(ApiOperation({
 	                                                               summary    : 'Add item to cart',
                                                                }), ApiBody({type: AddItemToCart}))
 
+export const apiPropertySubtotal = ApiProperty({
+												 type       : 'number',
+	                                             name       : 'subtotal',
+	                                             description: 'Subtotal is the total price of all items in the cart',
+											 })
+
+export const apiPropertyQuantity = ApiProperty({
+												 type       : 'number',
+	                                             name       : 'quantity',
+	                                             description: 'The quantity of the product in the cart',
+											 })
+
+export const apiPropertyTotal = ApiProperty({
+											  type       : 'number',
+	                                          name       : 'total',
+	                                          description: 'The total price of the product in the cart',
+										  })
+
+export const apiPropertyCurrency = ApiProperty({
+												 type       : 'string',
+	                                             name       : 'currency',
+	                                             description: 'The currency of the price',
+											 })
+
+
 
 @ApiTags('cart') @Controller('cart')
 export class CartController

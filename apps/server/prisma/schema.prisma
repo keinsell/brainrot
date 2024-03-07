@@ -16,6 +16,15 @@ datasource db {
   // shadowDatabaseUrl = env("DATABASE_URL")
 }
 
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  output              = "../docs/dbml"
+  outputName          = "plygrnd.dbml"
+  projectName         = "plygrnd"
+  projectDatabaseType = "PostgreSQL"
+  projectNote         = "plygrnd database"
+}
+
 model Account {
   id                  String                @id @default(cuid())
   // --------------------------------------------------
@@ -585,9 +594,9 @@ model CartItem {
 }
 
 enum PaymentProcessor {
-  STRIPE
-  PAYPAL
-  MANUAL
+  STRIPE @map("stripe")
+  PAYPAL @map("paypal")
+  MANUAL @map("manual")
 }
 
 enum PaymentStatus {
@@ -610,8 +619,7 @@ model Payment {
   // --------------------------------------------------
   Payer           User          @relation(fields: [payerId], references: [id])
   PaymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-  Checkout        Checkout?
-  Invoice         Invoice[]
+  checkoutId      String?
 
   // --------------------------------------------------
   @@map("payment")
@@ -630,13 +638,11 @@ model Invoice {
   // --------------------------------------------------
   customerId  String
   status      InvoiceStatus
-  paymentId   String
   // --------------------------------------------------
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   // --------------------------------------------------
   InvoiceLine InvoiceLine[]
-  Payment     Payment?      @relation(fields: [paymentId], references: [id])
   Checkout    Checkout[]
 
   // --------------------------------------------------
@@ -713,7 +719,6 @@ model Checkout {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   // --------------------------------------------------
-  Payment        Payment        @relation(fields: [paymentId], references: [id])
   User           User           @relation(fields: [userId], references: [id])
   Invoice        Invoice        @relation(fields: [invoiceId], references: [id])
   CheckoutItem   CheckoutItem[]
