@@ -24,12 +24,9 @@
  */
 
 import {randomUUID}          from 'node:crypto'
-import {EmailMessage}        from '../../../kernel/integration/mailer/entity/email-message.js'
-import {
-	EmailContent,
-	isEmailContent,
-}                            from '../../../kernel/integration/mailer/value-object/email-content.js'
-import {EmailReceipent}      from '../../../kernel/integration/mailer/value-object/email-receipent.js'
+import {EmailMessage}                 from "../../../kernel/modules/mailer/entity/email-message.js"
+import {EmailContent, isEmailContent} from "../../../kernel/modules/mailer/value-object/email-content.js"
+import {EmailRecipient}               from "../../../kernel/modules/mailer/value-object/email-recipient.js"
 import type {AccountId}      from '../../../modules/account/shared-kernel/account-id.js'
 import {
 	EntityBase,
@@ -49,7 +46,7 @@ type ChannelContentMap = {
 }
 
 type ReceipentByChannelMap = {
-	[NotificationChannel.EMAIL]: EmailReceipent,
+	[NotificationChannel.EMAIL]: EmailRecipient,
 	[NotificationChannel.SMS]: unknown
 	[NotificationChannel.PUSH]: unknown
 	[NotificationChannel.WEBHOOK]: unknown

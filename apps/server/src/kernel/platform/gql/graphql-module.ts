@@ -24,18 +24,22 @@
  */
 
 
-//import {ApolloServerPluginCacheControl}            from '@apollo/server/plugin/cacheControl'
-import {ApolloServerPluginLandingPageLocalDefault} from '@apollo/server/plugin/landingPage/default'
-//import {ApolloServerPluginUsageReporting}          from '@apollo/server/plugin/usageReporting'
+import {ApolloServerPluginInlineTrace}          from "@apollo/server/plugin/inlineTrace"
+import {ApolloServerPluginSubscriptionCallback} from "@apollo/server/plugin/subscriptionCallback"
+import {ApolloServerPluginCacheControl}         from "@apollo/server/plugin/cacheControl"
+import {ApolloServerPluginUsageReporting}       from "@apollo/server/plugin/usageReporting"
+import {
+	ApolloServerPluginLandingPageLocalDefault, ApolloServerPluginLandingPageProductionDefault,
+}                                               from '@apollo/server/plugin/landingPage/default'
 import {
 	ApolloDriver,
 	type ApolloDriverConfig,
-}                                                  from '@nestjs/apollo'
+}                                               from '@nestjs/apollo'
 import {
 	Module,
 	OnModuleDestroy,
 	OnModuleInit,
-}                                                  from '@nestjs/common'
+}                                               from '@nestjs/common'
 import {GraphQLModule}                             from '@nestjs/graphql'
 import {join}                                      from 'node:path'
 import process                                     from 'node:process'
@@ -43,7 +47,7 @@ import {isDevelopment}                             from '../../../configs/helper
 import {StaticFeatureFlags}                        from '../../../configs/static-feature-flags.js'
 import {FooResolver}                               from '../../../http/graphql/hello-world-resolver.js'
 
-
+const landingPageGraphQLPlayground = isDevelopment() ? ApolloServerPluginLandingPageLocalDefault() : ApolloServerPluginLandingPageProductionDefault({})
 
 @Module({
 	        imports  : [
@@ -51,10 +55,14 @@ import {FooResolver}                               from '../../../http/graphql/h
 			                                                  driver                           : ApolloDriver,
 			                                                  autoSchemaFile                   : join(process.cwd(), 'schema.gql'),
 			                                                  playground                       : false,
+											status400ForVariableCoercionErrors: true,
+					inheritResolversFromInterfaces	: true,
 			                                                  plugins                          : [
-				                                                  ApolloServerPluginLandingPageLocalDefault() as any,
-				                                                  //				                                                  ApolloServerPluginCacheControl({defaultMaxAge:
-				                                                  // 5}), ApolloServerPluginUsageReporting({}),
+																  landingPageGraphQLPlayground as any,
+				                                                  ApolloServerPluginCacheControl(),
+																  //ApolloServerPluginUsageReporting({}),
+																  ApolloServerPluginInlineTrace(),
+																  ApolloServerPluginSubscriptionCallback(),
 			                                                  ],
 			                                                  allowBatchedHttpRequests         : true,
 			                                                  introspection                    : true,

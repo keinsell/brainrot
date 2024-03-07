@@ -16,8 +16,8 @@ import {EventBus}                     from '../../../common/modules/messaging/ev
 import {CacheManager}                 from '../../../common/modules/storage/cache-manager/contract/cache-manager.js'
 import {NotificationService}          from '../../../common/notification/contract/notification-service.js'
 import {StaticFeatureFlags}           from '../../../configs/static-feature-flags.js'
-import {Mailer}                       from '../../../kernel/integration/mailer/contract/mailer.js'
-import {CreateEmailMessagePayload}    from '../../../kernel/integration/mailer/dto/create-email-message-payload.js'
+import {Mailer}                       from "../../../kernel/modules/mailer/contract/mailer.js"
+import {CreateEmailMessagePayload}    from "../../../kernel/modules/mailer/dto/create-email-message-payload.js"
 import {AccountEmailConfirmed}        from '../events/account-email-confirmed.js'
 import {AccountRegistered}            from '../events/account-registered.js'
 import {AccountVerificationEmailSent} from '../events/account-verification-email-sent.js'

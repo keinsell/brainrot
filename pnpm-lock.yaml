@@ -93,6 +93,31 @@ importers:
         specifier: 5.3.3
         version: 5.3.3
 
+  apps/neuronek:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^1
+        version: 1.5.3
+      vue:
+        specifier: ^3.3.4
+        version: 3.4.18(typescript@5.3.3)
+    devDependencies:
+      '@tauri-apps/cli':
+        specifier: ^1
+        version: 1.5.10
+      '@vitejs/plugin-vue':
+        specifier: ^5.0.4
+        version: 5.0.4(vite@5.1.5)(vue@3.4.18)
+      typescript:
+        specifier: ^5.0.2
+        version: 5.3.3
+      vite:
+        specifier: ^5.0.0
+        version: 5.1.5(@types/node@20.11.17)
+      vue-tsc:
+        specifier: ^1.8.5
+        version: 1.8.27(typescript@5.3.3)
+
   apps/server:
     dependencies:
       '@apollo/server':
