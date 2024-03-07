@@ -1015,9 +1015,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Pascale_Stroman",
-              "Wanda_Davis",
-              "Queenie.Prosacco"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1222,9 +1222,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Pascale_Stroman",
-              "Wanda_Davis",
-              "Queenie.Prosacco"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1304,9 +1304,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Pascale_Stroman",
-              "Wanda_Davis",
-              "Queenie.Prosacco"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           },
           "method": {
@@ -1398,16 +1398,16 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Indicates whether the email associated with a user domain has been verified",
-            "example": true
+            "example": false
           },
           "username": {
             "type": "string",
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Pascale_Stroman",
-              "Wanda_Davis",
-              "Queenie.Prosacco"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           }
         },
@@ -1427,9 +1427,9 @@
             "description": "The account's username",
             "example": "Raul_Marks",
             "examples": [
-              "Pascale_Stroman",
-              "Wanda_Davis",
-              "Queenie.Prosacco"
+              "Floy.Daniel",
+              "Providenci.McCullough52",
+              "Cydney_Walker39"
             ]
           },
           "password": {
