@@ -13,7 +13,7 @@ terraform {
     organization = "keinsell"
     workspaces {
       project = "plygrnd"
-      tags = ["plygrnd"]
+      name = "production"
     }
   }
   required_providers {
