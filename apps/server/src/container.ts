@@ -15,6 +15,7 @@ import {HealthModule}          from './common/modules/observability/healthcheck/
 import {CacheManagerModule}    from './common/modules/storage/cache-manager/cache-manager-module.js'
 import {SharedModule}          from './common/shared-module.js'
 import {CartController}        from './http/v1/cart.js'
+import {CheckoutController}    from "./http/v1/checkout.js"
 import {ComputeController}     from './http/v1/compute.js'
 import {GraphqlModule}         from './kernel/platform/gql/graphql-module.js'
 import {FingerprintMiddleware} from './kernel/platform/http/middleware/fingerprint.js'
@@ -43,6 +44,7 @@ import {RegionModule}                             from './modules/todo_regions/r
 		        CertificateBasedAuthenticationController,
 		        ComputeController,
 		        CartController,
+				CheckoutController,
 	        ],
 	        providers  : [
 		        {
