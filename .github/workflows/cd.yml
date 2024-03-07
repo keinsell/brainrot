@@ -17,7 +17,7 @@ jobs:
     runs-on: luminar-linux-x64-x1
     steps:
       - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       # Bump Versions
@@ -44,6 +44,6 @@ jobs:
     runs-on: luminar-linux-x64-x1
     steps:
       - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
