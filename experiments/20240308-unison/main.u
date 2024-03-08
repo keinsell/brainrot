@@ -1,0 +1,24 @@
+use base
+
+square : Nat -> Nat
+square x =
+  use Nat *
+  x * x
+
+> square 4
+
+> List.reverse [1,2,3,4]
+> 4 + 6
+> 5.0 / 2.0
+> not true
+
+use test
+
+test> square.tests.ex1 = verify '(ensureEqual (square 4) 16)
+
+test> square.tests.prop1 =
+    verify do
+      Each.repeat 100
+      a = Random.natIn 0 100000
+      b = Random.natIn 0 100000
+      ensure (square a * square b == square (a * b))
