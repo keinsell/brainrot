@@ -2,10 +2,22 @@
 
 This repository is dedicated to organization-wide resources and tools, focusing on the infrastructure side of software
 development. Here, you'll find configurations and implementations for various services used by different teams within an
-organization. In some cases, this might include a central `infrastructure` repository utilizing Terraform.
+organization. In some cases, this might include a central `infrastructure` repository using Terraform.
 
-My objective with this project is to explore DevOps practices and deploy 3rd-party services in self-managed
-infrastructure, such as my workstation, several Virtual Private Servers (VPSes), and Raspberry Pi devices.
+As a repository is built with a broke developer, without willing to spend a lot of money on the cloud infrastructure,
+as 20% uptime for most of these services is just enough, in my opinion (#whoCaresAboutLogs) I'll self-host most of the
+crap that I need, with a fancy way of setup.
+
+## Local Port Forwarding
+
+- `9000` - Sentry
+- `9001` - Posthog
+- `9002` - Grafana
+- `9003` - Prometheus
+- `9004` - Novu
+- `9005` - Eleven CRM
+- `9006` - SigNoz
+- `9007` - Sourcegraph
 
 ## List of Services
 
