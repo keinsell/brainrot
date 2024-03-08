@@ -1,5 +1,5 @@
 import {Module}                         from '@nestjs/common'
-import {ConfigModule}                   from '../kernel/core/configuration/config-module.js'
+import {ConfigModule}                   from '../core/configuration/config-module.js'
 import {XcacheModule}                   from '../kernel/modules/cache/xcache-module.js'
 import {RedisModule}                    from '../kernel/resource/redis/redis.module.js'
 import {AccountModule}                  from '../modules/account/account.module.js'

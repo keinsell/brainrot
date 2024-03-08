@@ -23,8 +23,7 @@
  *
  */
 
-
-import { CreateEmailMessagePayload } from '../dto/create-email-message-payload.js'
+import {CreateEmailMessagePayload} from './dto/create-email-message-payload.js'
 
 
 
