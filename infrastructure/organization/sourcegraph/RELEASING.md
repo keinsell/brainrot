@@ -1,6 +1,6 @@
 # Release guide
 
-**This is the guide for releasing the [Pure-Docker Sourcegraph deployment reference](./pure-docker/README.md).**
+**This is the guide for releasing the [Pure-Docker Sourcegraph deployment reference](pure-docker/README.md).**
 The docker-compose release is done entirely via the [Sourcegraph release tool](https://about.sourcegraph.com/handbook/engineering/distribution/tools/release).
 
 ## Customer Replica

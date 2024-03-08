@@ -106,8 +106,8 @@ services:
       # Uncomment / update the following line when using HTTPS with custom certificates
       # - '/LOCAL/KEY/PATH.key:/sourcegraph.key'
     ports:
-      - '0.0.0.0:80:80'
-      - '0.0.0.0:443:443'
+      - '9007:80'
+#      - '0.0.0.0:443:443'
     networks:
       - sourcegraph
     restart: always
@@ -449,8 +449,8 @@ services:
     volumes:
       - 'prometheus-v2:/prometheus'
       - '../prometheus:/sg_prometheus_add_ons'
-    ports:
-      - '0.0.0.0:9090:9090'
+#    ports:
+#      - '0.0.0.0:9090:9090'
     networks:
       - sourcegraph
     restart: always
@@ -477,8 +477,8 @@ services:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
       - '../grafana/dashboards:/sg_grafana_additional_dashboards'
-    ports:
-      - '0.0.0.0:3370:3370'
+#    ports:
+#      - '0.0.0.0:3370:3370'
     networks:
       - sourcegraph
     restart: always

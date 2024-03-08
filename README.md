@@ -34,11 +34,14 @@ script install dependencies listed below.
 
 #### Recommended Knowledge
 
-Repository isn't mean to be next "copy-paste" boilerplate, it is mean to be a boilerplate that you can use to learn and
-actually use a little of such code for your own purposes. Also this repository will/should appearch somehow complicated
-for new programmers however I swear things aren't as much complicated as they could be once you will understand internal
+Repository isn't meant to be the next "copy-paste" boilerplate,
+it is meant to be a boilerplate that you can use to learn and
+actually use a little of such code for your own purposes.
+Also, this repository will/should appear somehow complicated
+for new programmers;
+however, I swear things aren't as much complicated as they could be once you will understand an internal
 library, I recommend you to have at least basic knowledge about
-following topics:
+the following topics:
 
 - Essential knowledge about TypeScript
 - Essential knowledge about Docker and Docker Compose
