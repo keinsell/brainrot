@@ -1,0 +1,121 @@
+name: "xylotheke"
+services:
+  # ----------------------------------------
+  # Cloudflare Tunnel
+  # ----------------------------------------
+  # This is the core service that connects the
+  # local development environment to the Cloudflare
+  # network. It is used to expose the local development
+  # environment to the internet.
+  tunnel:
+    container_name: xylotheke-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
+    networks:
+      - infisical
+
+  # ----------------------------------------
+  # Core Services
+  # ----------------------------------------
+  # These are the core services that are required
+  # to run the application. They are the database
+  # and the cache.
+  redis:
+    image: redis
+    container_name: xylotheke-redis
+    env_file: .env
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - infisical
+    volumes:
+      - redis_data:/data
+  postgres:
+    container_name: xylotheke-postgres
+    image: postgres:14-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - infisical
+    env_file:
+      - .env
+    healthcheck:
+      test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # ----------------------------------------
+  # Infisical
+  # ----------------------------------------
+  infisical:
+    container_name: xylotheke-infisical
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      infisical-migration:
+        condition: service_completed_successfully
+    image: infisical/infisical:latest-postgres
+    pull_policy: always
+    ports:
+      - ${INFISICAL_PORT}:8080
+    environment:
+      - NODE_ENV=production
+      - SITE_URL=${INFISICAL_SITE_URL}
+      - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
+      - AUTH_SECRET=${INFISICAL_AUTH_SECRET}
+      - ENCRYPTION_KEY=${INFISICAL_ENCRYPTION_KEY}
+      - REDIS_URL=${INFISICAL_REDIS_URL}
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_NAME=
+      - SMTP_USERNAME=
+      - SMTP_PASSWORD=
+    networks:
+      - infisical
+  infisical-migration:
+    container_name: xylotheke-infisical-migration
+    depends_on:
+      postgres:
+        condition: service_healthy
+    image: infisical/infisical:latest-postgres
+    command: npm run migration:latest
+    pull_policy: always
+    environment:
+      - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
+    networks:
+      - infisical
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Supabase
+  # ----------------------------------------
+  # TODO: Add Supabase service.
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Sentry
+  # ----------------------------------------
+  # TODO: Add Sentry service.
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Sentry
+  # ----------------------------------------
+  # TODO: Add Supabase service.
+  # ----------------------------------------
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  infisical:
