@@ -11,7 +11,7 @@ jobs:
     continue-on-error: false
     steps:
       - name: 📜 Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: ✳️ Setup Node.js
@@ -26,7 +26,7 @@ jobs:
   #    continue-on-error: true
   #    steps:
   #      - name: 📜 Checkout Repository
-  #        uses: actions/checkout@v3
+  #        uses: actions/checkout@v4
   #        with:
   #          fetch-depth: 0
   #      - uses: errata-ai/vale-action@reviewdog

@@ -28,10 +28,10 @@ resource "infisical_secret" "TF_API_TOKEN" {
 
 resource "infisical_secret" "DATABASE_HOST" {
   name        = "DATABASE_HOST"
-  value       = "${neon_project.this.branch.endpoint.host}"
+  value       = neon_project.this.branch.endpoint.host
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
   ]
@@ -42,7 +42,7 @@ resource "infisical_secret" "DATABASE_PORT" {
   value       = "5432"
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
   ]
@@ -53,7 +53,7 @@ resource "infisical_secret" "DATABASE_NAME" {
   value       = neon_database.this.name
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
     neon_database.this
@@ -66,20 +66,20 @@ resource "infisical_secret" "DATABASE_USER" {
   value       = neon_role.db_owner.name
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
   ]
 }
 
 resource "infisical_secret" "DATABASE_URI" {
-  name  = "DATABASE_URI"
+  name = "DATABASE_URI"
   value = "postgres://${neon_role.db_owner.name}:${neon_role.db_owner
-  .password}@${neon_project.this.branch.endpoint
+    .password}@${neon_project.this.branch.endpoint
   .host}:5432/${neon_database.this.name}"
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
     neon_database.this
@@ -91,7 +91,7 @@ resource "infisical_secret" "DATABASE_PASSWORD" {
   value       = neon_role.db_owner.password
   env_slug    = "dev"
   folder_path = "/"
-  depends_on  = [
+  depends_on = [
     neon_project.this,
     neon_role.db_owner,
   ]
