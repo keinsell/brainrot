@@ -18,21 +18,59 @@ services:
   # ----------------------------------------
 
   # ----------------------------------------
-  # Core Services
+  # Object Storage
   # ----------------------------------------
-  # These are the core services that are required
-  # to run the application.
+  minio:
+    image: minio/minio
+    container_name: ${PROJECT}-minio
+    ports:
+      - '${MINIO_PORT}:${MINIO_PORT}'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://minio:${MINIO_PORT}/minio/health/live" ]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - minio_data:/data:z
+  minio-migration:
+    image: minio/mc
+    container_name: ${PROJECT}-minio-migration
+    env_file:
+      - .env
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb minio/stub;
+      /usr/bin/mc mb minio/dummy;
+      exit 0;
+      "
+
+
+  # ----------------------------------------
+  # Cache
   # ----------------------------------------
   redis:
     image: redis
     container_name: ${PROJECT}-redis
-    env_file: .env
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - infisical
     volumes:
       - redis_data:/data
+
+  # ----------------------------------------
+  # Database
+  # ----------------------------------------
   postgres:
     container_name: ${PROJECT}-postgres
     image: postgres:14-alpine
@@ -51,6 +89,17 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+
+  # ----------------------------------------
+  # Messaging
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Core Services
+  # ----------------------------------------
+  # These are the core services that are required
+  # to run the application.
+  # ----------------------------------------
   # TODO: Kafka
   # TODO: Redis
   # TODO: Memcached
@@ -150,6 +199,9 @@ volumes:
     driver: local
   redis_data:
     name: ${PROJECT}-redis
+    driver: local
+  minio_data:
+    name: ${PROJECT}-minio
     driver: local
 
 networks:
