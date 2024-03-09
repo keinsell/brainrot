@@ -1,3 +1,38 @@
+# https://docs.docker.com/compose/compose-file/05-services/#volumes
+# ----------------------------------------
+# Resource Presets
+# ----------------------------------------
+x-resource-preset-x1: &resource-preset-eco
+  limits:
+    cpus: '0.1'
+    memory: 128M
+x-resource-preset-x2: &resource-preset-low
+  limits:
+    cpus: '0.5'
+    memory: 256M
+x-resource-preset-x4: &resource-preset-mid
+  limits:
+    cpus: '1'
+    memory: 1G
+x-resource-preset-x8: &resource-preset-high
+  limits:
+    cpus: '2'
+    memory: 2G
+x-resource-preset-x16: &resource-preset-max
+  limits:
+    cpus: '4'
+    memory: 4G
+# ----------------------------------------
+# Logging Configuration
+# ----------------------------------------
+x-logging-config: &logging-default
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+
 name: "polylab"
 services:
   # ----------------------------------------
@@ -15,6 +50,9 @@ services:
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
     networks:
       - infisical
+      - twentycrm
+    deploy:
+      resources: *resource-preset-eco
   # ----------------------------------------
 
   # ----------------------------------------
@@ -29,7 +67,6 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-
     command: server --console-address ":9001" /data
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://minio:${MINIO_PORT}/minio/health/live" ]
@@ -38,6 +75,9 @@ services:
       retries: 5
     volumes:
       - minio_data:/data:z
+    deploy:
+      resources: *resource-preset-eco
+
   minio-migration:
     image: minio/mc
     container_name: ${PROJECT}-minio-migration
@@ -53,7 +93,28 @@ services:
       /usr/bin/mc mb minio/dummy;
       exit 0;
       "
+    deploy:
+      resources: *resource-preset-eco
 
+
+
+  # ----------------------------------------
+  # Object Management
+  # ----------------------------------------
+  imgproxy:
+    container_name: ${PROJECT}-imgproxy
+    image: darthsim/imgproxy:v3.8.0
+    healthcheck:
+      test: [ "CMD", "imgproxy", "health" ]
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    environment:
+      IMGPROXY_BIND: ":5001"
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: true
+    deploy:
+      resources: *resource-preset-eco
 
   # ----------------------------------------
   # Cache
@@ -67,27 +128,33 @@ services:
       - infisical
     volumes:
       - redis_data:/data
-
+    deploy:
+      resources: *resource-preset-eco
   # ----------------------------------------
   # Database
   # ----------------------------------------
   postgres:
     container_name: ${PROJECT}-postgres
-    image: postgres:14-alpine
+    image: plygrnd-postgres:latest
+    build:
+      context: postgres
+      dockerfile: Dockerfile
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      #      - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    #      - ./postgres/init.sql:/docker-entrypoint-initdb.d/00_setup_pg_graphql.sql
     networks:
       - infisical
+      - twentycrm
     env_file:
       - .env
     healthcheck:
       test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
       interval: 5s
-      timeout: 10s
+      timeout: 30s
       retries: 10
 
   # ----------------------------------------
@@ -137,7 +204,6 @@ services:
       infisical-migration:
         condition: service_completed_successfully
     image: infisical/infisical:latest-postgres
-    pull_policy: always
     ports:
       - ${INFISICAL_PORT}:8080
     environment:
@@ -154,6 +220,8 @@ services:
       - SMTP_PASSWORD=
     networks:
       - infisical
+    deploy:
+      resources: *resource-preset-eco
   infisical-migration:
     container_name: ${PROJECT}-infisical-migration
     depends_on:
@@ -166,6 +234,8 @@ services:
       - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
     networks:
       - infisical
+    deploy:
+      resources: *resource-preset-eco
   # ----------------------------------------
 
   # ----------------------------------------
@@ -183,8 +253,74 @@ services:
   # ----------------------------------------
   # TwentyCRM
   # ----------------------------------------
-  # TODO: Add TwentyCRM service.
-  # ----------------------------------------
+  twenty:
+    image: twentycrm/twenty-front:latest
+    container_name: ${PROJECT}-twenty
+    ports:
+      - ${TWENTY_PORT}:3000
+    environment:
+      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
+      - REACT_APP_SERVER_BASE_URL=${TWENTY_SERVER_URL}
+      - REACT_APP_SERVER_AUTH_URL=${TWENTY_SERVER_URL}/auth
+      - REACT_APP_SERVER_FILES_URL=${TWENTY_SERVER_URL}/files
+    depends_on:
+      - twenty-server
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-eco
+  # docker exec -it polylab-twenty-server yarn database:reset
+  twenty-server:
+    image: twentycrm/twenty-server:latest
+    container_name: ${PROJECT}-twenty-server
+    ports:
+      - ${TWENTY_SERVER_PORT}:${TWENTY_SERVER_PORT}
+    environment:
+      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
+      - PG_DATABASE_URL=${TWENTY_DATABASE_URL}
+      - FRONT_BASE_URL=${TWENTY_SITE_URL}
+      - PORT=${TWENTY_SERVER_PORT}
+      - STORAGE_TYPE=local
+      - STORAGE_LOCAL_PATH=.local-storage
+      - ACCESS_TOKEN_SECRET=${TWENTY_ACCESS_TOKEN_SECRET}
+      - LOGIN_TOKEN_SECRET=${TWENTY_LOGIN_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${TWENTY_REFRESH_TOKEN_SECRET}
+    depends_on:
+      - twenty-database
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-eco
+  twenty-migrate:
+    image: twentycrm/twenty-server:latest
+    container_name: ${PROJECT}-twenty-migrate
+    command: yarn nx database:init
+    environment:
+      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
+      - PG_DATABASE_URL=${TWENTY_DATABASE_URL}
+      - FRONT_BASE_URL=${TWENTY_SITE_URL}
+      - PORT=${TWENTY_SERVER_PORT}
+      - STORAGE_TYPE=local
+      - STORAGE_LOCAL_PATH=.local-storage
+      - ACCESS_TOKEN_SECRET=${TWENTY_ACCESS_TOKEN_SECRET}
+      - LOGIN_TOKEN_SECRET=${TWENTY_LOGIN_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${TWENTY_REFRESH_TOKEN_SECRET}
+    depends_on:
+      - twenty-database
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-eco
+  twenty-database:
+    image: twentycrm/twenty-postgres:latest
+    volumes:
+      - twenty_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=twenty
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-eco
 
   # ----------------------------------------
   # Blockchain
@@ -203,6 +339,12 @@ volumes:
   minio_data:
     name: ${PROJECT}-minio
     driver: local
+  twenty_data:
+    name: ${PROJECT}-twenty
+    driver: local
 
 networks:
   infisical:
+  sourcegraph:
+  supabase:
+  twentycrm:
