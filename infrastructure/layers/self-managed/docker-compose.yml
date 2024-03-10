@@ -2,26 +2,27 @@
 # ----------------------------------------
 # Resource Presets
 # ----------------------------------------
-x-resource-preset-x1: &resource-preset-eco
+x-resource-preset-x1: &resource-preset-x1
   limits:
     cpus: '0.1'
     memory: 128M
-x-resource-preset-x2: &resource-preset-low
+x-resource-preset-x2: &resource-preset-x2
   limits:
     cpus: '0.5'
     memory: 256M
-x-resource-preset-x4: &resource-preset-mid
+x-resource-preset-x4: &resource-preset-x4
   limits:
     cpus: '1'
     memory: 1G
-x-resource-preset-x8: &resource-preset-high
+x-resource-preset-x8: &resource-preset-x8
   limits:
     cpus: '2'
     memory: 2G
-x-resource-preset-x16: &resource-preset-max
+x-resource-preset-x16: &resource-preset-x16
   limits:
     cpus: '4'
     memory: 4G
+
 # ----------------------------------------
 # Logging Configuration
 # ----------------------------------------
@@ -32,6 +33,12 @@ x-logging-config: &logging-default
       max-size: "10m"
       max-file: "3"
 
+# ----------------------------------------
+# Restart Policy Configuration
+# ----------------------------------------
+x-restart-policy: &restart_policy
+  condition: any
+#  max_attempts: 3
 
 name: "polylab"
 services:
@@ -52,7 +59,8 @@ services:
       - infisical
       - twentycrm
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
   # ----------------------------------------
 
   # ----------------------------------------
@@ -76,7 +84,8 @@ services:
     volumes:
       - minio_data:/data:z
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
 
   minio-migration:
     image: minio/mc
@@ -85,7 +94,7 @@ services:
       - .env
     depends_on:
       minio:
-        condition: service_started
+        condition: service_healthy
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
@@ -94,7 +103,8 @@ services:
       exit 0;
       "
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
 
 
 
@@ -114,7 +124,8 @@ services:
       IMGPROXY_USE_ETAG: "true"
       IMGPROXY_ENABLE_WEBP_DETECTION: true
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
 
   # ----------------------------------------
   # Cache
@@ -129,23 +140,21 @@ services:
     volumes:
       - redis_data:/data
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+
   # ----------------------------------------
   # Database
   # ----------------------------------------
   postgres:
     container_name: ${PROJECT}-postgres
-    image: plygrnd-postgres:latest
-    build:
-      context: postgres
-      dockerfile: Dockerfile
+    image: postgres:15
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      #      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-    #      - ./postgres/init.sql:/docker-entrypoint-initdb.d/00_setup_pg_graphql.sql
     networks:
       - infisical
       - twentycrm
@@ -156,6 +165,24 @@ services:
       interval: 5s
       timeout: 30s
       retries: 10
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+    configs:
+      - postgres_config
+
+  cockroachdb:
+    image: cockroachdb/cockroach:v23.2.2
+    container_name: ${PROJECT}-cockroach
+    ports:
+      - "${COCKROACHDB_PORT}:${COCKROACHDB_PORT}"
+      - "${COCKROACHDB_CONSOLE_PORT}:${COCKROACHDB_CONSOLE_PORT}"
+    command: start-single-node
+    volumes:
+      - "cockroach_data:/cockroach/cockroach-data"
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
 
   # ----------------------------------------
   # Messaging
@@ -184,6 +211,25 @@ services:
   # These are the core services that are required
   # to run the application.
   # ----------------------------------------
+  #  docker run --name my-prometheus \
+  #  --mount type=bind,source=/tmp/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
+  #  -p 9090:9090 \
+  #  --add-host host.docker.internal=host-gateway \
+  #  prom/prometheus
+  prometheus:
+    container_name: ${PROJECT}-prometheus
+    image: prom/prometheus
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command: --config.file=/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+
   # TODO: HyperDX
   # TODO: Grafana
   # TODO: Prometheus
@@ -221,7 +267,7 @@ services:
     networks:
       - infisical
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x4
   infisical-migration:
     container_name: ${PROJECT}-infisical-migration
     depends_on:
@@ -229,13 +275,12 @@ services:
         condition: service_healthy
     image: infisical/infisical:latest-postgres
     command: npm run migration:latest
-    pull_policy: always
     environment:
       - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
     networks:
       - infisical
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x4
   # ----------------------------------------
 
   # ----------------------------------------
@@ -268,7 +313,7 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
   # docker exec -it polylab-twenty-server yarn database:reset
   twenty-server:
     image: twentycrm/twenty-server:latest
@@ -290,7 +335,7 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x8
   twenty-migrate:
     image: twentycrm/twenty-server:latest
     container_name: ${PROJECT}-twenty-migrate
@@ -310,7 +355,7 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x8
   twenty-database:
     image: twentycrm/twenty-postgres:latest
     volumes:
@@ -320,15 +365,33 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-eco
+      resources: *resource-preset-x1
 
-  # ----------------------------------------
-  # Blockchain
-  # ----------------------------------------
-  # These are the core services that are required
-  # to run the application.
-  # ----------------------------------------
+    # ----------------------------------------
+    # Blockchain
+    # ----------------------------------------
+    # These are the core services that are required
+    # to run the application.
+    # ----------------------------------------
 
+    # ----------------------------------------
+    # Backups and Volume Snapshotting
+    # ----------------------------------------
+    # docker-compose and volume management is
+    # kinda pain in the ass comparing it to local
+    # aka block volume management, I'm sure there
+    # are tools that avoid such struggle with volumes
+    # such as automatic backup to some S3 and easy
+    # recovery.
+    # ----------------------------------------
+
+# TODO: Check Docker Volume Plugins as they may be useful for managing these volumes, also after quick
+#   research I think they would have me in my previous production deployments based on docker-compose.include:
+#   https://github.com/rexray/rexray
+#   https://github.com/rancher/convoy
+#   https://github.com/MatchbookLab/local-persist
+#   https://github.com/ScatterHQ/flocker
+# TODO(https://github.com/keinsell/plygrnd/issues/335): ZFS and Docker Volumes?
 volumes:
   postgres_data:
     name: ${PROJECT}-postgres
@@ -342,9 +405,31 @@ volumes:
   twenty_data:
     name: ${PROJECT}-twenty
     driver: local
+  cockroach_data:
+    name: ${PROJECT}-cockroach
+    driver: local
 
 networks:
   infisical:
+    name: infisical
   sourcegraph:
+    name: sourcegraph
   supabase:
+    name: supabase
   twentycrm:
+    name: twentycrm
+  cockroach:
+    name: cockroach
+
+# TODO: Learn how to utilize secrets.
+secrets:
+  postgres_password:
+    file: ./.env
+    name: postgres_password
+
+# TODO: Learn how to utilize configs.
+configs:
+  postgres_config:
+    name: postgres-config
+    file: .env
+
