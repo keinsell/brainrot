@@ -45,27 +45,27 @@ the following topics:
 - Essential knowledge about TypeScript
 - Essential knowledge about Docker and Docker Compose
 - Essential knowledge about Hexagonal Architecture
-- Understanding of model happening in DDD (Aggregate, Value Object)
+- **Understanding** of DDD (Domain-Driven Design) in terms what is what and how it works
 - Understanding of CQRS (Command, Event, Query)
 - Understanding of Event Sourcing
 - Minimal knowledge of other programming languages (as repository aims to be language agnostic)
 
 #### Windows Support
 
-Nobody likes you, use Unix-like system (WSL2, MacOS, Linux) or go away.
+Nobody likes you, use a Unix-like system (WSL2, macOS, Linux) or go away.
 
 ### Installation
 
 ```bash
-git clone https://github.com/keinsell/methylphenidate.git
-cd methylphenidate
+git clone https://github.com/keinsell/plygrnd.git
+cd plygrnd
 pnpm install
 http://localhost:5005/
 ```
 
 ### Usage
 
-> "If modern repositories cannot be ran just for a quick demo with less than 5 commands they can be dropped stright out
+> "If modern repositories can't be run just for a quick demo with less than 5 commands, they can be dropped stright out
 > to trash, we have abstraction ffs."
 > ~ @keinsell
 
@@ -111,14 +111,16 @@ http://localhost:5005/
 
 ### Common Takes
 
-- **Clean Code Principles**, every person who is taking clean code literally should leave the industry, Uncle Bob had
-  good ideas however they aren't always right (like the world is...) - it's good to know and eventually if something
-  looks good in your eyes go for it, take shrooms once per week and then read your code again - write down pitfalls and
-  then fix them.
-- **Unbreakability Theory**, every software is breakable - the thing is how much it can break, none of 3rd-party
-  integrations should bring your whole application down, use limited trust for supply chain and integrations even
-  between your own code. One trust between dots is limited and link is breakable, software will be able to recovery
-  itself from such breakage.
+- **People are idiots**, not first and not last to say this sentence, but it's true - people are idiots, they do not
+  understand things, they do not read documentation, they do not read error messages, they do not read logs, they do not
+  read anything, they do not understand anything, they do not understand the problem, they do not understand the
+  solution, they do not understand the code, they do not understand the architecture, they do not understand the
+  business, they do not understand the requirements. People are idiots, and they will always be idiots, and you have to
+  deal with it - honestly, I'm an idiot too, but I'm trying to be less idiotic every day. I'll cry about it more on my
+  blog, stay tuned.
+- **Software is hard**, software is hard, it's not easy, it's not simple, it's not straightforward, it's not` "just
+  write the code", it's not "just deploy the code", it's not "just run the code".
+  People who think otherwise are just ignorant fucks that do not understand what they are doing.
 
 ## Contributing
 
