@@ -159,6 +159,8 @@ services:
     deploy:
       resources: *resource-preset-x05
       restart_policy: *restart_policy
+  # TODO: Memcached
+  # TODO: Dragonfly
 
   # ----------------------------------------
   # Database
@@ -229,21 +231,97 @@ services:
   # These are the core services that are required
   # to run the application.
   # ----------------------------------------
-  #  docker run --name my-prometheus \
-  #  --mount type=bind,source=/tmp/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
-  #  -p 9090:9090 \
-  #  --add-host host.docker.internal=host-gateway \
-  #  prom/prometheus
   prometheus:
-    container_name: ${PROJECT}-prometheus
     image: prom/prometheus
-    ports:
-      - ${PROMETHEUS_PORT}:9090
+    restart: always
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    command: --config.file=/etc/prometheus/prometheus.yml
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - ./prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9091:9090
+    #    extra_hosts:
+    #      - 'host.docker.internal:host-gateway'
+    depends_on:
+      - node-exporter
+      - cadvisor
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    ports:
+      - 9100:9100
+    restart: always
+    deploy:
+      mode: global
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/dev/disk/:/dev/disk"
+    ports:
+      - 8081:8080
+    networks:
+      - monitoring
+    restart: always
+    devices:
+      - "/dev/kmsg"
+    privileged: true
+    deploy:
+      mode: global
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+
+  grafana:
+    image: grafana/grafana
+    user: '472'
+    restart: always
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    ports:
+      - 8081
     deploy:
       resources: *resource-preset-x025
       restart_policy: *restart_policy
@@ -421,6 +499,20 @@ volumes:
       type: tmpfs
       device: tmpfs
       o: size=1G,uid=1000
+  prometheus_data:
+    name: ${PROJECT}-prometheus
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
+  grafana_data:
+    name: ${PROJECT}-grafana
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
 
 networks:
   infisical:
@@ -433,6 +525,9 @@ networks:
     name: twentycrm
   cockroach:
     name: cockroach
+  monitoring:
+    name: monitoring
+    driver: bridge
 
 # TODO: Learn how to utilize secrets.
 secrets:
