@@ -4,11 +4,11 @@
 </h1>
 </center>
 
-Plygrnd is a little collection of shit that I wrote, it's not really meaningful for the community and serve no other
+Plygrnd is a little collection of shit that I wrote, it's not really meaningful for the community and serves no other
 purpose than tracking my own progress over time with the oversight on things which actually struggling me, there may be
-tons of code which I'll probably use as boilerplate for building things as nobody in this industry are building new
-things - all of shit that companies need is mostly things that I've wrote from 2-3 years ago. I also starting struggling
-with burnout so I hope my work will be helpful to some new people.
+tons of code which I'll probably use as boilerplate for building things as nobody in this industry is building new
+things - all shit that companies need is mostly things that I've written from 2-3 years ago.
+I'm also starting struggling with burnout, so I hope my work will be helpful to some people.
 
 ## Getting Started
 
