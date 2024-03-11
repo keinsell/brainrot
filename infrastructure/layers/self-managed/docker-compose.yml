@@ -2,19 +2,19 @@
 # ----------------------------------------
 # Resource Presets
 # ----------------------------------------
-x-resource-preset-x1: &resource-preset-x1
+x-resource-preset-x0.25: &resource-preset-x025
   limits:
-    cpus: '0.1'
-    memory: 128M
-x-resource-preset-x2: &resource-preset-x2
+    cpus: '0.25'
+    memory: 256M
+x-resource-preset-x0.5: &resource-preset-x05
   limits:
     cpus: '0.5'
-    memory: 256M
-x-resource-preset-x4: &resource-preset-x4
+    memory: 512M
+x-resource-preset-x1: &resource-preset-x1
   limits:
     cpus: '1'
     memory: 1G
-x-resource-preset-x8: &resource-preset-x8
+x-resource-preset-x2: &resource-preset-x2
   limits:
     cpus: '2'
     memory: 2G
@@ -40,6 +40,20 @@ x-restart-policy: &restart_policy
   condition: any
 #  max_attempts: 3
 
+# ----------------------------------------
+# Healthcheck Configuration
+# ----------------------------------------
+x-healthcheck-default: &healthcheck-default
+  # Avoid setting the interval too small, as docker uses much more CPU than one would expect.
+  # Related issues:
+  # https://github.com/moby/moby/issues/39102
+  # https://github.com/moby/moby/issues/39388
+  # https://github.com/getsentry/self-hosted/issues/1000
+  interval: 30s
+  timeout: 20s
+  retries: 10
+  start_period: 30s
+
 name: "polylab"
 services:
   # ----------------------------------------
@@ -59,32 +73,36 @@ services:
       - infisical
       - twentycrm
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
       restart_policy: *restart_policy
   # ----------------------------------------
 
   # ----------------------------------------
   # Object Storage
   # ----------------------------------------
+  # There are multiple object storage services
+  # the one I know is minio, however, since they
+  # 've changed pricing and license, I'd
+  # look forward to exploring something else
+  # that can be used on closed-source apps.
+  # ----------------------------------------
   minio:
     image: minio/minio
     container_name: ${PROJECT}-minio
     ports:
-      - '${MINIO_PORT}:${MINIO_PORT}'
+      - '${MINIO_PORT}:9000'
       - '9001:9001'
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server --console-address ":9001" /data
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://minio:${MINIO_PORT}/minio/health/live" ]
-      interval: 2s
-      timeout: 10s
-      retries: 5
+      <<: *healthcheck-default
+      test: [ "CMD", "curl", "-f", "http://minio:9000/minio/health/live" ]
     volumes:
       - minio_data:/data:z
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x05
       restart_policy: *restart_policy
 
   minio-migration:
@@ -103,10 +121,8 @@ services:
       exit 0;
       "
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
       restart_policy: *restart_policy
-
-
 
   # ----------------------------------------
   # Object Management
@@ -115,16 +131,14 @@ services:
     container_name: ${PROJECT}-imgproxy
     image: darthsim/imgproxy:v3.8.0
     healthcheck:
+      <<: *healthcheck-default
       test: [ "CMD", "imgproxy", "health" ]
-      timeout: 5s
-      interval: 5s
-      retries: 3
     environment:
       IMGPROXY_BIND: ":5001"
       IMGPROXY_USE_ETAG: "true"
       IMGPROXY_ENABLE_WEBP_DETECTION: true
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
       restart_policy: *restart_policy
 
   # ----------------------------------------
@@ -139,8 +153,11 @@ services:
       - infisical
     volumes:
       - redis_data:/data
+    healthcheck:
+      <<: *healthcheck-default
+      test: redis-cli ping
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x05
       restart_policy: *restart_policy
 
   # ----------------------------------------
@@ -161,26 +178,27 @@ services:
     env_file:
       - .env
     healthcheck:
+      <<: *healthcheck-default
       test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
-      interval: 5s
-      timeout: 30s
-      retries: 10
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
       restart_policy: *restart_policy
     configs:
       - postgres_config
 
   cockroachdb:
+    # TODO: Prepare multi-node setup with certificates and secure communication.
     image: cockroachdb/cockroach:v23.2.2
     container_name: ${PROJECT}-cockroach
     ports:
       - "${COCKROACHDB_PORT}:${COCKROACHDB_PORT}"
-      - "${COCKROACHDB_CONSOLE_PORT}:${COCKROACHDB_CONSOLE_PORT}"
-    command: start-single-node
+      - "${COCKROACHDB_CONSOLE_PORT}:8080"
+    command: start-single-node --insecure
     volumes:
       - "cockroach_data:/cockroach/cockroach-data"
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     deploy:
+      # The required resources for this service are min. x4
       resources: *resource-preset-x1
       restart_policy: *restart_policy
 
@@ -227,7 +245,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
       restart_policy: *restart_policy
 
   # TODO: HyperDX
@@ -246,13 +264,13 @@ services:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
       infisical-migration:
         condition: service_completed_successfully
     image: infisical/infisical:latest-postgres
     ports:
       - ${INFISICAL_PORT}:8080
-    environment:
+    environment: &infisical-env
       - NODE_ENV=production
       - SITE_URL=${INFISICAL_SITE_URL}
       - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
@@ -267,7 +285,7 @@ services:
     networks:
       - infisical
     deploy:
-      resources: *resource-preset-x4
+      resources: *resource-preset-x1
   infisical-migration:
     container_name: ${PROJECT}-infisical-migration
     depends_on:
@@ -275,12 +293,11 @@ services:
         condition: service_healthy
     image: infisical/infisical:latest-postgres
     command: npm run migration:latest
-    environment:
-      - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
+    environment: *infisical-env
     networks:
       - infisical
     deploy:
-      resources: *resource-preset-x4
+      resources: *resource-preset-x1
   # ----------------------------------------
 
   # ----------------------------------------
@@ -313,14 +330,14 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
   # docker exec -it polylab-twenty-server yarn database:reset
   twenty-server:
     image: twentycrm/twenty-server:latest
     container_name: ${PROJECT}-twenty-server
     ports:
       - ${TWENTY_SERVER_PORT}:${TWENTY_SERVER_PORT}
-    environment:
+    environment: &twenty-server-env
       - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
       - PG_DATABASE_URL=${TWENTY_DATABASE_URL}
       - FRONT_BASE_URL=${TWENTY_SITE_URL}
@@ -335,28 +352,20 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-x8
+      resources: *resource-preset-x2
   twenty-migrate:
     image: twentycrm/twenty-server:latest
     container_name: ${PROJECT}-twenty-migrate
     command: yarn nx database:init
-    environment:
-      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
-      - PG_DATABASE_URL=${TWENTY_DATABASE_URL}
-      - FRONT_BASE_URL=${TWENTY_SITE_URL}
-      - PORT=${TWENTY_SERVER_PORT}
-      - STORAGE_TYPE=local
-      - STORAGE_LOCAL_PATH=.local-storage
-      - ACCESS_TOKEN_SECRET=${TWENTY_ACCESS_TOKEN_SECRET}
-      - LOGIN_TOKEN_SECRET=${TWENTY_LOGIN_TOKEN_SECRET}
-      - REFRESH_TOKEN_SECRET=${TWENTY_REFRESH_TOKEN_SECRET}
+    environment: *twenty-server-env
     depends_on:
       - twenty-database
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-x8
+      resources: *resource-preset-x2
   twenty-database:
+    container_name: ${PROJECT}-twenty-database
     image: twentycrm/twenty-postgres:latest
     volumes:
       - twenty_data:/var/lib/postgresql/data
@@ -365,7 +374,7 @@ services:
     networks:
       - twentycrm
     deploy:
-      resources: *resource-preset-x1
+      resources: *resource-preset-x025
 
     # ----------------------------------------
     # Blockchain
@@ -408,6 +417,10 @@ volumes:
   cockroach_data:
     name: ${PROJECT}-cockroach
     driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
 
 networks:
   infisical:
