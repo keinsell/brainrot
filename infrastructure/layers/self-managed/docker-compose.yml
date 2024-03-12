@@ -105,7 +105,7 @@ services:
     volumes:
       - minio_data:/data:z
     deploy:
-      resources: *resource-preset-x05
+      resources: *resource-preset-x1
       restart_policy: *restart_policy
     networks:
       - supabase
@@ -115,9 +115,9 @@ services:
     container_name: ${PROJECT}-minio-migration
     env_file:
       - .env
-    depends_on:
-      minio:
-        condition: service_healthy
+    #    depends_on:
+    #      minio:
+    #        condition: service_healthy
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
@@ -459,7 +459,7 @@ services:
         ]
     volumes:
       - ./supabase/logs/vector.yml:/etc/vector/vector.yml:ro
-      - ${DOCKER_SOCKET}:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     command: [ "--config", "etc/vector/vector.yml" ]
     deploy:
       resources: *resource-preset-x025
@@ -565,7 +565,7 @@ services:
       DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
       DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
 
-      SUPABASE_URL: http://kong:8000
+      SUPABASE_URL: http://supabase-kong:8000
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
@@ -612,8 +612,7 @@ services:
     networks:
       - supabase
     deploy:
-      resources: *resource-preset-x2
-      restart_policy: *restart_policy
+      resources: *resource-preset-x05
   supabase-auth:
     container_name: supabase-auth
     image: supabase/gotrue:v2.143.0
@@ -727,7 +726,7 @@ services:
       imgproxy:
         condition: service_started
       minio:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       <<: *healthcheck-default
       test:
@@ -927,14 +926,14 @@ volumes:
       device: tmpfs
       o: size=1G,uid=1000
   prometheus_data:
-    name: ${PROJECT}-prometheus
+    name: prometheus
     driver: local
     driver_opts:
       type: tmpfs
       device: tmpfs
       o: size=1G,uid=1000
   grafana_data:
-    name: ${PROJECT}-grafana
+    name: grafana
     driver: local
     driver_opts:
       type: tmpfs
