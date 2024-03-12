@@ -134,7 +134,7 @@ dist
 
 # InteliJ IDEA (https://www.jetbrains.com/idea/)
 # Lightweight ignore which store project-wide configuration.
-.idea
+# .idea
 # Contains project-specific code style settings.
 !.idea/codeStyles/
 # Contains project-specific inspection profiles.
