@@ -458,7 +458,7 @@ services:
           "http://vector:9001/health"
         ]
     volumes:
-      - ./supabase/logs/vector.yml:/etc/vector/vector.yml:ro
+      - ./supabase/vector.yml:/etc/vector/vector.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: [ "--config", "etc/vector/vector.yml" ]
     deploy:
