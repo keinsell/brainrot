@@ -1,0 +1,10 @@
+CREATE USER infisical WITH PASSWORD 'infisical';
+
+CREATE DATABASE infisical;
+
+\c infisical;
+
+GRANT ALL PRIVILEGES ON DATABASE infisical TO infisical;
+CREATE SCHEMA IF NOT EXISTS public;
+GRANT USAGE, CREATE ON SCHEMA public TO infisical;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO infisical;

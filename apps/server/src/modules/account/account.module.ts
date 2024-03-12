@@ -6,7 +6,7 @@ import {EventBusModule}                from '../../common/modules/messaging/even
 import {OpentelemetryTracer}           from '../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import {CacheManagerModule}            from '../../common/modules/storage/cache-manager/cache-manager-module.js'
 import {NotificationModule}            from '../../common/notification/notification-module.js'
-import {MailerModule}                  from '../../kernel/integration/mailer/mailer-module.js'
+import {MailerModule}                  from "../../kernel/modules/mailer/mailer-module.js"
 import {RegisterAccountUseCase}        from './commands/register-account/register-account-usecase.js'
 import {AccountRecoveryController}     from './controllers/account-recovery.controller.js'
 import {AccountVerificationController} from './controllers/account-verification.controller.js'

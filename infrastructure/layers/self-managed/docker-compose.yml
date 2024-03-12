@@ -1,0 +1,985 @@
+# If this will not give me a job as junior devops
+# I do not have clue what will...
+# https://docs.docker.com/compose/compose-file/05-services/#volumes
+# ----------------------------------------
+# Resource Presets
+# ----------------------------------------
+x-resource-preset-x0.25: &resource-preset-x025
+  limits:
+    cpus: '0.25'
+    memory: 256M
+x-resource-preset-x0.5: &resource-preset-x05
+  limits:
+    cpus: '0.5'
+    memory: 512M
+x-resource-preset-x1: &resource-preset-x1
+  limits:
+    cpus: '1'
+    memory: 1G
+x-resource-preset-x2: &resource-preset-x2
+  limits:
+    cpus: '2'
+    memory: 2G
+x-resource-preset-x16: &resource-preset-x16
+  limits:
+    cpus: '4'
+    memory: 4G
+
+# ----------------------------------------
+# Logging Configuration
+# ----------------------------------------
+x-logging-config: &logging-default
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+# ----------------------------------------
+# Restart Policy Configuration
+# ----------------------------------------
+x-restart-policy: &restart_policy
+  condition: on-failure
+  max_attempts: 3
+
+# ----------------------------------------
+# Healthcheck Configuration
+# ----------------------------------------
+x-healthcheck-default: &healthcheck-default
+  # Avoid setting the interval too small, as docker uses much more CPU than one would expect.
+  # Related issues:
+  # https://github.com/moby/moby/issues/39102
+  # https://github.com/moby/moby/issues/39388
+  # https://github.com/getsentry/self-hosted/issues/1000
+  interval: 60s
+  timeout: 60s
+  retries: 2
+  start_period: 30s
+
+name: "polylab"
+services:
+  # ----------------------------------------
+  # Cloudflare Tunnel
+  # ----------------------------------------
+  # This is the core service that connects the
+  # local development environment to the Cloudflare
+  # network. It is used to expose the local development
+  # environment to the internet.
+  # ----------------------------------------
+  tunnel:
+    container_name: ${PROJECT}-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
+    networks:
+      - infisical
+      - twentycrm
+      - tunnel
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Object Storage
+  # ----------------------------------------
+  # There are multiple object storage services
+  # the one I know is minio, however, since they
+  # 've changed pricing and license, I'd
+  # look forward to exploring something else
+  # that can be used on closed-source apps.
+  # ----------------------------------------
+  minio:
+    image: minio/minio
+    container_name: ${PROJECT}-minio
+    ports:
+      - '${MINIO_PORT}:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server --console-address ":9001" /data
+    healthcheck:
+      <<: *healthcheck-default
+      test: [ "CMD", "curl", "-f", "http://minio:9000/minio/health/live" ]
+    volumes:
+      - minio_data:/data:z
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+    networks:
+      - supabase
+
+  minio-migration:
+    image: minio/mc
+    container_name: ${PROJECT}-minio-migration
+    env_file:
+      - .env
+    #    depends_on:
+    #      minio:
+    #        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb minio/stub;
+      /usr/bin/mc mb minio/dummy;
+      exit 0;
+      "
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - supabase
+
+  # ----------------------------------------
+  # Object Management
+  # ----------------------------------------
+  imgproxy:
+    container_name: ${PROJECT}-imgproxy
+    image: darthsim/imgproxy:v3.8.0
+    healthcheck:
+      <<: *healthcheck-default
+      test: [ "CMD", "imgproxy", "health" ]
+    environment:
+      IMGPROXY_BIND: ":5001"
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: true
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - supabase
+
+  # ----------------------------------------
+  # Cache
+  # ----------------------------------------
+  redis:
+    image: redis
+    container_name: ${PROJECT}-redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - infisical
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      <<: *healthcheck-default
+      test: redis-cli ping
+    deploy:
+      resources: *resource-preset-x05
+      restart_policy: *restart_policy
+  # TODO: Memcached
+  # TODO: Dragonfly
+
+  # ----------------------------------------
+  # Database
+  # ----------------------------------------
+  postgres:
+    container_name: ${PROJECT}-postgres
+    image: postgres:15
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - infisical
+      - twentycrm
+      - postgres
+    env_file:
+      - .env
+    healthcheck:
+      <<: *healthcheck-default
+      test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    configs:
+      - postgres_config
+
+  cockroachdb:
+    # TODO: Prepare multi-node setup with certificates and secure communication.
+    image: cockroachdb/cockroach:v23.2.2
+    container_name: ${PROJECT}-cockroach
+    ports:
+      - "${COCKROACHDB_PORT}:${COCKROACHDB_PORT}"
+      - "${COCKROACHDB_CONSOLE_PORT}:8080"
+    command: start-single-node --insecure
+    volumes:
+      - "cockroach_data:/cockroach/cockroach-data"
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    deploy:
+      # The required resources for this service are min. x4
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+
+  # ----------------------------------------
+  # Messaging
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Core Services
+  # ----------------------------------------
+  # These are the core services that are required
+  # to run the application.
+  # ----------------------------------------
+  # TODO: Kafka
+  # TODO: Redis
+  # TODO: Memcached
+  # TODO: RabbitMQ
+  # TODO: Elasticsearch
+  # TODO: Kibana
+  # TODO: Melisearch
+  # TODO: Minio
+  # TODO: IPFS
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Observability Services
+  # ----------------------------------------
+  # These are the core services that are required
+  # to run the application.
+  # ----------------------------------------
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9091:9090
+    #    extra_hosts:
+    #      - 'host.docker.internal:host-gateway'
+    depends_on:
+      - node-exporter
+      - cadvisor
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    ports:
+      - 9100:9100
+    restart: always
+    deploy:
+      mode: global
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/dev/disk/:/dev/disk"
+    ports:
+      - 8081:8080
+    networks:
+      - monitoring
+    restart: always
+    devices:
+      - "/dev/kmsg"
+    privileged: true
+    deploy:
+      mode: global
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+
+  grafana:
+    image: grafana/grafana
+    user: '472'
+    restart: always
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    ports:
+      - 8081
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - monitoring
+
+  # TODO: HyperDX
+  # TODO: Grafana
+  # TODO: Prometheus
+  # TODO: Jaeger
+  # TODO: Zipkin
+
+  # ----------------------------------------
+  # Infisical
+  # ----------------------------------------
+  infisical:
+    container_name: ${PROJECT}-infisical
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      infisical-migration:
+        condition: service_completed_successfully
+    image: infisical/infisical:latest-postgres
+    ports:
+      - ${INFISICAL_PORT}:8080
+    environment: &infisical-env
+      - NODE_ENV=production
+      - SITE_URL=${INFISICAL_SITE_URL}
+      - DB_CONNECTION_URI=${INFISICAL_DB_CONNECTION_URI}
+      - AUTH_SECRET=${INFISICAL_AUTH_SECRET}
+      - ENCRYPTION_KEY=${INFISICAL_ENCRYPTION_KEY}
+      - REDIS_URL=${INFISICAL_REDIS_URL}
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_NAME=
+      - SMTP_USERNAME=
+      - SMTP_PASSWORD=
+    networks:
+      - infisical
+    deploy:
+      resources: *resource-preset-x1
+  infisical-migration:
+    container_name: ${PROJECT}-infisical-migration
+    depends_on:
+      postgres:
+        condition: service_healthy
+    image: infisical/infisical:latest-postgres
+    command: npm run migration:latest
+    environment: *infisical-env
+    networks:
+      - infisical
+    deploy:
+      resources: *resource-preset-x1
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # Supabase
+  # ----------------------------------------
+  supabase-database:
+    container_name: supabase-database
+    image: supabase/postgres:15.1.0.147
+    healthcheck:
+      <<: *healthcheck-default
+      test: pg_isready -U postgres -h localhost
+    #    depends_on:
+    #      supabase-vector:
+    #        condition: service_healthy
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal # prevents Realtime polling queries from appearing in logs
+    #    ports:
+    #      # Pass down internal port because it's set dynamically by other services
+    #      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: ${POSTGRES_PORT}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DB}
+      JWT_SECRET: ${SUPABASE_JWT_SECRET}
+      JWT_EXP: ${SUPABASE_JWT_EXPIRY}
+    volumes:
+      - ./supabase/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
+      # Must be superuser to create event trigger
+      - ./supabase/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
+      # Must be superuser to alter reserved role
+      - ./supabase/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
+      # Initialize the database settings with JWT_SECRET and JWT_EXP
+      - ./supabase/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
+      # PGDATA directory is persisted between restarts
+      - supabase_pg_data:/var/lib/postgresql/data:Z
+      # Changes required for Analytics support
+      - ./supabase/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
+      # Use named volume to persist pgsodium decryption key between restarts
+      - supabase_pg_config:/etc/postgresql-custom
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+    networks:
+      - supabase
+  supabase-vector:
+    container_name: supabase-vector
+    image: timberio/vector:0.28.1-alpine
+    healthcheck:
+      <<: *healthcheck-default
+      test:
+        [
+
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://vector:9001/health"
+        ]
+    volumes:
+      - ./supabase/vector.yml:/etc/vector/vector.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: [ "--config", "etc/vector/vector.yml" ]
+    deploy:
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
+    networks:
+      - supabase
+  supabase-analytics:
+    container_name: supabase-analytics
+    image: supabase/logflare:1.4.0
+    healthcheck:
+      <<: *healthcheck-default
+      test: [ "CMD", "curl", "http://localhost:4000/health" ]
+    restart: unless-stopped
+    depends_on:
+      supabase-database:
+        condition: service_healthy
+    environment:
+      LOGFLARE_NODE_HOST: 127.0.0.1
+      DB_USERNAME: supabase_admin
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_HOSTNAME: ${SUPABASE_POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_SCHEMA: _analytics
+      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      LOGFLARE_SINGLE_TENANT: true
+      LOGFLARE_SUPABASE_MODE: true
+      POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${SUPABASE_POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      POSTGRES_BACKEND_SCHEMA: _analytics
+      LOGFLARE_FEATURE_FLAG_OVERRIDE: multibackend=true
+    ports:
+      - 4000:4000
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x2
+      restart_policy: *restart_policy
+  supabase-meta:
+    container_name: supabase-meta
+    image: supabase/postgres-meta:v0.79.0
+    depends_on:
+      supabase-database:
+        condition: service_healthy
+      supabase-analytics:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: ${SUPABASE_POSTGRES_HOST}
+      PG_META_DB_PORT: ${POSTGRES_PORT}
+      PG_META_DB_NAME: ${POSTGRES_DB}
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x2
+      restart_policy: *restart_policy
+  supabase-rest:
+    container_name: supabase-rest
+    image: postgrest/postgrest:v12.0.1
+    depends_on:
+      supabase-database:
+        # Disable this if you are using an external Postgres database
+        condition: service_healthy
+      supabase-analytics:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@${SUPABASE_POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${SUPABASE_JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${SUPABASE_JWT_EXPIRY}
+    command: "postgrest"
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x2
+      restart_policy: *restart_policy
+  supabase-studio:
+    container_name: supabase-studio
+    image: supabase/studio:20240301-0942bfe
+    restart: unless-stopped
+    healthcheck:
+      <<: *healthcheck-default
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000/api/profile', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+        ]
+    depends_on:
+      supabase-analytics:
+        condition: service_healthy
+    environment:
+      STUDIO_PG_META_URL: http://supabase-meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
+      DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
+
+      SUPABASE_URL: http://supabase-kong:8000
+      SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+
+      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      LOGFLARE_URL: http://supabase-analytics:4000
+      NEXT_PUBLIC_ENABLE_LOGS: true
+      # Comment to use Big Query backend for analytics
+      NEXT_ANALYTICS_BACKEND_PROVIDER: postgres
+      # Uncomment to use Big Query backend for analytics
+      # NEXT_ANALYTICS_BACKEND_PROVIDER: bigquery
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x2
+      restart_policy: *restart_policy
+  supabase-kong:
+    container_name: supabase-kong
+    image: kong:2.8.1
+    restart: unless-stopped
+    # https://unix.stackexchange.com/a/294837
+    entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+    ports:
+      - ${KONG_HTTP_PORT}:8000/tcp
+      - ${KONG_HTTPS_PORT}:8443/tcp
+    depends_on:
+      supabase-analytics:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      # https://github.com/supabase/cli/issues/14
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
+      DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
+    volumes:
+      # https://github.com/supabase/supabase/issues/12661
+      - ./supabase/api/kong.yml:/home/kong/temp.yml:ro
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x05
+  supabase-auth:
+    container_name: supabase-auth
+    image: supabase/gotrue:v2.143.0
+    depends_on:
+      supabase-database:
+        condition: service_healthy
+      supabase-analytics:
+        condition: service_healthy
+    healthcheck:
+      <<: *healthcheck-default
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9999/health"
+        ]
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
+
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@${SUPABASE_POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS}
+      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP}
+
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP}
+      GOTRUE_MAILER_AUTOCONFIRM: ${ENABLE_EMAIL_AUTOCONFIRM}
+      # GOTRUE_MAILER_SECURE_EMAIL_CHANGE_ENABLED: true
+      # GOTRUE_SMTP_MAX_FREQUENCY: 1s
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT}
+      GOTRUE_SMTP_USER: ${SMTP_USER}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME}
+      GOTRUE_MAILER_URLPATHS_INVITE: ${MAILER_URLPATHS_INVITE}
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: ${MAILER_URLPATHS_CONFIRMATION}
+      GOTRUE_MAILER_URLPATHS_RECOVERY: ${MAILER_URLPATHS_RECOVERY}
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: ${MAILER_URLPATHS_EMAIL_CHANGE}
+
+      GOTRUE_EXTERNAL_PHONE_ENABLED: ${ENABLE_PHONE_SIGNUP}
+      GOTRUE_SMS_AUTOCONFIRM: ${ENABLE_PHONE_AUTOCONFIRM}
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+  supabase-realtime:
+    # This container name looks inconsistent but is correct because realtime constructs tenant id by parsing the subdomain
+    container_name: realtime-dev.supabase-realtime
+    image: supabase/realtime:v2.25.66
+    depends_on:
+      supabase-database:
+        # Disable this if you are using an external Postgres database
+        condition: service_healthy
+      supabase-analytics:
+        condition: service_healthy
+    healthcheck:
+      <<: *healthcheck-default
+      test:
+        [
+          "CMD",
+          "bash",
+          "-c",
+          "printf \\0 > /dev/tcp/localhost/4000"
+        ]
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      DB_HOST: ${SUPABASE_POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_ENC_KEY: supabaserealtime
+      API_JWT_SECRET: ${JWT_SECRET}
+      FLY_ALLOC_ID: fly123
+      FLY_APP_NAME: realtime
+      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      ERL_AFLAGS: -proto_dist inet_tcp
+      ENABLE_TAILSCALE: "false"
+      DNS_NODES: "''"
+    command: >
+      sh -c "/app/bin/migrate && /app/bin/realtime eval 'Realtime.Release.seeds(Realtime.Repo)' && /app/bin/server"
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+  supabase-storage:
+    container_name: supabase-storage
+    image: supabase/storage-api:v0.43.11
+    depends_on:
+      supabase-database:
+        condition: service_healthy
+      supabase-rest:
+        condition: service_started
+      imgproxy:
+        condition: service_started
+      minio:
+        condition: service_started
+    healthcheck:
+      <<: *healthcheck-default
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:5000/status"
+        ]
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://supabase-rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@${SUPABASE_POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: s3
+      GLOBAL_S3_BUCKET: stub
+      GLOBAL_S3_ENDPOINT: http://minio:9000
+      GLOBAL_S3_PROTOCOL: http
+      GLOBAL_S3_FORCE_PATH_STYLE: true
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      AWS_DEFAULT_REGION: stub
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      # TODO: https://github.com/supabase/storage-api/issues/55
+      REGION: stub
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://imgproxy:5001
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+    volumes:
+      - supabase_storage_data:/var/lib/storage:z
+    networks:
+      - supabase
+  supabase-edge:
+    container_name: supabase-edge
+    image: supabase/edge-runtime:v1.38.0
+    restart: unless-stopped
+    depends_on:
+      supabase-analytics:
+        condition: service_healthy
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      SUPABASE_URL: http://supabase-kong:8000
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_DB_URL: postgresql://postgres:${POSTGRES_PASSWORD}@${SUPABASE_POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      # TODO: Allow configuring VERIFY_JWT per function. This PR might help: https://github.com/supabase/cli/pull/786
+      VERIFY_JWT: false
+    volumes:
+      - ./supabase/functions:/home/deno/functions:Z
+    command:
+      - start
+      - --main-service
+      - /home/deno/functions/main
+    networks:
+      - supabase
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+
+  # ----------------------------------------
+  # Sentry
+  # ----------------------------------------
+  # TODO: Add Sentry service.
+  # ----------------------------------------
+
+  # ----------------------------------------
+  # TwentyCRM
+  # ----------------------------------------
+  twenty:
+    image: twentycrm/twenty-front:latest
+    container_name: ${PROJECT}-twenty
+    ports:
+      - ${TWENTY_PORT}:3000
+    environment:
+      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
+      - REACT_APP_SERVER_BASE_URL=${TWENTY_SERVER_URL}
+      - REACT_APP_SERVER_AUTH_URL=${TWENTY_SERVER_URL}/auth
+      - REACT_APP_SERVER_FILES_URL=${TWENTY_SERVER_URL}/files
+    depends_on:
+      - twenty-server
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-x025
+  # docker exec -it polylab-twenty-server yarn database:reset
+  twenty-server:
+    image: twentycrm/twenty-server:latest
+    container_name: ${PROJECT}-twenty-server
+    ports:
+      - ${TWENTY_SERVER_PORT}:${TWENTY_SERVER_PORT}
+    environment: &twenty-server-env
+      - SIGN_IN_PREFILLED=${TWENTY_SIGN_IN_PREFILLED}
+      - PG_DATABASE_URL=${TWENTY_DATABASE_URL}
+      - FRONT_BASE_URL=${TWENTY_SITE_URL}
+      - PORT=${TWENTY_SERVER_PORT}
+      - STORAGE_TYPE=local
+      - STORAGE_LOCAL_PATH=.local-storage
+      - ACCESS_TOKEN_SECRET=${TWENTY_ACCESS_TOKEN_SECRET}
+      - LOGIN_TOKEN_SECRET=${TWENTY_LOGIN_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${TWENTY_REFRESH_TOKEN_SECRET}
+    depends_on:
+      - twenty-database
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-x2
+  twenty-migrate:
+    image: twentycrm/twenty-server:latest
+    container_name: ${PROJECT}-twenty-migrate
+    command: yarn nx database:init
+    environment: *twenty-server-env
+    depends_on:
+      - twenty-database
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-x2
+  twenty-database:
+    container_name: ${PROJECT}-twenty-database
+    image: twentycrm/twenty-postgres:latest
+    volumes:
+      - twenty_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=twenty
+    networks:
+      - twentycrm
+    deploy:
+      resources: *resource-preset-x025
+
+  # ----------------------------------------
+  # Bytebase
+  # ----------------------------------------
+  bytebase:
+    image: bytebase/bytebase:2.14.0
+    container_name: ${PROJECT}-bytebase
+    ports:
+      - ${BYTEBASE_PORT}:8080
+    volumes:
+      - bytebase_data:/var/opt/bytebase
+    networks:
+      - postgres
+      - tunnel
+    deploy:
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
+
+    # ----------------------------------------
+    # Blockchain
+    # ----------------------------------------
+    # These are the core services that are required
+    # to run the application.
+    # ----------------------------------------
+
+    # ----------------------------------------
+    # Backups and Volume Snapshotting
+    # ----------------------------------------
+    # docker-compose and volume management is
+    # kinda pain in the ass comparing it to local
+    # aka block volume management, I'm sure there
+    # are tools that avoid such struggle with volumes
+    # such as automatic backup to some S3 and easy
+    # recovery.
+    # ----------------------------------------
+
+# TODO: Check Docker Volume Plugins as they may be useful for managing these volumes, also after quick
+#   research I think they would have me in my previous production deployments based on docker-compose.include:
+#   https://github.com/rexray/rexray
+#   https://github.com/rancher/convoy
+#   https://github.com/MatchbookLab/local-persist
+#   https://github.com/ScatterHQ/flocker
+# TODO(https://github.com/keinsell/plygrnd/issues/335): ZFS and Docker Volumes?
+volumes:
+  postgres_data:
+    name: ${PROJECT}-postgres
+    driver: local
+  redis_data:
+    name: ${PROJECT}-redis
+    driver: local
+  minio_data:
+    name: ${PROJECT}-minio
+    driver: local
+  twenty_data:
+    name: twenty
+    driver: local
+  cockroach_data:
+    name: ${PROJECT}-cockroach
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
+  prometheus_data:
+    name: prometheus
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
+  grafana_data:
+    name: grafana
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=1G,uid=1000
+  bytebase_data:
+    name: bytebase
+    driver: local
+  supabase_pg_config:
+    name: supabase-pgconfig
+    driver: local
+  supabase_pg_data:
+    name: supabase-postgres
+    driver: local
+  supabase_storage_data:
+    name: supabase-storage
+    driver: local
+networks:
+  infisical:
+    name: infisical
+  sourcegraph:
+    name: sourcegraph
+  supabase:
+    name: supabase
+  twentycrm:
+    name: twentycrm
+  cockroach:
+    name: cockroach
+  monitoring:
+    name: monitoring
+    driver: bridge
+  postgres:
+    name: postgres
+    driver: bridge
+  tunnel:
+    name: tunnel
+
+# TODO: Learn how to utilize secrets.
+secrets:
+  postgres_password:
+    file: ./.env
+    name: postgres_password
+
+# TODO: Learn how to utilize configs.
+configs:
+  postgres_config:
+    name: postgres-config
+    file: .env
+

@@ -9,8 +9,8 @@ import {
 	ok,
 	Result,
 }                                       from 'neverthrow'
-import {PlainText}                             from '../../../kernel/integration/mailer/value-object/plain-text.js'
-import {AccessToken, JwtService, RefreshToken} from "../../../mod/identity/jwt.js"
+import {AccessToken, JwtService, RefreshToken} from "../../../kernel/modules/identity/jwt.js"
+import {PlainText} from "../../../kernel/modules/mailer/value-object/plain-text.js"
 import type {AccountId}                        from '../../account/shared-kernel/account-id.js'
 import {CredentialValidator}            from '../../account/shared-kernel/credential-validator/credential-validator.js'
 import type {Username}                  from '../../account/value-objects/username.js'

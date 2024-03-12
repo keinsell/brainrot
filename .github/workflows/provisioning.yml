@@ -26,18 +26,18 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 🐧 Setup OS
         uses: "./.github/actions/setup-os"
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 0.14.0
 
       - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
         id: plan-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -45,7 +45,7 @@ jobs:
           speculative: false
 
       - name: Create Plan Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
         id: plan-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -53,13 +53,13 @@ jobs:
           plan_only: true
 
       - name: Get Plan Output
-        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.2.0
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
       - name: Update PR
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: plan-comment
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -104,18 +104,18 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 🐧 Setup OS
         uses: "./.github/actions/setup-os"
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 0.14.0
 
       - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
         id: apply-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -123,7 +123,7 @@ jobs:
           speculative: false
 
       - name: Create Apply Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
         id: apply-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}

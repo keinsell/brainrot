@@ -1,0 +1,79 @@
+githubConfigUrl: "https://github.com/keinsell/methylphenidate"
+
+maxRunners: 15
+minRunners: 3
+
+# runnerGroup: "default"
+
+## name of the runner scale set to create.  Defaults to the helm release name
+# runnerScaleSetName: ""
+
+
+containerMode:
+  type: "kubernetes"
+  kubernetesModeWorkVolumeClaim:
+    accessModes: ["ReadWriteOnce"]
+    storageClassName: "openebs-hostpath"
+    resources:
+      requests:
+        storage: 5Gi
+  kubernetesModeServiceAccount:
+    annotations: {}
+
+## template is the PodSpec for each listener Pod
+## For reference: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+# listenerTemplate:
+#   spec:
+#     containers:
+#     # Use this section to append additional configuration to the listener container.
+#     # If you change the name of the container, the configuration will not be applied to the listener,
+#     # and it will be treated as a side-car container.
+#     - name: listener
+#       securityContext:
+#         runAsUser: 1000
+#     # Use this section to add the configuration of a side-car container.
+#     # Comment it out or remove it if you don't need it.
+#     # Spec for this container will be applied as is without any modifications.
+#     - name: side-car
+#       image: example-sidecar
+
+## template is the PodSpec for each runner Pod
+## For reference: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+template:
+     spec:
+       containers:
+       - name: runner
+         image: ghcr.io/actions/actions-runner:latest
+         command: ["/home/runner/run.sh"]
+         env:
+           - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+             value: /home/runner/k8s/index.js
+           - name: ACTIONS_RUNNER_POD_NAME
+             valueFrom:
+               fieldRef:
+                 fieldPath: metadata.name
+           - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+             value: "false"
+         volumeMounts:
+           - name: work
+             mountPath: /home/runner/_work
+       volumes:
+         - name: work
+           ephemeral:
+             volumeClaimTemplate:
+               spec:
+                 accessModes: [ "ReadWriteOnce" ]
+                 storageClassName: "openebs-hostpath"
+                 resources:
+                   requests:
+                     storage: 5Gi
+          
+## Optional controller service domain that needs to have required Role and RoleBinding
+## to operate this gha-runner-scale-set installation.
+## The helm chart will try to find the controller deployment and its service domain at installation time.
+## In case the helm chart can't find the right service domain, you can explicitly pass in the following value
+## to help it finish RoleBinding with the right service domain.
+## Note: if your controller is installed to only watch a single namespace, you have to pass these values explicitly.
+# controllerServiceAccount:
+#   namespace: arc-system
+#   name: test-arc-gha-runner-scale-set-controller
