@@ -3,6 +3,9 @@
 version: 0.1
 cli:
   version: 1.17.1
+repo:
+  trunk_branch: main
+  use_branch_upstream: true
 plugins:
   sources:
     - id: trunk
@@ -11,8 +14,10 @@ plugins:
 runtimes:
   enabled:
     - go@1.21.0
-    - node@18.12.1
+    - node@latest
     - python@3.10.8
+    - ruby@latest
+    - rust@latest
 lint:
   enabled:
     - checkov@3.0.15
