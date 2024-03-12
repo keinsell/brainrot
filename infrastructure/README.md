@@ -1,5 +1,37 @@
 # Infrastructure
 
+1. Developer Control Plane (DCP)
+ - IDE
+ - Service Catalog
+ - Version Control
+ - Application Source Code
+ - Workloads
+ - Platform Source Code
+2. Integration Control Plane (ICP)
+ - CI/CD
+ - Artifact Registry
+ - Container Registry
+ - Image Registry
+ - Helm Repository
+ - Kustomize Repository
+ - FlexCD Repository
+3. Monitoring Control Plane (MCP)
+    - Logging
+    - Metrics
+    - Tracing
+    - Alerting
+    - Observability
+    - Security
+4. Security Control Plane (SCP)
+    - Identity and Access Management
+    - Network Security
+    - Data Security
+    - Application Security
+    - Infrastructure Security
+    - Compliance
+5. Resource Plane
+    - Compute, Data, Networking, Services
+
 This directory contains all the infrastructure code for project and
 organization, and is organized through Terraform and Pulumi.
 
