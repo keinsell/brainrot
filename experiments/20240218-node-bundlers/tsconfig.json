@@ -15,17 +15,17 @@
     "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
     // Code Quality and Safety
-    "strict": false,
+    "strict": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "useDefineForClassFields": true,
     "strictPropertyInitialization": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": false,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true,
     "strictBindCallApply": true,
-    "forceConsistentCasingInFileNames": false,
+    "forceConsistentCasingInFileNames": true,
     "strictFunctionTypes": true,
     "exactOptionalPropertyTypes": true,
     "skipLibCheck": false,
@@ -43,7 +43,7 @@
     "incremental": true,
     "composite": true,
     "tsBuildInfoFile": "dist/.tsbuildinfo",
-    "assumeChangesOnlyAffectDirectDependencies": false,
+    "assumeChangesOnlyAffectDirectDependencies": true,
     // Emit design-type metadata for decorated declarations in source files.
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -85,14 +85,6 @@
     "types": [
       "@types/node"
     ],
-    "paths": {
-      "internal:mod/*": [
-        "./src/mod/*"
-      ],
-      "internal:kernel": [
-        "./src/kernel/index.ts"
-      ]
-    },
     "plugins": [
       // Transform paths in output .js files
       {

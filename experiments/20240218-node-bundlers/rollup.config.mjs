@@ -10,6 +10,7 @@ import nodeNatives from 'rollup-plugin-natives'
 // import fdts from 'rollup-plugin-flat-dts';
 import nodeGlobals from 'rollup-plugin-node-globals'
 import swc from 'rollup-plugin-swc3'
+import {terser} from "rollup-plugin-terser";
 
 // When building production-ready configuration of Rollup
 // Official repository would be good reference
@@ -35,23 +36,6 @@ const transpilers = {
 const typescriptTranspiler = transpilers.tsc
 const swcTranspiler = transpilers.swc
 
-//const configs: RollupOptions[] = []
-
-
-// pnpm i --force to install all prebuilt binaries.
-
-// `npm run build` -> `production` is true
-// `npm run dev` -> `production` is false
-const production = !process.env.ROLLUP_WATCH
-
-const platform = process.env.npm_config_target_platform || process.env.npm_config_platform || process.platform
-
-const arch = process.env.npm_config_target_arch || process.env.npm_config_arch || process.arch
-
-const platformId = (
-    arch === 'arm64'
-) ? `${platform}-arm64v8` : `${platform}-${arch}`
-
 export default {
     input: 'src/index.ts',
     treeshake: {
@@ -62,15 +46,15 @@ export default {
         file: 'dist/bin.js',
         sourcemap: true,
         plugins: [],
-    }, // TODO: Find a way to bundle snappy
+    },
     external: ['snappy'],
     plugins: [
         USE_SWC ? swcTranspiler : typescriptTranspiler,
-        // autoInstall({manager: 'pnpm'}),
         commonjs({
-            esmExternals: false,
+            esmExternals: true,
             transformMixedEsModules: true,
             sourceMap: true,
+            strictRequires: true,
         }),
         nodeGlobals(),
         resolve({
@@ -79,32 +63,31 @@ export default {
                 'node',
             ],
             extensions: ['node'],
-            allowExportsFolderMapping: false,
+            allowExportsFolderMapping: true,
             browser: false,
             preferBuiltins: true,
         }),
-        json({compact: true}),
+        json({compact: true, preferConst: true, namedExports: true}),
         nodeNatives({
             copyTo: 'dist/lib',
             destDir: './lib',
             targetEsm: true,
-            originTransform: arch,
+            sourcemap: true,
         }),
-        wasm({targetEnv: 'node'}),
-        //		production & terser({
-        //			                    toplevel       : true,
-        //			                    keep_fnames    : false,
-        //			                    compress       : true,
-        //			                    mangle         : true,
-        //			                    keep_classnames: false,
-        //			                    enclose        : false,
-        //			                    module         : false,
-        //			                    format         : {
-        //				                    wrap_iife: false,
-        //				                    shebang  : true,
-        //			                    },
-        //		                    }),
+        wasm({targetEnv: 'node', }),
+        terser({
+        			                    toplevel       : true,
+        			                    keep_fnames    : false,
+        			                    compress       : true,
+        			                    mangle         : true,
+        			                    keep_classnames: false,
+        			                    enclose        : false,
+        			                    module         : true,
+        			                    format         : {
+        				                    wrap_iife: false,
+        				                    shebang  : true,
+        			                    },
+        		                    }),
         beep(),
-        // fdts()
     ],
 }

@@ -1,11 +1,9 @@
 import express          from 'express'
 import {getPort}        from 'get-port-please'
-import {add}            from './mod/sample.js'
 import {Buffer}         from 'node:buffer'
 import {createServer}   from 'node:http'
 import pg               from 'pg'
 import snappy           from 'snappy'
-import {paintMeRedBaby} from './kernel/deduct.js'
 
 
 
@@ -28,9 +26,6 @@ console.log('Decompressed', (
 ).byteLength)
 
 console.log('Hello')
-console.log(add(1, 2))
-
-paintMeRedBaby()
 
 const app = express()
 
