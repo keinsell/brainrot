@@ -80,6 +80,37 @@ services:
       restart_policy: *restart_policy
   # ----------------------------------------
 
+  dockerproxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    container_name: dockerproxy
+    environment:
+      - CONTAINERS=1
+      - SERVICES=1
+      - TASKS=1
+      - POST=0
+    ports:
+      - 127.0.0.1:2375:2375
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
+    restart: unless-stopped
+    networks:
+      - supabase
+      - docker_proxy
+
+  # ----------------------------------------
+  # Server Dashboard
+  # ----------------------------------------
+  homepage:
+      image: ghcr.io/gethomepage/homepage:latest
+      container_name: homepage
+      ports:
+        - 3010:3000
+      volumes:
+        - ./homepage:/app/config
+      networks:
+        - docker_proxy
+  # ----------------------------------------
+
   # ----------------------------------------
   # Object Storage
   # ----------------------------------------
@@ -160,6 +191,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - infisical
+      - cache
     volumes:
       - redis_data:/data
     healthcheck:
@@ -197,7 +229,6 @@ services:
       restart_policy: *restart_policy
     configs:
       - postgres_config
-
   cockroachdb:
     # TODO: Prepare multi-node setup with certificates and secure communication.
     image: cockroachdb/cockroach:v23.2.2
@@ -254,8 +285,6 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
       - 9091:9090
-    #    extra_hosts:
-    #      - 'host.docker.internal:host-gateway'
     depends_on:
       - node-exporter
       - cadvisor
@@ -568,7 +597,7 @@ services:
       SUPABASE_URL: http://supabase-kong:8000
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
       SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
 
       LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
       LOGFLARE_URL: http://supabase-analytics:4000
@@ -589,8 +618,8 @@ services:
     # https://unix.stackexchange.com/a/294837
     entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
     ports:
-      - ${KONG_HTTP_PORT}:8000/tcp
-      - ${KONG_HTTPS_PORT}:8443/tcp
+      - ${SUPABASE_HTTP_PORT}:8000/tcp
+      - ${SUPABASE_HTTPS_PORT}:8443/tcp
     depends_on:
       supabase-analytics:
         condition: service_healthy
@@ -602,8 +631,8 @@ services:
       KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
       KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
       KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
-      SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
     volumes:
@@ -868,7 +897,7 @@ services:
   # ----------------------------------------
   bytebase:
     image: bytebase/bytebase:2.14.0
-    container_name: ${PROJECT}-bytebase
+    container_name: bytebase
     ports:
       - ${BYTEBASE_PORT}:8080
     volumes:
@@ -880,12 +909,58 @@ services:
       resources: *resource-preset-x1
       restart_policy: *restart_policy
 
+  # ----------------------------------------
+  # mathesar
+  # ----------------------------------------
+
+  mathesar:
+    image: mathesar/mathesar-prod:latest
+    container_name: mathesar
+    ports:
+      - ${MATHESAR_PORT}:8000
+    networks:
+      - postgres
+      - tunnel
+    deploy:
+        resources: *resource-preset-x1
+        restart_policy: *restart_policy
+
     # ----------------------------------------
     # Blockchain
     # ----------------------------------------
     # These are the core services that are required
     # to run the application.
     # ----------------------------------------
+
+    # ----------------------------------------
+    # Bitcoin Node
+    # ----------------------------------------
+  bitcoind:
+      container_name: bitcoind
+      image: lncm/bitcoind:v22.0@sha256:37a1adb29b3abc9f972f0d981f45e41e5fca2e22816a023faa9fdc0084aa4507
+      volumes:
+        - bitcoin_data:/data/.bitcoin
+      restart: on-failure
+      stop_grace_period: 15m30s
+      ports:
+        - "18443:18443"
+        # - "8333:8333" # "$BITCOIN_P2P_PORT:$BITCOIN_P2P_PORT"
+#  bitcoind_dashboard:
+#    image: umbrel-bitcoin:master
+#    container_name: bitcoind-dashboard
+#    depends_on: [bitcoind]
+#    command: ["npm", "start"]
+#    restart: on-failure
+#    ports:
+#      - "10075:3005"
+#    environment:
+#      PORT: "3005"
+#      BITCOIN_HOST: "bitcoind"
+#      RPC_PORT: $BITCOIN_RPC_PORT
+#      RPC_USER: $BITCOIN_RPC_USER
+#      RPC_PASSWORD: $BITCOIN_RPC_PASS
+#      BITCOIN_RPC_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-rpc/hostname"
+#      BITCOIN_P2P_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-p2p/hostname"
 
     # ----------------------------------------
     # Backups and Volume Snapshotting
@@ -951,9 +1026,14 @@ volumes:
   supabase_storage_data:
     name: supabase-storage
     driver: local
+  bitcoin_data:
+    name: bitcoin
+    driver: local
 networks:
   infisical:
     name: infisical
+  cache:
+    name: cache
   sourcegraph:
     name: sourcegraph
   supabase:
@@ -970,6 +1050,10 @@ networks:
     driver: bridge
   tunnel:
     name: tunnel
+  bitcoin:
+    name: bitcoin
+  docker_proxy:
+    name: docker_proxy
 
 # TODO: Learn how to utilize secrets.
 secrets:
