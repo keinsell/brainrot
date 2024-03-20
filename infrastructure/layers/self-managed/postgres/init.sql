@@ -1,6 +1,8 @@
 CREATE USER infisical WITH PASSWORD 'infisical';
+CREATE USER mathesar WITH PASSWORD 'mathesar';
 
 CREATE DATABASE infisical;
+CREATE DATABASE mathesar;
 
 \c infisical;
 
@@ -8,3 +10,10 @@ GRANT ALL PRIVILEGES ON DATABASE infisical TO infisical;
 CREATE SCHEMA IF NOT EXISTS public;
 GRANT USAGE, CREATE ON SCHEMA public TO infisical;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO infisical;
+
+\c mathesar;
+
+GRANT ALL PRIVILEGES ON DATABASE mathesar TO mathesar;
+CREATE SCHEMA IF NOT EXISTS public;
+GRANT USAGE, CREATE ON SCHEMA public TO mathesar;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO mathesar;
