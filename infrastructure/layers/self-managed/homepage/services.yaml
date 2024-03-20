@@ -18,9 +18,12 @@
         href: http://localhost:10037/
         description: test
     - mathesar:
-        icon: si-postgres
+        icon: si-mamp
         href: http://localhost:10038/
         description: test
+    - cockroach:
+        icon: si-cockroachlabs
+        href: http://localhost:8089/
 
 - Observability:
     - prometheus:

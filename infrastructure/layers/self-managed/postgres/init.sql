@@ -3,6 +3,7 @@ CREATE USER mathesar WITH PASSWORD 'mathesar';
 
 CREATE DATABASE infisical;
 CREATE DATABASE mathesar;
+CREATE DATABASE supabase;
 
 \c infisical;
 
