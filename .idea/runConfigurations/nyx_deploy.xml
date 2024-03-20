@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="nyx:deploy" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="buildKitEnabledForCompose" value="true" />
+        <option name="composeProjectName" value="nyx" />
+        <option name="envFilePath" value="" />
+        <option name="sourceFilePath" value="infrastructure/layers/self-managed/docker-compose.yml" />
+        <option name="upAlwaysRecreate" value="true" />
+        <option name="upAttachDependencies" value="true" />
+        <option name="upDetach" value="false" />
+        <option name="upRemoveOrphans" value="true" />
+        <option name="upRenewAnonVolumes" value="true" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>

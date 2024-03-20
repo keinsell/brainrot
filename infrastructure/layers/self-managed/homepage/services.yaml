@@ -10,7 +10,7 @@
         container: minio
     - supabase:
         icon: si-supabase
-        href: http://localhost:9000
+        href: http://localhost:8000
         description: Supabase is an open source Firebase alternative.
         container: supabase-studio
     - bytebase:
