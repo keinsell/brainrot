@@ -107,6 +107,7 @@ services:
         - 3010:3000
       volumes:
         - ./homepage:/app/config
+        - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - docker_proxy
   # ----------------------------------------
@@ -200,6 +201,17 @@ services:
   # TODO: Memcached
   # TODO: Dragonfly
 
+  rancher:
+    image: rancher/rancher:latest
+    restart: always
+    ports:
+      - "10088:80/tcp"
+      - "10089:443/tcp"
+      - "36793:36793/tcp" # Minikube
+    volumes:
+      - "rancher-data:/var/lib/rancher"
+    privileged: true
+
   # ----------------------------------------
   # Database
   # ----------------------------------------
@@ -209,9 +221,6 @@ services:
     healthcheck:
       <<: *healthcheck-default
       test: pg_isready -U postgres -h localhost
-    depends_on:
-      supabase-vector:
-        condition: service_started
     command:
       - postgres
       - -c
@@ -652,6 +661,9 @@ volumes:
     driver: local
   bitcoin_data:
     name: bitcoin
+    driver: local
+  rancher-data:
+    name: rancher
     driver: local
 networks:
   infisical:

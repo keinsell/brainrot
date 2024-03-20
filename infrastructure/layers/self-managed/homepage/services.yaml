@@ -39,3 +39,6 @@
         description: test
     - infisical:
         icon: si-infisical
+    - rancher:
+        icon: si-rancher
+        href: https://localhost:10089/
