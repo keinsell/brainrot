@@ -408,7 +408,7 @@ services:
   # Infisical
   # ----------------------------------------
   infisical:
-    container_name: ${PROJECT}-infisical
+    container_name: infisical
     restart: unless-stopped
     depends_on:
       postgres:
@@ -515,8 +515,9 @@ services:
       - twentycrm
     deploy:
       resources: *resource-preset-x2
+  # TODO: Ditch this container for postgres
   twenty-database:
-    container_name: ${PROJECT}-twenty-database
+    container_name: twenty-database
     image: twentycrm/twenty-postgres:latest
     volumes:
       - twenty_data:/var/lib/postgresql/data
@@ -559,6 +560,9 @@ services:
     deploy:
         resources: *resource-preset-x1
         restart_policy: *restart_policy
+    depends_on:
+      postgres:
+        condition: service_healthy
 
     # ----------------------------------------
     # Blockchain
@@ -667,7 +671,6 @@ networks:
     driver: bridge
   postgres:
     name: postgres
-    driver: bridge
   tunnel:
     name: tunnel
   bitcoin:
