@@ -1,0 +1,44 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+
+- Storage:
+    - minio:
+        icon: minio.png
+        href: http://localhost:9000
+        description: MinIO is a high-performance, Amazon S3-compatible object storage solution designed for cloud-native applications, analytics, and large-scale AI/ML workloads.
+        container: minio
+    - supabase:
+        icon: si-supabase
+        href: http://localhost:8000
+        description: Supabase is an open source Firebase alternative.
+        container: supabase-studio
+    - bytebase:
+        icon: si-bytebase
+        href: http://localhost:10037/
+        description: test
+    - mathesar:
+        icon: si-mamp
+        href: http://localhost:10038/
+        description: test
+    - cockroach:
+        icon: si-cockroachlabs
+        href: http://localhost:8089/
+
+- Observability:
+    - prometheus:
+        icon: si-prometheus
+        href: http://localhost:9091/
+    - grafana:
+        icon: si-grafana
+        href: http://localhost:3000/
+
+- Applications:
+    - twenty:
+        href: http://localhost:10011/
+        description: test
+    - infisical:
+        icon: si-infisical
+    - rancher:
+        icon: si-rancher
+        href: https://localhost:10089/
