@@ -1,0 +1,4 @@
+providers:
+  docker:
+    exposedByDefault: true
+    watch: true

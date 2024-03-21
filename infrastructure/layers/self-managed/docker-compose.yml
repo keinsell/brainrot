@@ -67,14 +67,13 @@ services:
   # environment to the internet.
   # ----------------------------------------
   tunnel:
-    container_name: ${PROJECT}-tunnel
+    container_name: cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
     networks:
-      - infisical
-      - twentycrm
       - tunnel
+      - reverse_proxy
     deploy:
       resources: *resource-preset-x025
       restart_policy: *restart_policy
@@ -97,18 +96,58 @@ services:
       - supabase
       - docker_proxy
 
+  traefik:
+    image: "traefik:v2.11"
+    container_name: "traefik"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+#      - "--entrypoints.http.http.redirections.entryPoint.to=https"
+#      - "--entrypoints.http.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.https.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8083:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - docker_proxy
+      - reverse_proxy
+
+  whoami:
+    # A container that exposes an API to show its IP address
+    image: traefik/whoami
+    container_name: whoami
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)"
+    networks:
+      - reverse_proxy
+
   # ----------------------------------------
   # Server Dashboard
   # ----------------------------------------
   homepage:
       image: ghcr.io/gethomepage/homepage:latest
       container_name: homepage
+      labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.homepage.rule=PathPrefix(`/`)"
+          - "traefik.http.routers.homepage.entrypoints=http"
       ports:
         - 3010:3000
       volumes:
         - ./homepage:/app/config
       networks:
         - docker_proxy
+        - reverse_proxy
   # ----------------------------------------
 
   # ----------------------------------------
@@ -122,10 +161,14 @@ services:
   # ----------------------------------------
   minio:
     image: minio/minio
-    container_name: ${PROJECT}-minio
+    container_name: minio
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
+      - "traefik.http.services.minio.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio.entrypoints=http"
     ports:
       - '${MINIO_PORT}:9000'
-      - '9001:9001'
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -137,15 +180,13 @@ services:
       restart_policy: *restart_policy
     networks:
       - supabase
+      - reverse_proxy
 
   minio-migration:
     image: minio/mc
-    container_name: ${PROJECT}-minio-migration
+    container_name: minio-migration
     env_file:
       - .env
-    #    depends_on:
-    #      minio:
-    #        condition: service_healthy
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
@@ -203,9 +244,15 @@ services:
   rancher:
     image: rancher/rancher:latest
     container_name: rancher
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rancher.rule=Host(`rancher.${DOMAIN}`)"
+      - "traefik.http.services.rancher.loadbalancer.server.port=80"
+      - "traefik.http.routers.rancher.entrypoints=http"
     deploy:
-#      resources: *resource-preset-x2
-      restart_policy: *restart_policy_always
+      resources: *resource-preset-x2
+      restart_policy:
+        condition: any
     restart: always
     ports:
       - "10088:80/tcp"
@@ -223,6 +270,9 @@ services:
         source: rancher_kubelet
         type: volume
     privileged: true
+
+  # TODO: Setup k3s
+  # https://doc.traefik.io/traefik/user-guides/crd-acme/
 
   # ----------------------------------------
   # Database
@@ -275,13 +325,33 @@ services:
       - infisical
       - twentycrm
 
+  hydra:
+    container_name: hydra
+    image: ghcr.io/hydradatabase/hydra:latest
+    ports:
+      - ${HYDRA_EXTERNAL_PORT}:${HYDRA_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - hydra_data:/var/lib/postgresql/data
+      - ./hydra/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    networks:
+      - postgres
+
+
   cockroachdb:
     # TODO: Prepare multi-node setup with certificates and secure communication.
     image: cockroachdb/cockroach:v23.2.2
     container_name: cockroach
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cockroachdb.rule=Host(`cockroach.${DOMAIN}`)"
+      - "traefik.http.services.cockroachdb.loadbalancer.server.port=8080"
+      - "traefik.http.routers.cockroachdb.entrypoints=http"
     ports:
       - "${COCKROACHDB_PORT}:${COCKROACHDB_PORT}"
-      - "${COCKROACHDB_CONSOLE_PORT}:8080"
     command: start-single-node --insecure
     volumes:
       - "cockroach_data:/cockroach/cockroach-data"
@@ -290,6 +360,8 @@ services:
       # The required resources for this service are min. x4
       resources: *resource-preset-x1
       restart_policy: *restart_policy
+    networks:
+      - reverse_proxy
 
   # ----------------------------------------
   # Messaging
@@ -321,6 +393,11 @@ services:
   prometheus:
     image: prom/prometheus
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.routers.prometheus.entrypoints=http"
     volumes:
       - ./prometheus:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -329,8 +406,6 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - 9091:9090
     depends_on:
       - node-exporter
       - cadvisor
@@ -555,13 +630,18 @@ services:
   bytebase:
     image: bytebase/bytebase:2.14.0
     container_name: bytebase
-    ports:
-      - ${BYTEBASE_PORT}:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bytebase.rule=Host(`bytebase.${DOMAIN}`)"
+      - "traefik.http.services.bytebase.loadbalancer.server.port=8080"
+      - "traefik.http.routers.bytebase.entrypoints=http"
+#    ports:
+#      - ${BYTEBASE_PORT}:8080
     volumes:
       - bytebase_data:/var/opt/bytebase
     networks:
       - postgres
-      - tunnel
+      - reverse_proxy
     deploy:
       resources: *resource-preset-x1
       restart_policy: *restart_policy
@@ -674,6 +754,15 @@ volumes:
   bitcoin_data:
     name: bitcoin
     driver: local
+  hydra_data:
+    name: hydra
+  rancher-data:
+    name: rancher
+  rancher_cni:
+    name: rancher_cni
+  rancher_kubelet:
+    name: rancher_kubelet
+
 networks:
   infisical:
     name: infisical
@@ -698,6 +787,8 @@ networks:
     name: bitcoin
   docker_proxy:
     name: docker_proxy
+  reverse_proxy:
+    name: reverse_proxy
 
 # TODO: Learn how to utilize secrets.
 secrets:
