@@ -107,7 +107,6 @@ services:
         - 3010:3000
       volumes:
         - ./homepage:/app/config
-        - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - docker_proxy
   # ----------------------------------------
@@ -203,13 +202,26 @@ services:
 
   rancher:
     image: rancher/rancher:latest
+    container_name: rancher
+    deploy:
+#      resources: *resource-preset-x2
+      restart_policy: *restart_policy_always
     restart: always
     ports:
       - "10088:80/tcp"
       - "10089:443/tcp"
-      - "36793:36793/tcp" # Minikube
+      - "36793:36793"
+      - "6444:6443"
     volumes:
-      - "rancher-data:/var/lib/rancher"
+      - target: /var/lib/rancher
+        source: rancher-data
+        type: volume
+      - target: /var/lib/cni
+        source: rancher_cni
+        type: volume
+      - target: /var/lib/kubelet
+        source: rancher_kubelet
+        type: volume
     privileged: true
 
   # ----------------------------------------
@@ -661,9 +673,6 @@ volumes:
     driver: local
   bitcoin_data:
     name: bitcoin
-    driver: local
-  rancher-data:
-    name: rancher
     driver: local
 networks:
   infisical:
