@@ -5,7 +5,7 @@
 - Storage:
     - minio:
         icon: minio.png
-        href: http://localhost:9000
+        href: http://minio.localhost
         description: MinIO is a high-performance, Amazon S3-compatible object storage solution designed for cloud-native applications, analytics, and large-scale AI/ML workloads.
         container: minio
     - supabase:
@@ -15,7 +15,7 @@
         container: supabase-studio
     - bytebase:
         icon: si-bytebase
-        href: http://localhost:10037/
+        href: http://bytebase.localhost
         description: test
     - mathesar:
         icon: si-mamp
@@ -23,15 +23,28 @@
         description: test
     - cockroach:
         icon: si-cockroachlabs
-        href: http://localhost:8089/
-
+        href: http://cockroach.localhost
 - Observability:
     - prometheus:
         icon: si-prometheus
-        href: http://localhost:9091/
+        href: http://prometheus.localhost
     - grafana:
         icon: si-grafana
         href: http://localhost:3000/
+    - todo_jaeger:
+        icon: si-jaeger
+    - todo_sentry:
+        icon: si-sentry
+    - todo_sourcegraph:
+        icon: si-sourcegraph
+
+- Network:
+    - traefik:
+        icon: si-traefikproxy
+        href: http://localhost:8083/
+    - portainer:
+        icon: si-portainer
+        href: http://localhost:9000/
 
 - Applications:
     - twenty:
@@ -39,6 +52,16 @@
         description: test
     - infisical:
         icon: si-infisical
+    - todo_vault:
+        icon: si-vault
+    - argocd:
+        icon: si-argo
+    - todo_windmill:
+        icon: si-windmill
+    - todo_highlight:
+        icon: si-highlight
+    - todo_headlamp:
+        icon: si-headlamp
     - rancher:
         icon: si-rancher
-        href: https://localhost:10089/
+        href: https://localhost:10088/
