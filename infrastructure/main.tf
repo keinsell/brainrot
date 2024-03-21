@@ -1,8 +1,19 @@
+locals {
+  environments = {
+    preview = "preview"
+    development = "development"
+    nightly     = "nightly"
+    canary      = "canary"
+    production  = "production"
+  }
+}
+
 terraform {
   cloud {
     organization = "keinsell"
     workspaces {
-      name = "methylphenidate"
+      project = "plygrnd"
+      name = "production"
     }
   }
   required_providers {
