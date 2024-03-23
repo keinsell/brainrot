@@ -43,14 +43,32 @@ x-restart-policy: &restart_policy
   max_attempts: 3
 
 # ----------------------------------------
+# Stateful Persistance Volumes Configuration
+# ----------------------------------------
+# https://rclone.org/docker/
+# docker plugin set rclone RCLONE_VERBOSE=2 config=/etc/rclone args="--vfs-cache-mode=writes --allow-other
+# Local Persist ("local-persist")
+# https://github.com/MatchbookLab/local-persist/tree/master
+# ---
+# docker run -d \
+#   -v /run/docker/plugins/:/run/docker/plugins/ \
+#   -v /spacewarp/docker/plugins/local-persist:/var/lib/docker/plugin-data/ \
+#   -v /spacewarp/docker/volumes:/data \
+#      cwspear/docker-local-persist-volume-plugin
+#
+x-stateful-volume-default: &stateful-volume
+  driver: local
+
+# ----------------------------------------
 # Healthcheck Configuration
 # ----------------------------------------
-x-healthcheck-default: &healthcheck-default
+x-healthcheck-default:
   # Avoid setting the interval too small, as docker uses much more CPU than one would expect.
   # Related issues:
   # https://github.com/moby/moby/issues/39102
   # https://github.com/moby/moby/issues/39388
   # https://github.com/getsentry/self-hosted/issues/1000
+  &healthcheck-default
   interval: 60s
   timeout: 60s
   retries: 2
@@ -109,8 +127,8 @@ services:
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.http.address=:80"
-#      - "--entrypoints.http.http.redirections.entryPoint.to=https"
-#      - "--entrypoints.http.http.redirections.entryPoint.scheme=https"
+      #      - "--entrypoints.http.http.redirections.entryPoint.to=https"
+      #      - "--entrypoints.http.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.https.address=:443"
     ports:
       - "80:80"
@@ -135,19 +153,21 @@ services:
   # Server Dashboard
   # ----------------------------------------
   homepage:
-      image: ghcr.io/gethomepage/homepage:latest
-      container_name: homepage
-      labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.homepage.rule=PathPrefix(`/`)"
-          - "traefik.http.routers.homepage.entrypoints=http"
-      ports:
-        - 3010:3000
-      volumes:
-        - ./homepage:/app/config
-      networks:
-        - docker_proxy
-        - reverse_proxy
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.homepage.entrypoints=http"
+    ports:
+      - 3010:3000
+    volumes:
+      - type: bind
+        source: ./homepage
+        target: /app/config
+    networks:
+      - docker_proxy
+      - reverse_proxy
   # ----------------------------------------
 
   # ----------------------------------------
@@ -174,7 +194,9 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server --console-address ":9001" /data
     volumes:
-      - minio_data:/data:z
+      - type: bind
+        source: ~/datastore
+        target: /data
     deploy:
       resources: *resource-preset-x1
       restart_policy: *restart_policy
@@ -188,12 +210,7 @@ services:
     env_file:
       - .env
     entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb minio/stub;
-      /usr/bin/mc mb minio/dummy;
-      exit 0;
-      "
+      /bin/sh -c " /usr/bin/mc alias set minio http://${MINIO_HOST}:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; /usr/bin/mc mb minio/stub; /usr/bin/mc mb minio/dummy; usr/bin/mc mb minio/docker; exit 0;"
     deploy:
       resources: *resource-preset-x025
       restart_policy: *restart_policy
@@ -260,9 +277,10 @@ services:
       - "36793:36793"
       - "6444:6443"
     volumes:
-      - target: /var/lib/rancher
+      # Core Configuration
+      - type: volume
         source: rancher-data
-        type: volume
+        target: /var/lib/rancher
       - target: /var/lib/cni
         source: rancher_cni
         type: volume
@@ -295,8 +313,8 @@ services:
       POSTGRES_HOST: /var/run/postgresql
       PGPORT: ${POSTGRES_PORT}
       POSTGRES_PORT: ${POSTGRES_PORT}
-      PGPASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGPASSWORD: /run/secrets/postgres_password
+      POSTGRES_PASSWORD: /run/secrets/postgres_password
       PGDATABASE: ${POSTGRES_DB}
       POSTGRES_DB: ${POSTGRES_DB}
       JWT_SECRET: ${SUPABASE_JWT_SECRET}
@@ -324,6 +342,8 @@ services:
       - postgres
       - infisical
       - twentycrm
+    secrets:
+      - source: postgres_password
 
   hydra:
     container_name: hydra
@@ -340,7 +360,6 @@ services:
     networks:
       - postgres
 
-
   cockroachdb:
     # TODO: Prepare multi-node setup with certificates and secure communication.
     image: cockroachdb/cockroach:v23.2.2
@@ -355,7 +374,7 @@ services:
     command: start-single-node --insecure
     volumes:
       - "cockroach_data:/cockroach/cockroach-data"
-#      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    #      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     deploy:
       # The required resources for this service are min. x4
       resources: *resource-preset-x1
@@ -436,30 +455,31 @@ services:
     networks:
       - monitoring
 
+  # https://gvisor.dev/
   cadvisor:
-      image: gcr.io/cadvisor/cadvisor
-      container_name: cadvisor
-      privileged: true
-      cgroup: host
-      userns_mode: "host"
-      ipc: private
-      shm_size: 128M
-      expose:
-        - "8080"
-      networks:
-        - monitoring
-      volumes:
-        - /:/rootfs:ro
-        - /var/run:/var/run:rw
-        - /sys:/sys:ro
-        - /var/lib/docker/:/var/lib/docker:ro
-        - /dev/disk/:/dev/disk:ro
-        # Fucking cgroup bullshit
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      deploy:
-        mode: global
-        resources: *resource-preset-x025
-        restart_policy: *restart_policy
+    image: gcr.io/cadvisor/cadvisor
+    container_name: cadvisor
+    privileged: true
+    cgroup: host
+    userns_mode: "host"
+    ipc: private
+    shm_size: 128M
+    expose:
+      - "8080"
+    networks:
+      - monitoring
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      # Fucking cgroup bullshit
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    deploy:
+      mode: global
+      resources: *resource-preset-x025
+      restart_policy: *restart_policy
 
   grafana:
     image: grafana/grafana
@@ -635,8 +655,8 @@ services:
       - "traefik.http.routers.bytebase.rule=Host(`bytebase.${DOMAIN}`)"
       - "traefik.http.services.bytebase.loadbalancer.server.port=8080"
       - "traefik.http.routers.bytebase.entrypoints=http"
-#    ports:
-#      - ${BYTEBASE_PORT}:8080
+    #    ports:
+    #      - ${BYTEBASE_PORT}:8080
     volumes:
       - bytebase_data:/var/opt/bytebase
     networks:
@@ -659,12 +679,38 @@ services:
       - postgres
       - tunnel
     deploy:
-        resources: *resource-preset-x1
-        restart_policy: *restart_policy
+      resources: *resource-preset-x1
+      restart_policy: *restart_policy
     depends_on:
       postgres:
         condition: service_healthy
-
+    # tubearchivist:
+    #   container_name: tubearchivist
+    #   image: bbilly1/tubearchivist
+    #   ports:
+    #     - 8000:8000
+    #   volumes:
+    #     - media:/youtube
+    #     - cache:/cache
+    #   environment:
+    #     - ES_URL=http://archivist-es:9200 # needs protocol e.g. http and port
+    #     - REDIS_HOST=archivist-redis # don't add protocol
+    #     - HOST_UID=1000
+    #     - HOST_GID=1000
+    #     - TA_HOST=tubearchivist.local # set your host name
+    #     - TA_USERNAME=tubearchivist # your initial TA credentials
+    #     - TA_PASSWORD=verysecret # your initial TA credentials
+    #     - ELASTIC_PASSWORD=verysecret # set password for Elasticsearch
+    #     - TZ=America/New_York # set your time zone
+    #   healthcheck:
+    #     test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+    #     interval: 2m
+    #     timeout: 10s
+    #     retries: 3
+    #     start_period: 30s
+    #   depends_on:
+    #     - redis
+    #     - archivist-redis
     # ----------------------------------------
     # Blockchain
     # ----------------------------------------
@@ -675,51 +721,52 @@ services:
     # ----------------------------------------
     # Bitcoin Node
     # ----------------------------------------
-#  bitcoind:
-#      container_name: bitcoind
-#      image: lncm/bitcoind:v22.0@sha256:37a1adb29b3abc9f972f0d981f45e41e5fca2e22816a023faa9fdc0084aa4507
-#      volumes:
-#        - bitcoin_data:/data/.bitcoin
-#      restart: on-failure
-#      stop_grace_period: 15m30s
-#      ports:
-#        - "18443:18443"
-#        # - "8333:8333" # "$BITCOIN_P2P_PORT:$BITCOIN_P2P_PORT"
-##  bitcoind_dashboard:
-##    image: umbrel-bitcoin:master
-##    container_name: bitcoind-dashboard
-##    depends_on: [bitcoind]
-##    command: ["npm", "start"]
-##    restart: on-failure
-##    ports:
-##      - "10075:3005"
-##    environment:
-##      PORT: "3005"
-##      BITCOIN_HOST: "bitcoind"
-##      RPC_PORT: $BITCOIN_RPC_PORT
-##      RPC_USER: $BITCOIN_RPC_USER
-##      RPC_PASSWORD: $BITCOIN_RPC_PASS
-##      BITCOIN_RPC_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-rpc/hostname"
-##      BITCOIN_P2P_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-p2p/hostname"
-#
-#    # ----------------------------------------
-#    # Backups and Volume Snapshotting
-#    # ----------------------------------------
-#    # docker-compose and volume management is
-#    # kinda pain in the ass comparing it to local
-#    # aka block volume management, I'm sure there
-#    # are tools that avoid such struggle with volumes
-#    # such as automatic backup to some S3 and easy
-#    # recovery.
-#    # ----------------------------------------
+    #  bitcoind:
+    #      container_name: bitcoind
+    #      image: lncm/bitcoind:v22.0@sha256:37a1adb29b3abc9f972f0d981f45e41e5fca2e22816a023faa9fdc0084aa4507
+    #      volumes:
+    #        - bitcoin_data:/data/.bitcoin
+    #      restart: on-failure
+    #      stop_grace_period: 15m30s
+    #      ports:
+    #        - "18443:18443"
+    #        # - "8333:8333" # "$BITCOIN_P2P_PORT:$BITCOIN_P2P_PORT"
+    ##  bitcoind_dashboard:
+    ##    image: umbrel-bitcoin:master
+    ##    container_name: bitcoind-dashboard
+    ##    depends_on: [bitcoind]
+    ##    command: ["npm", "start"]
+    ##    restart: on-failure
+    ##    ports:
+    ##      - "10075:3005"
+    ##    environment:
+    ##      PORT: "3005"
+    ##      BITCOIN_HOST: "bitcoind"
+    ##      RPC_PORT: $BITCOIN_RPC_PORT
+    ##      RPC_USER: $BITCOIN_RPC_USER
+    ##      RPC_PASSWORD: $BITCOIN_RPC_PASS
+    ##      BITCOIN_RPC_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-rpc/hostname"
+    ##      BITCOIN_P2P_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-p2p/hostname"
+    #
+    #    # ----------------------------------------
+    #    # Backups and Volume Snapshotting
+    #    # ----------------------------------------
+    #    # docker-compose and volume management is
+    #    # kinda pain in the ass comparing it to local
+    #    # aka block volume management, I'm sure there
+    #    # are tools that avoid such struggle with volumes
+    #    # such as automatic backup to some S3 and easy
+    #    # recovery.
+    #    # ----------------------------------------
 
-# TODO: Check Docker Volume Plugins as they may be useful for managing these volumes, also after quick
-#   research I think they would have me in my previous production deployments based on docker-compose.include:
-#   https://github.com/rexray/rexray
-#   https://github.com/rancher/convoy
-#   https://github.com/MatchbookLab/local-persist
-#   https://github.com/ScatterHQ/flocker
-# TODO(https://github.com/keinsell/plygrnd/issues/335): ZFS and Docker Volumes?
+    # TODO: Check Docker Volume Plugins as they may be useful for managing these volumes, also after quick
+    #   research I think they would have me in my previous production deployments based on docker-compose.include:
+    #   https://github.com/rexray/rexray
+    #   https://github.com/rancher/convoy
+    #   https://github.com/MatchbookLab/local-persist
+    #   https://github.com/ScatterHQ/flocker
+    # TODO(https://github.com/keinsell/plygrnd/issues/335): ZFS and Docker Volumes?
+
 volumes:
   redis_data:
     name: redis
@@ -749,15 +796,17 @@ volumes:
     name: postgres_data
     driver: local
   supabase_storage_data:
+    driver: local
     name: supabase-storage
-    driver: local
   bitcoin_data:
-    name: bitcoin
     driver: local
+    name: bitcoin
   hydra_data:
+    driver: local
     name: hydra
   rancher-data:
     name: rancher
+    driver: local
   rancher_cni:
     name: rancher_cni
   rancher_kubelet:
@@ -793,7 +842,7 @@ networks:
 # TODO: Learn how to utilize secrets.
 secrets:
   postgres_password:
-    file: ./.env
+    environment: "POSTGRES_PASSWORD"
     name: postgres_password
 
 # TODO: Learn how to utilize configs.
@@ -801,4 +850,3 @@ configs:
   postgres_config:
     name: postgres-config
     file: .env
-

@@ -83,3 +83,19 @@ crap that I need, with a fancy way of setup.
 - `9006` - SigNoz
 - `9007` - Sourcegraph
 - `10037` - Bytebase
+
+
+## Docker
+
+https://github.com/YouMightNotNeedKubernetes/rclone-volume-driver-guide
+
+```bash
+mkdir -p /home/keinsell/.config/rclone-docker
+```
+
+```bash
+docker plugin install rclone/docker-volume-rclone:amd64 \
+  --alias rclone \
+  --grant-all-permissions \
+  args="-v --allow-other"
+```
