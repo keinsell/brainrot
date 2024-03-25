@@ -15,7 +15,7 @@
         container: supabase-studio
     - bytebase:
         icon: si-bytebase
-        href: http://bytebase.localhost
+        href: https://bytebase.plygrnd.land
         description: test
     - mathesar:
         icon: si-mamp
