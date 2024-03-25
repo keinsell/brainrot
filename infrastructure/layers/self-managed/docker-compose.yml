@@ -43,12 +43,29 @@ x-restart-policy: &restart_policy
   max_attempts: 3
 
 # ----------------------------------------
-# Stateful Persistance Volumes Configuration
+# Stateful Persistence Volumes Configuration
 # ----------------------------------------
+# My problem there is that I know bind mounts would solve my
+# problem, but there I would need to define tons of bind mounts
+# into different places, and I would like to seek for more elegant
+# way that would allow me to define the volumes in one place and
+# then use them in different services.
+# I'm actually sure the volume plugins are things that I need
+# but before them I need one bind mount for ex.
+# S3 bucket that would store all the data that I need to persist
+#
 # https://rclone.org/docker/
 # docker plugin set rclone RCLONE_VERBOSE=2 config=/etc/rclone args="--vfs-cache-mode=writes --allow-other
 # Local Persist ("local-persist")
 # https://github.com/MatchbookLab/local-persist/tree/master
+# https://github.com/rexray/rexray
+# https://github.com/offen/docker-volume-backup
+# This project used NFS volumes for persisting data
+# https://github.com/tldr-devops/startpack/tree/main
+# https://github.com/ethibox/awesome-stacks/tree/master
+# https://github.com/juicedata/docker-volume-juicefs
+# https://github.com/TrilliumIT/docker-zfs-plugin
+# glusterfs plugin
 # ---
 # docker run -d \
 #   -v /run/docker/plugins/:/run/docker/plugins/ \
@@ -152,6 +169,16 @@ services:
   # ----------------------------------------
   # Server Dashboard
   # ----------------------------------------
+  # There is a need for two dashboards, the one
+  # for the public network and people who ten use
+  # my infrastructure and applications and
+  # the second one for the internal network and
+  # mostly myself.
+  #
+  # https://github.com/ProductiveOps/dokemon
+  # https://github.com/louislam/dockge?tab=readme-ov-file
+  # https://github.com/hywax/mafl
+  # ----------------------------------------
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
@@ -195,7 +222,7 @@ services:
     command: server --console-address ":9001" /data
     volumes:
       - type: bind
-        source: ~/datastore
+        source: /srv/minio
         target: /data
     deploy:
       resources: *resource-preset-x1
@@ -281,6 +308,9 @@ services:
       - type: volume
         source: rancher-data
         target: /var/lib/rancher
+      - type: volume
+        source: rancher-config
+        target: /etc/rancher
       - target: /var/lib/cni
         source: rancher_cni
         type: volume
@@ -806,13 +836,24 @@ volumes:
     name: hydra
   rancher-data:
     name: rancher
-    driver: local
+    driver: juicedata/juicefs
+    driver_opts:
+      name: myjfs
+      metaurl: sqlite3://myjfs.db
+  rancher-config:
+    name: rancher
+    driver: juicedata/juicefs
+    driver_opts:
+      name: myjfs
+      metaurl: sqlite3://myjfs.db
   rancher_cni:
     name: rancher_cni
   rancher_kubelet:
     name: rancher_kubelet
 
 networks:
+  plygrnd:
+    name: plygrnd
   infisical:
     name: infisical
   cache:
