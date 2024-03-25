@@ -131,32 +131,6 @@ services:
       - supabase
       - docker_proxy
 
-  traefik:
-    image: "traefik:v2.11"
-    container_name: "traefik"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
-    command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.watch=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.http.address=:80"
-      #      - "--entrypoints.http.http.redirections.entryPoint.to=https"
-      #      - "--entrypoints.http.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.https.address=:443"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8083:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - docker_proxy
-      - reverse_proxy
-
   whoami:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
@@ -178,6 +152,7 @@ services:
   # https://github.com/ProductiveOps/dokemon
   # https://github.com/louislam/dockge?tab=readme-ov-file
   # https://github.com/hywax/mafl
+  # https://github.com/ordinary-dev/phoenix
   # ----------------------------------------
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -284,40 +259,6 @@ services:
       restart_policy: *restart_policy
   # TODO: Memcached
   # TODO: Dragonfly
-
-  rancher:
-    image: rancher/rancher:latest
-    container_name: rancher
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.rancher.rule=Host(`rancher.${DOMAIN}`)"
-      - "traefik.http.services.rancher.loadbalancer.server.port=80"
-      - "traefik.http.routers.rancher.entrypoints=http"
-    deploy:
-      resources: *resource-preset-x2
-      restart_policy:
-        condition: any
-    restart: always
-    ports:
-      - "10088:80/tcp"
-      - "10089:443/tcp"
-      - "36793:36793"
-      - "6444:6443"
-    volumes:
-      # Core Configuration
-      - type: volume
-        source: rancher-data
-        target: /var/lib/rancher
-      - type: volume
-        source: rancher-config
-        target: /etc/rancher
-      - target: /var/lib/cni
-        source: rancher_cni
-        type: volume
-      - target: /var/lib/kubelet
-        source: rancher_kubelet
-        type: volume
-    privileged: true
 
   # TODO: Setup k3s
   # https://doc.traefik.io/traefik/user-guides/crd-acme/
@@ -834,22 +775,6 @@ volumes:
   hydra_data:
     driver: local
     name: hydra
-  rancher-data:
-    name: rancher
-    driver: juicedata/juicefs
-    driver_opts:
-      name: myjfs
-      metaurl: sqlite3://myjfs.db
-  rancher-config:
-    name: rancher
-    driver: juicedata/juicefs
-    driver_opts:
-      name: myjfs
-      metaurl: sqlite3://myjfs.db
-  rancher_cni:
-    name: rancher_cni
-  rancher_kubelet:
-    name: rancher_kubelet
 
 networks:
   plygrnd:
@@ -891,3 +816,4 @@ configs:
   postgres_config:
     name: postgres-config
     file: .env
+
