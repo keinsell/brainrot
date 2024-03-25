@@ -1,0 +1,28 @@
+name: reverse-proxy
+services:
+  traefik:
+    image: "traefik:v2.11"
+    container_name: "traefik"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8083:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - reverse_proxy
+
+networks:
+  reverse_proxy:
+    name: reverse_proxy

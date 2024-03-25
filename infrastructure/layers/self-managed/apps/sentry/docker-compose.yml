@@ -212,7 +212,7 @@ services:
     <<: *restart_policy
     image: clickhouse-self-hosted-local
     build:
-      context: ./clickhouse
+      context: clickhouse
       args:
         BASE_IMAGE: "${CLICKHOUSE_IMAGE:-}"
     ulimits:
@@ -316,7 +316,7 @@ services:
     <<: *restart_policy
     image: symbolicator-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: "$SYMBOLICATOR_IMAGE"
     command: '"55 23 * * * gosu symbolicator symbolicator cleanup"'
@@ -397,7 +397,7 @@ services:
     <<: *sentry_defaults
     image: sentry-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: sentry-self-hosted-local
     entrypoint: "/entrypoint.sh"
@@ -452,7 +452,7 @@ services:
     <<: *restart_policy
     image: vroom-cleanup-self-hosted-local
     build:
-      context: ./cron
+      context: cron
       args:
         BASE_IMAGE: "$VROOM_IMAGE"
     entrypoint: "/entrypoint.sh"
