@@ -270,7 +270,7 @@ services:
       - -c
       - log_min_messages=fatal
     ports:
-      - ${DOCKER_POSTGRES_EXTERNAL_PORT}:${POSTGRES_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       POSTGRES_HOST: /var/run/postgresql
       PGPORT: ${POSTGRES_PORT}
@@ -282,19 +282,6 @@ services:
       JWT_SECRET: ${SUPABASE_JWT_SECRET}
       JWT_EXP: ${SUPABASE_JWT_EXPIRY}
     volumes:
-      - ./supabase/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
-      # Must be superuser to create event trigger
-      - ./supabase/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
-      # Must be superuser to alter reserved role
-      - ./supabase/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
-      # Initialize the database settings with JWT_SECRET and JWT_EXP
-      - ./supabase/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
-      # PGDATA directory is persisted between restarts
-      - postgres_data:/var/lib/postgresql/data:Z
-      # Changes required for Analytics support
-      - ./supabase/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
-      # Use named volume to persist pgsodium decryption key between restarts
-      - pg_config:/etc/postgresql-custom
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init-scripts/00-plygrnd.sql
     deploy:
       resources: *resource-preset-x1

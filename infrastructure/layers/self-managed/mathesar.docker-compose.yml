@@ -1,0 +1,33 @@
+version: 1.27.0
+
+name: mathesar
+services:
+  mathesar:
+    image: mathesar/mathesar-prod:latest
+    container_name: mathesar
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mathesar.rule=Host(`mathesar.${DOMAIN}`)"
+      - "traefik.http.services.mathesar.loadbalancer.server.port=8000"
+      - "traefik.http.routers.mathesar.entrypoints=http"
+    ports:
+      - 10800:8000
+    networks:
+      - reverse_proxy
+    deploy:
+        resources:
+            limits:
+              cpus: '1'
+              memory: 1G
+        restart_policy:
+            condition: on-failure
+            max_attempts: 3
+    volumes:
+      - type: bind
+        source: ~/srv/mathesar
+        target: /var/lib/postgresql
+
+networks:
+  reverse_proxy:
+    name: reverse_proxy
+    external: true
