@@ -1,8 +1,8 @@
 import {Injectable}                  from '@nestjs/common'
 import {User}                        from 'db'
-import {DataDestination}             from '../../../../common/libraries/data-synchronization/data-destination.js'
-import {DataSource}                  from '../../../../common/libraries/data-synchronization/data-source.js'
-import {DataSynchronizationManager} from '../../../../common/libraries/data-synchronization/data-synchronization-manager.js'
+import {DataDestination}             from '../../../../common/lib/data-synchronization/data-destination.js'
+import {DataSource}                  from '../../../../common/lib/data-synchronization/data-source.js'
+import {DataSynchronizationManager} from '../../../../common/lib/data-synchronization/data-synchronization-manager.js'
 import {PrismaService}               from '../../../../common/modules/resources/prisma/services/prisma-service.js'
 import {isNil}                       from '../../../../utilities/type-utils/index.js'
 

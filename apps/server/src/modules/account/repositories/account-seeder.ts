@@ -4,7 +4,7 @@ import {
 	Logger,
 }                                    from '@nestjs/common'
 import {$Enums}                      from 'db'
-import {SeederBase}                  from '../../../common/libraries/seeder/seeder-base.js'
+import {SeederBase}                  from '../../../common/lib/seeder/seeder-base.js'
 import {PrismaService}               from '../../../common/modules/resources/prisma/services/prisma-service.js'
 import {ApiAccountMockup}            from '../../../utilities/fixtures/api-account-mockup.js'
 import type {RegisterAccountCommand} from '../commands/register-account/register-account-command.js'

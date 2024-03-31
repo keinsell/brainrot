@@ -1,9 +1,9 @@
 import {BadRequestException, ConflictException, Inject, Injectable, Logger} from '@nestjs/common'
 import {SpanStatusCode}                                                     from '@opentelemetry/api'
 import {err, ok}                                                            from 'neverthrow'
-import {BasePolicy}                                                         from '../../../common/libraries/domain/policy/base-policy.js'
-import {Pwnproc}                                                            from '../../../common/libraries/pwnproc/pwnproc.js'
-import {PasswordSecurityLevel}                                              from '../../../common/libraries/pwnproc/report/password-security-level.js'
+import {BasePolicy}                                                         from '../../../common/lib/domain/policy/base-policy.js'
+import {Pwnproc}                                                            from '../../../common/lib/pwnproc/pwnproc.js'
+import {PasswordSecurityLevel}                                              from '../../../common/lib/pwnproc/report/password-security-level.js'
 import {OpentelemetryTracer}                                                from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import {AccountRepository}                                                  from '../repositories/account-repository.js'
 

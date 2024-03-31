@@ -23,7 +23,7 @@
  *
  */
 
-import { EntityBase }  from '../../../common/libraries/domain/entity/entity-base.js'
+import { EntityBase }  from '../../../common/lib/domain/entity/entity-base.js'
 import { GroupMember } from '../value-object/group-member.js'
 
 

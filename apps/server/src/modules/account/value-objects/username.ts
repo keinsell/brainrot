@@ -20,7 +20,7 @@ import {
 import type {
 	Opaque,
 	UnwrapOpaque,
-}                            from '../../../common/libraries/opaque.js'
+}                            from '../../../common/lib/opaque.js'
 import {ApiAccountMockup}    from '../../../utilities/fixtures/api-account-mockup.js'
 
 

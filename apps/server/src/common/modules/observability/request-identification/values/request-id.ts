@@ -25,7 +25,7 @@
 
 
 
-import type { UniqueIdentifier } from '../../../../libraries/identification/index.js'
+import type { UniqueIdentifier } from '../../../../../kernel/runtime/identification/index.js'
 
 
 

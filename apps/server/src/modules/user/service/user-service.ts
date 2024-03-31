@@ -24,7 +24,7 @@
  */
 
 import { OnEvent }         from '@nestjs/event-emitter'
-import { ServiceAbstract } from '../../../common/libraries/services/service-abstract.js'
+import { ServiceAbstract } from '../../../common/lib/services/service-abstract.js'
 import type { User }       from '../entity/user.js'
 import { UserCreated }     from '../event/user-created.js'
 

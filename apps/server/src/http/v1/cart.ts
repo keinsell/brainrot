@@ -24,9 +24,9 @@ import {
 	Cart,
 	Customer,
 }                            from 'db'
-import {HttpProblem}         from '../../common/error/problem-details/http-problem.js'
-import {HttpStatus}          from '../../common/http-status.js'
-import {Event}               from '../../common/libraries/message/event.js'
+import {HttpProblem} from '../../common/error/problem-details/http-problem.js'
+import {HttpStatus}  from '../../kernel/standard/http-status.js'
+import {Event}       from '../../common/lib/message/event.js'
 import {EventBus}            from '../../common/modules/messaging/event-bus.js'
 import {REQUEST_ID_HEADER}   from '../../common/modules/observability/request-identification/constant/REQUEST_ID_HEADER.js'
 import {PrismaService}       from '../../common/modules/resources/prisma/services/prisma-service.js'

@@ -1,4 +1,4 @@
-import { Message }     from '../../libraries/message/message.js'
+import { Message }     from '../../lib/message/message.js'
 import { HandlerBase } from './handler.js'
 
 

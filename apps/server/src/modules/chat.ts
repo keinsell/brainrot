@@ -1,5 +1,5 @@
 import {ApiProperty}                      from '@nestjs/swagger'
-import {UniqueIdentifierApiSpecification} from '../common/libraries/identification/index.js'
+import {UniqueIdentifierApiSpecification} from '../kernel/runtime/identification/index.js'
 
 
 

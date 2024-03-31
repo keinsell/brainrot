@@ -46,7 +46,7 @@ import {
 	Product,
 }                      from 'db'
 import { HttpProblem } from '../../common/error/problem-details/http-problem.js';
-import { HttpStatus }  from '../../common/http-status.js';
+import { HttpStatus }  from '../../kernel/standard/http-status.js';
 import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
 
 export class ProductNotFound extends HttpProblem {

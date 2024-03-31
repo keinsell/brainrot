@@ -3,7 +3,7 @@ import {
 	Logger,
 }                      from '@nestjs/common'
 import {Prisma}        from 'db'
-import {SeederBase}    from '../../common/libraries/seeder/seeder-base.js'
+import {SeederBase}    from '../../common/lib/seeder/seeder-base.js'
 import {PrismaService} from '../../common/modules/resources/prisma/services/prisma-service.js'
 
 

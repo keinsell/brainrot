@@ -25,7 +25,7 @@
 
 import { Injectable }              from '@nestjs/common'
 import { ClsService }              from 'nestjs-cls'
-import type { UniqueIdentifier }   from '../../../../libraries/identification/index.js'
+import type { UniqueIdentifier }   from '../../../../../kernel/runtime/identification/index.js'
 import type { RequestIdDataStore } from '../config/request-id.config.js'
 
 

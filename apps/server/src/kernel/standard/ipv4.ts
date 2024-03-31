@@ -1,5 +1,5 @@
 import typia, {createAssert} from 'typia'
-import {Opaque}              from '../../common/libraries/opaque.js'
+import {Opaque}              from '../../common/lib/opaque.js'
 
 
 

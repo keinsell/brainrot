@@ -24,7 +24,7 @@
  */
 
 import {Opaque}        from "type-fest";
-import {ULID}          from "../../../common/libraries/identification/ulid/ulid.js";
+import {ULID}          from "../../../kernel/runtime/identification/ulid/ulid.js";
 import {PaymentMethod} from "../entity/payment-method.js";
 
 

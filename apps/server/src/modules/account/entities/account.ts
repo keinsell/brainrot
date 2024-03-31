@@ -2,7 +2,7 @@ import {BadRequestException}               from '@nestjs/common'
 import {
 	AggregateRootProperties,
 	BaseAggregateRoot,
-}                                          from '../../../common/libraries/domain/aggregate.js'
+}                                          from '../../../common/lib/domain/aggregate.js'
 import {AccountEmailConfirmed}             from '../events/account-email-confirmed.js'
 import {AccountEvent}                      from '../events/account-event.js'
 import {AccountVerificationEmailRequested} from '../events/account-verification-email-requested.js'

@@ -23,7 +23,7 @@
  *
  */
 
-import {ImmutableClass} from "../../../common/libraries/dst/data-class/data-class.js"
+import {ImmutableClass} from "../../../common/lib/dst/data-class/data-class.js"
 
 
 // TODO: Add complete typing of user agent

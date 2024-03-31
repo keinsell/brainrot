@@ -1,5 +1,5 @@
 import {ApiProperty}      from '@nestjs/swagger'
-import {ImmutableClass}   from '../../../common/libraries/dst/data-class/data-class.js'
+import {ImmutableClass}   from '../../../common/lib/dst/data-class/data-class.js'
 import {EmailAddress}     from "../../../kernel/modules/mailer/value-object/email-address.js"
 import {ApiAccountMockup} from '../../../utilities/fixtures/api-account-mockup.js'
 

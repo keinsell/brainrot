@@ -8,11 +8,12 @@ import {
 	ok,
 	Result,
 }                               from 'neverthrow'
-import {PasswordHashing}        from '../../../../common/libraries/unihash/index.js'
-import {KdfAlgorithm}           from '../../../../common/libraries/unihash/key-derivation-functions/key-derivation-function.js'
+import {PasswordHashing}        from '../../../../common/lib/unihash/index.js'
+import {KdfAlgorithm}           from '../../../../common/lib/unihash/key-derivation-functions/key-derivation-function.js'
 import {EventBus}               from '../../../../common/modules/messaging/event-bus.js'
 import {OpentelemetryTracer}    from '../../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import {createEmailAddress}     from "../../../../kernel/modules/mailer/value-object/email-address.js"
+import {Std}                    from "../../../../kernel/standard/std.js"
 import {UseCase}                from '../../../../kernel/standard/use-case.js'
 import {Account}                from '../../entities/account.js'
 import {AccountPolicy}          from '../../policies/account-policy.js'
@@ -26,7 +27,7 @@ import {RegisterAccountCommand} from './register-account-command.js'
 
 @Injectable()
 export class RegisterAccountUseCase
-	extends UseCase<RegisterAccountCommand, Account>
+	extends Std.CF.UseCase<RegisterAccountCommand, Account>
 {
 	private logger: Logger              = new Logger('account::usecase::register-account')
 	private repository: AccountRepository
@@ -46,7 +47,7 @@ export class RegisterAccountUseCase
 	}
 
 
-	public async execute(input: RegisterAccountCommand): Promise<Result<Account, never>>
+	public async execute(input: RegisterAccountCommand): Std.AsyncResult<Account, never>
 	{
 		const span = this.tracer.startSpan('com.methylphenidate.account.service.register', {
 			kind      : SpanKind.INTERNAL,
@@ -126,7 +127,7 @@ export class RegisterAccountUseCase
 
 		span.end()
 
-		return ok(identity)
+		return Std.ok(identity)
 	}
 
 }

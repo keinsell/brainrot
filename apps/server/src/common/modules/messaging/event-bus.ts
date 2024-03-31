@@ -1,7 +1,7 @@
 import {Injectable, Logger, type OnApplicationBootstrap, type OnApplicationShutdown, Optional} from '@nestjs/common'
 import {EventEmitter2}                                                                         from '@nestjs/event-emitter'
-import {Event}                                                                                 from '../../libraries/message/event.js'
-import {Message}                                                                               from '../../libraries/message/message.js'
+import {Event}                                                                                 from '../../lib/message/event.js'
+import {Message}                                                                               from '../../lib/message/message.js'
 import type {TransactionalOutbox}                                                              from './transactional-outbox/transactional-outbox.js'
 
 

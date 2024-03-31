@@ -23,23 +23,8 @@
  *
  */
 
-
-import {HttpStatus}  from '../../kernel/standard/http-status.js'
-import {HttpProblem} from '../../common/error/problem-details/http-problem.js'
+import type { Opaque } from '../../../common/lib/opaque.js'
 
 
 
-export class AccountAlreadyExists
-	extends HttpProblem
-{
-	constructor()
-	{
-		super({
-			      type    : 'com.methylphenidate.account.already-exists',
-			      title   : 'Account Already Exists',
-			      status  : HttpStatus.CONFLICT,
-			      message : 'The account already exists.',
-			      instance: 'com.methylphenidate.account.already-exists',
-		      })
-	}
-}
+export type PID = Opaque<number, 'pid'>

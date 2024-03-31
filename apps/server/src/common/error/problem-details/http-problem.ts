@@ -24,9 +24,9 @@
  */
 
 import {ApiProperty} from '@nestjs/swagger'
-import {ApiModel}    from '../../../utilities/docs-utils/swagger-api-model.js'
-import {HttpStatus}  from '../../http-status.js'
-import {Exception}   from '../../libraries/error-registry/error.js'
+import {ApiModel}   from '../../../utilities/docs-utils/swagger-api-model.js'
+import {HttpStatus} from '../../../kernel/standard/http-status.js'
+import {Exception}  from '../../lib/error-registry/error.js'
 
 
 

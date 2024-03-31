@@ -1,8 +1,8 @@
 import {ApiProperty}            from '@nestjs/swagger'
-import {Pwnproc}                from '../../../common/libraries/pwnproc/pwnproc.js'
-import {PasswordSecurityReport} from '../../../common/libraries/pwnproc/report/password-security-report.js'
-import {PhcString}              from '../../../common/libraries/unihash/types/phc-string.js'
-import {UnihashAlgorithm}       from '../../../common/libraries/unihash/unihash-algorithm.js'
+import {Pwnproc}                from '../../../common/lib/pwnproc/pwnproc.js'
+import {PasswordSecurityReport} from '../../../common/lib/pwnproc/report/password-security-report.js'
+import {PhcString}              from '../../../common/lib/unihash/types/phc-string.js'
+import {UnihashAlgorithm}       from '../../../common/lib/unihash/unihash-algorithm.js'
 import {ApiAccountMockup}       from '../../../utilities/fixtures/api-account-mockup.js'
 
 

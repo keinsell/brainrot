@@ -4,10 +4,10 @@ import {
 	Logger,
 }                        from '@nestjs/common'
 import {Prisma}          from 'db'
-import {Address}         from '../../../common/libraries/address/address.js'
-import {CountryCode}     from '../../../common/libraries/address/country-code.js'
-import type {PostalCode} from '../../../common/libraries/address/postal-code.js'
-import {SeederBase}      from '../../../common/libraries/seeder/seeder-base.js'
+import {Address}         from '../../../common/lib/address/address.js'
+import {CountryCode}     from '../../../common/lib/address/country-code.js'
+import type {PostalCode} from '../../../common/lib/address/postal-code.js'
+import {SeederBase}      from '../../../common/lib/seeder/seeder-base.js'
 import {PrismaService}   from '../../../common/modules/resources/prisma/services/prisma-service.js'
 import UserCreateInput = Prisma.UserCreateInput
 

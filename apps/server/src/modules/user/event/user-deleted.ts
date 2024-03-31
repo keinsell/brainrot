@@ -23,7 +23,7 @@
  *
  */
 
-import { DomainEvent } from '../../../common/libraries/domain/domain-event.js'
+import { DomainEvent } from '../../../common/lib/domain/domain-event.js'
 import type { User }   from '../entity/user.js'
 
 

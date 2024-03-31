@@ -23,7 +23,7 @@
  *
  */
 
-import {Event}   from "../../../common/libraries/message/event.js";
+import {Event}   from "../../../common/lib/message/event.js";
 import {Payment} from "../payment.js";
 
 

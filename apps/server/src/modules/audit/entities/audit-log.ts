@@ -1,5 +1,5 @@
-import { UUID }           from '../../../common/libraries/identification/index.js'
-import { AuditActor }     from '../value-object/audit-actor.js'
+import { UUID }       from '../../../kernel/runtime/identification/index.js'
+import { AuditActor } from '../value-object/audit-actor.js'
 import { AuditOperation } from '../value-object/audit-operation.js'
 import { AuditResource }  from '../value-object/audit-resource.js'
 

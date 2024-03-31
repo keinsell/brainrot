@@ -31,7 +31,7 @@ import type {AccountId}      from '../../../modules/account/shared-kernel/accoun
 import {
 	EntityBase,
 	type EntityFoundation,
-}                            from '../../libraries/domain/entity/entity-base.js'
+}                            from '../../lib/domain/entity/entity-base.js'
 import {NotificationQueued}  from '../event/notification-queued.js'
 import {NotificationChannel} from '../value-object/notification-channel.js'
 import {NotificationStatus}  from '../value-object/notification-status.js'

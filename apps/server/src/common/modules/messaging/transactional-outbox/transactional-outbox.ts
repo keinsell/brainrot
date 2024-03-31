@@ -23,7 +23,7 @@
  *
  */
 
-import type {Message} from '../../../libraries/message/message.js'
+import type {Message} from '../../../lib/message/message.js'
 
 
 

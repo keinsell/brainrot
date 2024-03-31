@@ -1,5 +1,5 @@
 import {Logger}         from '@nestjs/common'
-import {seeder}         from './common/libraries/seeder/seeder.js'
+import {seeder}         from './common/lib/seeder/seeder.js'
 import {DatabaseModule} from './common/modules/database/database.module.js'
 import {AccountModule} from './modules/account/account.module.js'
 import {AccountSeeder} from './modules/account/repositories/account-seeder.js'

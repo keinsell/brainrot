@@ -23,7 +23,7 @@
  *
  */
 
-import { DomainEvent }   from '../../libraries/domain/domain-event.js'
+import { DomainEvent }   from '../../lib/domain/domain-event.js'
 import { Notification } from '../entity/notification.js'
 
 

@@ -1,6 +1,6 @@
 import {Inject, Injectable, Logger} from '@nestjs/common'
-import {ServiceAbstract}            from '../../../common/libraries/services/service-abstract.js'
-import {PasswordHashing}            from '../../../common/libraries/unihash/index.js'
+import {ServiceAbstract}            from '../../../common/lib/services/service-abstract.js'
+import {PasswordHashing}            from '../../../common/lib/unihash/index.js'
 import {EventBus}                   from '../../../common/modules/messaging/event-bus.js'
 import {OpentelemetryTracer}        from '../../../common/modules/observability/tracing/opentelemetry/provider/tracer/opentelemetry-tracer.js'
 import {RegisterAccountCommand}     from '../commands/register-account/register-account-command.js'

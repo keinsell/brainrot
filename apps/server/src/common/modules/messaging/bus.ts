@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { Message }      from '../../libraries/message/message.js'
+import { Message }      from '../../lib/message/message.js'
 
 
 // TODO: https://linear.app/keinsell/issue/PROD-108/add-outbox-support-for-message-bus

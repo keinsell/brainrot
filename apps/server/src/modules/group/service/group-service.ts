@@ -27,7 +27,7 @@ import {GroupMember}       from "../value-object/group-member.js";
 import {Group}             from "../entities/group.js";
 import {GroupRepository}   from "../repository/group-repository.js";
 import {Injectable}        from "@nestjs/common";
-import {ServiceAbstract}   from "../../../common/libraries/services/service-abstract.js";
+import {ServiceAbstract}   from "../../../common/lib/services/service-abstract.js";
 import {AccountRegistered} from "../../account/events/account-registered.js";
 import {OnEvent}           from "@nestjs/event-emitter";
 

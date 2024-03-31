@@ -1,4 +1,4 @@
-import {Address}   from "../../../../common/libraries/address/address.js"
+import {Address}   from "../../../../common/lib/address/address.js"
 import {AccountId} from "../../../account/shared-kernel/account-id.js"
 
 

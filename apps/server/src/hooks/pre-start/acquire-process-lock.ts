@@ -24,7 +24,7 @@
  */
 
 import process                from 'node:process'
-import { ProcessLockManager } from '../../common/process-locking/process-lock.js'
+import { ProcessLockManager } from '../../kernel/runtime/pidlock/process-lock.js'
 
 
 

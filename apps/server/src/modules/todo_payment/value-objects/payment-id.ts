@@ -23,7 +23,7 @@
  *
  */
 
-import {Opaque}  from "../../../common/libraries/opaque.js";
+import {Opaque}  from "../../../common/lib/opaque.js";
 import {Payment} from "../payment.js";
 
 

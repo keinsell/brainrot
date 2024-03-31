@@ -23,7 +23,7 @@
  *
  */
 
-import {Repository} from "../../../common/libraries/storage/index.js"
+import {Repository} from "../../../common/lib/storage/index.js"
 import {AuditLog}   from "../entities/audit-log.js"
 
 

@@ -2,7 +2,7 @@ import {
 	Injectable,
 	Logger,
 }                            from '@nestjs/common';
-import { PhcString }         from '../../../common/libraries/unihash/types/phc-string.js';
+import { PhcString }         from '../../../common/lib/unihash/types/phc-string.js';
 import { DbContextModel }    from '../../../common/modules/database/db-context-model.js';
 import { PrismaService }     from '../../../common/modules/resources/prisma/services/prisma-service.js';
 import { Account }           from '../entities/account.js';

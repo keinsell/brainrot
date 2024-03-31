@@ -32,9 +32,9 @@ import {nanoid}                            from 'nanoid'
 import type {
 	ExpressRequest,
 	ExpressResponse,
-}                                          from '../../../../../types/express-response.js'
-import type {UniqueIdentifier}             from '../../../../libraries/identification/index.js'
-import type {RequestIdModuleOptions}       from '../config/request-id.config.js'
+}                                    from '../../../../../types/express-response.js'
+import type {UniqueIdentifier}       from '../../../../../kernel/runtime/identification/index.js'
+import type {RequestIdModuleOptions} from '../config/request-id.config.js'
 import {REQUEST_ID_HEADER}                 from '../constant/REQUEST_ID_HEADER.js'
 import {REQUEST_ID_SERVICE}                from '../constant/REQUEST_ID_SERVICE.js'
 import {REQUEST_ID_MODULE_OPTIONS_TOKEN}   from '../module/request-identificatiion-module-definition.js'
