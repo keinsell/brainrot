@@ -1,7 +1,7 @@
-import {select, confirm, spinner, outro, intro, log} from "@clack/prompts"
-import color from 'picocolors'
-import Conf from 'conf';
-import {MurmurHash3} from 'murmurhash-wasm';
+import {confirm, intro, log, outro, select, spinner}         from "@clack/prompts"
+import Conf                                                  from 'conf';
+import {MurmurHash3}                                         from 'murmurhash-wasm';
+import color                                                 from 'picocolors'
 
 const store = new Conf<{
 	migrations: {
@@ -71,14 +71,6 @@ export abstract class DatapatchPlanGenerator<T extends ExecutionContext<unknown>
 	}
 }
 
-export abstract class Applyier<T extends ExecutionContext<unknown>> {
-	abstract executePlan(plan: ExecutionPlan<T>): Promise<void>
-}
-
-export abstract class Rollbacker<T extends ExecutionContext<unknown>> {
-	abstract rollbackPlan(plan: ExecutionPlan<T>): Promise<void>
-}
-
 export function storePlan(plan: ExecutionPlan<ExecutionContext<unknown>>) {
 	const planHash = MurmurHash3.hash32(plan.id, 0)
 	const planKey = `migrations.${planHash.toString('hex')}`
@@ -101,11 +93,12 @@ export function fetchPlan(hash: string): ExecutionPlan<ExecutionContext<unknown>
 // 4. (Apply) Save the updated orders
 // 5. (Rollback) Revert the total price of each order
 
-export type ApplyUnitfFn<T> = (input: T) => Promise<T | void>
-export type RollbackUnitFn<T> = (input: T) => Promise<T | void>
-export type TransformFn<T> = (input: T) => Promise<T | void>
+export type ApplyUnitfFn<T extends ExecutionContext<unknown>> = (input: T) => Promise<T | void>
+export type RollbackUnitFn<T extends ExecutionContext<unknown>> = (input: T) => Promise<T | void>
+export type TransformFn<T extends ExecutionContext<unknown>> = (input: T) => Promise<T | void>
 
-export class DatapatchCli<T extends ExecutionContext<unknown>> {
+
+export class CLI<T extends ExecutionContext<unknown>> {
 	private OPERATION_MODE: 'apply' | 'rollback' | undefined
 	public name: string
 	private plan: ExecutionPlan<T> | undefined
@@ -114,10 +107,9 @@ export class DatapatchCli<T extends ExecutionContext<unknown>> {
 		public metadata: {
 			name: string
 		},
-		public deps: {
-			rollaback: RollbackUnitFn<T>,
+		public implementation: {
+			rollback: RollbackUnitFn<T>,
 			apply: ApplyUnitfFn<T>,
-			transform: TransformFn<T>
 		},
 		public planner: DatapatchPlanGenerator<T>,
 	) {
@@ -175,7 +167,7 @@ export class DatapatchCli<T extends ExecutionContext<unknown>> {
 		spin.start(`Applying unit ${Math.random()}...`)
 
 		const tasks = this.plan!.context.map(async (unit) => {
-			await this.deps.apply(unit as  any)
+			await this.implementation.apply(unit as  any)
 			log.success(`Unit applied: ${JSON.stringify(unit?.diff || null)}`)
 		})
 
@@ -189,7 +181,7 @@ export class DatapatchCli<T extends ExecutionContext<unknown>> {
 		log.step(`Rolling back plan ${color.yellow(this.plan!.id)}...`)
 
 		const tasks = this.plan!.context.map(async (unit) => {
-			await this.deps.rollaback(unit.input)
+			await this.implementation.rollback(unit.input)
 		})
 
 		await Promise.all(tasks)
@@ -262,87 +254,3 @@ Plan identifier: ${color.yellow(MurmurHash3.hash32(this.plan!.id, 0).toString('h
 		});
 	}
 }
-
-interface Order {
-	id: string
-	total: number
-	status: string
-}
-
-const orders = [
-	{
-		id: '1',
-		total: 100,
-		status: 'pending'
-	},
-	{
-		id: '2',
-		total: 200,
-		status: 'pending'
-	},
-	{
-		id: '3',
-		total: 300,
-		status: 'pending'
-	},
-	{
-		id: '4',
-		total: 400,
-		status: 'pending'
-	},
-	{
-		id: '5',
-		total: 500,
-		status: 'pending'
-	},
-]
-
-// Generate 20 000 orders
-for (let i = 0; i < 2000000; i++) {
-	orders.push({
-		id: i.toString(),
-		total: Math.floor(Math.random() * 1000),
-		status: 'pending'
-	})
-}
-
-interface OrderContext extends ExecutionContext<Order> {
-}
-
-export class MultipleTotalPriceUpdateFactory extends DatapatchPlanGenerator<OrderContext> {
-
-	public override async transform(input: OrderContext): Promise<OrderContext> {
-		return {
-			...input,
-			total: input.total * 1.1
-		}
-	}
-
-	constructor() {
-		super('multiple-total-price-update', 'Update the total price of each order')
-	}
-}
-
-const multipleTotalPriceUpdateFactory = new MultipleTotalPriceUpdateFactory()
-
-
-await multipleTotalPriceUpdateFactory.provideData(orders)
-
-await new DatapatchCli(
-	{
-		name: 'Update orders total price'
-	},
-	{
-		apply: async (input: Order) => {
-		},
-		rollaback: async (input: Order) => {
-		},
-		transform: async (input: Order) => {
-			return {
-				...input,
-				total: input.total * 1.1
-			}
-		}
-	},
-	multipleTotalPriceUpdateFactory,
-).cli()
