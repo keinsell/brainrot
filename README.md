@@ -65,35 +65,13 @@ http://localhost:5005/
 
 ### Usage
 
-> "If modern repositories can't be run just for a quick demo with less than 5 commands, they can be dropped stright out
-> to trash, we have abstraction ffs."
+> "If modern repositories can't be run just for a quick demo with less than 5 commands, they can be dropped straight out
+> to trash; we have abstraction ffs."
 > ~ @keinsell
 
 ```bash
 # And by such statement throw this repo to trash (at least for now)
 ```
-
-## Features
-
-- **🔑 Identity and Access Management (IAM)**, repository is providing basic Identity and Access Management (IAM)
-  features, such as user management, role management, permission management and audit logging. These features are
-  written from scratch, however there will be also integration with 3rd-party services such as "Keycloak", "Auth0" or "
-  Okta".
-- **E-Commerce**
-- **Warehouse Management**
-- **Order Management**
-- **Customer Management**
-- **Inventory Management**
-- **Shipping Management**
-- **Payment Management**
-- **Analytics**
-- **Reporting**
-- **Dashboard**
-- **User Management**
-- **Role Management**
-- **Permission Management**
-- **Audit Logging**
-- **Event Sourcing**
 
 ## Technological Approach
 
@@ -106,21 +84,6 @@ http://localhost:5005/
 - **🔌 Language-agnostic**, even through this repository is written mostly in TypeScript there's no problem to use it
   with application written in other languages, if you find deployment logic, versioning and packaing somehow useful for
   your application you can still use `turborepo` and ex. `cargo` under it.
-
-## Development
-
-### Common Takes
-
-- **People are idiots**, not first and not last to say this sentence, but it's true - people are idiots, they do not
-  understand things, they do not read documentation, they do not read error messages, they do not read logs, they do not
-  read anything, they do not understand anything, they do not understand the problem, they do not understand the
-  solution, they do not understand the code, they do not understand the architecture, they do not understand the
-  business, they do not understand the requirements. People are idiots, and they will always be idiots, and you have to
-  deal with it - honestly, I'm an idiot too, but I'm trying to be less idiotic every day. I'll cry about it more on my
-  blog, stay tuned.
-- **Software is hard**, software is hard, it's not easy, it's not simple, it's not straightforward, it's not` "just
-  write the code", it's not "just deploy the code", it's not "just run the code".
-  People who think otherwise are just ignorant fucks that do not understand what they are doing.
 
 ## Contributing
 
