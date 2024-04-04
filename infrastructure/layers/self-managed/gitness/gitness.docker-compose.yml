@@ -1,0 +1,11 @@
+version: '3'
+services:
+  gitness:
+    container_name: gitness
+    image: harness/gitness
+    ports:
+      - "0:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/srv/gitness/:/data
+    restart: always
