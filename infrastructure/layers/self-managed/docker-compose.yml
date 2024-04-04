@@ -93,27 +93,6 @@ x-healthcheck-default:
 
 name: "polylab"
 services:
-  # ----------------------------------------
-  # Cloudflare Tunnel
-  # ----------------------------------------
-  # This is the core service that connects the
-  # local development environment to the Cloudflare
-  # network. It is used to expose the local development
-  # environment to the internet.
-  # ----------------------------------------
-  tunnel:
-    container_name: cloudflared
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
-    networks:
-      - tunnel
-      - reverse_proxy
-    deploy:
-      resources: *resource-preset-x025
-      restart_policy: *restart_policy
-  # ----------------------------------------
-
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: dockerproxy
@@ -775,6 +754,7 @@ networks:
     name: postgres
   tunnel:
     name: tunnel
+    external: true
   bitcoin:
     name: bitcoin
   docker_proxy:
