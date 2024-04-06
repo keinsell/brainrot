@@ -1,5 +1,3 @@
-version: 1.27.0
-
 include:
   - base.docker-compose.yml
 
@@ -13,7 +11,7 @@ services:
       - "traefik.http.routers.rancher.rule=Host(`rancher.${DOMAIN}`)"
       - "traefik.http.services.rancher.loadbalancer.server.port=80"
       - "traefik.http.routers.rancher.entrypoints=http"
-    restart: always
+    restart: unless-stopped
     ports:
       - "10088:80/tcp"
       - "10089:443/tcp"
@@ -22,8 +20,11 @@ services:
         source: rancher_data
         target: /var/lib/rancher
     privileged: true
+    cap_add:
+      - ALL
     networks:
       - reverse_proxy
+      - rancher
 
 # TODO: Setup k3s
 # https://doc.traefik.io/traefik/user-guides/crd-acme/
@@ -34,6 +35,8 @@ volumes:
     driver: local
 
 networks:
+  rancher:
+    name: rancher
   reverse_proxy:
     name: reverse_proxy
     external: true
