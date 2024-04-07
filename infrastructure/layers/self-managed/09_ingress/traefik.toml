@@ -1,0 +1,122 @@
+################################################################
+#
+# Configuration sample for Traefik v2.
+#
+# For Traefik v1: https://github.com/traefik/traefik/blob/v1.7/traefik.sample.toml
+#
+################################################################
+
+################################################################
+# Global configuration
+################################################################
+[global]
+checkNewVersion = true
+sendAnonymousUsage = true
+
+################################################################
+# Entrypoints configuration
+################################################################
+
+[entryPoints]
+[entryPoints.http]
+address = ":80"
+
+[entryPoints.https]
+address = ":443"
+
+[entryPoints.streaming]
+address = ":1704/udp"
+
+################################################################
+# Traefik logs configuration
+################################################################
+
+# Traefik logs
+# Enabled by default and log to stdout
+#
+# Optional
+#
+[log]
+level = "DEBUG"
+# Sets the filepath for the traefik log. If not specified, stdout will be used.
+# Intermediate directories are created if necessary.
+# Optional
+# Default: os.Stdout
+#filePath = "log/traefik.log"
+format = "json"
+
+################################################################
+# Access logs configuration
+################################################################
+
+# Enable access logs
+# By default it will write to stdout and produce logs in the textual
+# Common Log Format (CLF), extended with additional fields.
+#
+# Optional
+#
+# [accessLog]
+
+# Sets the file path for the access log. If not specified, stdout will be used.
+# Intermediate directories are created if necessary.
+#
+# Optional
+# Default: os.Stdout
+#
+# filePath = "/path/to/log/log.txt"
+
+# Format is either "json" or "common".
+#
+# Optional
+# Default: "common"
+#
+# format = "json"
+
+################################################################
+# API and dashboard configuration
+################################################################
+
+[api]
+insecure = true
+dashboard = true
+
+################################################################
+# Ping configuration
+################################################################
+
+[ping]
+entryPoint = "traefik"
+
+################################################################
+# Docker configuration backend
+################################################################
+
+[providers.docker]
+endpoint = "unix:///var/run/docker.sock"
+defaultRule = "Host(`{{ normalize .Name }}`)"
+exposedByDefault = true
+watch = true
+
+
+[experimental.plugins.sablier]
+moduleName = "github.com/acouvreur/sablier"
+version = "v1.7.0-beta.6"
+
+
+[http]
+[http.middlewares]
+[http.middlewares.sablier]
+
+[http.middlewares.sablier.plugin]
+
+[http.middlewares.sablier.plugin.sablier]
+group = "default"
+names = "whoami,nginx"
+sablierUrl = "http://sablier:10000"
+sessionDuration = "1m"
+
+[http.middlewares.sablier.plugin.sablier.dynamic]
+displayName = "My Title"
+refreshFrequency = "5s"
+showDetails = "true"
+theme = "hacker-terminal"

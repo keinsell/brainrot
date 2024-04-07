@@ -1,0 +1,51 @@
+name: ingress
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN:-localhost}`)"
+      - traefik.http.services.api.loadbalancer.server.port=8080
+      - traefik.http.routers.api.entrypoints=http
+    ports:
+      - published: 80
+        target: 80
+      - published: 443
+        target: 443
+      - published: 8083
+        target: 8080
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    configs:
+      - source: traefik_config
+        target: /etc/traefik/traefik.toml
+    networks:
+      - public_network
+    restart: unless-stopped
+
+  sablier:
+    image: acouvreur/sablier:1.6.0
+    command:
+      - start
+      - --provider.name=docker
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+  whoami:
+    image: containous/whoami:v1.5.0
+    labels:
+      - sablier.enable=true
+      - sablier.group=mygroup
+
+networks:
+  public_network:
+    name: "public_network"
+    driver: none
+
+configs:
+  traefik_config:
+    file: traefik.toml

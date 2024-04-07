@@ -18,21 +18,17 @@ services:
       TUNNEL_EDGE_IP_VERSION: auto
     user: root
     networks:
-      - public_tunnel
-      - private_tunnel
-      - minio
+      - public_network
     secrets:
       - source: cloudflare_tunnel_credentials
       - source: cloudflare_account_certificate
     configs:
       - source: cloudflared_config
         target: /etc/cloudflared/config.yml
+
+
 networks:
-  public_tunnel:
-    name: "public_tunnel"
-  private_tunnel:
-    name: "private_tunnel"
-  minio:
+  public_network:
     external: true
 
 secrets:
@@ -48,8 +44,15 @@ configs:
       credentials-file: /run/secrets/cloudflare_tunnel_credentials
       
       ingress:
-        - hostname: hello.plygrnd.land
-          service: hello_world
-        - hostname: minio.plygrnd.land
-          service: http://minio:9001
+        - hostname: traefik.plygrnd.land
+          service: http://traefik
+          httpHostHeader: "traefik.localhost"
+          noTLSVerify: true
+        - hostname: portainer.plygrnd.land
+          service: http://traefik
+          httpHostHeader: "portainer.localhost"
+          noTLSVerify: true
+        - hostname: "*.plygrnd.land"
+          service: http://traefik
+          noTLSVerify: true
         - service: http_status:404
