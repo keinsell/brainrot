@@ -5,31 +5,30 @@ services:
     container_name: portainer
     image: portainer/portainer-ce:latest
     restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`portainer`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.entrypoints=http
+    #      - traefik.https.routers.portainer.rule=Host(`portainer.${DOMAIN:-localhost}`)
+    #      - traefik.https.services.portainer.loadbalancer.server.port=9443
+    #      - traefik.https.routers.portainer.entrypoints=https
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+      - type: volume
+        source: portainer_data
+        target: /data
+    networks:
+      - public_network
     ports:
-      - 9000:9000
-
-  backup_portainer_data:
-    image: offen/docker-volume-backup:latest
-    restart: always
-    environment:
-
-    volumes:
-      - data:/backup/my-app-backup:ro
-      # Mounting the Docker socket allows the script to stop and restart
-      # the container during backup. You can omit this if you don't want
-      # to stop the container. In case you need to proxy the socket, you can
-      # also provide a location by setting `DOCKER_HOST` in the container
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # If you mount a local directory or volume to `/archive` a local
-      # copy of the backup will be stored there. You can override the
-      # location inside of the container by setting `BACKUP_ARCHIVE`.
-      # You can omit this if you do not want to keep local backups.
-      - /path/to/local_backups:/archive
+      - target: 9000
+        published: 9000
 
 volumes:
   portainer_data:
     driver: local
     name: portainer_data
+
+networks:
+  public_network:
+    external: true

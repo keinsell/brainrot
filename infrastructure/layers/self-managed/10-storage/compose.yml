@@ -1,0 +1,85 @@
+name: 'minio'
+
+# Minio is used as one and only S3 storage available for my usage, this is backed up by
+# ZFS filesystem on host machine which exposes the stack and such minio is there to collect all
+# the backups from other stacks.
+
+services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.minio-http.rule=Host(`minio.${DOMAIN:-localhost}`)
+      - traefik.http.routers.minio-http.entrypoints=http
+      - traefik.http.routers.minio-http.service=minio
+      #- traefik.http.routers.minio-http.middlewares=https-redirect
+      #      - traefik.http.routers.minio-https.rule=Host(`minio.${DOMAIN:-localhost}`)
+      #      - traefik.http.routers.minio-https.entrypoints=https
+      #      - traefik.http.routers.minio-https.tls=true
+      #      - traefik.http.routers.minio-https.service=minio
+      #      - traefik.http.routers.minio-https.tls.certresolver=le
+      - traefik.http.services.minio.loadbalancer.server.port=10001
+      #      - traefik.http.routers.minio-console-http.rule=Host(`minio-console.${DOMAIN:-localhost}`)
+      #      - traefik.http.routers.minio-console-http.entrypoints=http
+      #      - traefik.http.routers.minio-console-http.service=minio-console
+      #- traefik.http.routers.minio-console-http.middlewares=https-redirect
+      #      - traefik.http.routers.minio-console-https.rule=Host(`minio-console.${DOMAIN:-localhost}`)
+      #      - traefik.http.routers.minio-console-https.entrypoints=https
+      #      - traefik.http.routers.minio-console-https.tls=true
+      #      - traefik.http.routers.minio-console-https.service=minio-console
+      #      - traefik.http.routers.minio-console-https.tls.certresolver=le
+    #      - traefik.http.services.minio-console.loadbalancer.server.port=9001
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    #      MINIO_DOMAIN: "minio"
+    #      MINIO_SERVER_URL: "minio:10000"
+    command: server --address 0.0.0.0:10000 --console-address 0.0.0.0:10001 /data
+    ports:
+      - published: 10000
+        target: 10000
+    volumes:
+      - type: bind
+        source: /spacewarp/Objects
+        target: /data
+    restart: unless-stopped
+    networks:
+      - minio
+      - public_network
+    secrets:
+      - minio_root_password
+      - minio_root_user
+
+  minio-migration:
+    image: minio/mc
+    container_name: minio-migration
+    entrypoint: >
+      /bin/sh -c " /usr/bin/mc alias set minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb minio/stub;
+      /usr/bin/mc mb minio/dummy;
+      usr/bin/mc mb minio/backups;
+      exit 0;
+      "
+    restart: no
+    networks:
+      - minio
+
+networks:
+  minio:
+    name: minio
+  public_network:
+    external: true
+
+secrets:
+  minio_root_user:
+    name: "minio_root_user"
+    environment: "MINIO_ROOT_USER"
+  minio_root_password:
+    name: "minio_root_password"
+    environment: "MINIO_ROOT_PASSWORD"
+
+configs:
+  minio:
+    name: "minio_config"
+    content: "asd"
