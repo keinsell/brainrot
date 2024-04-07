@@ -27,20 +27,6 @@ services:
       - public_network
     restart: unless-stopped
 
-  sablier:
-    image: acouvreur/sablier:1.6.0
-    command:
-      - start
-      - --provider.name=docker
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
-
-  whoami:
-    image: containous/whoami:v1.5.0
-    labels:
-      - sablier.enable=true
-      - sablier.group=mygroup
-
 networks:
   public_network:
     name: "public_network"
