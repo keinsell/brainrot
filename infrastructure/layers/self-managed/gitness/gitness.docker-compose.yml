@@ -1,11 +1,35 @@
-version: '3'
+name: gitness
 services:
   gitness:
     container_name: gitness
     image: harness/gitness
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitness.rule=Host(`gitness.localhost`)"
+      - "traefik.http.services.gitness.loadbalancer.server.port=3000"
+      - "traefik.http.routers.gitness.entrypoints=http"
     ports:
       - "0:3000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ~/srv/gitness/:/data
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: volume
+        source: gitness_data
+        target: /data
     restart: always
+    networks:
+      - gitness
+      - reverse_proxy
+
+volumes:
+  gitness_data:
+    name: gitness_data
+    driver: local
+
+networks:
+  gitness:
+    name: gitness
+  reverse_proxy:
+    external: true
