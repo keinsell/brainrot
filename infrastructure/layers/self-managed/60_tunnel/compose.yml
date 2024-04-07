@@ -1,0 +1,55 @@
+name: tunnel
+services:
+  # ----------------------------------------
+  # Cloudflare Tunnel
+  # ----------------------------------------
+  # This is the core service that connects the
+  # local development environment to the Cloudflare
+  # network. It is used to expose the local development
+  # environment to the internet.
+  # ----------------------------------------
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_ORIGIN_CERT: /run/secrets/cloudflare_account_certificate
+      TUNNEL_EDGE_IP_VERSION: auto
+    user: root
+    networks:
+      - public_tunnel
+      - private_tunnel
+      - minio
+    secrets:
+      - source: cloudflare_tunnel_credentials
+      - source: cloudflare_account_certificate
+    configs:
+      - source: cloudflared_config
+        target: /etc/cloudflared/config.yml
+networks:
+  public_tunnel:
+    name: "public_tunnel"
+  private_tunnel:
+    name: "private_tunnel"
+  minio:
+    external: true
+
+secrets:
+  cloudflare_account_certificate:
+    file: "~/.cloudflared/cert.pem"
+  cloudflare_tunnel_credentials:
+    file: "~/.cloudflared/${CLOUDFLARE_TUNNEL_ID}.json"
+
+configs:
+  cloudflared_config:
+    content: |
+      tunnel: ${CLOUDFLARE_TUNNEL_ID}
+      credentials-file: /run/secrets/cloudflare_tunnel_credentials
+      
+      ingress:
+        - hostname: hello.plygrnd.land
+          service: hello_world
+        - hostname: minio.plygrnd.land
+          service: http://minio:9001
+        - service: http_status:404

@@ -5,7 +5,7 @@ services:
     container_name: "traefik"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN:-localhost}`)"
     command:
       - "--log.level=DEBUG"
       - "--api.insecure=true"
@@ -15,36 +15,27 @@ services:
       - "--entrypoints.http.address=:80"
       - "--entrypoints.https.address=:443"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8083:8080"
+      - published: 80
+        target: 80
+        mode: ingress
+      - published: 443
+        target: 443
+        mode: ingress
+      - published: 8083
+        target: 8080
+        mode: ingress
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
     networks:
       - reverse_proxy
+      - public_tunnel
     restart: unless-stopped
-
-  # ----------------------------------------
-  # Cloudflare Tunnel
-  # ----------------------------------------
-  # This is the core service that connects the
-  # local development environment to the Cloudflare
-  # network. It is used to expose the local development
-  # environment to the internet.
-  # ----------------------------------------
-  tunnel:
-    container_name: cloudflared
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_SERIVCE_TOKEN}
-    networks:
-      - tunnel
-      - reverse_proxy
-  # ----------------------------------------
-
 
 networks:
   reverse_proxy:
     name: reverse_proxy
-  tunnel:
-    name: tunnel
+  public_tunnel:
+    external: true
