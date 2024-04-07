@@ -1,0 +1,79 @@
+# This Docker Compose file is meant to manage and configure backups for the
+# system. It works by executing backups using the offen/docker-volume-backup:v2 image,
+# a Docker container that is designed to help create, manage, and prune backups.
+#
+# The backup service takes the environment variables specified to create backups,
+# store them, and prune them as necessary. This Compose file is especially configured
+# to work with a Minio instance for S3-compatible backups.
+#
+# The backup name includes a timestamp to avoid overwriting previous backups,
+# and to help identify when a particular backup was created. These backup files
+# are stored in a dedicated Minio bucket. Access to the Minio backend is handled
+# through the provided root user and password files.
+#
+# The volumes section is used to specify the data to backup and the location
+# where the backup is stored. Direct access to Docker socket is used to allow
+# the container to control Docker-related functionality, like stopping and
+# starting other containers during the backup process.
+#
+# The secrets are used to securely pass the Minio credentials into the backup
+# container. These files largely exist to specify paths to the files containing
+# the Minio root user and password, thus ensuring these sensitive values aren't
+# hard-coded into the file.
+
+name: backups
+services:
+  backup:
+    image: offen/docker-volume-backup:v2
+    environment:
+      BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_PRUNING_PREFIX: backup-
+      BACKUP_RETENTION_DAYS: '7'
+      AWS_ENDPOINT: minio:9000
+      AWS_ENDPOINT_PROTO: http
+      AWS_S3_BUCKET_NAME: backups
+      AWS_ACCESS_KEY_ID_FILE: /run/secrets/s3_access_key
+      AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/s3_secret_key
+    volumes:
+      - type: bind
+        source: /home/keinsell/backups
+        target: /archive
+      - type: volume
+        source: rancher_data
+        target: /backup/rancher_data
+        read_only: true
+      - type: volume
+        source: portainer_data
+        target: /backup/portainer_data
+        read_only: true
+      - type: volume
+        source: gitness_data
+        target: /backup/gitness_data
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    networks:
+      - minio
+    secrets:
+      - s3_access_key
+      - s3_secret_key
+
+volumes:
+  rancher_data:
+    external: true
+  portainer_data:
+    external: true
+  gitness_data:
+    external: true
+
+networks:
+  minio:
+    external: true
+
+secrets:
+  s3_access_key:
+    environment: "MINIO_ROOT_USER"
+  s3_secret_key:
+    environment: "MINIO_ROOT_PASSWORD"
