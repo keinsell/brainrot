@@ -45,13 +45,18 @@ configs:
       credentials-file: /run/secrets/cloudflare_tunnel_credentials
       
       originRequest: # Top-level configuration
-        connectTimeout: 5s
+        connectTimeout: 3s
       
       ingress:
         - hostname: traefik.plygrnd.land
           service: http://traefik
           originRequest:
-            httpHostHeader: traefik.localhost
+            httpHostHeader: traefik.${DOMAIN:-localhost}
+            noTLSVerify: true
+            disableChunkedEncoding: true
+        - hostname: minio.plygrnd.land
+          service: http://minio:10001
+          originRequest:
             noTLSVerify: true
             disableChunkedEncoding: true
         - hostname: test.plygrnd.land
