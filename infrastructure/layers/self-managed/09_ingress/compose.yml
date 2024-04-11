@@ -4,16 +4,19 @@ services:
     image: "traefik:latest"
     container_name: "traefik"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN:-localhost}`)"
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN:-localhost}`)
       - traefik.http.services.api.loadbalancer.server.port=8080
-      - traefik.http.routers.api.entrypoints=http
+      - traefik.http.routers.api.entrypoints=web
     ports:
       - published: 80
         target: 80
       - published: 443
         target: 443
-      - published: 8083
+      - published: 1704
+        target: 1704
+        mode: udp
+      - published: 0
         target: 8080
     volumes:
       - type: bind
@@ -22,16 +25,28 @@ services:
         read_only: true
     configs:
       - source: traefik_config
-        target: /etc/traefik/traefik.toml
+        target: /etc/traefik/traefik.yaml
+      - source: traefik_dynamic_config
+        target: /etc/traefik/traefik_dynamic.yaml
+    secrets:
+      - source: local_certificate
+      - source: local_certificate_key
     networks:
-      - public_network
+      - ingress
     restart: unless-stopped
 
 networks:
-  public_network:
-    name: "public_network"
-    driver: none
+  ingress:
+    name: "ingress"
 
 configs:
   traefik_config:
-    file: traefik.toml
+    file: traefik.yaml
+  traefik_dynamic_config:
+    file: traefik_dynamic.yaml
+
+secrets:
+  local_certificate:
+    file: ./certs/local-cert.pem
+  local_certificate_key:
+    file: ./certs/local-key.pem

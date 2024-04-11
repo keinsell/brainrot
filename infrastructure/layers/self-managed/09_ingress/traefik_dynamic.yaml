@@ -1,0 +1,17 @@
+http:
+  routers:
+    traefik:
+      rule: "Host(`traefik.docker.localhost`)"
+      service: "api@internal"
+      tls:
+        domains:
+          - main: "docker.localhost"
+            sans:
+              - "*.docker.localhost"
+          - main: "domain.local"
+            sans:
+              - "*.domain.local"
+tls:
+  certificates:
+    - certFile: "/run/secrets/local_certificate"
+      keyFile: "/run/secrets/local_certificate_key"

@@ -1,0 +1,48 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+
+pilot:
+  dashboard: true
+  token: x
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":443"
+  streaming:
+    address: ":1704/udp"
+
+log:
+  level: "DEBUG"
+  format: "json"
+
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    defaultRule: "Host(`{{ normalize .Name }}.docker.localhost`)"
+    exposedByDefault: true
+    watch: true
+    network: ingress
+    useBindPortIP: false
+    allowEmptyServices: true
+    httpClientTimeout: 1000
+
+  file:
+    filename: /etc/traefik/traefik_dynamic.yaml
+    watch: true
+
+serversTransport:
+  insecureSkipVerify: true
+  maxIdleConnsPerHost: 1

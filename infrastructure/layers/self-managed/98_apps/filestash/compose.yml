@@ -1,0 +1,42 @@
+services:
+  filestash:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.filestash.rule=Host(`filestash.${DOMAIN:-localhost}`)
+      - traefik.http.services.filestash.loadbalancer.server.port=8334
+      - traefik.http.routers.filestash.entrypoints=http
+    container_name: filestash
+    image: machines/filestash
+    restart: unless-stopped
+    environment:
+      - APPLICATION_URL=filestash.${DOMAIN:-localhost}
+      - ONLYOFFICE_URL=http://onlyoffice
+    volumes:
+      - type: volume
+        source: filestash
+        target: /app/data/state/
+    networks:
+      - public_network
+      - filestash
+
+  onlyoffice:
+    container_name: filestash_oods
+    image: onlyoffice/documentserver
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    networks:
+      - filestash
+
+volumes:
+  filestash:
+    name: "filestash_data"
+    driver: local
+
+networks:
+  filestash:
+    name: filestash
+  public_network:
+    external: true
+  minio:
+    external: true
