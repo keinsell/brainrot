@@ -12,14 +12,14 @@ services:
     container_name: cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel --autoupdate-freq 5m --config /etc/cloudflared/config.yml --management-diagnostics --bastion --no-chunked-encoding --url http://traefik run
+    command: tunnel --autoupdate-freq 5m --config /etc/cloudflared/config.yml --management-diagnostics --bastion --no-chunked-encoding run
     environment:
       TUNNEL_ORIGIN_CERT: /run/secrets/cloudflare_account_certificate
       TUNNEL_EDGE_IP_VERSION: auto
       TUNNEL_LOGLEVEL: debug
     user: root
     networks:
-      - public_network
+      - ingress
     secrets:
       - source: cloudflare_tunnel_credentials
       - source: cloudflare_account_certificate
@@ -29,7 +29,7 @@ services:
 
 
 networks:
-  public_network:
+  ingress:
     external: true
 
 secrets:
@@ -48,17 +48,9 @@ configs:
         connectTimeout: 3s
       
       ingress:
-        - hostname: traefik.plygrnd.land
+        - hostname: "*.plygrnd.land"
           service: http://traefik
           originRequest:
-            httpHostHeader: traefik.${DOMAIN:-localhost}
             noTLSVerify: true
             disableChunkedEncoding: true
-        - hostname: minio.plygrnd.land
-          service: http://minio:10001
-          originRequest:
-            noTLSVerify: true
-            disableChunkedEncoding: true
-        - hostname: test.plygrnd.land
-          service: hello_world
         - service: http_status:404

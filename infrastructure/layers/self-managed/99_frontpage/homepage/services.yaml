@@ -5,7 +5,6 @@
 - Storage:
     - minio:
         icon: minio.png
-        href: http://minio.localhost
         description: MinIO is a high-performance, Amazon S3-compatible object storage solution designed for cloud-native applications, analytics, and large-scale AI/ML workloads.
         container: minio
     - supabase:
