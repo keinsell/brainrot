@@ -23,9 +23,9 @@
  *
  */
 
-import { Module }     from '@nestjs/common'
-import { Mailer }     from './contract/mailer.js'
-import { NoopMailer } from './provider/mailer/noop-mailer.js'
+import {Module}     from '@nestjs/common'
+import {Mailer}     from './mailer.js'
+import {NoopMailer} from './provider/mailer/noop-mailer.js'
 
 
 

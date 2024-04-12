@@ -23,11 +23,8 @@
  *
  */
 
-import {
-	DynamicModule,
-	Module,
-}                             from '@nestjs/common'
-import {ConfigurationService} from '../../../configs/service/configuration-service.js'
+import {DynamicModule, Module} from '@nestjs/common'
+import {ConfigurationService}   from '../../configs/service/configuration-service.js'
 
 
 

@@ -23,14 +23,9 @@
  *
  */
 
-
-
-import {
-  Injectable,
-  Logger,
-}                                    from '@nestjs/common'
-import { Mailer }                    from '../../contract/mailer.js'
-import { CreateEmailMessagePayload } from '../../dto/create-email-message-payload.js'
+import {Injectable, Logger}       from '@nestjs/common'
+import {CreateEmailMessagePayload} from '../../dto/create-email-message-payload.js'
+import {Mailer}                    from '../../mailer.js'
 
 
 
