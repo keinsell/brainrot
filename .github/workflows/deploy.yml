@@ -68,7 +68,7 @@ jobs:
           docker_password: ${{ env.DOCKER_TOKEN }}
 
       - name: 🐳 Publish Docker Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: apps/server
           file: apps/server/build/Dockerfile
