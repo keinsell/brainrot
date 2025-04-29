@@ -1,0 +1,3 @@
+# Alice's Way
+
+Alice way is about ultimate was of computing power by overloading context window with relevant information and integrating "retard-kernel" which would split task given by user into very small manageable tasks which would be executed in loop by language model. There are various constraints related to this specific task, as we want to complete in optimal time with optimal cost and have optimal quality.

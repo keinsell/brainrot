@@ -1,0 +1,25 @@
+# Alice's Research
+
+- https://lib.rs/keywords/llm
+- https://lib.rs/crates/nerve-ai
+- https://lib.rs/crates/kwaak
+- https://lib.rs/crates/aichat
+- https://lib.rs/crates/llm-base
+- https://github.com/EricLBuehler/mistral.rs
+- https://medevel.com/llm-as-a-backend-1200/
+- https://www.secondstate.io/articles/run-llm-sh/
+- https://lib.rs/crates/llm-gpt2
+- https://www.libhunt.com/l/rust/topic/llm
+- https://www.pixelstech.net/article/1727749309-Flows-network%3A-Writing-an-LLM-Application-in-Rust
+- https://www.shuttle.dev/blog/2024/06/06/llm-chain-langchain-rust
+- https://github.com/sobelio/llm-chain
+- https://github.com/huggingface/candle
+- https://llm-2351b5.webflow.io/
+- https://simonwillison.net/2024/Oct/11/lmrs/
+- https://github.com/topics/llmops
+- https://github.com/topics/generative-ai
+- https://github.com/topics/llm
+- https://github.com/topics/large-language-model
+- https://rig.rs/learn.html
+- https://github.com/sekmet/llm-rust
+- 

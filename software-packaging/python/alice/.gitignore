@@ -1,0 +1,19 @@
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+.aider*
+gemma-2-27B-it-function-calling-Q5_K_M.gguf
+target
+/.alice/
+/src/alice.egg-info/
+/.venv/
+**/__pycache__/**
+/dist/
+/build/
+result

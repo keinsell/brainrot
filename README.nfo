@@ -1,7 +1,7 @@
 
                                                     ______   __
                                //\   _     //\     /  ___/\ / /\
-           /\_           _____//  \ //\/\ // /\   /__/\  \ \ /  | 
+           /\_           _____//  \ //\/\ // /\   /__/\  \ \ /  |
           //\/\____     //         \/\/ ///  \/  /  /\ \__\//   |
          //    \  _\___//___   /\   \/\/\/\  /  /__/ /\ \/ / __/
          \\/\   \/ \____/\  \  \\\  | \\/\ \|   \__\/\ \ \/ /
@@ -14,7 +14,7 @@
                         \\    /\/\    ///\/ /|
                          \\  /    \  ///\/\/ |
                           \\/\\ /\/\///_/  \/
-                             /// \\////\\_/    
+                             /// \\////\\_/
                             ///    /// /       //|
                            ///    ///\/       // |
                           //  \  ///         //  |
@@ -24,6 +24,13 @@
                              \\/
 
 
-Repository contain somewhat ruins on what I was actually experimenting, there
-are traces of learning languages, some actually useful snippets or just half-baked
-applications that will never get into production.
+Repository is one unecessary source of mess, there are a lot of code
+experimentations, technology previews, and overall nothing close to
+products by itself but rather just the code - some of it is functional,
+some of it needs small fix, and some of it doesn't work and will never
+work at all. Repository is meant to be somewhat learn-in-public representation
+what happened to be on my road.
+
+For now this repository is just a mess as I don't know where I will be going
+in near time, definitely some ReasonML exploration and web programming around
+it will be done.
