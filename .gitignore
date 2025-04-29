@@ -158,3 +158,4 @@ src/externals/compodoc
 
 .turbo
 test/target/*
+gui/slint-crud-application/target
