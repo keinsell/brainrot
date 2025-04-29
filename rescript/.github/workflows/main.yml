@@ -1,0 +1,250 @@
+name: continuous-integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      - trunk
+      - next
+      - release/*
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+      - chore/*
+  push:
+    branches:
+      - next
+      - trunk
+      - main
+      - release/*
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+      - chore/
+  release:
+    types:
+      - released
+      - prereleased
+
+env:
+  EARTHLY_VERSION: v0.7.23
+  REGISTRY_URL: ghcr.io/${{ github.repository_owner }}
+  TAG: ${{ github.sha }}
+
+jobs:
+  unit-testing:
+    name: "test"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: setup-node
+        uses: "./.github/actions/setup-node"
+
+      # - name: run-tests
+      #   run: pnpm test
+      #   shell: bash
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: setup-nix
+        uses: "./.github/actions/setup-nix"
+        
+      - name: setup-node
+        uses: "./.github/actions/setup-node"
+          
+      - name: setup-earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: ${{ env.EARTHLY_VERSION }}
+          
+      - name: setup-docker
+        uses: "./.github/actions/setup-docker"
+          
+      - name: build-app
+        run: earthly --ci +all
+        env:
+          EARTHLY_PUSH: true
+          REGISTRY_URL: ${{ env.REGISTRY_URL }}
+          TAG: ${{ github.sha }}
+          
+      - name: upload-tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: fwa-build
+          path: artifacts/fwa-build.tar.gz
+          
+      - name: upload-nix-result
+        uses: actions/upload-artifact@v4
+        with:
+          name: nix-result
+          path: artifacts/result
+
+  preview:
+    name: dev-preview
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - unit-testing
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: download-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fwa-build
+          path: ./artifacts
+          
+      - name: deploy-dev
+        run: |
+          echo "Deploying to development environment"
+          # Add deployment logic here
+          # For example:
+          # - Extract the tarball
+          # - Connect to development server
+          # - Deploy the application
+
+  beta-testing:
+    name: beta-test
+    needs:
+      - preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: launch-env
+        run: echo "Launching beta environment"
+        shell: bash
+        
+      - name: deploy-db
+        run: echo "Deploying database to beta environment"
+        shell: bash
+        
+      - name: deploy-app
+        run: |
+          echo "Deploying application to beta environment"
+          # Add deployment logic here using the Docker image
+          # docker pull ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.sha }}
+        shell: bash
+        
+      - name: integration-test
+        run: echo "Running integration tests in beta environment"
+        shell: bash
+        
+      - name: acceptance-test
+        run: echo "Running acceptance tests in beta environment"
+        shell: bash
+
+  gamma-testing:
+    name: gamma-test
+    needs:
+      - preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: launch-env
+        run: |
+          echo "Launching gamma environment"
+          # Add logic to deploy to gamma environment
+          # This could use the Docker image or Nix derivation
+        shell: bash
+
+  deploy-staging:
+    name: deploy-staging
+    if: github.ref_type == 'tag'
+    needs:
+      - beta-testing
+      - gamma-testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: download-artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: fwa-build
+          path: ./artifacts
+          
+      - name: deploy-staging
+        run: |
+          echo "Deploying to staging environment"
+          # Add staging deployment logic here
+          # This could involve:
+          # - Using the Docker image from the registry
+          # - Extracting and deploying the tarball
+          # - Using the Nix derivation
+
+  release:
+    name: release
+    if: github.ref_type == 'tag'
+    needs:
+      - deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: tag-docker-image
+        run: |
+          echo "Tagging image for release"
+          # Add logic to tag the Docker image with a semantic version
+          # docker pull ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.sha }}
+          # docker tag ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.sha }} ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.ref_name }}
+          # docker push ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.ref_name }}
+        shell: bash
+        
+      - name: create-release-notes
+        run: echo "Creating release notes"
+        shell: bash
+
+  deploy-prod:
+    name: deploy-prod
+    if: github.ref_type == 'tag'
+    needs:
+      - release
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: pull-release-image
+        run: |
+          echo "Pulling release image for production deployment"
+          # docker pull ${{ env.REGISTRY_URL }}/fucking-web-application:${{ github.ref_name }}
+        shell: bash
+        
+      - name: deploy-prod
+        run: |
+          echo "Deploying to production environment"
+          # Add production deployment logic here
+          # This would typically involve:
+          # - Provisioning resources if needed
+          # - Deploying the Docker image or Nix derivation
+          # - Running post-deployment verification 

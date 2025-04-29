@@ -1,0 +1,5 @@
+*.res.mjs linguist-generated=true
+*.res.cjs linguist-generated=true
+*.res.js linguist-generated=true
+*.gen.tsx linguist-generated=true
+src/**/*.js linguist-generated=true

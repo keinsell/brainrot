@@ -1,0 +1,35 @@
+{
+  "name": "fucking-web-application",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently 'rewatch watch' 'next dev --turbopack'",
+    "build": "rewatch build && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "biome"
+  },
+  "dependencies": {
+    "iron-session": "^8.0.4",
+    "next": "15.3.0-canary.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "swr": "^2.3.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@rescript/core": "^1.6.1",
+    "@rescript/react": "^0.12.1",
+    "@rescript/std": "12.0.0-alpha.9",
+    "@rescript/webapi": "0.1.0-experimental-390e51f",
+    "@rolandpeelen/rewatch": "^1.0.11",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
+    "rescript": "12.0.0-alpha.9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,18 @@
+name: 'Setup Nix'
+description: 'Sets up Nix and the direnv integration'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Nix
+      uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command flakes
+    
+    - name: Setup direnv
+      shell: bash
+      run: |
+        mkdir -p ~/.config/direnv
+        echo '[[ -f .envrc ]] && source_env' > ~/.config/direnv/direnvrc 
