@@ -159,3 +159,6 @@ src/externals/compodoc
 .turbo
 test/target/*
 gui/slint-crud-application/target
+
+**/.claude/settings.local.json
+parser/ini-parser/_build

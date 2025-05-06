@@ -1,0 +1,16 @@
+# dune exec ini
+# OCAMLPARAM: unset
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /home/keinsell/.cache/dune/db
+# Workspace root: /home/keinsell/Documents/brainrot/parser/ini-parser
+# Auto-detected concurrency: 32
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /home/keinsell/.opam/default/bin/ocamlc.opt -config > /tmp/dune_8b0127_output
